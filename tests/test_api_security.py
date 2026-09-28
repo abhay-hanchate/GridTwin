@@ -66,3 +66,13 @@ def test_readiness_exposes_each_required_artifact():
         "solar_forecast", "demand_forecast", "model_metrics", "solar_explainability"
     }
 
+
+def test_solar_model_report_is_auditable():
+    response = client.get("/api/model-report", params={"target": "solar"})
+    assert response.status_code == 200
+    body = response.json()
+    assert body["model"] == "solar_p50"
+    assert body["features_available_at_issue_time"] is True
+    assert len(body["importance"]) == 7
+    assert abs(sum(row["gain_normalized"] for row in body["importance"]) - 1.0) < 1e-4
+    assert body["limitations"]
