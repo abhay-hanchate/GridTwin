@@ -2,22 +2,23 @@ import {
   Area, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts'
 import { useApi, volts } from '../api'
+import { duration, niceDate } from '../plain'
 import type { EarlyWarning, ForecastResult, ModelMetrics } from '../types'
 
-function BandChart({ f, unit }: { f: ForecastResult; unit: string }) {
-  const data = f.points.map((p) => ({ ...p, band: [p.p10, p.p90] }))
+function BandChart({ f, scale, unit }: { f: ForecastResult; scale: number; unit: string }) {
+  const r = (v: number) => Math.round(v * scale * 10) / 10
+  const data = f.points.map((p) => ({ t: p.t, p50: r(p.p50), actual: r(p.actual), band: [r(p.p10), r(p.p90)] }))
   return (
     <ResponsiveContainer width="100%" height={240}>
-      <ComposedChart data={data} margin={{ top: 8, right: 12, left: -8, bottom: 0 }}>
+      <ComposedChart data={data} margin={{ top: 8, right: 12, left: -4, bottom: 0 }}>
         <CartesianGrid stroke="#e8ebe6" vertical={false} />
         <XAxis dataKey="t" interval={11} tick={{ fontSize: 11 }} />
-        <YAxis tick={{ fontSize: 11 }} />
-        <Tooltip formatter={(v) => (Array.isArray(v) ? `${v[0].toFixed(3)}–${v[1].toFixed(3)} ${unit}`
-          : typeof v === 'number' ? `${v.toFixed(3)} ${unit}` : v)} />
+        <YAxis tick={{ fontSize: 11 }} unit={` ${unit}`} width={64} />
+        <Tooltip formatter={(v) => (Array.isArray(v) ? `${v[0]}–${v[1]} ${unit}` : `${v} ${unit}`)} />
         <Legend wrapperStyle={{ fontSize: 12 }} />
-        <Area isAnimationActive={false} dataKey="band" name="Forecast range (P10–P90)" stroke="none" fill="#0f766e" fillOpacity={0.18} />
-        <Line isAnimationActive={false} dataKey="p50" name="Forecast (P50)" stroke="#0f766e" strokeWidth={2} dot={false} />
-        <Line isAnimationActive={false} dataKey="actual" name="What happened" stroke="#16201d" strokeDasharray="4 3" strokeWidth={1.6} dot={false} />
+        <Area isAnimationActive={false} dataKey="band" name="Range the AI is 80% sure about" stroke="none" fill="#0f766e" fillOpacity={0.18} />
+        <Line isAnimationActive={false} dataKey="p50" name="AI prediction (made the day before)" stroke="#0f766e" strokeWidth={2} dot={false} />
+        <Line isAnimationActive={false} dataKey="actual" name="What really happened" stroke="#16201d" strokeDasharray="4 3" strokeWidth={1.6} dot={false} />
       </ComposedChart>
     </ResponsiveContainer>
   )
@@ -26,9 +27,9 @@ function BandChart({ f, unit }: { f: ForecastResult; unit: string }) {
 function Scores({ m }: { m: ModelMetrics }) {
   return (
     <div className="metrics-row">
-      <div className="mini"><div className="v">{Math.round(m.skill_vs_persistence * 100)}%</div><div className="l">better than "same as yesterday"</div></div>
-      <div className="mini"><div className="v">{Math.round(m.p10_p90_coverage * 100)}%</div><div className="l">of real values inside the range (target 80%)</div></div>
-      <div className="mini"><div className="v">{m.mae_p50.toFixed(3)}</div><div className="l">mean error · test {m.test}</div></div>
+      <div className="mini"><div className="v">{Math.round(m.skill_vs_persistence * 100)}%</div><div className="l">more accurate than guessing "same as yesterday"</div></div>
+      <div className="mini"><div className="v">{Math.round(m.p10_p90_coverage * 100)}%</div><div className="l">of real values fell inside the shaded range (aim: 80%)</div></div>
+      <div className="mini"><div className="v">{m.test}</div><div className="l">tested on data the AI never saw (trained on {m.train})</div></div>
     </div>
   )
 }
@@ -41,11 +42,15 @@ export default function ForecastView() {
 
   return (
     <div className="stack">
+      <p className="how">
+        Our AI (a LightGBM machine-learning model) reads tomorrow's weather forecast and predicts how much solar the street
+        will make. We feed that prediction into the computer copy of the street to see, a day early, when voltage will be unsafe.
+      </p>
       <div className="card">
-        <h2>Early warning · {warn.data?.date ?? '…'} with every home on solar</h2>
+        <h2>Early warning for {warn.data ? niceDate(warn.data.date) : '…'}, with solar on every home</h2>
         <p className="sub">
-          Tomorrow's solar forecast is run through the grid twin to predict unsafe voltage a day ahead, then compared with what happened.
-          {warn.data && ` Demand uses the same calendar day of 2019 (${warn.data.demand_proxy_date}) as a labelled proxy.`}
+          Left: what the AI predicted the day before. Right: what actually happened.
+          {warn.data && ` Home electricity use is taken from the same calendar day in 2019 (${niceDate(warn.data.demand_proxy_date)}), the latest real meter data available.`}
         </p>
         {warn.data && (
           <div className="warn-grid">
@@ -53,28 +58,28 @@ export default function ForecastView() {
               const c = warn.data!.cases[k]
               return (
                 <div key={k} className={`warn-case ${k === 'actual' ? 'actual' : ''}`}>
-                  <div className="muted">{k === 'p50' ? 'Predicted (likely solar)' : k === 'p90' ? 'Predicted (high solar)' : 'What actually happened'}</div>
-                  <div className="v">{c.violation_steps} unsafe steps</div>
-                  <div className="muted">peak {volts(c.max_vm_pu)} V · first at {c.first_unsafe ?? '—'}</div>
+                  <div className="muted">{k === 'p50' ? 'AI prediction (most likely)' : k === 'p90' ? 'AI prediction (sunny case)' : 'What actually happened'}</div>
+                  <div className="v">{duration(c.violation_steps)} unsafe</div>
+                  <div className="muted">highest {volts(c.max_vm_pu)} V · starts around {c.first_unsafe ?? '—'}</div>
                 </div>
               )
             })}
           </div>
         )}
-        {warn.loading && <div className="loading">Running the forecast through the grid…</div>}
+        {warn.loading && <div className="loading">Running the forecast through the street…</div>}
       </div>
 
       <div className="split">
         <div className="card">
-          <h2>Solar forecast · 15 May 2025</h2>
-          <p className="sub">LightGBM on the weather forecast issued the day before; truth is solar computed from ERA5 reanalysis.</p>
-          {solar.data && <BandChart f={solar.data} unit="kW/kWp" />}
+          <h2>Solar forecast for one home's 3 kW panels · 15 May 2025</h2>
+          <p className="sub">The solid line is the AI's prediction; the dashed line is what the panels really produced.</p>
+          {solar.data && <BandChart f={solar.data} scale={3} unit="kW" />}
           {metrics.data && <Scores m={metrics.data.solar} />}
         </div>
         <div className="card">
-          <h2>Household demand forecast · 20 Nov 2019</h2>
-          <p className="sub">Average real CEEW household in Mathura; predicts the ratio to the same time yesterday.</p>
-          {demand.data && <BandChart f={demand.data} unit="kW" />}
+          <h2>Electricity use of an average home · 20 Nov 2019</h2>
+          <p className="sub">Predicted from the home's own history and the temperature, then compared with its real meter.</p>
+          {demand.data && <BandChart f={demand.data} scale={1000} unit="W" />}
           {metrics.data && <Scores m={metrics.data.demand} />}
         </div>
       </div>

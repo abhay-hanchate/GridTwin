@@ -1,8 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useApi, volts } from '../api'
+import { duration, SCENARIO_TEXT } from '../plain'
 import type { GridTopology, RunResult, ScenarioId } from '../types'
 import { PowerDayChart, VoltageDayChart } from './DayCharts'
 import GridMap from './GridMap'
+
+const PROVENANCE_TEXT: Record<string, string> = {
+  load: 'Electricity use: measured by real smart meters in Mathura homes',
+  voltage: 'Voltage arriving at the street: measured by the same meters',
+  pv: 'Solar output: calculated from real Mathura weather',
+  grid: 'Street wiring: public benchmark street, adapted to Indian overhead wires',
+}
 
 export default function GridView({ scenario }: { scenario: ScenarioId }) {
   const run = useApi<RunResult>(`/api/run?scenario=${scenario}`)
@@ -23,48 +31,57 @@ export default function GridView({ scenario }: { scenario: ScenarioId }) {
     return { over: buses('overvoltage'), under: buses('undervoltage') }
   }, [step])
 
-  if (run.loading || grid.loading) return <div className="loading">Simulating the feeder…</div>
+  if (run.loading || grid.loading) return <div className="loading">Simulating the street…</div>
   if (run.error || grid.error) return <div className="error">{run.error ?? grid.error}</div>
   if (!run.data || !grid.data || !step) return null
   const r = run.data
   const s = r.summary
+  const hi = volts(r.limits.vm_max_pu)
+  const lo = volts(r.limits.vm_min_pu)
 
   return (
     <>
+      <p className="how">
+        <b>{SCENARIO_TEXT[scenario].long}.</b> We replay one real day (15 May 2019) and check the voltage at every point
+        on the street's wire every 15 minutes. Safe means between {lo} V and {hi} V.
+      </p>
       <div className="kpis">
         <div className={`card kpi ${s.violation_steps ? 'alert' : ''}`}>
-          <div className="kpi-label">Unsafe time</div>
-          <div className="kpi-value">{s.violation_steps} / 96</div>
-          <div className="kpi-note">15-minute steps outside ±{r.band}% on {r.date}</div>
+          <div className="kpi-label">Unsafe today</div>
+          <div className="kpi-value">{duration(s.violation_steps)}</div>
+          <div className="kpi-note">time some homes were outside {lo}–{hi} V</div>
         </div>
-        <div className={`card kpi ${s.violation_steps_from_solar ? 'alert' : ''}`}>
-          <div className="kpi-label">Caused by solar</div>
-          <div className="kpi-value">{s.violation_steps_from_solar}</div>
-          <div className="kpi-note">{s.violation_steps_without_solar} steps are unsafe even with no solar</div>
+        <div className={`card kpi ${s.violation_steps_from_solar > 0 ? 'alert' : ''}`}>
+          <div className="kpi-label">Of which caused by solar</div>
+          <div className="kpi-value">{duration(Math.max(s.violation_steps_from_solar, 0))}</div>
+          <div className="kpi-note">the other {duration(s.violation_steps_without_solar)} happens even without solar</div>
         </div>
         <div className="card kpi">
-          <div className="kpi-label">Peak voltage</div>
+          <div className="kpi-label">Highest voltage</div>
           <div className="kpi-value">{volts(s.max_vm_pu)} V</div>
-          <div className="kpi-note">{s.max_vm_pu.toFixed(3)} pu · limit {volts(r.limits.vm_max_pu)} V</div>
+          <div className="kpi-note">safe limit is {hi} V</div>
         </div>
         <div className="card kpi">
-          <div className="kpi-label">Solar generated</div>
+          <div className="kpi-label">Solar produced</div>
           <div className="kpi-value">{Math.round(s.pv_kwh)} kWh</div>
-          <div className="kpi-note">{Math.round(r.pv_share * 99)} of 99 homes · 3 kW each</div>
+          <div className="kpi-note">{Math.round(r.pv_share * 99)} of 99 homes, 3 kW panels each</div>
         </div>
       </div>
 
       <div className="split">
         <div className="card">
-          <h2>Feeder map</h2>
-          <p className="sub">99 homes on a 250 kVA transformer. Colour = voltage at each house; ring = rooftop solar; line width = loading.</p>
+          <h2>The street, minute by minute</h2>
+          <p className="sub">
+            Each dot is a point on the wire (almost all are homes); T is the transformer. Press play to watch a day:
+            dots turn red when voltage there goes above {hi} V.
+          </p>
           <GridMap grid={grid.data} step={step} limits={r.limits} />
           <div className="legend">
             <span><i style={{ background: 'var(--safe)' }} />Safe</span>
-            <span><i style={{ background: 'var(--near)' }} />Within 2% of a limit</span>
-            <span><i style={{ background: 'var(--unsafe)' }} />Over-voltage</span>
-            <span><i style={{ background: 'var(--under)' }} />Under-voltage</span>
-            <span><i style={{ background: 'transparent', border: '2px solid var(--solar)' }} />Rooftop solar</span>
+            <span><i style={{ background: 'var(--near)' }} />Close to the limit</span>
+            <span><i style={{ background: 'var(--unsafe)' }} />Too high</span>
+            <span><i style={{ background: 'var(--under)' }} />Too low</span>
+            <span><i style={{ background: 'transparent', border: '2px solid var(--solar)' }} />Home with solar</span>
           </div>
           <div className="player">
             <button className="play" onClick={() => setPlaying((p) => !p)} aria-label={playing ? 'Pause' : 'Play the day'}>
@@ -75,29 +92,32 @@ export default function GridView({ scenario }: { scenario: ScenarioId }) {
             <span className="clock">{step.t.slice(-5)}</span>
           </div>
           <div className={`step-status ${step.violations.length ? 'bad' : 'ok'}`}>
+            <b>At {step.t.slice(-5)}:</b>{' '}
             {step.violations.length
-              ? `${counts.over} of 96 connection points over-voltage, ${counts.under} under-voltage · highest ${volts(step.max_vm_pu)} V`
-              : `Every connection point within limits · ${volts(step.min_vm_pu)}–${volts(step.max_vm_pu)} V`}
-            {' · '}solar {step.pv_kw.toFixed(0)} kW, demand {step.load_kw.toFixed(0)} kW
+              ? `${counts.over ? `${counts.over} of 96 points are too high` : ''}${counts.over && counts.under ? ', ' : ''}${counts.under ? `${counts.under} too low` : ''} (highest ${volts(step.max_vm_pu)} V).`
+              : `every point is safe (${volts(step.min_vm_pu)}–${volts(step.max_vm_pu)} V).`}
+            {' '}Solar is making {step.pv_kw.toFixed(0)} kW while homes use {step.load_kw.toFixed(0)} kW.
           </div>
         </div>
         <div className="stack">
           <div className="card">
             <h2>Voltage through the day</h2>
-            <p className="sub">Shaded bands are outside the ±{r.band}% limit. Dashed grey is the measured upstream voltage.</p>
+            <p className="sub">
+              Red line: the highest voltage anywhere on the street. Above the dashed {hi} V line is unsafe (shaded).
+            </p>
             <VoltageDayChart run={r} cursor={step.t} />
           </div>
           <div className="card">
-            <h2>Solar vs demand</h2>
-            <p className="sub">When solar exceeds demand, power flows back up the wires and pushes voltage up.</p>
+            <h2>Why it happens: solar vs what homes use</h2>
+            <p className="sub">When the orange area is bigger than the blue, the extra solar flows back into the wire and pushes voltage up.</p>
             <PowerDayChart run={r} cursor={step.t} />
           </div>
         </div>
       </div>
 
       <div className="provenance">
-        {Object.entries(r.provenance).map(([k, v]) => (
-          <span key={k} className="chip"><b>{k}</b>{v}</span>
+        {Object.keys(r.provenance).map((k) => (
+          <span key={k} className="chip">{PROVENANCE_TEXT[k] ?? r.provenance[k]}</span>
         ))}
       </div>
     </>
