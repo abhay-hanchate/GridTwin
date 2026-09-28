@@ -154,7 +154,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 ## Features
 
 <!-- FEATURES:START -->
-**10 of 24 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
+**11 of 24 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
 
 | ID | Feature | Area | Owner | Status | Pull request |
 | --- | --- | --- | --- | --- | --- |
@@ -168,7 +168,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 | F08 | Docs and CI: README and assumptions and GitHub Actions | Quality | P3 | ✅ Done | [#7](https://github.com/abhay-hanchate/GridTwin/pull/7) |
 | F09 | Plain-language story view and simpler wording | Frontend | P4 | ✅ Done | [#8](https://github.com/abhay-hanchate/GridTwin/pull/8) |
 | F10 | Fix simulator and prediction-vs-reality simulator | Engine + Frontend | P4 | ✅ Done | [#9](https://github.com/abhay-hanchate/GridTwin/pull/9) |
-| F11 | Automatic feature tracker (this file and the README table) | Quality | P1 | 🔄 In progress |  |
+| F11 | Automatic feature tracker (this file and the README table) | Quality | P1 | ✅ Done | [#10](https://github.com/abhay-hanchate/GridTwin/pull/10) |
 | F12 | Solar model feature-importance report | ML | P2 | ⏳ Planned |  |
 | F13 | Cloudy-day early warning and docs/ml.md | ML | P2 | ⏳ Planned |  |
 | F14 | README setup fixes from a fresh-clone test | Quality | P3 | ⏳ Planned |  |

@@ -9,7 +9,7 @@ F07,Dashboard: feeder map and fixes and forecast screens,Frontend,P4,feature/das
 F08,Docs and CI: README and assumptions and GitHub Actions,Quality,P3,feature/docs-ci,Done,7,2026-09-28
 F09,Plain-language story view and simpler wording,Frontend,P4,feature/plain-language-story,Done,8,2026-09-28
 F10,Fix simulator and prediction-vs-reality simulator,Engine + Frontend,P4,feature/show-the-simulation,Done,9,2026-09-28
-F11,Automatic feature tracker (this file and the README table),Quality,P1,feature/feature-tracker,In progress,,
+F11,Automatic feature tracker (this file and the README table),Quality,P1,feature/feature-tracker,Done,10,2026-09-28
 F12,Solar model feature-importance report,ML,P2,feature/ml-explain,Planned,,
 F13,Cloudy-day early warning and docs/ml.md,ML,P2,feature/cloudy-day-warning,Planned,,
 F14,README setup fixes from a fresh-clone test,Quality,P3,fix/readme-setup,Planned,,
