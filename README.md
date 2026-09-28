@@ -63,7 +63,7 @@ Four numbered screens that follow the story.
 
 ![Fix simulator](docs/images/fixes.png)
 
-**4 · AI forecast** — how the warning is made, the AI's predicted street next to the real one, and the solar and demand forecasts against what happened.
+**4 · AI forecast** — how the warning is made, the AI's predicted street next to an ERA5/PVWatts reference simulation, and the separate solar and demand forecast evaluations.
 
 ![AI forecast](docs/images/forecast.png)
 
@@ -102,9 +102,9 @@ flowchart TD
 | Model | Inputs | Tested on (never seen) | Result |
 | --- | --- | --- | --- |
 | Solar, LightGBM quantile | The weather forecast issued the day before | 2025 | 13% more accurate than "same hour yesterday"; 82% of real values inside the predicted range |
-| Household use, LightGBM quantile | Ratio to yesterday, time, weekday, temperature change | Nov–Dec 2019 | 5% more accurate than "same time yesterday"; 82% inside the range |
+| Household use, LightGBM quantile | Lagged demand, time, weekday and temperature delayed by at least one day | Nov–Dec 2019 | Retrain to regenerate the leakage-safe score and interval coverage |
 
-The AI predicts; physics verifies. Every fix and every warning is checked by a full power-flow simulation. We use genuine day-ahead forecasts scored against independent ERA5 data: Open-Meteo's historical-forecast and archive services return identical values from 2021 on, which would have faked a perfect model.
+The AI predicts; physics verifies. Every fix and every warning is checked by a full power-flow simulation. Solar uses genuine day-ahead forecasts scored against an independent ERA5/PVWatts reference proxy. Demand and upstream voltage in the 2025 warning are explicitly labelled same-calendar-day 2019 proxies; the separate demand-model demo does not currently drive that warning. See [`docs/ml.md`](docs/ml.md) for splits, provenance, leakage controls and permitted pitch wording.
 
 ## API
 
@@ -117,7 +117,9 @@ The AI predicts; physics verifies. Every fix and every warning is checked by a f
 | `/api/actions?scenario=S4` | All seven fixes, ranked |
 | `/api/fix-sim?scenario=S4&action=tap1_volt_var` | The day without and with one fix, step by step |
 | `/api/forecast`, `/api/metrics` | Forecast curves and model scores |
-| `/api/early-warning`, `/api/forecast-sim` | Predicted vs real day |
+| `/api/model-report?target=solar` | Gain and held-out permutation importance |
+| `/api/early-warning`, `/api/forecast-sim` | Day-ahead prediction vs reference simulation |
+| `/api/readiness` | Required ML/data artifact availability |
 
 ## Run it
 
@@ -138,6 +140,8 @@ Rebuild everything from raw data (about 15 minutes):
 python scripts/download_data.py    # CEEW smart meters, Open-Meteo weather and forecasts into data/raw (not committed)
 python scripts/build_data.py       # 15-minute profiles into data/processed
 python -m ml.forecast              # train the forecasts, write ml/reports/metrics.json
+python -m ml.explain               # gain + held-out permutation importance
+python -m ml.evaluate_warning      # multi-day warning evaluation; intentionally compute-heavy
 python scripts/precompute.py       # scenarios, fixes, simulators and early warning into data/results
 pytest -q tests
 ```

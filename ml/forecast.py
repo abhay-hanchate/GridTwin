@@ -2,7 +2,8 @@
 
 Solar: inputs are genuine day-ahead weather forecasts (Open-Meteo Previous Runs API,
 "previous_day1" = issued the day before). Target is solar output modelled from ERA5
-reanalysis, an independent proxy for what actually happened. Train 2024, test 2025.
+reanalysis, an independent reference proxy rather than measured panel output. Train 2024,
+test 2025.
 (The Open-Meteo historical-forecast and archive APIs return identical values for 2021+,
 so they cannot be used as forecast vs truth.)
 Demand: average Mathura household load, 15-minute. Train May-Oct 2019, test Nov-Dec 2019.
