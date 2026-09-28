@@ -121,18 +121,42 @@ The AI predicts; physics verifies. Every fix and every warning is checked by a f
 
 ## Run it
 
-Requires Python 3.11 and Node 20+.
+Requires Python 3.11 and Node.js 20.19+ or 22.12+ (Vite 8 requirement).
 
-```bash
-python -m venv .venv && .venv/Scripts/activate      # Windows; use .venv/bin/activate on Linux/macOS
-pip install -r requirements.txt
+From the repository root, create a virtual environment and install the Python dependencies. In Windows PowerShell:
 
-# Dashboard with the committed, precomputed results
-cd frontend && npm install && npm run build && cd ..
-uvicorn backend.main:app                            # open http://127.0.0.1:8000
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
 ```
 
-Rebuild everything from raw data (about 15 minutes):
+On Linux or macOS:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+```
+
+Build the dashboard with the committed, precomputed results:
+
+```text
+cd frontend
+npm install
+npm run build
+cd ..
+```
+
+Start the API and dashboard from the repository root:
+
+```text
+uvicorn backend.main:app
+```
+
+Open <http://127.0.0.1:8000> in a browser. Keep the terminal running while using the dashboard. You can confirm the API is ready at <http://127.0.0.1:8000/api/health>; it should return `{"status":"ok"}`.
+
+With the virtual environment active and from the repository root, rebuild everything from raw data (about 15 minutes):
 
 ```bash
 python scripts/download_data.py    # CEEW smart meters, Open-Meteo weather and forecasts into data/raw (not committed)
