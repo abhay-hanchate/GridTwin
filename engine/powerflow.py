@@ -49,7 +49,7 @@ def run_day(net: pp.pandapowerNet, inputs: DayInputs, band: str = "10",
     meters = assign_meters(net, inputs.load_kw.columns)
     load_matrix = inputs.load_kw[meters].to_numpy() / 1000          # MW, 96 x houses
 
-    steps, losses_kwh, pv_kwh, curtailed_kwh = [], 0.0, 0.0, 0.0
+    steps, losses_kwh, pv_kwh, curtailed_kwh, battery_kwh = [], 0.0, 0.0, 0.0, 0.0
     for i, t in enumerate(inputs.load_kw.index):
         net.load["p_mw"] = load_matrix[i]
         net.load["q_mvar"] = load_matrix[i] * TAN_PHI
@@ -81,6 +81,7 @@ def run_day(net: pp.pandapowerNet, inputs: DayInputs, band: str = "10",
 
         losses_kwh += float(net.res_line.pl_mw.sum() + net.res_trafo.pl_mw.sum()) * 1000 / 4
         pv_kwh += float(net.res_sgen.p_mw.sum()) * 1000 / 4 if len(net.sgen) else 0.0
+        battery_kwh += float(net.res_storage.p_mw.abs().sum()) * 1000 / 4 if len(net.storage) else 0.0
         step = {
             "t": t.strftime("%Y-%m-%dT%H:%M"),
             "max_vm_pu": round(float(vm.max()), 4),
@@ -109,6 +110,7 @@ def run_day(net: pp.pandapowerNet, inputs: DayInputs, band: str = "10",
             "pv_kwh": round(pv_kwh, 1),
             "curtailed_kwh": round(curtailed_kwh, 1),
             "losses_kwh": round(losses_kwh, 2),
+            "battery_throughput_kwh": round(battery_kwh, 1),
             "homes_profiled": int(inputs.load_kw.shape[1]),
         },
         "provenance": {
