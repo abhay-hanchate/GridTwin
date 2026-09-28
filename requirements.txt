@@ -1,0 +1,12 @@
+pandapower==3.5.5
+simbench==1.6.3
+pvlib==0.16.1
+lightgbm==4.7.0
+pandas==2.3.3
+pyarrow
+numba
+requests
+fastapi
+uvicorn[standard]
+pytest
+httpx

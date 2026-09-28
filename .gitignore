@@ -1,0 +1,28 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+frontend/dist/
+
+# Raw data is downloaded by scripts/download_data.py, never committed
+data/raw/
+data/cache/
+
+# Large or binary artefacts (rulebook: no zips, build outputs or videos)
+*.zip
+*.exe
+*.dll
+*.jar
+*.mp4
+*.mov
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
