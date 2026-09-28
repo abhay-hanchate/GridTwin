@@ -3,7 +3,8 @@ import {
 } from 'recharts'
 import { useApi, volts } from '../api'
 import { duration, niceDate } from '../plain'
-import type { EarlyWarning, ForecastResult, ModelMetrics } from '../types'
+import type { EarlyWarning, ForecastResult, GridTopology, ModelMetrics, SimResult } from '../types'
+import TwinSim from './TwinSim'
 
 function BandChart({ f, scale, unit }: { f: ForecastResult; scale: number; unit: string }) {
   const r = (v: number) => Math.round(v * scale * 10) / 10
@@ -39,13 +40,17 @@ export default function ForecastView() {
   const demand = useApi<ForecastResult>('/api/forecast?target=demand&date=2019-11-20')
   const metrics = useApi<{ solar: ModelMetrics; demand: ModelMetrics }>('/api/metrics')
   const warn = useApi<EarlyWarning>('/api/early-warning')
+  const sim = useApi<SimResult>('/api/forecast-sim')
+  const grid = useApi<GridTopology>('/api/grid?scenario=S4')
 
   return (
     <div className="stack">
-      <p className="how">
-        Our AI (a LightGBM machine-learning model) reads tomorrow's weather forecast and predicts how much solar the street
-        will make. We feed that prediction into the computer copy of the street to see, a day early, when voltage will be unsafe.
-      </p>
+      <div className="how-strip">
+        <div><b>1</b> Yesterday, the weather service forecasts tomorrow's sun, clouds and heat</div>
+        <div><b>2</b> Our AI turns that forecast into solar power for every hour of tomorrow</div>
+        <div><b>3</b> The computer copy of the street replays tomorrow with that solar</div>
+        <div><b>4</b> We warn: when, where and for how long voltage will be unsafe</div>
+      </div>
       <div className="card">
         <h2>Early warning for {warn.data ? niceDate(warn.data.date) : '…'}, with solar on every home</h2>
         <p className="sub">
@@ -67,6 +72,22 @@ export default function ForecastView() {
           </div>
         )}
         {warn.loading && <div className="loading">Running the forecast through the street…</div>}
+      </div>
+
+      <div className="card">
+        <h2>Prediction vs reality, on the street</h2>
+        <p className="sub">
+          Left: the street as our AI predicted it the day before. Right: the street on the real day. Press play: if the AI is
+          right, the two maps turn red at the same times.
+        </p>
+        {sim.loading && <div className="loading">Replaying the predicted and the real day…</div>}
+        {sim.data && grid.data && (
+          <TwinSim sim={sim.data} grid={grid.data} leftTitle="AI prediction (made the day before)" rightTitle="What really happened"
+            rightTone="neutral"
+            doing={(real, predicted) => predicted.pv_kw > 1 || real.pv_kw > 1
+              ? `the AI predicted the street's panels would make ${Math.round(predicted.pv_kw)} kW; they really made ${Math.round(real.pv_kw)} kW.`
+              : 'no sun, so both days depend only on the voltage coming from the grid.'} />
+        )}
       </div>
 
       <div className="split">
