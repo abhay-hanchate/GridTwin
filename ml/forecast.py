@@ -94,6 +94,23 @@ def solar_features(fc: pd.DataFrame) -> pd.DataFrame:
     }, index=idx)
 
 
+def solar_training_data() -> tuple[pd.DataFrame, pd.Series, dict[str, pd.Series]]:
+    """Return the solar feature matrix, reference target and disjoint temporal masks."""
+    fc = _read_hourly("dayahead_mathura_2024_2025.json")
+    fc.columns = [c.replace("_previous_day1", "") for c in fc.columns]
+    fc = fc.dropna()
+    obs = _read_hourly("era5_mathura_2024_2025.json").loc[fc.index]
+    X = solar_features(fc)
+    y = profiles.pv_hourly(obs)
+    daylight = X["clearsky_ghi"] > 0
+    masks = {
+        "train": daylight & (X.index < "2024-11-01"),
+        "calibration": daylight & (X.index >= "2024-11-01") & (X.index.year == 2024),
+        "test": daylight & (X.index.year == 2025),
+    }
+    return X, y, masks
+
+
 def demand_features(y: pd.Series, temperature: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
     """Build leakage-safe demand features and return yesterday's load baseline.
 
@@ -114,16 +131,9 @@ def demand_features(y: pd.Series, temperature: pd.Series) -> tuple[pd.DataFrame,
 
 
 def train_solar() -> dict:
-    fc = _read_hourly("dayahead_mathura_2024_2025.json")
-    fc.columns = [c.replace("_previous_day1", "") for c in fc.columns]
-    fc = fc.dropna()
-    obs = _read_hourly("era5_mathura_2024_2025.json").loc[fc.index]
-    X = solar_features(fc)
-    y = profiles.pv_hourly(obs)
+    X, y, masks = solar_training_data()
     day = X["clearsky_ghi"] > 0
-    fit = day & (X.index < "2024-11-01")
-    calib = day & (X.index >= "2024-11-01") & (X.index.year == 2024)
-    test = day & (X.index.year == 2025)
+    fit, calib, test = masks["train"], masks["calibration"], masks["test"]
 
     models = _fit_quantiles(X[fit], y[fit], "solar")
     pred = pd.DataFrame(0.0, index=X.index, columns=list(QUANTILES))

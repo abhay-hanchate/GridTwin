@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 
 from ml.forecast import PARAMS, demand_features
+from ml.explain import normalize_gain, permutation_mae_increase
 
 
 def _series(days: int = 10) -> tuple[pd.Series, pd.Series]:
@@ -42,3 +43,24 @@ def test_lightgbm_training_is_seeded_and_deterministic():
     assert PARAMS["deterministic"] is True
     assert PARAMS["force_col_wise"] is True
 
+
+def test_gain_importance_is_normalized():
+    result = normalize_gain(np.array([2.0, 3.0, 5.0]))
+    assert np.isclose(result.sum(), 1.0)
+    assert np.allclose(result, [0.2, 0.3, 0.5])
+
+
+def test_permutation_importance_finds_the_predictive_feature():
+    index = pd.date_range("2025-01-01", periods=200, freq="h")
+    X = pd.DataFrame({"signal": np.arange(200), "noise": 1.0}, index=index)
+    y = X["signal"] * 2
+
+    importance = permutation_mae_increase(
+        lambda frame: frame["signal"].to_numpy() * 2,
+        X,
+        y,
+        repeats=3,
+    )
+
+    assert importance["signal"] > 0
+    assert importance["noise"] == 0
