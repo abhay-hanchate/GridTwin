@@ -3,13 +3,16 @@
 Run:  uvicorn backend.main:app --reload
 """
 import json
+import os
 import sys
 import warnings
+from datetime import date as Date
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 
 import pandas as pd
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -23,22 +26,28 @@ from engine.ranking import evaluate_actions  # noqa: E402
 from engine.scenarios import DEFAULT_DATE, SCENARIOS, run_scenario  # noqa: E402
 from engine.simulate import ACTIONS_BY_ID, simulate_fix  # noqa: E402
 from ml.early_warning import DEFAULT_FORECAST_DATE, early_warning, forecast_sim  # noqa: E402
+from backend.cache import CorruptCacheError, load_or_compute  # noqa: E402
+from backend.schemas import EarlyWarningResponse, ModelReportResponse, ReadinessResponse  # noqa: E402
 
 RESULTS_DIR = config.ROOT / "data" / "results"
 FRONTEND_DIST = config.ROOT / "frontend" / "dist"
 
 app = FastAPI(title="GridTwin API", version="0.1.0")
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["GET"], allow_headers=["*"])
+cors_origins = [
+    origin.strip()
+    for origin in os.getenv(
+        "GRIDTWIN_CORS_ORIGINS", "http://127.0.0.1:5173,http://localhost:5173"
+    ).split(",")
+    if origin.strip()
+]
+app.add_middleware(CORSMiddleware, allow_origins=cors_origins, allow_methods=["GET"], allow_headers=["*"])
 
 
 def _cached(name: str, compute):
-    path = RESULTS_DIR / f"{name}.json"
-    if path.exists():
-        return json.loads(path.read_text())
-    result = compute()
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(result, separators=(",", ":")))
-    return result
+    try:
+        return load_or_compute(RESULTS_DIR, name, compute)
+    except CorruptCacheError as exc:
+        raise HTTPException(503, str(exc)) from exc
 
 
 def _scenario(scenario: str) -> str:
@@ -52,13 +61,26 @@ def health():
     return {"status": "ok"}
 
 
+@app.get("/api/readiness", response_model=ReadinessResponse)
+def readiness():
+    required = {
+        "solar_forecast": config.PROCESSED_DIR / "solar_forecast_2025.parquet",
+        "demand_forecast": config.PROCESSED_DIR / "demand_forecast_2019.parquet",
+        "model_metrics": config.ROOT / "ml" / "reports" / "metrics.json",
+        "solar_explainability": config.ROOT / "ml" / "reports" / "solar_feature_importance.json",
+    }
+    files = {name: path.is_file() for name, path in required.items()}
+    ready = all(files.values())
+    return {"status": "ready" if ready else "degraded", "ready": ready, "files": files}
+
+
 @app.get("/api/scenarios")
 def scenarios():
     return [{"id": sid, **spec, "default_date": DEFAULT_DATE} for sid, spec in SCENARIOS.items()]
 
 
 @app.get("/api/summary")
-def summary(date: str = DEFAULT_DATE):
+def summary(date: Date = Date.fromisoformat(DEFAULT_DATE)):
     """Headline numbers for every scenario, without the per-step detail (for the story view)."""
     out = []
     for sid, spec in SCENARIOS.items():
@@ -75,19 +97,21 @@ def grid(scenario: str = "S4"):
 
 
 @app.get("/api/run")
-def run(scenario: str = "S4", date: str = DEFAULT_DATE):
+def run(scenario: str = "S4", date: Date = Date.fromisoformat(DEFAULT_DATE)):
     sid = _scenario(scenario)
+    date_value = date.isoformat()
     try:
-        return _cached(f"run_{sid}_{date}", lambda: run_scenario(sid, date))
+        return _cached(f"run_{sid}_{date_value}", lambda: run_scenario(sid, date_value))
     except (KeyError, ValueError) as e:
         raise HTTPException(422, f"No complete meter data for {date}: {e}")
 
 
 @app.get("/api/actions")
-def actions(scenario: str = "S4", date: str = DEFAULT_DATE):
+def actions(scenario: str = "S4", date: Date = Date.fromisoformat(DEFAULT_DATE)):
     sid = _scenario(scenario)
+    date_value = date.isoformat()
     try:
-        return _cached(f"actions_{sid}_{date}", lambda: evaluate_actions(sid, date))
+        return _cached(f"actions_{sid}_{date_value}", lambda: evaluate_actions(sid, date_value))
     except (KeyError, ValueError) as e:
         raise HTTPException(422, f"No complete meter data for {date}: {e}")
 
@@ -99,16 +123,20 @@ def _forecast_table(target: str) -> pd.DataFrame:
 
 
 @app.get("/api/forecast")
-def forecast(target: str = Query("solar", pattern="^(solar|demand)$"), date: str = DEFAULT_FORECAST_DATE):
+def forecast(
+    target: Literal["solar", "demand"] = "solar",
+    date: Date = Date.fromisoformat(DEFAULT_FORECAST_DATE),
+):
     table = _forecast_table(target)
+    date_value = date.isoformat()
     try:
-        day = table.loc[date]
+        day = table.loc[date_value]
     except KeyError:
         raise HTTPException(404, f"No {target} forecast for {date}; range {table.index.min()} to {table.index.max()}")
     return {
         "target": target,
         "unit": "kW per installed kW" if target == "solar" else "kW per home",
-        "date": date,
+        "date": date_value,
         "points": [{"t": t.strftime("%H:%M"), **{k: round(float(v), 4) for k, v in row.items()}}
                    for t, row in day.iterrows()],
     }
@@ -116,27 +144,65 @@ def forecast(target: str = Query("solar", pattern="^(solar|demand)$"), date: str
 
 @app.get("/api/metrics")
 def metrics():
-    return json.loads((config.ROOT / "ml" / "reports" / "metrics.json").read_text())
+    path = config.ROOT / "ml" / "reports" / "metrics.json"
+    if not path.is_file():
+        raise HTTPException(503, "model metrics are unavailable; retrain the forecasts")
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
-@app.get("/api/early-warning")
-def warning(date: str = DEFAULT_FORECAST_DATE):
-    return _cached(f"early_warning_{date}", lambda: early_warning(date))
+@app.get("/api/model-report", response_model=ModelReportResponse)
+def model_report(target: Literal["solar"] = "solar"):
+    path = config.ROOT / "ml" / "reports" / f"{target}_feature_importance.json"
+    if not path.is_file():
+        raise HTTPException(503, f"{target} explainability report is unavailable")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+@app.get("/api/early-warning", response_model=EarlyWarningResponse)
+def warning(
+    date: Date = Date.fromisoformat(DEFAULT_FORECAST_DATE),
+    risk: Literal["p10", "p50", "p90"] = "p90",
+    band: Literal["6", "10"] = "10",
+):
+    date_value = date.isoformat()
+    try:
+        return _cached(
+            f"early_warning_{date_value}_{risk}_band{band}",
+            lambda: early_warning(date_value, risk=risk, band=band),
+        )
+    except (KeyError, ValueError) as exc:
+        raise HTTPException(422, f"warning inputs are unavailable: {exc}") from exc
 
 
 @app.get("/api/fix-sim")
-def fix_sim(scenario: str = "S4", action: str = "tap1_volt_var", date: str = DEFAULT_DATE):
+def fix_sim(
+    scenario: str = "S4",
+    action: str = "tap1_volt_var",
+    date: Date = Date.fromisoformat(DEFAULT_DATE),
+):
     """The same day without and with one fix, step by step, for the side-by-side simulator."""
     sid = _scenario(scenario)
     if action not in ACTIONS_BY_ID:
         raise HTTPException(404, f"Unknown fix {action}; choose from {list(ACTIONS_BY_ID)}")
-    return _cached(f"fixsim_{sid}_{action}_{date}", lambda: simulate_fix(sid, action, date))
+    date_value = date.isoformat()
+    return _cached(f"fixsim_{sid}_{action}_{date_value}", lambda: simulate_fix(sid, action, date_value))
 
 
 @app.get("/api/forecast-sim")
-def forecast_simulation(date: str = DEFAULT_FORECAST_DATE):
-    """The street under the AI's day-ahead forecast next to what really happened."""
-    return _cached(f"forecastsim_{date}", lambda: forecast_sim(date))
+def forecast_simulation(
+    date: Date = Date.fromisoformat(DEFAULT_FORECAST_DATE),
+    risk: Literal["p10", "p50", "p90"] = "p50",
+    band: Literal["6", "10"] = "10",
+):
+    """The day-ahead solar case next to the ERA5/PVWatts reference simulation."""
+    date_value = date.isoformat()
+    try:
+        return _cached(
+            f"forecastsim_{date_value}_{risk}_band{band}",
+            lambda: forecast_sim(date_value, risk=risk, band=band),
+        )
+    except (KeyError, ValueError) as exc:
+        raise HTTPException(422, f"forecast simulation inputs are unavailable: {exc}") from exc
 
 
 @app.get("/api/insights")
