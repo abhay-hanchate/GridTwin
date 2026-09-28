@@ -1,89 +1,123 @@
 # GridTwin
 
 [![CI](https://github.com/abhay-hanchate/GridTwin/actions/workflows/ci.yml/badge.svg)](https://github.com/abhay-hanchate/GridTwin/actions/workflows/ci.yml)
+[![Feature tracker](https://github.com/abhay-hanchate/GridTwin/actions/workflows/features.yml/badge.svg)](https://github.com/abhay-hanchate/GridTwin/actions/workflows/features.yml)
 
-**HackMatrix 5.0 · ENR-02 — Renewable Distribution Grid Digital Twin**
+**HackMatrix 5.0 · Energy track · ENR-02 — Renewable Distribution Grid Digital Twin**
 
-GridTwin is a digital twin of a rural low-voltage feeder under growing rooftop solar. It runs on **real Indian household demand, real measured voltage and real weather**, predicts where and when voltage becomes unsafe, tests corrective actions over the whole day, and recommends the cheapest safe one — or says honestly that no safe action exists.
+GridTwin is a computer copy of a rural Indian street's electricity network. It shows **when rooftop solar will make voltage unsafe, how much of that is solar's fault, and the cheapest fix that keeps the street safe all day** — and our AI warns a day in advance. It runs on real household electricity use and real measured voltage from smart meters in Mathura, real weather, and a physics-based power-flow engine.
 
 ## The problem, in real data
 
-Smart meters in 38 Mathura homes (CEEW, 2019) show that Indian feeders already run hot:
+India is putting rooftop solar on 1 crore homes (PM Surya Ghar). At midday, solar makes more power than homes use, so the surplus flows back up the street's wire and **raises** the voltage. Too much voltage damages appliances and makes solar inverters switch off.
+
+Smart meters in 38 Mathura homes (CEEW, 2019) show the street is already close to the edge:
 
 | Measured at real homes | Value |
 | --- | --- |
-| Median voltage (nominal 230 V) | **245.5 V** |
-| Readings above the +10% limit (253 V) | **27.2%** |
-| Readings below the −10% limit (207 V) | 6.1% |
+| Typical voltage (should be 230 V) | **245.5 V** |
+| Time above the 253 V safe limit (+10%) | **27.2%** |
+| Time below 207 V (−10%) | 6.1% |
 
-PM Surya Ghar is adding rooftop solar to 1 crore homes. At midday, solar flows back up the wires and pushes voltage higher still.
+## What GridTwin shows
 
-## What GridTwin finds (15 May 2019, 99 homes, ±10% band)
+On a real day (15 May 2019) for a 99-home street with one 250 kVA transformer, safe band 207–253 V:
 
-| Scenario | Unsafe 15-min steps | Caused by solar | Peak |
+| Homes with 3 kW rooftop solar | Unsafe time per day | Caused by solar | Highest voltage |
 | --- | --- | --- | --- |
-| S1 · no rooftop solar | 5 | 0 | 256 V |
-| S2 · 30% of homes with 3 kW | 12 | 7 | 256 V |
-| S3 · 60% of homes | 16 | 11 | 259 V |
-| S4 · every home | **26** | **21** | **263 V** |
-| S5 · every home, strict ±6% band | 47 | 4 | 263 V |
+| None | 1 h 15 min | 0 | 256 V |
+| 3 in 10 | 3 h | 1 h 45 min | 256 V |
+| 6 in 10 | 4 h | 2 h 45 min | 259 V |
+| Every home | **6 h 30 min** | **5 h 15 min** | **263 V** |
+| Every home, stricter ±6% rule | 11 h 45 min | 1 h | 263 V |
 
-**Recommended fix for S4:** transformer tap +1 together with inverter Volt/VAR (power factor 0.9) clears all 26 unsafe steps with **zero solar wasted**. No single action does it alone; curtailing solar to 60% wastes 489 kWh and still leaves 15 unsafe steps. Under the strict ±6% band, **no safe action exists**, and GridTwin says so.
+**Seven fixes tested, each replayed over the whole day:**
 
-**Early warning:** for 15 May 2025, the solar forecast predicted 27 unsafe steps (peak 1.157 pu) a day ahead; 28 happened (peak 1.158 pu).
+| Fix | Unsafe time left | Solar thrown away |
+| --- | --- | --- |
+| **Transformer one notch lower + smart inverters** (recommended) | **0 min** | **0 kWh** |
+| Transformer two notches lower | 45 min (evenings drop to 206 V) | 0 kWh |
+| Transformer one notch lower | 2 h | 0 kWh |
+| Smart inverters only | 2 h 45 min | 0 kWh |
+| Throw away 40% of solar (common today) | 3 h 45 min | 489 kWh |
+| Neighbourhood battery 50 kW | 5 h | 0 kWh |
+| Throw away 20% of solar | 5 h 30 min | 245 kWh |
 
-## Screenshots
+Under the stricter ±6% rule **no fix is enough**, and GridTwin says so instead of pretending.
 
-**The story** — the dashboard opens on a four-step, plain-language walkthrough: the problem, what solar does, the best fix, and the AI warning.
+**AI early warning:** for 15 May 2025, the forecast predicted **6 h 45 min** of unsafe voltage a day ahead; **7 h** happened.
+
+## The dashboard
+
+Four numbered screens that follow the story.
+
+**1 · The story** — the whole project in four plain steps: the voltage is already too high, solar pushes it over at midday, two cheap settings fix it, and the AI warns a day early.
 
 ![The story](docs/images/story.png)
 
-**Grid twin** — every connection point coloured by voltage at 11:00 with solar on every home; play through the day.
+**2 · Live map** — the street coloured by voltage at every point; press play to watch a day. Switch between no solar, 3 in 10 homes, 6 in 10 homes, every home, and the strict rule.
 
-![Grid twin](docs/images/grid-twin.png)
+![Live map](docs/images/grid-twin.png)
 
-**Fixes** — every action re-simulated for all 96 steps and ranked; only fixes safe all day count.
+**3 · Fixes** — the fix simulator plays two maps side by side, without and with the chosen fix, on one clock; a live line says what the fix is doing (for example, inverters absorbing 70 kvar), and impact cards show the before and after. All seven fixes are ranked below.
 
-![Fixes](docs/images/fixes.png)
+![Fix simulator](docs/images/fixes.png)
 
-**Forecast and early warning** — tomorrow's solar forecast run through the grid predicts unsafe voltage a day ahead.
+**4 · AI forecast** — how the warning is made, the AI's predicted street next to the real one, and the solar and demand forecasts against what happened.
 
-![Forecast and early warning](docs/images/forecast.png)
+![AI forecast](docs/images/forecast.png)
 
 ## How it works
 
 ```mermaid
-flowchart LR
-  A[CEEW smart meters<br/>demand + voltage] --> D[Full-day power flow<br/>96 x 15 min, pandapower]
-  B[Open-Meteo weather<br/>pvlib solar model] --> D
-  C[SimBench feeder<br/>+ Indian overhead lines] --> D
-  F[LightGBM forecasts<br/>P10 / P50 / P90] --> D
-  D --> E[Violations<br/>with vs without solar]
-  E --> G[7 corrective actions<br/>each re-simulated all day]
-  G --> H[Ranking + honest<br/>no-safe-action verdict]
-  H --> I[FastAPI + React dashboard]
+flowchart TD
+  A[Real homes<br/>CEEW smart meters] --> E[Computer copy of the street<br/>AC power flow, 96 moments a day]
+  B[Real weather<br/>Open-Meteo + pvlib solar] --> E
+  C[Street layout<br/>SimBench + Indian overhead wires] --> E
+  D[AI forecast<br/>LightGBM on the day-ahead forecast] --> E
+  E --> F[Unsafe time<br/>with vs without solar]
+  E --> G[Fix tournament<br/>7 fixes replayed all day]
+  E --> H[Early warning<br/>a day ahead]
+  F --> I[Dashboard]
+  G --> I
+  H --> I
 ```
 
-| Layer | What it does |
-| --- | --- |
-| `engine/profiles.py` | Real CEEW demand (15-min kW), median customer voltage, pvlib solar |
-| `engine/grid.py` | SimBench rural feeder, Indian ACSR Rabbit overhead lines, working taps |
-| `engine/powerflow.py` | 96-step AC power flow, over/under-voltage and overload detection |
-| `engine/actions.py` | Tap, Volt/VAR, tap + Volt/VAR, export caps, volt-droop battery |
-| `engine/ranking.py` | Safe all day or rejected; ranked by solar wasted, battery use, losses |
-| `ml/forecast.py` | LightGBM quantile forecasts with calibrated uncertainty bands |
-| `ml/early_warning.py` | Forecast solar through the grid to predict unsafe voltage a day ahead |
-| `backend/main.py` | FastAPI serving precomputed results instantly |
-| `frontend/` | React dashboard: feeder map, fixes, forecasts |
+| Component | What it does | Why it exists |
+| --- | --- | --- |
+| `engine/profiles.py` | Turns 3-minute meter readings into 15-minute household use and street voltage; models solar with pvlib | The twin must run on real Indian data |
+| `engine/grid.py` | Builds the 99-home street with Indian overhead-wire values and working transformer taps | A public benchmark layout, adapted to Indian conditions |
+| `engine/powerflow.py` | Replays a day in 96 steps, solving the physics at each and flagging unsafe voltage | The core of the twin |
+| `engine/scenarios.py` | Five solar scenarios, each also run without solar | Shows how much unsafe time solar itself causes |
+| `engine/actions.py` | The seven fixes as small functions applied at every step | New fixes plug in without new simulation code |
+| `engine/ranking.py` | Keeps only fixes safe all day, ranks them by solar wasted, battery use and losses, or reports no safe action | Honest, verifiable recommendations |
+| `engine/simulate.py` | The same day without and with a fix, point by point | Powers the side-by-side simulators |
+| `ml/forecast.py` | LightGBM forecasts of solar and household use with calibrated ranges | The AI layer |
+| `ml/early_warning.py` | Runs tomorrow's predicted solar through the street | The day-ahead warning |
+| `backend/main.py` | FastAPI service; serves precomputed results instantly | Connects the engine to the dashboard |
+| `frontend/` | React dashboard with the story, live map, fix simulator and forecast screens | Understandable by non-engineers |
 
 ## AI / ML
 
-| Model | Inputs | Test | Result |
+| Model | Inputs | Tested on (never seen) | Result |
 | --- | --- | --- | --- |
-| Solar, LightGBM quantile | Weather forecast issued the day before | 2025 | 13% better than same-hour-yesterday; 82% of outcomes inside the P10–P90 band |
-| Demand, LightGBM quantile | Real household history, temperature | Nov–Dec 2019 | 5% better than same-time-yesterday; 82% band coverage |
+| Solar, LightGBM quantile | The weather forecast issued the day before | 2025 | 13% more accurate than "same hour yesterday"; 82% of real values inside the predicted range |
+| Household use, LightGBM quantile | Ratio to yesterday, time, weekday, temperature change | Nov–Dec 2019 | 5% more accurate than "same time yesterday"; 82% inside the range |
 
-Physics verifies every recommendation: the ML predicts the problem, the power flow checks every fix.
+The AI predicts; physics verifies. Every fix and every warning is checked by a full power-flow simulation. We use genuine day-ahead forecasts scored against independent ERA5 data: Open-Meteo's historical-forecast and archive services return identical values from 2021 on, which would have faked a perfect model.
+
+## API
+
+| Route | Returns |
+| --- | --- |
+| `/api/insights` | Measured voltage quality from the real meters |
+| `/api/summary` | Headline numbers for every scenario |
+| `/api/scenarios`, `/api/grid` | Scenario list; street layout with coordinates |
+| `/api/run?scenario=S4` | A full simulated day |
+| `/api/actions?scenario=S4` | All seven fixes, ranked |
+| `/api/fix-sim?scenario=S4&action=tap1_volt_var` | The day without and with one fix, step by step |
+| `/api/forecast`, `/api/metrics` | Forecast curves and model scores |
+| `/api/early-warning`, `/api/forecast-sim` | Predicted vs real day |
 
 ## Run it
 
@@ -98,33 +132,84 @@ cd frontend && npm install && npm run build && cd ..
 uvicorn backend.main:app                            # open http://127.0.0.1:8000
 ```
 
-Rebuild everything from raw data (about 10 minutes):
+Rebuild everything from raw data (about 15 minutes):
 
 ```bash
-python scripts/download_data.py    # CEEW smart meters + Open-Meteo weather into data/raw (not committed)
+python scripts/download_data.py    # CEEW smart meters, Open-Meteo weather and forecasts into data/raw (not committed)
 python scripts/build_data.py       # 15-minute profiles into data/processed
-python -m ml.forecast              # train forecasts, write ml/reports/metrics.json
-python scripts/precompute.py       # scenarios, fixes and early warning into data/results
+python -m ml.forecast              # train the forecasts, write ml/reports/metrics.json
+python scripts/precompute.py       # scenarios, fixes, simulators and early warning into data/results
 pytest -q tests
 ```
 
 For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn backend.main:app --reload`.
 
+## Quality
+
+- **Tests:** engine, API contracts, simulators and the feature tracker (`pytest -q tests`).
+- **CI:** GitHub Actions runs the tests and the dashboard build on every pull request.
+- **Workflow:** every feature is built on its own branch and merged through a pull request after CI passes.
+- **Feature tracker:** when a pull request is merged, a GitHub Action marks its feature Done in [features.csv](features.csv) and regenerates the table below.
+
+## Features
+
+<!-- FEATURES:START -->
+**10 of 24 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
+
+| ID | Feature | Area | Owner | Status | Pull request |
+| --- | --- | --- | --- | --- | --- |
+| F01 | Project scaffold: README and requirements | Repo | P1 | ✅ Done |  |
+| F02 | Data pipeline: real CEEW demand and voltage and pvlib solar profiles | Data | P1 | ✅ Done | [#1](https://github.com/abhay-hanchate/GridTwin/pull/1) |
+| F03 | Grid engine: street model and full-day power flow and scenarios | Engine | P1 | ✅ Done | [#2](https://github.com/abhay-hanchate/GridTwin/pull/2) |
+| F04 | Seven corrective actions and all-day ranking with honest no-safe-action | Engine | P1 | ✅ Done | [#3](https://github.com/abhay-hanchate/GridTwin/pull/3) |
+| F05 | Solar and demand forecasts with calibrated ranges and early warning | ML | P2 | ✅ Done | [#4](https://github.com/abhay-hanchate/GridTwin/pull/4) |
+| F06 | FastAPI service with precomputed results | API | P2 | ✅ Done | [#5](https://github.com/abhay-hanchate/GridTwin/pull/5) |
+| F07 | Dashboard: feeder map and fixes and forecast screens | Frontend | P4 | ✅ Done | [#6](https://github.com/abhay-hanchate/GridTwin/pull/6) |
+| F08 | Docs and CI: README and assumptions and GitHub Actions | Quality | P3 | ✅ Done | [#7](https://github.com/abhay-hanchate/GridTwin/pull/7) |
+| F09 | Plain-language story view and simpler wording | Frontend | P4 | ✅ Done | [#8](https://github.com/abhay-hanchate/GridTwin/pull/8) |
+| F10 | Fix simulator and prediction-vs-reality simulator | Engine + Frontend | P4 | ✅ Done | [#9](https://github.com/abhay-hanchate/GridTwin/pull/9) |
+| F11 | Automatic feature tracker (this file and the README table) | Quality | P1 | 🔄 In progress |  |
+| F12 | Solar model feature-importance report | ML | P2 | ⏳ Planned |  |
+| F13 | Cloudy-day early warning and docs/ml.md | ML | P2 | ⏳ Planned |  |
+| F14 | README setup fixes from a fresh-clone test | Quality | P3 | ⏳ Planned |  |
+| F15 | Test plan and bug issues | Quality | P3 | ⏳ Planned |  |
+| F16 | Edge-case tests | Quality | P3 | ⏳ Planned |  |
+| F17 | Demo script for the video | Docs | P3 | ⏳ Planned |  |
+| F18 | Hosting capacity: how much solar the street can take | Engine + Frontend | P4 | ⏳ Planned |  |
+| F19 | Faster dashboard: load each tab only when opened | Frontend | P4 | ⏳ Planned |  |
+| F20 | Phone layout and accessibility | Frontend | P4 | ⏳ Planned |  |
+| F21 | Live deployment with a public link | DevOps | P4 | ⏳ Planned |  |
+| F22 | Feeder reconfiguration (switching) as a fix | Engine | Team | 🏁 Finale |  |
+| F23 | Machine-learning shortcut model of the power flow | ML | Team | 🏁 Finale |  |
+| F24 | AI assistant that explains each recommendation | ML | Team | 🏁 Finale |  |
+<!-- FEATURES:END -->
+
+## Team
+
+| Person | Role | Owns |
+| --- | --- | --- |
+| Person 1 (team leader) | Engine and data lead | Data pipeline, street model, power flow, fixes and ranking; repository and submission |
+| Person 2 | ML and API | Solar and demand forecasts, early warning, FastAPI service |
+| Person 3 | QA, testing, docs and pitch | Test plan, edge-case tests, device checks, README, PPT, video |
+| Person 4 | Tech lead, new features | Dashboard, simulators, hosting capacity, performance, deployment |
+
 ## Data sources
 
 | Data | Source | Licence / access |
 | --- | --- | --- |
-| Household demand and voltage | [CEEW smart meter data, Mathura](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/GOCHJH) | CC0 |
+| Household use and voltage | [CEEW smart meter data, Mathura](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/GOCHJH) | CC0 |
 | Weather, reanalysis, day-ahead forecasts | [Open-Meteo](https://open-meteo.com/) | Free, non-commercial |
-| Feeder topology | [SimBench](https://github.com/e2nIEE/simbench) | Open benchmark |
+| Street layout | [SimBench](https://github.com/e2nIEE/simbench) | Open benchmark |
 | Overhead conductor | ACSR Rabbit, IS 398 | Indian standard |
 | Voltage tolerance | [CEA minutes on declared supply voltage](https://cea.nic.in/wp-content/uploads/dp_r/2022/06/Approved_MoM_of_the_Meeting_to_finalize_Declared_Supply_Voltage.pdf) | Public |
 | Rooftop-solar policy | [PM Surya Ghar (PIB)](https://www.pib.gov.in/PressReleasePage.aspx?PRID=2010130) | Public |
 
-Every assumption and limitation is listed in [docs/assumptions.md](docs/assumptions.md).
+Every assumption and limitation — what is observed, modeled or benchmark — is listed in [docs/assumptions.md](docs/assumptions.md).
 
 ## Roadmap (finale)
 
-- Feeder reconfiguration through switching
-- ML surrogate of the power flow to screen hundreds of actions in milliseconds
-- LLM operator assistant that explains each recommendation from the evidence record
+- Hosting capacity: how much solar each street can take, with and without fixes
+- Feeder reconfiguration (switching) as a fix
+- Machine-learning shortcut model of the power flow to test hundreds of fixes in milliseconds
+- AI assistant that explains each recommendation in plain language
+- Live deployment with a public link
