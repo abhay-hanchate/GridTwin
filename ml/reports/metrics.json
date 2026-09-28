@@ -1,0 +1,24 @@
+{
+  "solar": {
+    "target": "kW per installed kW, daytime hours",
+    "inputs": "day-ahead forecast",
+    "truth": "ERA5 reanalysis",
+    "train": "2024",
+    "test": "2025",
+    "mae_p50": 0.0396,
+    "p10_p90_coverage": 0.823,
+    "mae_persistence": 0.0456,
+    "skill_vs_persistence": 0.13,
+    "mae_physics_only": 0.0411,
+    "skill_vs_physics_only": 0.034
+  },
+  "demand": {
+    "target": "average household kW, 15-minute",
+    "train": "May-Oct 2019",
+    "test": "Nov-Dec 2019",
+    "mae_p50": 0.0387,
+    "p10_p90_coverage": 0.816,
+    "mae_persistence": 0.0409,
+    "skill_vs_persistence": 0.053
+  }
+}
