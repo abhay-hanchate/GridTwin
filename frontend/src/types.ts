@@ -1,0 +1,127 @@
+export type ScenarioId = 'S1' | 'S2' | 'S3' | 'S4' | 'S5'
+
+export interface Scenario {
+  id: ScenarioId
+  name: string
+  pv_share: number
+  band: '10' | '6'
+  default_date: string
+}
+
+export interface Violation {
+  type: 'overvoltage' | 'undervoltage' | 'line_overload' | 'trafo_overload'
+  element: string
+  id: number
+  value: number
+  limit: number
+}
+
+export interface Step {
+  t: string
+  max_vm_pu: number
+  min_vm_pu: number
+  trafo_loading_pct: number
+  pv_kw: number
+  load_kw: number
+  upstream_vm_pu: number
+  violations: Violation[]
+  bus_vm_pu: Record<string, number>
+  line_loading_pct: Record<string, number>
+  solver_failed?: boolean
+}
+
+export interface RunResult {
+  scenario_id: ScenarioId
+  name: string
+  pv_share: number
+  band: string
+  date: string
+  limits: { vm_min_pu: number; vm_max_pu: number; loading_max_pct: number }
+  steps: Step[]
+  summary: {
+    max_vm_pu: number
+    min_vm_pu: number
+    violation_steps: number
+    violation_steps_without_solar: number
+    violation_steps_from_solar: number
+    solver_failed_steps: number
+    pv_kwh: number
+    curtailed_kwh: number
+    losses_kwh: number
+    homes_profiled: number
+  }
+  provenance: Record<string, string>
+}
+
+export interface GridTopology {
+  buses: { id: number; x: number; y: number; house: boolean; pv: boolean }[]
+  lines: { id: number; from: number; to: number; length_m: number }[]
+  trafo: { lv_bus: number; sn_kva: number }
+}
+
+export interface Snapshot {
+  max_vm_pu: number
+  min_vm_pu: number
+  violation_steps: number
+}
+
+export interface ActionResult {
+  action_id: string
+  label: string
+  kind: string
+  params: Record<string, number>
+  acceptable: boolean
+  remaining_violation_steps: number
+  before: Snapshot
+  after: Snapshot
+  cost: { curtailed_kwh: number; losses_kwh: number; battery_throughput_kwh: number }
+  rank: number | null
+  reason_codes: string[]
+}
+
+export interface ActionsResult {
+  scenario_id: ScenarioId
+  date: string
+  band: string
+  worst_bus: number
+  before: Snapshot
+  actions: ActionResult[]
+  verdict: { safe_action_found: boolean; recommended: string | null; message: string }
+}
+
+export interface ForecastResult {
+  target: 'solar' | 'demand'
+  unit: string
+  date: string
+  points: { t: string; p10: number; p50: number; p90: number; actual: number }[]
+}
+
+export interface ModelMetrics {
+  mae_p50: number
+  p10_p90_coverage: number
+  mae_persistence: number
+  skill_vs_persistence: number
+  train: string
+  test: string
+  [key: string]: number | string
+}
+
+export interface EarlyWarning {
+  date: string
+  demand_proxy_date: string
+  cases: Record<'p50' | 'p90' | 'actual', {
+    violation_steps: number
+    max_vm_pu: number
+    first_unsafe: string | null
+    unsafe_times: string[]
+  }>
+}
+
+export interface Insights {
+  meters: number
+  readings: number
+  median_v: number
+  share_above_6pct: number
+  share_above_10pct: number
+  share_below_10pct: number
+}
