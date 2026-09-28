@@ -34,8 +34,14 @@ def main() -> None:
         save(f"grid_{sid}", topology(build_grid(spec["pv_share"])))
         save(f"run_{sid}_{DEFAULT_DATE}", run_scenario(sid, DEFAULT_DATE))
         save(f"actions_{sid}_{DEFAULT_DATE}", evaluate_actions(sid, DEFAULT_DATE))
-    save(f"early_warning_{DEFAULT_FORECAST_DATE}", early_warning(DEFAULT_FORECAST_DATE))
-    save(f"forecastsim_{DEFAULT_FORECAST_DATE}", forecast_sim(DEFAULT_FORECAST_DATE))
+    save(
+        f"early_warning_{DEFAULT_FORECAST_DATE}_p90_band10",
+        early_warning(DEFAULT_FORECAST_DATE, risk="p90", band="10"),
+    )
+    save(
+        f"forecastsim_{DEFAULT_FORECAST_DATE}_p50_band10",
+        forecast_sim(DEFAULT_FORECAST_DATE, risk="p50", band="10"),
+    )
     # Side-by-side fix simulations for the headline scenario; other scenarios compute on demand.
     for action in ACTIONS:
         save(f"fixsim_S4_{action.id}_{DEFAULT_DATE}", simulate_fix("S4", action.id, DEFAULT_DATE))
