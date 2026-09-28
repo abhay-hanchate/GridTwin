@@ -1,0 +1,55 @@
+{
+  "model": "solar_p50",
+  "generated_at": "2026-09-28T21:10:24.171807+00:00",
+  "evaluation_period": "2025 daylight hours (untouched temporal test set)",
+  "features_available_at_issue_time": true,
+  "importance": [
+    {
+      "feature": "fc_pv",
+      "definition": "PVWatts output calculated from the genuine previous-day weather forecast",
+      "gain_normalized": 0.605709,
+      "permutation_mae_increase": 0.144361
+    },
+    {
+      "feature": "clearsky_ghi",
+      "definition": "deterministic clear-sky irradiance for location and time",
+      "gain_normalized": 0.139496,
+      "permutation_mae_increase": 0.031799
+    },
+    {
+      "feature": "doy",
+      "definition": "day of year",
+      "gain_normalized": 0.105299,
+      "permutation_mae_increase": 0.009159
+    },
+    {
+      "feature": "fc_temp",
+      "definition": "previous-day forecast air temperature",
+      "gain_normalized": 0.049734,
+      "permutation_mae_increase": 0.001265
+    },
+    {
+      "feature": "fc_ghi",
+      "definition": "previous-day forecast global horizontal irradiance",
+      "gain_normalized": 0.047397,
+      "permutation_mae_increase": 0.00162
+    },
+    {
+      "feature": "fc_cloud",
+      "definition": "previous-day forecast cloud cover",
+      "gain_normalized": 0.036123,
+      "permutation_mae_increase": -0.000664
+    },
+    {
+      "feature": "hour",
+      "definition": "local hour of day",
+      "gain_normalized": 0.016242,
+      "permutation_mae_increase": 0.001154
+    }
+  ],
+  "limitations": [
+    "Importance describes predictive contribution, not causality.",
+    "The target is ERA5/PVWatts-derived solar output, not measured panel production.",
+    "Correlated irradiance features can share or exchange importance."
+  ]
+}
