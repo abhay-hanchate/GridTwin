@@ -102,7 +102,7 @@ flowchart TD
 | Model | Inputs | Tested on (never seen) | Result |
 | --- | --- | --- | --- |
 | Solar, LightGBM quantile | The weather forecast issued the day before | 2025 | 13% more accurate than "same hour yesterday"; 82% of real values inside the predicted range |
-| Household use, LightGBM quantile | Lagged demand, time, weekday and temperature delayed by at least one day | Nov–Dec 2019 | Retrain to regenerate the leakage-safe score and interval coverage |
+| Household use, LightGBM quantile | Lagged demand, time, weekday and temperature delayed by at least one day | Nov–Dec 2019 | 0.9% more accurate than "same time yesterday"; 75.3% inside the nominal 80% range |
 
 The AI predicts; physics verifies. Every fix and every warning is checked by a full power-flow simulation. Solar uses genuine day-ahead forecasts scored against an independent ERA5/PVWatts reference proxy. Demand and upstream voltage in the 2025 warning are explicitly labelled same-calendar-day 2019 proxies; the separate demand-model demo does not currently drive that warning. See [`docs/ml.md`](docs/ml.md) for splits, provenance, leakage controls and permitted pitch wording.
 
