@@ -24,20 +24,30 @@ def download(url: str, dest: Path) -> None:
     print(f"done  {dest.name} ({dest.stat().st_size / 1e6:.1f} MB)")
 
 
-def weather_url() -> str:
+def weather_url(base: str, start: str, end: str) -> str:
     return (
-        "https://archive-api.open-meteo.com/v1/archive"
-        f"?latitude={config.LATITUDE}&longitude={config.LONGITUDE}"
-        f"&start_date={config.WEATHER_START}&end_date={config.WEATHER_END}"
+        f"{base}?latitude={config.LATITUDE}&longitude={config.LONGITUDE}"
+        f"&start_date={start}&end_date={end}"
         f"&hourly={','.join(config.WEATHER_VARS)}&timezone={config.TIMEZONE}"
     )
+
+
+ARCHIVE = "https://archive-api.open-meteo.com/v1/archive"
+PREVIOUS_RUNS = "https://previous-runs-api.open-meteo.com/v1/forecast"
 
 
 def main() -> None:
     config.RAW_DIR.mkdir(parents=True, exist_ok=True)
     for name, url in config.CEEW_FILES.items():
         download(url, config.RAW_DIR / name)
-    download(weather_url(), config.RAW_DIR / "weather_mathura.json")
+    download(weather_url(ARCHIVE, config.WEATHER_START, config.WEATHER_END), config.RAW_DIR / "weather_mathura.json")
+    # ML training data: genuine day-ahead forecasts (issued the day before) and ERA5 reanalysis.
+    day_ahead_vars = ",".join(f"{v}_previous_day1" for v in config.WEATHER_VARS)
+    download(weather_url(PREVIOUS_RUNS, "2024-01-01", "2025-12-31").replace(
+        f"hourly={','.join(config.WEATHER_VARS)}", f"hourly={day_ahead_vars}"),
+        config.RAW_DIR / "dayahead_mathura_2024_2025.json")
+    download(weather_url(ARCHIVE, "2024-01-01", "2025-12-31") + "&models=era5",
+             config.RAW_DIR / "era5_mathura_2024_2025.json")
 
 
 if __name__ == "__main__":
