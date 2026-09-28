@@ -10,3 +10,4 @@ fastapi
 uvicorn[standard]
 pytest
 httpx
+scikit-learn

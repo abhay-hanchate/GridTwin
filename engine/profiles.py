@@ -58,7 +58,12 @@ def read_weather(path: Path) -> pd.DataFrame:
 
 
 def pv_from_weather(w: pd.DataFrame) -> pd.Series:
-    """Solar output in kW per installed kW (PVWatts model), 15-minute, from hourly weather.
+    """Solar output in kW per installed kW, 15-minute, from hourly weather."""
+    return pv_hourly(w).resample("15min").interpolate("time").clip(lower=0).astype("float32")
+
+
+def pv_hourly(w: pd.DataFrame) -> pd.Series:
+    """Solar output in kW per installed kW (PVWatts model), hourly.
 
     Open-Meteo radiation is the mean of the preceding hour, so the sun position is
     evaluated at the middle of that hour.
@@ -77,5 +82,11 @@ def pv_from_weather(w: pd.DataFrame) -> pd.Series:
     )
     dc = pvlib.pvsystem.pvwatts_dc(poa["poa_global"], t_cell, 1.0, config.PV_GAMMA_PDC)
     ac = np.clip(np.nan_to_num(dc) * (1 - config.PV_SYSTEM_LOSSES), 0, 1)
-    hourly = pd.Series(ac, index=w.index, name="pv_kw_per_kwp")
-    return hourly.resample("15min").interpolate("time").clip(lower=0).astype("float32")
+    return pd.Series(ac, index=w.index, name="pv_kw_per_kwp")
+
+
+def clearsky_ghi(index: pd.DatetimeIndex) -> pd.Series:
+    """Clear-sky global horizontal irradiance (Ineichen) at mid-hour, W/m2."""
+    mid = (index - pd.Timedelta(minutes=30)).tz_localize(config.TIMEZONE)
+    site = pvlib.location.Location(config.LATITUDE, config.LONGITUDE, config.TIMEZONE, config.ALTITUDE_M)
+    return pd.Series(site.get_clearsky(mid)["ghi"].to_numpy(), index=index, name="clearsky_ghi")
