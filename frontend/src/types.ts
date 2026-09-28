@@ -117,6 +117,37 @@ export interface EarlyWarning {
   }>
 }
 
+export interface SimStep {
+  max_vm_pu: number
+  min_vm_pu: number
+  pv_kw: number
+  pv_available_kw: number
+  load_kw: number
+  inverter_kvar: number
+  battery_kw: number
+  tap_pos: number
+  unsafe: boolean
+}
+
+export interface SimSide {
+  vm: (number[] | null)[]
+  steps: SimStep[]
+  summary: RunResult['summary']
+}
+
+/** The same day simulated twice (left vs right), step by step. */
+export interface SimResult {
+  date: string
+  limits: { vm_min_pu: number; vm_max_pu: number }
+  times: string[]
+  bus_ids: number[]
+  before: SimSide
+  after: SimSide
+  action_id?: string
+  label?: string
+  kind?: string
+}
+
 export interface SummaryRow {
   id: ScenarioId
   name: string

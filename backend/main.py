@@ -21,7 +21,8 @@ from engine import config  # noqa: E402
 from engine.grid import build_grid, topology  # noqa: E402
 from engine.ranking import evaluate_actions  # noqa: E402
 from engine.scenarios import DEFAULT_DATE, SCENARIOS, run_scenario  # noqa: E402
-from ml.early_warning import DEFAULT_FORECAST_DATE, early_warning  # noqa: E402
+from engine.simulate import ACTIONS_BY_ID, simulate_fix  # noqa: E402
+from ml.early_warning import DEFAULT_FORECAST_DATE, early_warning, forecast_sim  # noqa: E402
 
 RESULTS_DIR = config.ROOT / "data" / "results"
 FRONTEND_DIST = config.ROOT / "frontend" / "dist"
@@ -121,6 +122,21 @@ def metrics():
 @app.get("/api/early-warning")
 def warning(date: str = DEFAULT_FORECAST_DATE):
     return _cached(f"early_warning_{date}", lambda: early_warning(date))
+
+
+@app.get("/api/fix-sim")
+def fix_sim(scenario: str = "S4", action: str = "tap1_volt_var", date: str = DEFAULT_DATE):
+    """The same day without and with one fix, step by step, for the side-by-side simulator."""
+    sid = _scenario(scenario)
+    if action not in ACTIONS_BY_ID:
+        raise HTTPException(404, f"Unknown fix {action}; choose from {list(ACTIONS_BY_ID)}")
+    return _cached(f"fixsim_{sid}_{action}_{date}", lambda: simulate_fix(sid, action, date))
+
+
+@app.get("/api/forecast-sim")
+def forecast_simulation(date: str = DEFAULT_FORECAST_DATE):
+    """The street under the AI's day-ahead forecast next to what really happened."""
+    return _cached(f"forecastsim_{date}", lambda: forecast_sim(date))
 
 
 @app.get("/api/insights")

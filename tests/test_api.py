@@ -44,3 +44,22 @@ def test_summary_shows_solar_making_it_worse():
 
 def test_unknown_scenario_is_404():
     assert client.get("/api/run", params={"scenario": "S9"}).status_code == 404
+
+
+def test_fix_simulation_shows_the_fix_working():
+    r = client.get("/api/fix-sim", params={"scenario": "S4", "action": "tap1_volt_var"}).json()
+    assert len(r["times"]) == 96 and len(r["before"]["vm"][0]) == len(r["bus_ids"])
+    assert r["before"]["summary"]["violation_steps"] > 0
+    assert r["after"]["summary"]["violation_steps"] == 0
+    assert r["after"]["steps"][44]["inverter_kvar"] > 0      # inverters absorb reactive power at 11:00
+
+
+def test_unknown_fix_is_404():
+    assert client.get("/api/fix-sim", params={"action": "magic"}).status_code == 404
+
+
+def test_forecast_simulation_predicts_the_real_day():
+    r = client.get("/api/forecast-sim").json()
+    predicted = r["before"]["summary"]["violation_steps"]
+    actual = r["after"]["summary"]["violation_steps"]
+    assert abs(predicted - actual) <= 4

@@ -174,3 +174,32 @@ button { font: inherit; cursor: pointer; }
 .glossary dd { display: inline; margin: 0; color: var(--ink-2); }
 .how { font-size: 12.5px; color: var(--ink-2); margin: 0 0 8px; }
 @media (max-width: 700px) { .compare { grid-template-columns: 1fr; } .story-step { grid-template-columns: 1fr; } }
+
+/* Simulators */
+.how-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
+.how-strip > div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; font-size: 13px; color: var(--ink-2); display: flex; gap: 10px; align-items: flex-start; }
+.how-strip b { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--brand); color: #fff; display: grid; place-items: center; font-size: 12px; }
+.fix-picker { margin-bottom: 14px; }
+.impact { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+.impact-card { background: var(--surface-2); border-radius: 12px; padding: 10px 12px; }
+.impact-card .l { font-size: 12px; color: var(--ink-2); font-weight: 600; }
+.impact-card .v { font-size: 18px; font-weight: 700; margin-top: 2px; }
+.impact-card .v s { color: var(--ink-3); font-weight: 500; font-size: 15px; }
+.impact-card .good { color: var(--safe); }
+.impact-card .bad { color: var(--unsafe); }
+.impact-card.verdict-mini { display: grid; place-items: center; font-weight: 700; font-size: 15px; text-align: center; }
+.impact-card.verdict-mini.good { background: #e7f4ef; color: #1d5f4c; }
+.impact-card.verdict-mini.bad { background: #fbe9e5; color: #8b2a1b; }
+.twin-player { margin: 0 0 12px; }
+.twin-maps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.twin-title { font-weight: 700; font-size: 13.5px; margin-bottom: 6px; padding: 4px 10px; border-radius: 8px; display: inline-block; background: #fbe9e5; color: #8b2a1b; }
+.twin-title.good { background: #e7f4ef; color: #1d5f4c; }
+.twin-title.neutral { background: var(--surface-2); color: var(--ink); }
+.doing { margin-top: 12px; padding: 10px 14px; border-radius: 10px; background: #eef4fb; color: #1f3b63; font-size: 13.5px; }
+.twin-chart { margin-top: 14px; }
+.section-title { font-size: 16px; margin: 22px 0 10px; }
+@media (max-width: 960px) {
+  .how-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .impact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .twin-maps { grid-template-columns: 1fr; }
+}
