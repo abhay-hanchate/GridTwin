@@ -1,0 +1,46 @@
+name: Feature tracker
+
+# When a pull request is merged into main, mark its feature Done in features.csv
+# and regenerate the feature table in README.md.
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: feature-tracker
+  cancel-in-progress: false
+
+jobs:
+  update:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    env:
+      BRANCH: ${{ github.event.pull_request.head.ref }}
+      PR: ${{ github.event.pull_request.number }}
+      TITLE: ${{ github.event.pull_request.title }}
+      AUTHOR: ${{ github.event.pull_request.user.login }}
+      MERGED: ${{ github.event.pull_request.merged_at }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Mark the feature done
+        run: python scripts/update_features.py --branch "$BRANCH" --pr "$PR" --title "$TITLE" --author "$AUTHOR" --merged-on "${MERGED:0:10}"
+      - name: Commit the update
+        run: |
+          if git diff --quiet; then echo "Nothing to update"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore(features): mark $BRANCH done (#$PR)"
+          for attempt in 1 2 3; do
+            git pull --rebase origin main && git push && exit 0
+            sleep 5
+          done
+          exit 1
