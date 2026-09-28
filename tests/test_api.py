@@ -1,3 +1,4 @@
+import pytest
 from fastapi.testclient import TestClient
 
 from backend.main import app
@@ -36,6 +37,29 @@ def test_forecast_bands_are_ordered():
     assert all(p["p10"] <= p["p50"] <= p["p90"] for p in pts)
 
 
+@pytest.mark.parametrize("target", ["wind", "demand-ish"])
+def test_forecast_rejects_unknown_target(target):
+    response = client.get("/api/forecast", params={"target": target})
+
+    assert response.status_code == 422
+
+
+@pytest.mark.parametrize("target", ["solar", "demand"])
+def test_forecast_returns_404_when_date_is_unavailable(target):
+    response = client.get("/api/forecast", params={"target": target, "date": "1900-01-01"})
+
+    assert response.status_code == 404
+    assert f"No {target} forecast for 1900-01-01" in response.json()["detail"]
+
+
+def test_demand_forecast_uses_per_home_units():
+    response = client.get("/api/forecast", params={"target": "demand", "date": "2019-11-01"})
+
+    assert response.status_code == 200
+    assert response.json()["unit"] == "kW per home"
+    assert len(response.json()["points"]) == 96
+
+
 def test_summary_shows_solar_making_it_worse():
     rows = {r["id"]: r for r in client.get("/api/summary").json()}
     assert rows["S4"]["violation_steps"] > rows["S1"]["violation_steps"]
@@ -44,6 +68,14 @@ def test_summary_shows_solar_making_it_worse():
 
 def test_unknown_scenario_is_404():
     assert client.get("/api/run", params={"scenario": "S9"}).status_code == 404
+
+
+@pytest.mark.parametrize("endpoint", ["/api/run", "/api/actions"])
+def test_simulation_returns_422_when_meter_data_is_missing(endpoint):
+    response = client.get(endpoint, params={"scenario": "S4", "date": "1900-01-01"})
+
+    assert response.status_code == 422
+    assert "No complete meter data for 1900-01-01" in response.json()["detail"]
 
 
 def test_fix_simulation_shows_the_fix_working():
