@@ -90,6 +90,11 @@ def run_day(net: pp.pandapowerNet, inputs: DayInputs, band: str = "10",
             "pv_kw": round(float(net.sgen.p_mw.sum()) * 1000, 2),
             "load_kw": round(float(net.load.p_mw.sum()) * 1000, 2),
             "upstream_vm_pu": round(float(inputs.upstream_vm_pu.iloc[i]), 4),
+            # What any corrective action is doing at this step (all zero when no action is applied)
+            "pv_available_kw": round(float(available.sum()) * 1000, 2),
+            "inverter_kvar": round(float(-net.sgen.q_mvar.sum()) * 1000, 2) if len(net.sgen) else 0.0,
+            "battery_kw": round(float(net.storage.p_mw.sum()) * 1000, 2) if len(net.storage) else 0.0,
+            "tap_pos": int(net.trafo.tap_pos.iloc[0]),
             "violations": violations,
         }
         if detail:
