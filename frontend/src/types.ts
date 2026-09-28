@@ -117,6 +117,20 @@ export interface EarlyWarning {
   }>
 }
 
+export interface SummaryRow {
+  id: ScenarioId
+  name: string
+  pv_share: number
+  band: string
+  limits: { vm_min_pu: number; vm_max_pu: number }
+  max_vm_pu: number
+  min_vm_pu: number
+  violation_steps: number
+  violation_steps_without_solar: number
+  violation_steps_from_solar: number
+  pv_kwh: number
+}
+
 export interface Insights {
   meters: number
   readings: number

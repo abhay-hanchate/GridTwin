@@ -3,14 +3,18 @@ import { useApi } from './api'
 import FixesView from './components/FixesView'
 import ForecastView from './components/ForecastView'
 import GridView from './components/GridView'
+import StoryView from './components/StoryView'
+import { SCENARIO_TEXT } from './plain'
 import type { Insights, Scenario, ScenarioId } from './types'
 
-type Tab = 'grid' | 'fixes' | 'forecast'
+type Tab = 'story' | 'grid' | 'fixes' | 'forecast'
 
-const TABS: [Tab, string][] = [['grid', 'Grid twin'], ['fixes', 'Fixes'], ['forecast', 'Forecast & early warning']]
+const TABS: [Tab, string][] = [
+  ['story', '1 · The story'], ['grid', '2 · Live map'], ['fixes', '3 · Fixes'], ['forecast', '4 · AI forecast'],
+]
 
 export default function App() {
-  const [tab, setTab] = useState<Tab>('grid')
+  const [tab, setTab] = useState<Tab>('story')
   const [scenario, setScenario] = useState<ScenarioId>('S4')
   const scenarios = useApi<Scenario[]>('/api/scenarios')
   const insights = useApi<Insights>('/api/insights')
@@ -22,7 +26,7 @@ export default function App() {
           <img className="brand-mark" src="/favicon.svg" alt="" />
           <div>
             <h1>GridTwin</h1>
-            <p>Digital twin of a rural feeder under rooftop solar · real Mathura homes and weather</p>
+            <p>Can a street's wiring handle solar on every roof? A computer copy of the street finds out.</p>
           </div>
         </div>
         <nav className="tabs" aria-label="Views">
@@ -32,37 +36,38 @@ export default function App() {
         </nav>
       </header>
 
-      {insights.data && (
+      {tab !== 'story' && insights.data && (
         <section className="insight" aria-label="Measured voltage quality">
-          <div><strong>{insights.data.median_v} V</strong><div className="label">median voltage at real homes (nominal 230 V)</div></div>
-          <div><strong>{Math.round(insights.data.share_above_10pct * 100)}%</strong><div className="label">of readings above the +10% limit (253 V)</div></div>
-          <div><strong>{Math.round(insights.data.share_below_10pct * 100)}%</strong><div className="label">below −10% (207 V)</div></div>
-          <div className="source">CEEW smart meters · {insights.data.meters} Mathura homes · 2019</div>
+          <div><strong>{insights.data.median_v} V</strong><div className="label">typical voltage at real homes (should be 230 V)</div></div>
+          <div><strong>{Math.round(insights.data.share_above_10pct * 100)}%</strong><div className="label">of the time above the 253 V safe limit</div></div>
+          <div className="source">Measured by smart meters in {insights.data.meters} Mathura homes, 2019</div>
         </section>
       )}
 
-      {tab !== 'forecast' && scenarios.data && (
+      {(tab === 'grid' || tab === 'fixes') && scenarios.data && (
         <div className="toolbar">
-          <span className="label">Scenario</span>
+          <span className="label">Which homes have solar?</span>
           <div className="segmented" role="radiogroup" aria-label="Scenario">
             {scenarios.data.map((s) => (
-              <button key={s.id} role="radio" aria-checked={scenario === s.id}
+              <button key={s.id} role="radio" aria-checked={scenario === s.id} title={SCENARIO_TEXT[s.id].long}
                 className={`seg ${scenario === s.id ? 'active' : ''}`} onClick={() => setScenario(s.id)}>
-                <b>{s.id}</b>{s.name}
+                {SCENARIO_TEXT[s.id].short}
               </button>
             ))}
           </div>
         </div>
       )}
 
-      <main>
+      <main style={{ marginTop: tab === 'story' ? 20 : 0 }}>
+        {tab === 'story' && <StoryView go={setTab} />}
         {tab === 'grid' && <GridView scenario={scenario} />}
         {tab === 'fixes' && <FixesView scenario={scenario} />}
         {tab === 'forecast' && <ForecastView />}
       </main>
 
       <footer className="footer">
-        HackMatrix 5.0 · ENR-02 · Grid: SimBench benchmark with Indian overhead lines · Demand and voltage: CEEW (CC0) · Weather: Open-Meteo
+        HackMatrix 5.0 · ENR-02 · Street layout: SimBench benchmark with Indian overhead wires · Electricity use and voltage:
+        CEEW smart meters (CC0) · Weather: Open-Meteo
       </footer>
     </div>
   )

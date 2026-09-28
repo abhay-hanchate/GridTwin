@@ -34,6 +34,10 @@ PM Surya Ghar is adding rooftop solar to 1 crore homes. At midday, solar flows b
 
 ## Screenshots
 
+**The story** — the dashboard opens on a four-step, plain-language walkthrough: the problem, what solar does, the best fix, and the AI warning.
+
+![The story](docs/images/story.png)
+
 **Grid twin** — every connection point coloured by voltage at 11:00 with solar on every home; play through the day.
 
 ![Grid twin](docs/images/grid-twin.png)

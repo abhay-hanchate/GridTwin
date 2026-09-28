@@ -36,5 +36,11 @@ def test_forecast_bands_are_ordered():
     assert all(p["p10"] <= p["p50"] <= p["p90"] for p in pts)
 
 
+def test_summary_shows_solar_making_it_worse():
+    rows = {r["id"]: r for r in client.get("/api/summary").json()}
+    assert rows["S4"]["violation_steps"] > rows["S1"]["violation_steps"]
+    assert "steps" not in rows["S4"]
+
+
 def test_unknown_scenario_is_404():
     assert client.get("/api/run", params={"scenario": "S9"}).status_code == 404
