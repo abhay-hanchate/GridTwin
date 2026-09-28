@@ -56,6 +56,17 @@ def scenarios():
     return [{"id": sid, **spec, "default_date": DEFAULT_DATE} for sid, spec in SCENARIOS.items()]
 
 
+@app.get("/api/summary")
+def summary(date: str = DEFAULT_DATE):
+    """Headline numbers for every scenario, without the per-step detail (for the story view)."""
+    out = []
+    for sid, spec in SCENARIOS.items():
+        r = run(sid, date)
+        out.append({"id": sid, "name": spec["name"], "pv_share": spec["pv_share"], "band": spec["band"],
+                    "limits": r["limits"], **r["summary"]})
+    return out
+
+
 @app.get("/api/grid")
 def grid(scenario: str = "S4"):
     sid = _scenario(scenario)
