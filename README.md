@@ -93,6 +93,7 @@ flowchart TD
 | `engine/ranking.py` | Keeps only fixes safe all day, ranks them by solar wasted, battery use and losses, or reports no safe action | Honest, verifiable recommendations |
 | `engine/simulate.py` | The same day without and with a fix, point by point | Powers the side-by-side simulators |
 | `ml/forecast.py` | LightGBM forecasts of solar and household use with calibrated ranges | The AI layer |
+| `ml/live_forecast.py` | Fetches issue-time Open-Meteo weather and runs the frozen solar ensemble | Operational tomorrow inference |
 | `ml/early_warning.py` | Runs tomorrow's predicted solar through the street | The day-ahead warning |
 | `backend/main.py` | FastAPI service; serves precomputed results instantly | Connects the engine to the dashboard |
 | `frontend/` | React dashboard with the story, live map, fix simulator and forecast screens | Understandable by non-engineers |
@@ -119,6 +120,7 @@ The AI predicts; physics verifies. Every fix and every warning is checked by a f
 | `/api/forecast`, `/api/metrics` | Forecast curves and model scores |
 | `/api/model-report?target=solar` | Gain and held-out permutation importance |
 | `/api/early-warning`, `/api/forecast-sim` | Day-ahead prediction vs reference simulation |
+| `/api/live-forecast`, `/api/live-early-warning` | Keyless live tomorrow solar forecast and feeder-risk warning |
 | `/api/readiness` | Required ML/data artifact availability |
 
 ## Run it

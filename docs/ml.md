@@ -9,8 +9,10 @@ GridTwin's ML layer predicts uncertain solar and household demand. It does not d
 The current 2025 early-warning demonstration is driven by the solar forecast. Demand and upstream voltage are same-calendar-day CEEW measurements from 2019 and are labelled `historical_proxy`. The separate demand model is an evaluated prototype, but it does not drive the 2025 warning.
 
 This is not merely a weather-to-power formula: `ml/forecast.py` trains three LightGBM quantile
-models. However, the dashboard demonstration is an offline historical backtest, not a live API
-call. Open-Meteo's public endpoint used by the project does not require an API key. See
+models. The audited dashboard comparison remains an offline historical backtest, while
+`/api/live-forecast` and `/api/live-early-warning` now fetch keyless Open-Meteo weather and run
+the frozen, versioned boosters for a future date. A live warning has no `actual`/reference case
+until its target day has occurred. See
 [`docs/finale_model_plan.md`](finale_model_plan.md) for the screened pretrained baseline and the
 measured-PV dataset plan.
 
@@ -87,6 +89,10 @@ pytest -q tests
 ```
 
 Model files under `ml/models/` are generated and ignored. Small metrics, explainability and warning-evaluation reports are committed for auditability.
+
+The three solar boosters and `solar_manifest.json` are exceptions: they are versioned so a
+deployment can perform live inference without retraining at request time. Demand boosters remain
+generated locally because live warnings still use a labelled historical demand proxy.
 
 ## Known limitations
 

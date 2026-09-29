@@ -23,17 +23,17 @@ It still needs historical target values. A weather API alone cannot supply those
 
 | Stage | Current implementation | Status |
 | --- | --- | --- |
-| Weather input | Open-Meteo Previous Runs, `previous_day1` | Historical day-ahead forecasts; no API key |
+| Weather input | Open-Meteo Previous Runs for evaluation; live Open-Meteo forecast for operational inference | No API key |
 | PV conversion feature | pvlib/PVWatts from forecast weather | Physics-derived feature, not the final prediction |
 | Solar forecast | Three LightGBM quantile regressors | Implemented: P10, P50 and P90 |
 | Solar reference | ERA5 reanalysis converted with pvlib | Independent synthetic proxy, not measured PV |
 | Demand and incoming voltage | Same-calendar-day 2019 CEEW Mathura readings | Historical proxies in the 2025 warning |
 | Grid risk | pandapower simulation | Deterministic voltage calculation |
 
-The current demonstration is an offline historical backtest. It reads the committed 2025
-forecast artifact; it does not call a live weather endpoint whenever the dashboard is opened.
-The production path will fetch tomorrow's weather, build the same feature schema, load a frozen
-model version, predict P10/P50/P90, and then run all three cases through pandapower.
+The audited prediction-versus-reference demonstration remains an offline historical backtest.
+The live endpoints fetch tomorrow's weather, build the same feature schema, load the frozen model
+version, predict P10/P50/P90, and run all three cases through pandapower. The live result cannot
+contain a reference/actual case until tomorrow has occurred.
 
 ## F13 input provenance
 
@@ -114,4 +114,3 @@ the target for a measured-PV forecasting model.
 > on measured PV generation. CEEW Mathura data supplies demand and voltage, not solar labels.
 
 Do not say that Chronos-2 is already integrated, trained on Mathura, or validated for Indian PV.
-
