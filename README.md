@@ -191,7 +191,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 ## Features
 
 <!-- FEATURES:START -->
-**22 of 26 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
+**23 of 27 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
 
 | ID | Feature | Area | Owner | Status | Pull request |
 | --- | --- | --- | --- | --- | --- |
@@ -221,6 +221,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 | F24 | AI assistant that explains each recommendation | ML | Team | 🏁 Finale |  |
 | F25 | Final project document and PDF for the PPT and video | Docs | P4 | ✅ Done | [#15](https://github.com/abhay-hanchate/GridTwin/pull/15) |
 | F26 | Live warning: separate solar-caused risk from the grid's own voltage |  | Tabsirshaikh | ✅ Done | [#17](https://github.com/abhay-hanchate/GridTwin/pull/17) |
+| F27 | Docs: hosting capacity is built  not roadmap |  | abhay-hanchate | ✅ Done | [#18](https://github.com/abhay-hanchate/GridTwin/pull/18) |
 <!-- FEATURES:END -->
 
 ## Team
