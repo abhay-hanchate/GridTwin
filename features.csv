@@ -23,3 +23,4 @@ F21,Live deployment with a public link,DevOps,P4,feature/deploy,Planned,,
 F22,Feeder reconfiguration (switching) as a fix,Engine,Team,,Finale,,
 F23,Machine-learning shortcut model of the power flow,ML,Team,,Finale,,
 F24,AI assistant that explains each recommendation,ML,Team,,Finale,,
+F25,P3: Add QA coverage and project documentation,,ieafraazzz,P3,Done,11,2026-09-29

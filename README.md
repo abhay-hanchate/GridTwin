@@ -184,7 +184,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 ## Features
 
 <!-- FEATURES:START -->
-**11 of 24 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
+**12 of 25 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
 
 | ID | Feature | Area | Owner | Status | Pull request |
 | --- | --- | --- | --- | --- | --- |
@@ -212,6 +212,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 | F22 | Feeder reconfiguration (switching) as a fix | Engine | Team | 🏁 Finale |  |
 | F23 | Machine-learning shortcut model of the power flow | ML | Team | 🏁 Finale |  |
 | F24 | AI assistant that explains each recommendation | ML | Team | 🏁 Finale |  |
+| F25 | P3: Add QA coverage and project documentation |  | ieafraazzz | ✅ Done | [#11](https://github.com/abhay-hanchate/GridTwin/pull/11) |
 <!-- FEATURES:END -->
 
 ## Team
