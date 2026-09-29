@@ -10,8 +10,8 @@ const kw = (value: number) => `${value.toLocaleString()} kW`
 export default function CapacityView() {
   const capacity = useApi<HostingCapacityResult>('/api/hosting-capacity')
 
-  if (capacity.loading) return <div className="loading">Estimating feeder capacity across solar adoption levels…</div>
-  if (capacity.error) return <div className="error">{capacity.error}</div>
+  if (capacity.loading) return <div className="loading" role="status">Estimating feeder capacity across solar adoption levels…</div>
+  if (capacity.error) return <div className="error" role="alert">{capacity.error}</div>
   if (!capacity.data) return null
 
   const result = capacity.data

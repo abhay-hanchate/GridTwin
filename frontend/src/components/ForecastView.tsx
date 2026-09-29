@@ -59,7 +59,7 @@ export default function ForecastView() {
           This card fetches the latest keyless Open-Meteo weather forecast and runs the frozen LightGBM quantile ensemble at request time.
           It is operational inference; the historical cards below remain the audited comparison against ERA5/PVWatts.
         </p>
-        {live.loading && <div className="loading">Fetching tomorrow's weather and running the solar model…</div>}
+        {live.loading && <div className="loading" role="status">Fetching tomorrow's weather and running the solar model…</div>}
         {live.error && <div className="muted">Live forecast unavailable: {live.error}</div>}
         {live.data && (
           <div className="metrics-row">
@@ -68,7 +68,7 @@ export default function ForecastView() {
             <div className="mini"><div className="v">{live.data.points.length} × 15 min</div><div className="l">intervals from {live.data.weather_source}</div></div>
           </div>
         )}
-        {liveWarn.loading && <div className="loading">Checking the live forecast against the feeder model…</div>}
+        {liveWarn.loading && <div className="loading" role="status">Checking the live forecast against the feeder model…</div>}
         {liveWarn.error && <div className="muted">Live warning unavailable: {liveWarn.error}</div>}
         {liveWarn.data && (
           <div className="warn-grid" style={{ marginTop: 12 }}>
@@ -104,7 +104,7 @@ export default function ForecastView() {
             })}
           </div>
         )}
-        {warn.loading && <div className="loading">Running the forecast through the street…</div>}
+        {warn.loading && <div className="loading" role="status">Running the forecast through the street…</div>}
       </div>
 
       <div className="card">
@@ -113,7 +113,7 @@ export default function ForecastView() {
           Left: the street as our AI predicted it the day before. Right: the street on the real day. Press play: if the AI is
           right, the two maps turn red at the same times.
         </p>
-        {sim.loading && <div className="loading">Replaying the predicted and the real day…</div>}
+        {sim.loading && <div className="loading" role="status">Replaying the predicted and the real day…</div>}
         {sim.data && grid.data && (
           <TwinSim sim={sim.data} grid={grid.data} leftTitle="AI prediction (made the day before)" rightTitle="ERA5/PVWatts reference"
             rightTone="neutral"

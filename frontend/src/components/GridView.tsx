@@ -31,8 +31,8 @@ export default function GridView({ scenario }: { scenario: ScenarioId }) {
     return { over: buses('overvoltage'), under: buses('undervoltage') }
   }, [step])
 
-  if (run.loading || grid.loading) return <div className="loading">Simulating the street…</div>
-  if (run.error || grid.error) return <div className="error">{run.error ?? grid.error}</div>
+  if (run.loading || grid.loading) return <div className="loading" role="status">Simulating the street…</div>
+  if (run.error || grid.error) return <div className="error" role="alert">{run.error ?? grid.error}</div>
   if (!run.data || !grid.data || !step) return null
   const r = run.data
   const s = r.summary
@@ -87,7 +87,7 @@ export default function GridView({ scenario }: { scenario: ScenarioId }) {
             <button className="play" onClick={() => setPlaying((p) => !p)} aria-label={playing ? 'Pause' : 'Play the day'}>
               {playing ? '❚❚' : '▶'}
             </button>
-            <input type="range" min={0} max={95} value={idx} aria-label="Time of day"
+            <input type="range" min={0} max={95} value={idx} aria-label="Time of day" aria-valuetext={step.t.slice(-5)}
               onChange={(e) => { setPlaying(false); setIdx(Number(e.target.value)) }} />
             <span className="clock">{step.t.slice(-5)}</span>
           </div>

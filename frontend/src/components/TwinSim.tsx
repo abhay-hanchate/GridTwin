@@ -67,7 +67,7 @@ export default function TwinSim({ sim, grid, leftTitle, rightTitle, rightTone = 
         <button className="play" onClick={() => setPlaying((p) => !p)} aria-label={playing ? 'Pause' : 'Play the day'}>
           {playing ? '❚❚' : '▶'}
         </button>
-        <input type="range" min={0} max={sim.times.length - 1} value={idx} aria-label="Time of day"
+        <input type="range" min={0} max={sim.times.length - 1} value={idx} aria-label="Time of day" aria-valuetext={t}
           onChange={(e) => { setPlaying(false); setIdx(Number(e.target.value)) }} />
         <span className="clock">{t}</span>
       </div>
