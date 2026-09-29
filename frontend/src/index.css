@@ -37,7 +37,7 @@ button { font: inherit; cursor: pointer; }
 .brand h1 { margin: 0; font-size: 22px; letter-spacing: -0.02em; }
 .brand p { margin: 0; color: var(--ink-2); font-size: 13px; }
 
-.tabs { display: flex; gap: 4px; background: var(--surface-2); padding: 4px; border-radius: 12px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; background: var(--surface-2); padding: 4px; border-radius: 12px; }
 .tab { border: 0; background: transparent; padding: 8px 14px; border-radius: 9px; color: var(--ink-2); font-weight: 500; }
 .tab.active { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
 
@@ -198,6 +198,12 @@ button { font: inherit; cursor: pointer; }
 .doing { margin-top: 12px; padding: 10px 14px; border-radius: 10px; background: #eef4fb; color: #1f3b63; font-size: 13.5px; }
 .twin-chart { margin-top: 14px; }
 .section-title { font-size: 16px; margin: 22px 0 10px; }
+.capacity-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 12px; }
+.capacity-card .tag { color: var(--ink-2); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.capacity-card.recommended { border-color: var(--brand); }
+.capacity-value { margin-top: 8px; font-size: 32px; line-height: 1.1; font-weight: 800; color: var(--brand); }
+.capacity-card p { margin: 6px 0 0; }
+.capacity-chart { width: 100%; height: 300px; }
 @media (max-width: 960px) {
   .how-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .impact { grid-template-columns: repeat(2, minmax(0, 1fr)); }

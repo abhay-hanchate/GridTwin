@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useApi } from './api'
+import CapacityView from './components/CapacityView'
 import FixesView from './components/FixesView'
 import ForecastView from './components/ForecastView'
 import GridView from './components/GridView'
@@ -7,10 +8,11 @@ import StoryView from './components/StoryView'
 import { SCENARIO_TEXT } from './plain'
 import type { Insights, Scenario, ScenarioId } from './types'
 
-type Tab = 'story' | 'grid' | 'fixes' | 'forecast'
+type Tab = 'story' | 'grid' | 'fixes' | 'forecast' | 'capacity'
 
 const TABS: [Tab, string][] = [
   ['story', '1 · The story'], ['grid', '2 · Live map'], ['fixes', '3 · Fixes'], ['forecast', '4 · AI forecast'],
+  ['capacity', '5 · Hosting capacity'],
 ]
 
 export default function App() {
@@ -63,6 +65,7 @@ export default function App() {
         {tab === 'grid' && <GridView scenario={scenario} />}
         {tab === 'fixes' && <FixesView scenario={scenario} />}
         {tab === 'forecast' && <ForecastView />}
+        {tab === 'capacity' && <CapacityView />}
       </main>
 
       <footer className="footer">

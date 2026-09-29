@@ -49,7 +49,7 @@ Under the stricter ±6% rule **no fix is enough**, and GridTwin says so instead 
 
 ## The dashboard
 
-Four numbered screens that follow the story.
+Five dashboard screens that follow the story.
 
 **1 · The story** — the whole project in four plain steps: the voltage is already too high, solar pushes it over at midday, two cheap settings fix it, and the AI warns a day early.
 
@@ -66,6 +66,8 @@ Four numbered screens that follow the story.
 **4 · AI forecast** — how the warning is made, the AI's predicted street next to the real one, and the solar and demand forecasts against what happened.
 
 ![AI forecast](docs/images/forecast.png)
+
+**5 · Hosting capacity** — how much rooftop solar the feeder can host at 10% adoption steps, with and without the recommended fix. The estimate compares against the existing no-solar voltage baseline and requires the corrected case to be safe all day.
 
 ## How it works
 
@@ -91,11 +93,12 @@ flowchart TD
 | `engine/scenarios.py` | Five solar scenarios, each also run without solar | Shows how much unsafe time solar itself causes |
 | `engine/actions.py` | The seven fixes as small functions applied at every step | New fixes plug in without new simulation code |
 | `engine/ranking.py` | Keeps only fixes safe all day, ranks them by solar wasted, battery use and losses, or reports no safe action | Honest, verifiable recommendations |
+| `engine/hosting_capacity.py` | Sweeps solar adoption in 10% steps and checks hosting capacity with and without the recommended fix | Estimates feeder headroom |
 | `engine/simulate.py` | The same day without and with a fix, point by point | Powers the side-by-side simulators |
 | `ml/forecast.py` | LightGBM forecasts of solar and household use with calibrated ranges | The AI layer |
 | `ml/early_warning.py` | Runs tomorrow's predicted solar through the street | The day-ahead warning |
 | `backend/main.py` | FastAPI service; serves precomputed results instantly | Connects the engine to the dashboard |
-| `frontend/` | React dashboard with the story, live map, fix simulator and forecast screens | Understandable by non-engineers |
+| `frontend/` | React dashboard with the story, live map, fix simulator, forecast and hosting-capacity screens | Understandable by non-engineers |
 
 ## AI / ML
 
@@ -118,21 +121,46 @@ The AI predicts; physics verifies. Every fix and every warning is checked by a f
 | `/api/fix-sim?scenario=S4&action=tap1_volt_var` | The day without and with one fix, step by step |
 | `/api/forecast`, `/api/metrics` | Forecast curves and model scores |
 | `/api/early-warning`, `/api/forecast-sim` | Predicted vs real day |
+| `/api/hosting-capacity` | Solar adoption headroom with and without the recommended fix |
 
 ## Run it
 
-Requires Python 3.11 and Node 20+.
+Requires Python 3.11 and Node.js 20.19+ or 22.12+ (Vite 8 requirement).
 
-```bash
-python -m venv .venv && .venv/Scripts/activate      # Windows; use .venv/bin/activate on Linux/macOS
-pip install -r requirements.txt
+From the repository root, create a virtual environment and install the Python dependencies. In Windows PowerShell:
 
-# Dashboard with the committed, precomputed results
-cd frontend && npm install && npm run build && cd ..
-uvicorn backend.main:app                            # open http://127.0.0.1:8000
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
 ```
 
-Rebuild everything from raw data (about 15 minutes):
+On Linux or macOS:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+```
+
+Build the dashboard with the committed, precomputed results:
+
+```text
+cd frontend
+npm install
+npm run build
+cd ..
+```
+
+Start the API and dashboard from the repository root:
+
+```text
+uvicorn backend.main:app
+```
+
+Open <http://127.0.0.1:8000> in a browser. Keep the terminal running while using the dashboard. You can confirm the API is ready at <http://127.0.0.1:8000/api/health>; it should return `{"status":"ok"}`.
+
+With the virtual environment active and from the repository root, rebuild everything from raw data (about 15 minutes):
 
 ```bash
 python scripts/download_data.py    # CEEW smart meters, Open-Meteo weather and forecasts into data/raw (not committed)
@@ -147,6 +175,8 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 ## Quality
 
 - **Tests:** engine, API contracts, simulators and the feature tracker (`pytest -q tests`).
+- **QA plan:** [test plan, manual dashboard checks and defect report format](docs/test-plan.md).
+- **Demo:** [three-minute video script and recording checklist](docs/demo-script.md).
 - **CI:** GitHub Actions runs the tests and the dashboard build on every pull request.
 - **Workflow:** every feature is built on its own branch and merged through a pull request after CI passes.
 - **Feature tracker:** when a pull request is merged, a GitHub Action marks its feature Done in [features.csv](features.csv) and regenerates the table below.

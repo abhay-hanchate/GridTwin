@@ -170,3 +170,38 @@ export interface Insights {
   share_above_10pct: number
   share_below_10pct: number
 }
+
+export interface HostingCapacityPoint {
+  pv_share: number
+  solar_homes: number
+  installed_kw: number
+  unsafe_steps_without_fix: number
+  unsafe_steps_with_fix: number
+  solver_failed_steps_without_fix: number
+  solver_failed_steps_with_fix: number
+  max_voltage_without_fix: number
+  max_voltage_with_fix: number
+  safe_without_fix: boolean
+  safe_with_fix: boolean
+}
+
+export interface HostingCapacitySummary {
+  pv_share: number
+  solar_homes: number
+  installed_kw: number
+  unsafe_steps: number
+  found_safe_level: boolean
+}
+
+export interface HostingCapacityResult {
+  date: string
+  band: string
+  total_homes: number
+  kw_per_solar_home: number
+  resolution_percent: number
+  baseline_unsafe_steps: number
+  recommended_action: string
+  criteria: { without_fix: string; with_fix: string }
+  capacity: { without_fix: HostingCapacitySummary; with_fix: HostingCapacitySummary }
+  points: HostingCapacityPoint[]
+}
