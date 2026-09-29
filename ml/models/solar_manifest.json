@@ -12,9 +12,9 @@
     "p90": "solar_p90.txt"
   },
   "model_sha256": {
-    "p10": "2dd25fcbb1105eed42f919ea4894f5eddb53c49c2033885e02ec68fa641610f2",
-    "p50": "a22f67a78e5363aec36520d56053ef5179ba476161a12588245f8ec0e07ee4e2",
-    "p90": "9920f340a72520fc242b06cb14ebdfc74f7faea1726e5404a16096c8da3adfdd"
+    "p10": "cf8e4db4d49e9ead881b9278112a5d6939c3539965031b85a024ddfe5792c82b",
+    "p50": "05ddcebb19e5513294794aa17abeab64454cfc77fe0f16886991e8c9da80776e",
+    "p90": "c19690ef0a0b921d959407782adedc40f6eda22680bd5f0d3d608ab62ad88145"
   },
   "feature_names": [
     "fc_pv",
