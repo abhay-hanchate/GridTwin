@@ -138,6 +138,26 @@ def live_warning(
             "unsafe_times": unsafe,
         }
     out["predicted"] = out["cases"][risk]
+
+    # The same proxy day with no solar: what is unsafe anyway, from the grid's own voltage.
+    # Only the difference is tomorrow's solar risk (the same attribution the scenarios use).
+    no_sun = run_day(
+        build_grid(0.0), DayInputs(date, base.load_kw, pd.Series(0.0, index=base.load_kw.index), base.upstream_vm_pu),
+        band=band, detail=False,
+    )
+    baseline = [step["t"][-5:] for step in no_sun["steps"] if step["violations"]]
+    out["without_solar"] = {
+        "violation_steps": no_sun["summary"]["violation_steps"],
+        "max_vm_pu": no_sun["summary"]["max_vm_pu"],
+        "first_unsafe": baseline[0] if baseline else None,
+        "unsafe_times": baseline,
+    }
+    solar_times = [t for t in out["predicted"]["unsafe_times"] if t not in set(baseline)]
+    out["solar_caused"] = {
+        "violation_steps": len(solar_times),
+        "first_unsafe": solar_times[0] if solar_times else None,
+        "unsafe_times": solar_times,
+    }
     out["provenance"] = {
         "solar_prediction": "live Open-Meteo weather processed by frozen GridTwin LightGBM quantile models",
         "demand": f"CEEW Mathura historical proxy from {proxy_day}; not a live demand forecast",

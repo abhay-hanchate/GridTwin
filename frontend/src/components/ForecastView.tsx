@@ -73,9 +73,18 @@ export default function ForecastView() {
         {liveWarn.data && (
           <div className="warn-grid" style={{ marginTop: 12 }}>
             <div className="warn-case">
-              <div className="muted">Tomorrow's {liveWarn.data.risk_band} risk case</div>
-              <div className="v">{duration(liveWarn.data.predicted.violation_steps)} unsafe</div>
-              <div className="muted">highest {volts(liveWarn.data.predicted.max_vm_pu)} V · starts around {liveWarn.data.predicted.first_unsafe ?? '—'}</div>
+              <div className="muted">Tomorrow's {liveWarn.data.risk_band} risk case · caused by solar</div>
+              <div className="v">{duration(liveWarn.data.solar_caused.violation_steps)} unsafe</div>
+              <div className="muted">
+                {liveWarn.data.solar_caused.first_unsafe
+                  ? `from about ${liveWarn.data.solar_caused.first_unsafe} · highest ${volts(liveWarn.data.predicted.max_vm_pu)} V`
+                  : 'solar adds no unsafe time tomorrow'}
+              </div>
+              <div className="muted" style={{ marginTop: 6 }}>
+                + {duration(liveWarn.data.without_solar.violation_steps)} unsafe even without solar (the grid's own voltage
+                on the proxy day){liveWarn.data.without_solar.first_unsafe ? `, from ${liveWarn.data.without_solar.first_unsafe}` : ''} ·
+                total {duration(liveWarn.data.predicted.violation_steps)}
+              </div>
             </div>
             <div className="warn-case">
               <div className="muted">Interpretation</div>

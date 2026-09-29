@@ -68,6 +68,14 @@ class LiveForecastResponse(BaseModel):
     points: list[LiveForecastPoint]
 
 
+class SolarCaused(BaseModel):
+    """Unsafe intervals that appear only because of solar (unsafe with it, safe without it)."""
+
+    violation_steps: int
+    first_unsafe: str | None
+    unsafe_times: list[str]
+
+
 class LiveWarningResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -79,4 +87,6 @@ class LiveWarningResponse(BaseModel):
     band: str
     cases: dict[str, WarningCase]
     predicted: WarningCase
+    without_solar: WarningCase
+    solar_caused: SolarCaused
     provenance: dict[str, str]

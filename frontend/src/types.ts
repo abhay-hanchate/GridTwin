@@ -150,6 +150,19 @@ export interface LiveWarning {
     first_unsafe: string | null
     unsafe_times: string[]
   }
+  /** The same proxy day with no solar: unsafe time the grid has anyway. */
+  without_solar: {
+    violation_steps: number
+    max_vm_pu: number
+    first_unsafe: string | null
+    unsafe_times: string[]
+  }
+  /** Intervals unsafe only because of tomorrow's forecast solar. */
+  solar_caused: {
+    violation_steps: number
+    first_unsafe: string | null
+    unsafe_times: string[]
+  }
   provenance: Record<string, string>
 }
 
