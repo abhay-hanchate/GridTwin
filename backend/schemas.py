@@ -46,3 +46,37 @@ class ReadinessResponse(BaseModel):
     status: str
     ready: bool
     files: dict[str, bool]
+
+
+class LiveForecastPoint(BaseModel):
+    t: str
+    p10: float
+    p50: float
+    p90: float
+
+
+class LiveForecastResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    target: str
+    unit: str
+    date: str
+    generated_at: str
+    weather_source: str
+    weather_url: str
+    model: str
+    points: list[LiveForecastPoint]
+
+
+class LiveWarningResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    date: str
+    risk_band: str
+    demand_mode: str
+    demand_proxy_date: str
+    pv_share: float
+    band: str
+    cases: dict[str, WarningCase]
+    predicted: WarningCase
+    provenance: dict[str, str]

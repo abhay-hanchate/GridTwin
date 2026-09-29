@@ -25,9 +25,21 @@ from engine.grid import build_grid, topology  # noqa: E402
 from engine.ranking import evaluate_actions  # noqa: E402
 from engine.scenarios import DEFAULT_DATE, SCENARIOS, run_scenario  # noqa: E402
 from engine.simulate import ACTIONS_BY_ID, simulate_fix  # noqa: E402
-from ml.early_warning import DEFAULT_FORECAST_DATE, early_warning, forecast_sim  # noqa: E402
+from ml.early_warning import DEFAULT_FORECAST_DATE, early_warning, forecast_sim, live_warning  # noqa: E402
+from ml.live_forecast import (  # noqa: E402
+    LiveForecastError,
+    frame_from_result,
+    live_solar_forecast,
+    tomorrow_local,
+)
 from backend.cache import CorruptCacheError, load_or_compute  # noqa: E402
-from backend.schemas import EarlyWarningResponse, ModelReportResponse, ReadinessResponse  # noqa: E402
+from backend.schemas import (  # noqa: E402
+    EarlyWarningResponse,
+    LiveForecastResponse,
+    LiveWarningResponse,
+    ModelReportResponse,
+    ReadinessResponse,
+)
 
 RESULTS_DIR = config.ROOT / "data" / "results"
 FRONTEND_DIST = config.ROOT / "frontend" / "dist"
@@ -68,6 +80,10 @@ def readiness():
         "demand_forecast": config.PROCESSED_DIR / "demand_forecast_2019.parquet",
         "model_metrics": config.ROOT / "ml" / "reports" / "metrics.json",
         "solar_explainability": config.ROOT / "ml" / "reports" / "solar_feature_importance.json",
+        "solar_model_manifest": config.ROOT / "ml" / "models" / "solar_manifest.json",
+        "solar_model_p10": config.ROOT / "ml" / "models" / "solar_p10.txt",
+        "solar_model_p50": config.ROOT / "ml" / "models" / "solar_p50.txt",
+        "solar_model_p90": config.ROOT / "ml" / "models" / "solar_p90.txt",
     }
     files = {name: path.is_file() for name, path in required.items()}
     ready = all(files.values())
@@ -140,6 +156,33 @@ def forecast(
         "points": [{"t": t.strftime("%H:%M"), **{k: round(float(v), 4) for k, v in row.items()}}
                    for t, row in day.iterrows()],
     }
+
+
+@app.get("/api/live-forecast", response_model=LiveForecastResponse)
+def live_forecast(date: Date | None = None):
+    """Fetch issue-time weather and run the frozen solar models for tomorrow (or `date`)."""
+    target = date or tomorrow_local()
+    try:
+        return live_solar_forecast(target)
+    except LiveForecastError as exc:
+        raise HTTPException(503, str(exc)) from exc
+
+
+@app.get("/api/live-early-warning", response_model=LiveWarningResponse)
+def live_early_warning(
+    date: Date | None = None,
+    risk: Literal["p10", "p50", "p90"] = "p90",
+    band: Literal["6", "10"] = "10",
+):
+    """Convert the live probabilistic solar forecast into feeder-voltage risk."""
+    target = date or tomorrow_local()
+    try:
+        result = live_solar_forecast(target)
+        return live_warning(target.isoformat(), frame_from_result(result), risk=risk, band=band)
+    except LiveForecastError as exc:
+        raise HTTPException(503, str(exc)) from exc
+    except (KeyError, ValueError) as exc:
+        raise HTTPException(422, f"live warning inputs are unavailable: {exc}") from exc
 
 
 @app.get("/api/metrics")

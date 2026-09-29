@@ -63,7 +63,8 @@ def test_readiness_exposes_each_required_artifact():
     body = response.json()
     assert body["status"] in {"ready", "degraded"}
     assert set(body["files"]) == {
-        "solar_forecast", "demand_forecast", "model_metrics", "solar_explainability"
+        "solar_forecast", "demand_forecast", "model_metrics", "solar_explainability",
+        "solar_model_manifest", "solar_model_p10", "solar_model_p50", "solar_model_p90",
     }
 
 
