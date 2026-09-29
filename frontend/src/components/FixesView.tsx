@@ -42,8 +42,8 @@ function doingText(kind: string, s: SimStep): string {
 
 function FixSimulator({ scenario, action, grid }: { scenario: ScenarioId; action: string; grid: GridTopology }) {
   const sim = useApi<SimResult>(`/api/fix-sim?scenario=${scenario}&action=${action}`)
-  if (sim.loading) return <div className="loading">Replaying the whole day with this fix… (about 15 seconds the first time)</div>
-  if (sim.error) return <div className="error">{sim.error}</div>
+  if (sim.loading) return <div className="loading" role="status">Replaying the whole day with this fix… (about 15 seconds the first time)</div>
+  if (sim.error) return <div className="error" role="alert">{sim.error}</div>
   if (!sim.data) return null
   const d = sim.data
   const b = d.before.summary
@@ -86,8 +86,8 @@ export default function FixesView({ scenario }: { scenario: ScenarioId }) {
   const top = useRef<HTMLDivElement>(null)
   useEffect(() => setChosen(null), [scenario])
 
-  if (res.loading || grid.loading) return <div className="loading">Testing every fix across the whole day…</div>
-  if (res.error || grid.error) return <div className="error">{res.error ?? grid.error}</div>
+  if (res.loading || grid.loading) return <div className="loading" role="status">Testing every fix across the whole day…</div>
+  if (res.error || grid.error) return <div className="error" role="alert">{res.error ?? grid.error}</div>
   if (!res.data || !grid.data) return null
   const r = res.data
   const worst = Math.max(r.before.violation_steps, 1)
@@ -119,9 +119,9 @@ export default function FixesView({ scenario }: { scenario: ScenarioId }) {
       <div className="card" ref={top}>
         <h2>Fix simulator: watch a fix work</h2>
         <p className="sub">Pick a fix. Both maps replay the same day; press play and compare. {ACTION_TEXT[selected]?.how}</p>
-        <div className="segmented fix-picker" role="radiogroup" aria-label="Fix to simulate">
+        <div className="segmented fix-picker" role="group" aria-label="Fix to simulate">
           {r.actions.map((a) => (
-            <button key={a.action_id} role="radio" aria-checked={selected === a.action_id}
+            <button key={a.action_id} aria-pressed={selected === a.action_id}
               className={`seg ${selected === a.action_id ? 'active' : ''}`} onClick={() => setChosen(a.action_id)}>
               {a.acceptable ? '✓ ' : ''}{actionName(a.action_id, a.label)}
             </button>

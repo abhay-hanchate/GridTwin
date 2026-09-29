@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useEffect, useState, type KeyboardEvent } from 'react'
 import { useApi } from './api'
 import { SCENARIO_TEXT } from './plain'
 import type { Insights, Scenario, ScenarioId } from './types'
@@ -33,8 +33,25 @@ export default function App() {
   const scenarios = useApi<Scenario[]>('/api/scenarios')
   const insights = useApi<Insights>('/api/insights')
 
+  useEffect(() => {
+    const label = TABS.find(([id]) => id === tab)?.[1].replace(/^\d · /, '')
+    document.title = `${label} · GridTwin`
+  }, [tab])
+
+  // WAI-ARIA tabs pattern: arrow keys move between tabs, Home/End jump to the ends.
+  const onTabKey = (e: KeyboardEvent<HTMLButtonElement>) => {
+    const i = TABS.findIndex(([id]) => id === tab)
+    const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: TABS.length - 1 }[e.key]
+    if (next === undefined) return
+    e.preventDefault()
+    const id = TABS[(next + TABS.length) % TABS.length][0]
+    setTab(id)
+    document.getElementById(`tab-${id}`)?.focus()
+  }
+
   return (
     <div className="app">
+      <a className="skip-link" href="#content">Skip to content</a>
       <header className="header">
         <div className="brand">
           <img className="brand-mark" src="/favicon.svg" alt="" />
@@ -43,44 +60,50 @@ export default function App() {
             <p>Can a street's wiring handle solar on every roof? A computer copy of the street finds out.</p>
           </div>
         </div>
-        <nav className="tabs" aria-label="Views">
-          {TABS.map(([id, label]) => (
-            <button key={id} className={`tab ${tab === id ? 'active' : ''}`} onClick={() => setTab(id)}
-              onMouseEnter={() => prefetch(id)} onFocus={() => prefetch(id)}>{label}</button>
-          ))}
+        <nav aria-label="Views">
+          <div className="tabs" role="tablist" aria-label="Views">
+            {TABS.map(([id, label]) => (
+              <button key={id} id={`tab-${id}`} role="tab" aria-selected={tab === id} aria-controls="panel"
+                tabIndex={tab === id ? 0 : -1} className={`tab ${tab === id ? 'active' : ''}`}
+                onClick={() => setTab(id)} onKeyDown={onTabKey}
+                onMouseEnter={() => prefetch(id)} onFocus={() => prefetch(id)}>{label}</button>
+            ))}
+          </div>
         </nav>
       </header>
 
-      {tab !== 'story' && insights.data && (
-        <section className="insight" aria-label="Measured voltage quality">
-          <div><strong>{insights.data.median_v} V</strong><div className="label">typical voltage at real homes (should be 230 V)</div></div>
-          <div><strong>{Math.round(insights.data.share_above_10pct * 100)}%</strong><div className="label">of the time above the 253 V safe limit</div></div>
-          <div className="source">Measured by smart meters in {insights.data.meters} Mathura homes, 2019</div>
-        </section>
-      )}
+      <main id="content" tabIndex={-1} style={{ marginTop: tab === 'story' ? 20 : 0 }}>
+        <div id="panel" role="tabpanel" aria-labelledby={`tab-${tab}`}>
+          {tab !== 'story' && insights.data && (
+            <section className="insight" aria-label="Measured voltage quality">
+              <div><strong>{insights.data.median_v} V</strong><div className="label">typical voltage at real homes (should be 230 V)</div></div>
+              <div><strong>{Math.round(insights.data.share_above_10pct * 100)}%</strong><div className="label">of the time above the 253 V safe limit</div></div>
+              <div className="source">Measured by smart meters in {insights.data.meters} Mathura homes, 2019</div>
+            </section>
+          )}
 
-      {(tab === 'grid' || tab === 'fixes') && scenarios.data && (
-        <div className="toolbar">
-          <span className="label">Which homes have solar?</span>
-          <div className="segmented" role="radiogroup" aria-label="Scenario">
-            {scenarios.data.map((s) => (
-              <button key={s.id} role="radio" aria-checked={scenario === s.id} title={SCENARIO_TEXT[s.id].long}
-                className={`seg ${scenario === s.id ? 'active' : ''}`} onClick={() => setScenario(s.id)}>
-                {SCENARIO_TEXT[s.id].short}
-              </button>
-            ))}
-          </div>
+          {(tab === 'grid' || tab === 'fixes') && scenarios.data && (
+            <div className="toolbar">
+              <span className="label" id="scenario-label">Which homes have solar?</span>
+              <div className="segmented" role="group" aria-labelledby="scenario-label">
+                {scenarios.data.map((s) => (
+                  <button key={s.id} aria-pressed={scenario === s.id} title={SCENARIO_TEXT[s.id].long}
+                    className={`seg ${scenario === s.id ? 'active' : ''}`} onClick={() => setScenario(s.id)}>
+                    {SCENARIO_TEXT[s.id].short}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <Suspense fallback={<div className="loading" role="status">Loading this screen…</div>}>
+            {tab === 'story' && <StoryView go={setTab} />}
+            {tab === 'grid' && <GridView scenario={scenario} />}
+            {tab === 'fixes' && <FixesView scenario={scenario} />}
+            {tab === 'forecast' && <ForecastView />}
+            {tab === 'capacity' && <CapacityView />}
+          </Suspense>
         </div>
-      )}
-
-      <main style={{ marginTop: tab === 'story' ? 20 : 0 }}>
-        <Suspense fallback={<div className="loading">Loading this screen…</div>}>
-          {tab === 'story' && <StoryView go={setTab} />}
-          {tab === 'grid' && <GridView scenario={scenario} />}
-          {tab === 'fixes' && <FixesView scenario={scenario} />}
-          {tab === 'forecast' && <ForecastView />}
-          {tab === 'capacity' && <CapacityView />}
-        </Suspense>
       </main>
 
       <footer className="footer">
