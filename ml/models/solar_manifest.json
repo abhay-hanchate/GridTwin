@@ -1,0 +1,38 @@
+{
+  "model_type": "LightGBM quantile ensemble",
+  "model_version": "1.0.0",
+  "quantiles": [
+    "p10",
+    "p50",
+    "p90"
+  ],
+  "model_files": {
+    "p10": "solar_p10.txt",
+    "p50": "solar_p50.txt",
+    "p90": "solar_p90.txt"
+  },
+  "model_sha256": {
+    "p10": "2dd25fcbb1105eed42f919ea4894f5eddb53c49c2033885e02ec68fa641610f2",
+    "p50": "a22f67a78e5363aec36520d56053ef5179ba476161a12588245f8ec0e07ee4e2",
+    "p90": "9920f340a72520fc242b06cb14ebdfc74f7faea1726e5404a16096c8da3adfdd"
+  },
+  "feature_names": [
+    "fc_pv",
+    "fc_ghi",
+    "fc_cloud",
+    "fc_temp",
+    "clearsky_ghi",
+    "hour",
+    "doy"
+  ],
+  "interval_scale": 2.5,
+  "training_data": "Open-Meteo previous_day1 forecasts for Mathura; ERA5/pvlib reference target",
+  "train_period": "2024-01-01/2024-10-31",
+  "calibration_period": "2024-11-01/2024-12-31",
+  "test_period": "2025-01-01/2025-12-31",
+  "limitations": [
+    "ERA5/pvlib target is a reference proxy, not measured rooftop PV.",
+    "Live Open-Meteo best-match weather can differ from the historical previous-runs product.",
+    "A future live warning still uses same-calendar-day 2019 CEEW demand and voltage proxies."
+  ]
+}
