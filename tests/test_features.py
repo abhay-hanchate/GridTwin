@@ -14,7 +14,8 @@ def test_features_csv_is_valid():
     ids = [r["id"] for r in rows]
     assert len(ids) == len(set(ids))
     assert all(r["status"] in tracker.STATUSES for r in rows)
-    assert all(r["pull_request"] for r in rows if r["status"] == "Done" and r["branch"] != "main")
+    # Done work records how it landed: a pull request, or a merge date for a branch merged directly.
+    assert all(r["pull_request"] or r["merged_on"] for r in rows if r["status"] == "Done" and r["branch"] != "main")
 
 
 def test_readme_table_matches_csv():
@@ -29,6 +30,13 @@ def test_merge_marks_existing_branch_done_and_adds_new_ones():
     assert rows[0]["status"] == "Done" and rows[0]["pull_request"] == "12"
     new = tracker.mark_done(rows, "fix/typo-in-map", "13", "Fix map label", "p4", "2026-09-29")
     assert new["id"] == "F02" and new["owner"] == "p4" and len(rows) == 2
+
+
+def test_chore_branches_do_not_add_feature_rows():
+    rows = [{"id": "F01", "feature": "A", "area": "", "owner": "P1", "branch": "feature/a",
+             "status": "Planned", "pull_request": "", "merged_on": ""}]
+    assert tracker.mark_done(rows, "chore/tracker-sync", "16", "Sync tracker", "p4", "2026-09-29") is None
+    assert len(rows) == 1 and rows[0]["status"] == "Planned"
 
 
 def test_merge_marks_multiple_features_delivered_by_one_branch():

@@ -191,7 +191,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 ## Features
 
 <!-- FEATURES:START -->
-**15 of 26 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
+**21 of 25 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
 
 | ID | Feature | Area | Owner | Status | Pull request |
 | --- | --- | --- | --- | --- | --- |
@@ -206,21 +206,20 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 | F09 | Plain-language story view and simpler wording | Frontend | P4 | ✅ Done | [#8](https://github.com/abhay-hanchate/GridTwin/pull/8) |
 | F10 | Fix simulator and prediction-vs-reality simulator | Engine + Frontend | P4 | ✅ Done | [#9](https://github.com/abhay-hanchate/GridTwin/pull/9) |
 | F11 | Automatic feature tracker (this file and the README table) | Quality | P1 | ✅ Done | [#10](https://github.com/abhay-hanchate/GridTwin/pull/10) |
-| F12 | Solar model feature-importance report | ML | P2 | ⏳ Planned |  |
-| F13 | Cloudy-day early warning and docs/ml.md | ML | P2 | ⏳ Planned |  |
-| F14 | README setup fixes from a fresh-clone test | Quality | P3 | ⏳ Planned |  |
-| F15 | Test plan and bug issues | Quality | P3 | ⏳ Planned |  |
-| F16 | Edge-case tests | Quality | P3 | ⏳ Planned |  |
-| F17 | Demo script for the video | Docs | P3 | ⏳ Planned |  |
-| F18 | Hosting capacity: how much solar the street can take | Engine + Frontend | P4 | ⏳ Planned |  |
+| F12 | Solar model feature-importance report | ML | P2 | ✅ Done |  |
+| F13 | Cloudy-day early warning and docs/ml.md | ML | P2 | ✅ Done |  |
+| F14 | README setup fixes from a fresh-clone test | Quality | P3 | ✅ Done | [#11](https://github.com/abhay-hanchate/GridTwin/pull/11) |
+| F15 | Test plan and bug issues | Quality | P3 | ✅ Done | [#11](https://github.com/abhay-hanchate/GridTwin/pull/11) |
+| F16 | Edge-case tests | Quality | P3 | ✅ Done | [#11](https://github.com/abhay-hanchate/GridTwin/pull/11) |
+| F17 | Demo script for the video | Docs | P3 | ✅ Done | [#11](https://github.com/abhay-hanchate/GridTwin/pull/11) |
+| F18 | Hosting capacity: how much solar the street can take | Engine + Frontend | P3 | ✅ Done | [#11](https://github.com/abhay-hanchate/GridTwin/pull/11) |
 | F19 | Faster dashboard: load each tab only when opened | Frontend | P4 | ✅ Done | [#13](https://github.com/abhay-hanchate/GridTwin/pull/13) |
 | F20 | Phone layout and accessibility | Frontend | P4 | ✅ Done | [#14](https://github.com/abhay-hanchate/GridTwin/pull/14) |
 | F21 | Live deployment with a public link | DevOps | P4 | ⏳ Planned |  |
 | F22 | Feeder reconfiguration (switching) as a fix | Engine | Team | 🏁 Finale |  |
 | F23 | Machine-learning shortcut model of the power flow | ML | Team | 🏁 Finale |  |
 | F24 | AI assistant that explains each recommendation | ML | Team | 🏁 Finale |  |
-| F25 | P3: Add QA coverage and project documentation |  | ieafraazzz | ✅ Done | [#11](https://github.com/abhay-hanchate/GridTwin/pull/11) |
-| F26 | Docs: final project document for the PPT and video |  | Tabsirshaikh | ✅ Done | [#15](https://github.com/abhay-hanchate/GridTwin/pull/15) |
+| F25 | Final project document and PDF for the PPT and video | Docs | P4 | ✅ Done | [#15](https://github.com/abhay-hanchate/GridTwin/pull/15) |
 <!-- FEATURES:END -->
 
 ## Team
