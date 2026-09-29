@@ -1,0 +1,66 @@
+name: Person 2
+
+on:
+  push:
+    branches: [person2]
+  pull_request:
+    paths:
+      - "backend/**"
+      - "ml/**"
+      - "tests/test_api.py"
+      - "tests/test_api_security.py"
+      - "tests/test_live_forecast.py"
+      - "tests/test_ml_integrity.py"
+      - "tests/test_warning_evaluation.py"
+      - "requirements.txt"
+      - ".github/workflows/person2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: person2-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ml-api:
+    name: ML and API verification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Validate versioned solar models
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          import lightgbm as lgb
+
+          root = Path("ml/models")
+          manifest = json.loads((root / "solar_manifest.json").read_text())
+          assert manifest["feature_names"] == [
+              "fc_pv", "fc_ghi", "fc_cloud", "fc_temp",
+              "clearsky_ghi", "hour", "doy",
+          ]
+          for filename in manifest["model_files"].values():
+              booster = lgb.Booster(model_file=str(root / filename))
+              assert booster.num_feature() == len(manifest["feature_names"])
+          for quantile, filename in manifest["model_files"].items():
+              digest = hashlib.sha256((root / filename).read_bytes()).hexdigest()
+              assert digest == manifest["model_sha256"][quantile]
+          PY
+      - name: Run Person 2 tests
+        run: >-
+          pytest -q
+          tests/test_api.py
+          tests/test_api_security.py
+          tests/test_live_forecast.py
+          tests/test_ml_integrity.py
+          tests/test_warning_evaluation.py
