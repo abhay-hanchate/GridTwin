@@ -8,6 +8,12 @@ GridTwin's ML layer predicts uncertain solar and household demand. It does not d
 
 The current 2025 early-warning demonstration is driven by the solar forecast. Demand and upstream voltage are same-calendar-day CEEW measurements from 2019 and are labelled `historical_proxy`. The separate demand model is an evaluated prototype, but it does not drive the 2025 warning.
 
+This is not merely a weather-to-power formula: `ml/forecast.py` trains three LightGBM quantile
+models. However, the dashboard demonstration is an offline historical backtest, not a live API
+call. Open-Meteo's public endpoint used by the project does not require an API key. See
+[`docs/finale_model_plan.md`](finale_model_plan.md) for the screened pretrained baseline and the
+measured-PV dataset plan.
+
 ## Solar model
 
 | Item | Definition |
@@ -98,3 +104,6 @@ Use:
 > The AI estimates tomorrow's solar uncertainty from weather forecasts that existed the previous day. The grid simulator converts that uncertainty into voltage risk. The comparison uses an independent ERA5/PVWatts reference simulation, while demand and incoming voltage use a labelled 2019 historical proxy. Physics—not ML—decides whether an action is safe.
 
 Do not say that the project measured rooftop production or observed seven unsafe hours on a real feeder in 2025. Do not say the demand model drives the warning until a live or genuinely forecast demand input is integrated.
+
+Do not say that an external foundation model is already integrated. The screened Chronos-2
+checkpoint is a proposed finale baseline; the implemented model is the local LightGBM ensemble.
