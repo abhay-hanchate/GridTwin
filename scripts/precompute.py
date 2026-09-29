@@ -13,6 +13,7 @@ warnings.filterwarnings("ignore")
 
 from engine import config  # noqa: E402
 from engine.grid import build_grid, topology  # noqa: E402
+from engine.hosting_capacity import estimate_hosting_capacity  # noqa: E402
 from engine.ranking import evaluate_actions  # noqa: E402
 from engine.scenarios import DEFAULT_DATE, SCENARIOS, run_scenario  # noqa: E402
 from engine.actions import ACTIONS  # noqa: E402
@@ -34,6 +35,7 @@ def main() -> None:
         save(f"grid_{sid}", topology(build_grid(spec["pv_share"])))
         save(f"run_{sid}_{DEFAULT_DATE}", run_scenario(sid, DEFAULT_DATE))
         save(f"actions_{sid}_{DEFAULT_DATE}", evaluate_actions(sid, DEFAULT_DATE))
+    save(f"hosting_capacity_{DEFAULT_DATE}_10", estimate_hosting_capacity(DEFAULT_DATE, "10"))
     save(f"early_warning_{DEFAULT_FORECAST_DATE}", early_warning(DEFAULT_FORECAST_DATE))
     save(f"forecastsim_{DEFAULT_FORECAST_DATE}", forecast_sim(DEFAULT_FORECAST_DATE))
     # Side-by-side fix simulations for the headline scenario; other scenarios compute on demand.

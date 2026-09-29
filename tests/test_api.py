@@ -26,6 +26,27 @@ def test_actions_contract():
     assert r["actions"][0]["rank"] == 1 and r["actions"][0]["remaining_violation_steps"] == 0
 
 
+def test_hosting_capacity_reports_headroom_with_and_without_fix():
+    response = client.get("/api/hosting-capacity")
+
+    assert response.status_code == 200
+    result = response.json()
+    assert result["date"] == "2019-05-15"
+    assert result["baseline_unsafe_steps"] == 5
+    assert len(result["points"]) == 11
+    assert result["capacity"]["without_fix"]["solar_homes"] == 10
+    assert result["capacity"]["without_fix"]["found_safe_level"] is True
+    assert result["capacity"]["with_fix"]["solar_homes"] == 99
+    assert result["capacity"]["with_fix"]["unsafe_steps"] == 0
+    assert result["capacity"]["with_fix"]["found_safe_level"] is True
+
+
+def test_hosting_capacity_rejects_unsupported_voltage_band():
+    response = client.get("/api/hosting-capacity", params={"band": "7"})
+
+    assert response.status_code == 422
+
+
 def test_strict_band_has_no_safe_action():
     r = client.get("/api/actions", params={"scenario": "S5"}).json()
     assert r["verdict"]["safe_action_found"] is False

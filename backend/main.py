@@ -19,6 +19,7 @@ warnings.filterwarnings("ignore")
 
 from engine import config  # noqa: E402
 from engine.grid import build_grid, topology  # noqa: E402
+from engine.hosting_capacity import estimate_hosting_capacity  # noqa: E402
 from engine.ranking import evaluate_actions  # noqa: E402
 from engine.scenarios import DEFAULT_DATE, SCENARIOS, run_scenario  # noqa: E402
 from engine.simulate import ACTIONS_BY_ID, simulate_fix  # noqa: E402
@@ -88,6 +89,15 @@ def actions(scenario: str = "S4", date: str = DEFAULT_DATE):
     sid = _scenario(scenario)
     try:
         return _cached(f"actions_{sid}_{date}", lambda: evaluate_actions(sid, date))
+    except (KeyError, ValueError) as e:
+        raise HTTPException(422, f"No complete meter data for {date}: {e}")
+
+
+@app.get("/api/hosting-capacity")
+def hosting_capacity(date: str = DEFAULT_DATE, band: str = Query("10", pattern="^(10|6)$")):
+    """Estimate solar adoption the feeder can host, with and without the recommended fix."""
+    try:
+        return _cached(f"hosting_capacity_{date}_{band}", lambda: estimate_hosting_capacity(date, band))
     except (KeyError, ValueError) as e:
         raise HTTPException(422, f"No complete meter data for {date}: {e}")
 

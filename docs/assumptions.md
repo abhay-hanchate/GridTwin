@@ -33,6 +33,13 @@ The benchmark's original cables are strong and short; with Indian household dema
 - Default band ±10% of 230 V (207–253 V), the tolerance a 2021 CEA panel favoured. The strict ±6% band (216–244 V) is the planned future tolerance.
 - Maharashtra's regulator (MERC) allows +10% / −15%; limits are configurable in `engine/config.py`.
 
+## Hosting capacity
+
+- The demo sweeps rooftop adoption from 0% to 100% in 10% steps, with 3 kW of panels per participating home, across the selected day in 15-minute intervals.
+- Without a fix, a penetration level passes when it adds no unsafe intervals beyond that day's no-solar baseline. The baseline can itself contain unsafe intervals (5 on 15 May 2019).
+- With the recommended transformer tap +1 and inverter Volt/VAR action, a level passes only when all 96 intervals are safe and every power-flow solve converges.
+- The reported capacity is the highest tested adoption level that passes, not a continuous maximum. It describes this adapted benchmark feeder and demo day; it is not a surveyed feeder study or a solar-connection approval.
+
 ## Forecasting
 
 - Solar inputs are **genuine day-ahead forecasts** (Open-Meteo Previous Runs API, `previous_day1`). Open-Meteo's historical-forecast and archive APIs return identical values for 2021 onward, so they are not used as forecast vs truth.

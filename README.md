@@ -49,7 +49,7 @@ Under the stricter ±6% rule **no fix is enough**, and GridTwin says so instead 
 
 ## The dashboard
 
-Four numbered screens that follow the story.
+Five dashboard screens that follow the story.
 
 **1 · The story** — the whole project in four plain steps: the voltage is already too high, solar pushes it over at midday, two cheap settings fix it, and the AI warns a day early.
 
@@ -66,6 +66,8 @@ Four numbered screens that follow the story.
 **4 · AI forecast** — how the warning is made, the AI's predicted street next to the real one, and the solar and demand forecasts against what happened.
 
 ![AI forecast](docs/images/forecast.png)
+
+**5 · Hosting capacity** — how much rooftop solar the feeder can host at 10% adoption steps, with and without the recommended fix. The estimate compares against the existing no-solar voltage baseline and requires the corrected case to be safe all day.
 
 ## How it works
 
@@ -91,11 +93,12 @@ flowchart TD
 | `engine/scenarios.py` | Five solar scenarios, each also run without solar | Shows how much unsafe time solar itself causes |
 | `engine/actions.py` | The seven fixes as small functions applied at every step | New fixes plug in without new simulation code |
 | `engine/ranking.py` | Keeps only fixes safe all day, ranks them by solar wasted, battery use and losses, or reports no safe action | Honest, verifiable recommendations |
+| `engine/hosting_capacity.py` | Sweeps solar adoption in 10% steps and checks hosting capacity with and without the recommended fix | Estimates feeder headroom |
 | `engine/simulate.py` | The same day without and with a fix, point by point | Powers the side-by-side simulators |
 | `ml/forecast.py` | LightGBM forecasts of solar and household use with calibrated ranges | The AI layer |
 | `ml/early_warning.py` | Runs tomorrow's predicted solar through the street | The day-ahead warning |
 | `backend/main.py` | FastAPI service; serves precomputed results instantly | Connects the engine to the dashboard |
-| `frontend/` | React dashboard with the story, live map, fix simulator and forecast screens | Understandable by non-engineers |
+| `frontend/` | React dashboard with the story, live map, fix simulator, forecast and hosting-capacity screens | Understandable by non-engineers |
 
 ## AI / ML
 
@@ -118,6 +121,7 @@ The AI predicts; physics verifies. Every fix and every warning is checked by a f
 | `/api/fix-sim?scenario=S4&action=tap1_volt_var` | The day without and with one fix, step by step |
 | `/api/forecast`, `/api/metrics` | Forecast curves and model scores |
 | `/api/early-warning`, `/api/forecast-sim` | Predicted vs real day |
+| `/api/hosting-capacity` | Solar adoption headroom with and without the recommended fix |
 
 ## Run it
 
