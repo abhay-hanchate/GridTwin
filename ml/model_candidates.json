@@ -1,0 +1,54 @@
+{
+  "current_model": {
+    "name": "GridTwin LightGBM quantile ensemble",
+    "implementation": "ml/forecast.py",
+    "status": "implemented_and_evaluated",
+    "outputs": ["p10", "p50", "p90"],
+    "target": "ERA5/pvlib-derived kW per installed kW",
+    "limitation": "target is a synthetic reference proxy, not measured rooftop PV"
+  },
+  "recommended_pretrained_baseline": {
+    "name": "Chronos-2",
+    "model_id": "amazon/chronos-2",
+    "model_url": "https://huggingface.co/amazon/chronos-2",
+    "source_url": "https://github.com/amazon-science/chronos-forecasting",
+    "license": "Apache-2.0",
+    "status": "screened_not_integrated",
+    "selection_reason": "supports known-future weather covariates and probabilistic quantile forecasting",
+    "required_validation": "same held-out GridTwin dates and downstream voltage-warning metrics"
+  },
+  "training_datasets": [
+    {
+      "name": "EDS-lab/pv-generation",
+      "url": "https://huggingface.co/datasets/EDS-lab/pv-generation",
+      "role": "weather-conditioned PV development and pretraining",
+      "access": "gated",
+      "license": "BSD-3-Clause"
+    },
+    {
+      "name": "openclimatefix/uk_pv",
+      "url": "https://huggingface.co/datasets/openclimatefix/uk_pv",
+      "role": "large measured-PV pretraining after joining issue-time weather",
+      "access": "gated",
+      "license": "CC-BY-4.0"
+    },
+    {
+      "name": "future Mathura/UP inverter telemetry",
+      "role": "India-specific calibration and held-out evaluation",
+      "access": "must be collected",
+      "license": "to be established by data agreement"
+    }
+  ],
+  "rejected_as_drop_in": [
+    {
+      "name": "Suncast",
+      "model_id": "ryukkt62/Suncast",
+      "reason": "model card limits applicability to mainland China"
+    },
+    {
+      "name": "PVNet",
+      "repository": "openclimatefix/pvnet",
+      "reason": "valuable architecture but requires a regional NWP/satellite/recent-generation pipeline and retraining"
+    }
+  ]
+}
