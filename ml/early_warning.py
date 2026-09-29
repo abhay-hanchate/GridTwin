@@ -96,3 +96,53 @@ def early_warning(
         "grid": "SimBench benchmark adapted with Indian overhead-line assumptions",
     }
     return out
+
+
+def live_warning(
+    date: str,
+    forecast: pd.DataFrame,
+    pv_share: float = 1.0,
+    band: str = "10",
+    risk: str = "p90",
+) -> dict:
+    """Run a live probabilistic forecast without pretending tomorrow's actual is known."""
+    if risk not in RISK_CASES:
+        raise ValueError(f"risk must be one of {RISK_CASES}")
+    missing = set(RISK_CASES) - set(forecast.columns)
+    if missing or len(forecast) != 96:
+        raise ValueError(f"live forecast needs 96 P10/P50/P90 rows; missing {sorted(missing)}")
+    proxy_day = f"2019-{date[5:]}"
+    base = day_inputs(proxy_day)
+    out = {
+        "date": date,
+        "risk_band": risk,
+        "demand_mode": "historical_proxy",
+        "demand_proxy_date": proxy_day,
+        "pv_share": pv_share,
+        "band": band,
+        "cases": {},
+    }
+    for case in RISK_CASES:
+        pv = pd.Series(forecast[case].to_numpy(), index=base.load_kw.index)
+        run = run_day(
+            build_grid(pv_share),
+            DayInputs(date, base.load_kw, pv, base.upstream_vm_pu),
+            band=band,
+            detail=False,
+        )
+        unsafe = [step["t"][-5:] for step in run["steps"] if step["violations"]]
+        out["cases"][case] = {
+            "violation_steps": run["summary"]["violation_steps"],
+            "max_vm_pu": run["summary"]["max_vm_pu"],
+            "first_unsafe": unsafe[0] if unsafe else None,
+            "unsafe_times": unsafe,
+        }
+    out["predicted"] = out["cases"][risk]
+    out["provenance"] = {
+        "solar_prediction": "live Open-Meteo weather processed by frozen GridTwin LightGBM quantile models",
+        "demand": f"CEEW Mathura historical proxy from {proxy_day}; not a live demand forecast",
+        "upstream_voltage": f"CEEW Mathura historical proxy from {proxy_day}",
+        "grid": "SimBench benchmark adapted with Indian overhead-line assumptions",
+        "reference": "unavailable until the target day has occurred",
+    }
+    return out

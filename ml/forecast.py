@@ -11,6 +11,7 @@ Demand: average Mathura household load, 15-minute. Train May-Oct 2019, test Nov-
 Usage:  python -m ml.forecast
 """
 import json
+import hashlib
 import sys
 from pathlib import Path
 
@@ -24,6 +25,7 @@ from engine import config, profiles  # noqa: E402
 ML_DIR = Path(__file__).resolve().parent
 MODEL_DIR = ML_DIR / "models"
 REPORT = ML_DIR / "reports" / "metrics.json"
+SOLAR_MANIFEST = MODEL_DIR / "solar_manifest.json"
 QUANTILES = {"p10": 0.1, "p50": 0.5, "p90": 0.9}
 PARAMS = {"n_estimators": 400, "learning_rate": 0.05, "num_leaves": 31, "min_child_samples": 20, "verbose": -1}
 RANDOM_SEED = 42
@@ -142,10 +144,35 @@ def train_solar() -> dict:
     k = _band_scale(pred[calib], y[calib])
     pred.loc[day] = _apply_scale(pred[day], k).to_numpy()
 
+    model_files = {q: f"solar_{q}.txt" for q in QUANTILES}
+    model_sha256 = {
+        q: hashlib.sha256((MODEL_DIR / filename).read_bytes()).hexdigest()
+        for q, filename in model_files.items()
+    }
+    SOLAR_MANIFEST.write_text(json.dumps({
+        "model_type": "LightGBM quantile ensemble",
+        "model_version": "1.0.0",
+        "quantiles": list(QUANTILES),
+        "model_files": model_files,
+        "model_sha256": model_sha256,
+        "feature_names": list(X.columns),
+        "interval_scale": round(k, 6),
+        "training_data": "Open-Meteo previous_day1 forecasts for Mathura; ERA5/pvlib reference target",
+        "train_period": "2024-01-01/2024-10-31",
+        "calibration_period": "2024-11-01/2024-12-31",
+        "test_period": "2025-01-01/2025-12-31",
+        "limitations": [
+            "ERA5/pvlib target is a reference proxy, not measured rooftop PV.",
+            "Live Open-Meteo best-match weather can differ from the historical previous-runs product.",
+            "A future live warning still uses same-calendar-day 2019 CEEW demand and voltage proxies.",
+        ],
+    }, indent=2), encoding="utf-8")
+
     scores = _scores(y[test], pred[test], {
         "persistence": y.shift(24, freq="h").reindex(y.index)[test],   # same hour yesterday
         "physics_only": X.loc[test, "fc_pv"],                          # pvlib on the raw forecast
     })
+    scores["interval_scale"] = round(k, 6)
     hourly = pred.assign(actual=y)[X.index.year == 2025]
     hourly.resample("15min").interpolate("time").astype("float32").to_parquet(
         config.PROCESSED_DIR / "solar_forecast_2025.parquet")

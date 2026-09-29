@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -85,24 +86,36 @@ def summarise(rows: list[dict]) -> dict:
     }
 
 
-def evaluate(candidates: list[dict], risk: str = "p50") -> dict:
+def _evaluate_candidate(candidate: dict, risk: str) -> dict:
+    result = early_warning(candidate["date"], risk=risk)
+    predicted, reference = result["predicted"], result["reference"]
+    return {
+        **candidate,
+        "predicted_steps": predicted["violation_steps"],
+        "reference_steps": reference["violation_steps"],
+        "p10_steps": result["cases"]["p10"]["violation_steps"],
+        "p90_steps": result["cases"]["p90"]["violation_steps"],
+        "predicted_peak_pu": predicted["max_vm_pu"],
+        "reference_peak_pu": reference["max_vm_pu"],
+        "predicted_start": predicted["first_unsafe"],
+        "reference_start": reference["first_unsafe"],
+    }
+
+
+def evaluate(candidates: list[dict], risk: str = "p50", workers: int = 1) -> dict:
     if risk not in RISK_CASES:
         raise ValueError(f"risk must be one of {RISK_CASES}")
-    rows = []
-    for candidate in candidates:
-        result = early_warning(candidate["date"], risk=risk)
-        predicted, reference = result["predicted"], result["reference"]
-        rows.append({
-            **candidate,
-            "predicted_steps": predicted["violation_steps"],
-            "reference_steps": reference["violation_steps"],
-            "p10_steps": result["cases"]["p10"]["violation_steps"],
-            "p90_steps": result["cases"]["p90"]["violation_steps"],
-            "predicted_peak_pu": predicted["max_vm_pu"],
-            "reference_peak_pu": reference["max_vm_pu"],
-            "predicted_start": predicted["first_unsafe"],
-            "reference_start": reference["first_unsafe"],
-        })
+    workers = max(1, workers)
+    if workers == 1:
+        rows = [_evaluate_candidate(candidate, risk) for candidate in candidates]
+    else:
+        with ProcessPoolExecutor(max_workers=workers) as pool:
+            rows = list(pool.map(
+                _evaluate_candidate,
+                candidates,
+                [risk] * len(candidates),
+                chunksize=1,
+            ))
     cloudy = max(rows, key=lambda row: row["challenge_score"])
     ordered = sorted(rows, key=lambda row: row["challenge_score"])
     third = max(1, len(ordered) // 3)
@@ -132,11 +145,20 @@ def main() -> None:
     parser.add_argument("--stride", type=int, default=1, help="evaluate every Nth eligible day")
     parser.add_argument("--max-days", type=int, default=None, help="optional transparent runtime cap")
     parser.add_argument("--risk", choices=RISK_CASES, default="p50")
+    parser.add_argument("--workers", type=int, default=1, help="parallel day workers")
     args = parser.parse_args()
-    candidates = eligible_dates()[::max(args.stride, 1)]
+    all_candidates = eligible_dates()
+    candidates = all_candidates[::max(args.stride, 1)]
     if args.max_days is not None:
         candidates = candidates[:args.max_days]
-    report = evaluate(candidates, risk=args.risk)
+    report = evaluate(candidates, risk=args.risk, workers=args.workers)
+    report["evaluation_scope"] = {
+        "eligible_days": len(all_candidates),
+        "evaluated_days": len(candidates),
+        "stride": max(args.stride, 1),
+        "max_days": args.max_days,
+        "complete": max(args.stride, 1) == 1 and args.max_days is None,
+    }
     REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
     REPORT_PATH.write_text(json.dumps(report, indent=2), encoding="utf-8")
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)

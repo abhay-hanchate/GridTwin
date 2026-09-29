@@ -29,3 +29,14 @@ def test_merge_marks_existing_branch_done_and_adds_new_ones():
     assert rows[0]["status"] == "Done" and rows[0]["pull_request"] == "12"
     new = tracker.mark_done(rows, "fix/typo-in-map", "13", "Fix map label", "p4", "2026-09-29")
     assert new["id"] == "F02" and new["owner"] == "p4" and len(rows) == 2
+
+
+def test_merge_marks_multiple_features_delivered_by_one_branch():
+    rows = [
+        {"id": "F12", "feature": "Explain", "area": "ML", "owner": "P2", "branch": "person2",
+         "status": "In progress", "pull_request": "", "merged_on": ""},
+        {"id": "F13", "feature": "Warning", "area": "ML", "owner": "P2", "branch": "person2",
+         "status": "In progress", "pull_request": "", "merged_on": ""},
+    ]
+    tracker.mark_done(rows, "person2", "12", "P2 delivery", "YASEER6974", "2026-09-29")
+    assert all(row["status"] == "Done" and row["pull_request"] == "12" for row in rows)

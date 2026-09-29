@@ -10,7 +10,8 @@
     "mae_persistence": 0.0456,
     "skill_vs_persistence": 0.13,
     "mae_physics_only": 0.0411,
-    "skill_vs_physics_only": 0.034
+    "skill_vs_physics_only": 0.034,
+    "interval_scale": 2.5
   },
   "demand": {
     "target": "average household kW, 15-minute",
