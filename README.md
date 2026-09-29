@@ -247,7 +247,9 @@ Every assumption and limitation — what is observed, modeled or benchmark — i
 
 ## Roadmap (finale)
 
-- Hosting capacity: how much solar each street can take, with and without fixes
+Built in Round 1 and shown in the dashboard: hosting capacity (30 kW without a fix, 297 kW with the recommended fix).
+
+
 - Feeder reconfiguration (switching) as a fix
 - Machine-learning shortcut model of the power flow to test hundreds of fixes in milliseconds
 - AI assistant that explains each recommendation in plain language
