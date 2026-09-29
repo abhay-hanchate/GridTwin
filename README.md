@@ -191,7 +191,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 ## Features
 
 <!-- FEATURES:START -->
-**12 of 25 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
+**13 of 25 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
 
 | ID | Feature | Area | Owner | Status | Pull request |
 | --- | --- | --- | --- | --- | --- |
@@ -213,7 +213,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 | F16 | Edge-case tests | Quality | P3 | ⏳ Planned |  |
 | F17 | Demo script for the video | Docs | P3 | ⏳ Planned |  |
 | F18 | Hosting capacity: how much solar the street can take | Engine + Frontend | P4 | ⏳ Planned |  |
-| F19 | Faster dashboard: load each tab only when opened | Frontend | P4 | ⏳ Planned |  |
+| F19 | Faster dashboard: load each tab only when opened | Frontend | P4 | ✅ Done | [#13](https://github.com/abhay-hanchate/GridTwin/pull/13) |
 | F20 | Phone layout and accessibility | Frontend | P4 | ⏳ Planned |  |
 | F21 | Live deployment with a public link | DevOps | P4 | ⏳ Planned |  |
 | F22 | Feeder reconfiguration (switching) as a fix | Engine | Team | 🏁 Finale |  |

@@ -17,7 +17,7 @@ F15,Test plan and bug issues,Quality,P3,docs/test-plan,Planned,,
 F16,Edge-case tests,Quality,P3,test/edge-cases,Planned,,
 F17,Demo script for the video,Docs,P3,docs/demo-script,Planned,,
 F18,Hosting capacity: how much solar the street can take,Engine + Frontend,P4,feature/hosting-capacity,Planned,,
-F19,Faster dashboard: load each tab only when opened,Frontend,P4,feature/ui-code-split,Planned,,
+F19,Faster dashboard: load each tab only when opened,Frontend,P4,feature/ui-code-split,Done,13,2026-09-29
 F20,Phone layout and accessibility,Frontend,P4,feature/ui-responsive,Planned,,
 F21,Live deployment with a public link,DevOps,P4,feature/deploy,Planned,,
 F22,Feeder reconfiguration (switching) as a fix,Engine,Team,,Finale,,
