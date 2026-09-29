@@ -176,6 +176,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 
 - **Tests:** engine, API contracts, simulators and the feature tracker (`pytest -q tests`).
 - **QA plan:** [test plan, manual dashboard checks and defect report format](docs/test-plan.md).
+- **Demo:** [three-minute video script and recording checklist](docs/demo-script.md).
 - **CI:** GitHub Actions runs the tests and the dashboard build on every pull request.
 - **Workflow:** every feature is built on its own branch and merged through a pull request after CI passes.
 - **Feature tracker:** when a pull request is merged, a GitHub Action marks its feature Done in [features.csv](features.csv) and regenerates the table below.
