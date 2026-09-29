@@ -1,10 +1,12 @@
 from datetime import date, datetime, timedelta, timezone
 
+import numpy as np
 import pandas as pd
 from fastapi.testclient import TestClient
 
 import backend.main as api
 from engine import config
+from ml.early_warning import live_warning
 from ml.live_forecast import predict_solar, tomorrow_local, weather_frame
 
 client = TestClient(api.app)
@@ -84,11 +86,41 @@ def test_live_warning_api_contract_without_network(monkeypatch):
                   for key in ("p10", "p50", "p90")},
         "predicted": {"violation_steps": 4, "max_vm_pu": 1.08,
                        "first_unsafe": "12:00", "unsafe_times": ["12:00"]},
+        "without_solar": {"violation_steps": 1, "max_vm_pu": 1.11,
+                          "first_unsafe": "00:00", "unsafe_times": ["00:00"]},
+        "solar_caused": {"violation_steps": 3, "first_unsafe": "12:00", "unsafe_times": ["12:00"]},
         "provenance": {"reference": "unavailable until the target day has occurred"},
     })
     response = client.get("/api/live-early-warning", params={"date": target.isoformat(), "risk": "p90"})
     assert response.status_code == 200
-    assert response.json()["predicted"]["violation_steps"] == 4
+    body = response.json()
+    assert body["predicted"]["violation_steps"] == 4
+    assert body["without_solar"]["first_unsafe"] == "00:00"
+    assert body["solar_caused"]["violation_steps"] == 3
+
+
+def _solar_frame(target: date, midday_kw_per_kwp: float) -> pd.DataFrame:
+    """A bell-shaped day: no sun before 06:00 or after 18:00."""
+    index = pd.date_range(target.isoformat(), periods=96, freq="15min")
+    hours = index.hour + index.minute / 60
+    shape = np.clip(np.sin((hours - 6) / 12 * np.pi), 0, None) * midday_kw_per_kwp
+    return pd.DataFrame({"p10": shape * 0.8, "p50": shape, "p90": shape * 1.1}, index=index)
+
+
+def test_live_warning_separates_solar_caused_time_from_the_grid_baseline():
+    result = live_warning("2026-09-30", _solar_frame(date(2026, 9, 30), 0.7))
+    predicted, baseline, solar = result["predicted"], result["without_solar"], result["solar_caused"]
+    assert set(solar["unsafe_times"]) == set(predicted["unsafe_times"]) - set(baseline["unsafe_times"])
+    assert solar["violation_steps"] == len(solar["unsafe_times"])
+    # Solar cannot cause anything while the sun is down.
+    assert all("06:00" <= t <= "18:00" for t in solar["unsafe_times"])
+    assert solar["first_unsafe"] == (solar["unsafe_times"][0] if solar["unsafe_times"] else None)
+
+
+def test_live_warning_without_sun_attributes_nothing_to_solar():
+    result = live_warning("2026-09-30", _solar_frame(date(2026, 9, 30), 0.0))
+    assert result["solar_caused"]["violation_steps"] == 0
+    assert result["predicted"]["unsafe_times"] == result["without_solar"]["unsafe_times"]
 
 
 def test_weather_schema_rejects_missing_fields():
