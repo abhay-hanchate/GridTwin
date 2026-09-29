@@ -1,10 +1,5 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { useApi } from './api'
-import CapacityView from './components/CapacityView'
-import FixesView from './components/FixesView'
-import ForecastView from './components/ForecastView'
-import GridView from './components/GridView'
-import StoryView from './components/StoryView'
 import { SCENARIO_TEXT } from './plain'
 import type { Insights, Scenario, ScenarioId } from './types'
 
@@ -14,6 +9,23 @@ const TABS: [Tab, string][] = [
   ['story', '1 · The story'], ['grid', '2 · Live map'], ['fixes', '3 · Fixes'], ['forecast', '4 · AI forecast'],
   ['capacity', '5 · Hosting capacity'],
 ]
+
+// Each screen is its own chunk, downloaded the first time its tab is opened (or hovered).
+const LOADERS = {
+  story: () => import('./components/StoryView'),
+  grid: () => import('./components/GridView'),
+  fixes: () => import('./components/FixesView'),
+  forecast: () => import('./components/ForecastView'),
+  capacity: () => import('./components/CapacityView'),
+} satisfies Record<Tab, () => Promise<unknown>>
+
+const StoryView = lazy(LOADERS.story)
+const GridView = lazy(LOADERS.grid)
+const FixesView = lazy(LOADERS.fixes)
+const ForecastView = lazy(LOADERS.forecast)
+const CapacityView = lazy(LOADERS.capacity)
+
+const prefetch = (id: Tab) => { void LOADERS[id]() }
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('story')
@@ -33,7 +45,8 @@ export default function App() {
         </div>
         <nav className="tabs" aria-label="Views">
           {TABS.map(([id, label]) => (
-            <button key={id} className={`tab ${tab === id ? 'active' : ''}`} onClick={() => setTab(id)}>{label}</button>
+            <button key={id} className={`tab ${tab === id ? 'active' : ''}`} onClick={() => setTab(id)}
+              onMouseEnter={() => prefetch(id)} onFocus={() => prefetch(id)}>{label}</button>
           ))}
         </nav>
       </header>
@@ -61,11 +74,13 @@ export default function App() {
       )}
 
       <main style={{ marginTop: tab === 'story' ? 20 : 0 }}>
-        {tab === 'story' && <StoryView go={setTab} />}
-        {tab === 'grid' && <GridView scenario={scenario} />}
-        {tab === 'fixes' && <FixesView scenario={scenario} />}
-        {tab === 'forecast' && <ForecastView />}
-        {tab === 'capacity' && <CapacityView />}
+        <Suspense fallback={<div className="loading">Loading this screen…</div>}>
+          {tab === 'story' && <StoryView go={setTab} />}
+          {tab === 'grid' && <GridView scenario={scenario} />}
+          {tab === 'fixes' && <FixesView scenario={scenario} />}
+          {tab === 'forecast' && <ForecastView />}
+          {tab === 'capacity' && <CapacityView />}
+        </Suspense>
       </main>
 
       <footer className="footer">
