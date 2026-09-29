@@ -2,7 +2,7 @@
 
 Run automatically by .github/workflows/features.yml whenever a pull request is merged into
 main: the row whose branch matches the pull request is marked Done; a branch that is not
-listed yet gets a new row. The README table between the FEATURES markers is regenerated
+listed yet gets a new row (except `chore/` housekeeping branches). The README table between the FEATURES markers is regenerated
 from the CSV every time.
 
 Usage:
@@ -37,8 +37,13 @@ def write_rows(rows: list[dict]) -> None:
         writer.writerows(rows)
 
 
-def mark_done(rows: list[dict], branch: str, pr: str, title: str, author: str, merged_on: str) -> dict:
-    """Mark every feature built on `branch` done, adding a row if the branch is new."""
+def mark_done(rows: list[dict], branch: str, pr: str, title: str, author: str, merged_on: str) -> dict | None:
+    """Mark every feature built on `branch` done, adding a row if the branch is new.
+
+    `chore/` branches are housekeeping (tracker or tooling upkeep), not features: no row is touched.
+    """
+    if branch.startswith("chore/"):
+        return None
     matched = []
     for row in rows:
         if row["branch"] == branch:
@@ -93,7 +98,7 @@ def main() -> None:
             p.error("--branch is required unless --render-only")
         row = mark_done(rows, args.branch, args.pr, args.title, args.author, args.merged_on)
         write_rows(rows)
-        print(f"{row['id']} {row['feature']}: Done (#{args.pr})")
+        print(f"{row['id']} {row['feature']}: Done (#{args.pr})" if row else f"{args.branch}: housekeeping, no feature row")
     update_readme(rows)
 
 
