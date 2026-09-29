@@ -38,11 +38,14 @@ def write_rows(rows: list[dict]) -> None:
 
 
 def mark_done(rows: list[dict], branch: str, pr: str, title: str, author: str, merged_on: str) -> dict:
-    """Mark the feature built on `branch` as done, adding a row if the branch is new."""
+    """Mark every feature built on `branch` done, adding a row if the branch is new."""
+    matched = []
     for row in rows:
         if row["branch"] == branch:
             row.update(status="Done", pull_request=pr, merged_on=merged_on)
-            return row
+            matched.append(row)
+    if matched:
+        return matched[0]
     next_id = max(int(r["id"][1:]) for r in rows) + 1
     row = {"id": f"F{next_id:02d}", "feature": title.replace(",", " "), "area": "", "owner": author,
            "branch": branch, "status": "Done", "pull_request": pr, "merged_on": merged_on}

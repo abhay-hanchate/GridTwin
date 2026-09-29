@@ -2,7 +2,8 @@
 
 Solar: inputs are genuine day-ahead weather forecasts (Open-Meteo Previous Runs API,
 "previous_day1" = issued the day before). Target is solar output modelled from ERA5
-reanalysis, an independent proxy for what actually happened. Train 2024, test 2025.
+reanalysis, an independent reference proxy rather than measured panel output. Train 2024,
+test 2025.
 (The Open-Meteo historical-forecast and archive APIs return identical values for 2021+,
 so they cannot be used as forecast vs truth.)
 Demand: average Mathura household load, 15-minute. Train May-Oct 2019, test Nov-Dec 2019.
@@ -10,6 +11,7 @@ Demand: average Mathura household load, 15-minute. Train May-Oct 2019, test Nov-
 Usage:  python -m ml.forecast
 """
 import json
+import hashlib
 import sys
 from pathlib import Path
 
@@ -23,8 +25,11 @@ from engine import config, profiles  # noqa: E402
 ML_DIR = Path(__file__).resolve().parent
 MODEL_DIR = ML_DIR / "models"
 REPORT = ML_DIR / "reports" / "metrics.json"
+SOLAR_MANIFEST = MODEL_DIR / "solar_manifest.json"
 QUANTILES = {"p10": 0.1, "p50": 0.5, "p90": 0.9}
 PARAMS = {"n_estimators": 400, "learning_rate": 0.05, "num_leaves": 31, "min_child_samples": 20, "verbose": -1}
+RANDOM_SEED = 42
+PARAMS.update({"random_state": RANDOM_SEED, "deterministic": True, "force_col_wise": True})
 
 
 def _fit_quantiles(X: pd.DataFrame, y: pd.Series, name: str) -> dict:
@@ -92,17 +97,46 @@ def solar_features(fc: pd.DataFrame) -> pd.DataFrame:
     }, index=idx)
 
 
-def train_solar() -> dict:
+def solar_training_data() -> tuple[pd.DataFrame, pd.Series, dict[str, pd.Series]]:
+    """Return the solar feature matrix, reference target and disjoint temporal masks."""
     fc = _read_hourly("dayahead_mathura_2024_2025.json")
     fc.columns = [c.replace("_previous_day1", "") for c in fc.columns]
     fc = fc.dropna()
     obs = _read_hourly("era5_mathura_2024_2025.json").loc[fc.index]
     X = solar_features(fc)
     y = profiles.pv_hourly(obs)
+    daylight = X["clearsky_ghi"] > 0
+    masks = {
+        "train": daylight & (X.index < "2024-11-01"),
+        "calibration": daylight & (X.index >= "2024-11-01") & (X.index.year == 2024),
+        "test": daylight & (X.index.year == 2025),
+    }
+    return X, y, masks
+
+
+def demand_features(y: pd.Series, temperature: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
+    """Build leakage-safe demand features and return yesterday's load baseline.
+
+    Every feature is available before the target interval begins. In particular, target-day
+    archive temperature is never used: the temperature terms are delayed by one and two days.
+    """
+    eps = 0.05
+    lag_1d, lag_7d = y.shift(96), y.shift(672)
+    temp_lag_1d, temp_lag_2d = temperature.shift(96), temperature.shift(192)
+    X = pd.DataFrame({
+        "ratio_1d_7d": np.log((lag_1d + eps) / (lag_7d + eps)),
+        "slot": y.index.hour * 4 + y.index.minute // 15,
+        "dow": y.index.dayofweek,
+        "temp_lag_1d": temp_lag_1d,
+        "temp_change_lagged": temp_lag_1d - temp_lag_2d,
+    }, index=y.index)
+    return X, lag_1d
+
+
+def train_solar() -> dict:
+    X, y, masks = solar_training_data()
     day = X["clearsky_ghi"] > 0
-    fit = day & (X.index < "2024-11-01")
-    calib = day & (X.index >= "2024-11-01") & (X.index.year == 2024)
-    test = day & (X.index.year == 2025)
+    fit, calib, test = masks["train"], masks["calibration"], masks["test"]
 
     models = _fit_quantiles(X[fit], y[fit], "solar")
     pred = pd.DataFrame(0.0, index=X.index, columns=list(QUANTILES))
@@ -110,10 +144,35 @@ def train_solar() -> dict:
     k = _band_scale(pred[calib], y[calib])
     pred.loc[day] = _apply_scale(pred[day], k).to_numpy()
 
+    model_files = {q: f"solar_{q}.txt" for q in QUANTILES}
+    model_sha256 = {
+        q: hashlib.sha256((MODEL_DIR / filename).read_bytes()).hexdigest()
+        for q, filename in model_files.items()
+    }
+    SOLAR_MANIFEST.write_text(json.dumps({
+        "model_type": "LightGBM quantile ensemble",
+        "model_version": "1.0.0",
+        "quantiles": list(QUANTILES),
+        "model_files": model_files,
+        "model_sha256": model_sha256,
+        "feature_names": list(X.columns),
+        "interval_scale": round(k, 6),
+        "training_data": "Open-Meteo previous_day1 forecasts for Mathura; ERA5/pvlib reference target",
+        "train_period": "2024-01-01/2024-10-31",
+        "calibration_period": "2024-11-01/2024-12-31",
+        "test_period": "2025-01-01/2025-12-31",
+        "limitations": [
+            "ERA5/pvlib target is a reference proxy, not measured rooftop PV.",
+            "Live Open-Meteo best-match weather can differ from the historical previous-runs product.",
+            "A future live warning still uses same-calendar-day 2019 CEEW demand and voltage proxies.",
+        ],
+    }, indent=2), encoding="utf-8")
+
     scores = _scores(y[test], pred[test], {
         "persistence": y.shift(24, freq="h").reindex(y.index)[test],   # same hour yesterday
         "physics_only": X.loc[test, "fc_pv"],                          # pvlib on the raw forecast
     })
+    scores["interval_scale"] = round(k, 6)
     hourly = pred.assign(actual=y)[X.index.year == 2025]
     hourly.resample("15min").interpolate("time").astype("float32").to_parquet(
         config.PROCESSED_DIR / "solar_forecast_2025.parquet")
@@ -127,14 +186,9 @@ def train_demand() -> dict:
     weather = pd.read_parquet(config.PROCESSED_DIR / "weather_hourly.parquet")
     temp = weather["temperature_2m"].resample("15min").interpolate("time").reindex(y.index)
     eps = 0.05
-    lag_1d, lag_7d = y.shift(96), y.shift(672)
     # Scale-free design: predict the log-ratio to the same slot yesterday, with no absolute
     # level as input. Summer demand is ~3x winter demand, and trees cannot extrapolate levels.
-    X = pd.DataFrame({
-        "ratio_1d_7d": np.log((lag_1d + eps) / (lag_7d + eps)),
-        "slot": y.index.hour * 4 + y.index.minute // 15, "dow": y.index.dayofweek,
-        "temp_change_1d": temp - temp.shift(96),
-    }, index=y.index)
+    X, lag_1d = demand_features(y, temp)
     keep = X.notna().all(axis=1) & y.notna() & lag_1d.notna()
     X, y, lag_1d = X[keep], y[keep], lag_1d[keep]
     log_ratio = np.log((y + eps) / (lag_1d + eps))
@@ -160,6 +214,8 @@ def main() -> None:
                   "truth": "ERA5 reanalysis", "train": "2024", "test": "2025",
                   **train_solar()},
         "demand": {"target": "average household kW, 15-minute", "train": "May-Oct 2019", "test": "Nov-Dec 2019",
+                   "inputs": "lagged demand, calendar and temperature delayed by at least one day",
+                   "leakage_guard": "no target-day archive weather is used",
                    **train_demand()},
     }
     REPORT.write_text(json.dumps(metrics, indent=2))

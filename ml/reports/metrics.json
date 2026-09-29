@@ -10,15 +10,18 @@
     "mae_persistence": 0.0456,
     "skill_vs_persistence": 0.13,
     "mae_physics_only": 0.0411,
-    "skill_vs_physics_only": 0.034
+    "skill_vs_physics_only": 0.034,
+    "interval_scale": 2.5
   },
   "demand": {
     "target": "average household kW, 15-minute",
     "train": "May-Oct 2019",
     "test": "Nov-Dec 2019",
-    "mae_p50": 0.0387,
-    "p10_p90_coverage": 0.816,
+    "inputs": "lagged demand, calendar and temperature delayed by at least one day",
+    "leakage_guard": "no target-day archive weather is used",
+    "mae_p50": 0.0405,
+    "p10_p90_coverage": 0.753,
     "mae_persistence": 0.0409,
-    "skill_vs_persistence": 0.053
+    "skill_vs_persistence": 0.009
   }
 }

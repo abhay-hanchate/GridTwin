@@ -123,8 +123,8 @@ export default function StoryView({ go }: { go: Go }) {
             <div className="big-stat">{duration(warn.data.cases.p50.violation_steps)}</div>
             <p>
               From the weather forecast for <b>{niceDate(warn.data.date)}</b>, our AI predicted <b>{duration(warn.data.cases.p50.violation_steps)}</b> of
-              unsafe voltage the day before, starting around {warn.data.cases.p50.first_unsafe}. What actually happened:{' '}
-              <b>{duration(warn.data.cases.actual.violation_steps)}</b>. That gives the utility time to change settings before it happens.
+              unsafe voltage the day before, starting around {warn.data.cases.p50.first_unsafe}. The independent ERA5/PVWatts reference simulation produced{' '}
+              <b>{duration(warn.data.cases.actual.violation_steps)}</b>. Demand and incoming voltage use the labelled 2019 proxy.
             </p>
           </div>
         )}

@@ -108,13 +108,49 @@ export interface ModelMetrics {
 
 export interface EarlyWarning {
   date: string
+  risk_band: 'p10' | 'p50' | 'p90'
+  demand_mode: 'historical_proxy'
   demand_proxy_date: string
-  cases: Record<'p50' | 'p90' | 'actual', {
+  cases: Record<'p10' | 'p50' | 'p90' | 'actual', {
     violation_steps: number
     max_vm_pu: number
     first_unsafe: string | null
     unsafe_times: string[]
   }>
+  provenance: Record<string, string>
+}
+
+export interface LiveForecast {
+  target: string
+  unit: string
+  date: string
+  generated_at: string
+  weather_source: string
+  weather_url: string
+  model: string
+  points: { t: string; p10: number; p50: number; p90: number }[]
+}
+
+export interface LiveWarning {
+  date: string
+  risk_band: 'p10' | 'p50' | 'p90'
+  demand_mode: string
+  demand_proxy_date: string
+  pv_share: number
+  band: string
+  cases: Record<'p10' | 'p50' | 'p90', {
+    violation_steps: number
+    max_vm_pu: number
+    first_unsafe: string | null
+    unsafe_times: string[]
+  }>
+  predicted: {
+    violation_steps: number
+    max_vm_pu: number
+    first_unsafe: string | null
+    unsafe_times: string[]
+  }
+  provenance: Record<string, string>
 }
 
 export interface SimStep {

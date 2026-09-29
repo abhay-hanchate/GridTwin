@@ -45,8 +45,10 @@ The benchmark's original cables are strong and short; with Indian household dema
 - Solar inputs are **genuine day-ahead forecasts** (Open-Meteo Previous Runs API, `previous_day1`). Open-Meteo's historical-forecast and archive APIs return identical values for 2021 onward, so they are not used as forecast vs truth.
 - Solar truth is modeled from ERA5 reanalysis, an independent proxy for measured output. Train 2024, test 2025.
 - Demand model: trained May–Oct 2019, tested Nov–Dec 2019 on the average CEEW household.
+- Demand features use lagged demand, calendar variables and temperature delayed by at least one day. Target-day archive weather is excluded to prevent hindsight leakage.
 - P10–P90 bands are calibrated on held-out data (Nov–Dec 2024 for solar, Oct 2019 for demand) to about 80% coverage.
 - Early warning for 2025 dates uses 2019 demand and voltage from the same calendar day as a labelled proxy, as no newer smart-meter data is public.
+- The dashboard's 2025 comparison is an ERA5/PVWatts reference simulation, not measured panel production or measured 2025 feeder voltage.
 
 ## Not modeled in Round 1
 

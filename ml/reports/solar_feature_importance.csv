@@ -1,0 +1,8 @@
+feature,definition,gain_normalized,permutation_mae_increase
+fc_pv,PVWatts output calculated from the genuine previous-day weather forecast,0.605709,0.144361
+clearsky_ghi,deterministic clear-sky irradiance for location and time,0.139496,0.031799
+doy,day of year,0.105299,0.009159
+fc_temp,previous-day forecast air temperature,0.049734,0.001265
+fc_ghi,previous-day forecast global horizontal irradiance,0.047397,0.00162
+fc_cloud,previous-day forecast cloud cover,0.036123,-0.000664
+hour,local hour of day,0.016242,0.001154

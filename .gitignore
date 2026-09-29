@@ -26,4 +26,9 @@ data/cache/
 Thumbs.db
 .vscode/
 .idea/
-ml/models/
+ml/models/*
+!ml/models/README.md
+!ml/models/solar_manifest.json
+!ml/models/solar_p10.txt
+!ml/models/solar_p50.txt
+!ml/models/solar_p90.txt
