@@ -3,7 +3,7 @@ import {
 } from 'recharts'
 import { useApi, volts } from '../api'
 import { duration, niceDate } from '../plain'
-import type { EarlyWarning, ForecastResult, GridTopology, ModelMetrics, SimResult } from '../types'
+import type { EarlyWarning, ForecastResult, GridTopology, LiveForecast, LiveWarning, ModelMetrics, SimResult } from '../types'
 import TwinSim from './TwinSim'
 
 function BandChart({ f, scale, unit }: { f: ForecastResult; scale: number; unit: string }) {
@@ -36,6 +36,8 @@ function Scores({ m }: { m: ModelMetrics }) {
 }
 
 export default function ForecastView() {
+  const live = useApi<LiveForecast>('/api/live-forecast')
+  const liveWarn = useApi<LiveWarning>('/api/live-early-warning')
   const solar = useApi<ForecastResult>('/api/forecast?target=solar&date=2025-05-15')
   const demand = useApi<ForecastResult>('/api/forecast?target=demand&date=2019-11-20')
   const metrics = useApi<{ solar: ModelMetrics; demand: ModelMetrics }>('/api/metrics')
@@ -50,6 +52,37 @@ export default function ForecastView() {
         <div><b>2</b> Our AI turns that forecast into solar power for every hour of tomorrow</div>
         <div><b>3</b> The computer copy of the street replays tomorrow with that solar</div>
         <div><b>4</b> We warn: when, where and for how long voltage will be unsafe</div>
+      </div>
+      <div className="card">
+        <h2>Live tomorrow forecast{live.data ? ` · ${niceDate(live.data.date)}` : ''}</h2>
+        <p className="sub">
+          This card fetches the latest keyless Open-Meteo weather forecast and runs the frozen LightGBM quantile ensemble at request time.
+          It is operational inference; the historical cards below remain the audited comparison against ERA5/PVWatts.
+        </p>
+        {live.loading && <div className="loading">Fetching tomorrow's weather and running the solar model…</div>}
+        {live.error && <div className="muted">Live forecast unavailable: {live.error}</div>}
+        {live.data && (
+          <div className="metrics-row">
+            <div className="mini"><div className="v">{Math.round(Math.max(...live.data.points.map((p) => p.p50)) * 100)}%</div><div className="l">peak median solar output per kWp</div></div>
+            <div className="mini"><div className="v">{Math.round(Math.max(...live.data.points.map((p) => p.p90)) * 100)}%</div><div className="l">peak sunny-case output per kWp</div></div>
+            <div className="mini"><div className="v">{live.data.points.length} × 15 min</div><div className="l">intervals from {live.data.weather_source}</div></div>
+          </div>
+        )}
+        {liveWarn.loading && <div className="loading">Checking the live forecast against the feeder model…</div>}
+        {liveWarn.error && <div className="muted">Live warning unavailable: {liveWarn.error}</div>}
+        {liveWarn.data && (
+          <div className="warn-grid" style={{ marginTop: 12 }}>
+            <div className="warn-case">
+              <div className="muted">Tomorrow's {liveWarn.data.risk_band} risk case</div>
+              <div className="v">{duration(liveWarn.data.predicted.violation_steps)} unsafe</div>
+              <div className="muted">highest {volts(liveWarn.data.predicted.max_vm_pu)} V · starts around {liveWarn.data.predicted.first_unsafe ?? '—'}</div>
+            </div>
+            <div className="warn-case">
+              <div className="muted">Interpretation</div>
+              <div className="sub" style={{ marginTop: 8 }}>Demand uses the same-calendar-day CEEW Mathura proxy ({niceDate(liveWarn.data.demand_proxy_date)}); tomorrow's actual is intentionally not claimed before it occurs.</div>
+            </div>
+          </div>
+        )}
       </div>
       <div className="card">
         <h2>Early warning for {warn.data ? niceDate(warn.data.date) : '…'}, with solar on every home</h2>
