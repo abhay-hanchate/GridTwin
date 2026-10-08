@@ -13,7 +13,7 @@
 3. **Round 1 had four real weaknesses:** it used 1 of about 6 available smart-meter data slices; its "smart inverter" was a fixed power factor, not the standard curve; its demand model barely beat persistence (0.9% skill); and the Final Document promised things the code does not do (risk probabilities, switching, three-phase, GNN).
 4. **Round 1 also framed the voltage rule wrongly.** The CEEW report cites the UP Supply Code 2005 as prescribing 230 V ±6% [V]. Our "strict ±6% failure case" is the rule that applies in UP today.
 5. **Your research docs are useful as idea menus, not as evidence.** Of 15 citation items I could check, 8 are real, 1 is partial, and 6 do not verify (section 3).
-6. **The whitespace is a combination, not a single idea.** Each piece (probabilistic risk, predictive Volt/VAR, operating envelopes, phase identification) has prior art abroad. I found no source combining them for Indian low-voltage, single-phase, high-R/X streets with ranked physics-verified fixes and transformer-level connection decisions (section 9).
+6. **The whitespace is a combination, and the competitors are closer than I first reported.** Probabilistic risk, predictive Volt/VAR, operating envelopes, phase identification and transformer-level connection decisions all exist abroad (envelio, Adaion), and Indian twins are being built (JVVNL/Edge Electra, MSEDCL, Rajasthan/ISA; NREL did a Tamil Nadu hosting-capacity study in 2021). I found no public evidence of the specific combination for Indian low-voltage, single-phase, high-R/X streets with ranked physics-verified fixes (section 9).
 7. **Recommended v2 focus:** real-data upgrade, state rule library, standard Volt/VAR with cost accounting, phase-balancing fix, transformer headroom engine, calibrated risk, and per-house export limits (section 10).
 
 ---
@@ -168,27 +168,44 @@ Drop: the 2026–2030 roadmap, the ER diagram, the "conceptual" heatmap and scat
 
 ---
 
-## 8. Landscape and competitors
+## 8. Landscape and competitors (two search rounds, plus a deeper third pass)
+
+### 8.1 Indian projects: the closest overlap
+
+| Player | What is stated | Overlap with GridTwin | Evidence |
+|---|---|---|---|
+| **JVVNL "DUET" (Jaipur) with Edge Electra and GEAPP** | Predictive digital twin: GIS + SCADA + metering, real-time power-flow simulation, stress and demand forecasting, asset health; 1.4 million assets mapped toward 4.5 million; integrates PM-KUSUM solar (more than 2,000 MW) | **Highest.** Same buyer and same "twin" label. Public text does not state LV rooftop voltage risk, ranked fixes, phase balancing or connection checks. | **[V]** news article read by Gemini |
+| **MSEDCL with GEAPP (DUET), Statement of Intent 7 Oct 2025** | AI/ML grid digitalisation, load-flow analysis, distributed solar and battery integration; non-binding; no vendor named | High (same programme spreading) | **[V]** press release |
+| **Rajasthan / ISA digital twin** | Real-time virtual replica with load-flow analysis, forecasting and renewable integration; 15 consortia responded; **vendor and timeline not stated**; AI digital-twin pilot at Ajmer Discom in a July 2026 framework | High, unknown vendor | **[V]** (twin article); **[S]** (July 2026 framework) |
+| **Venios with TERI at BRPL Delhi** | Cloud twin pilot; DER impact analysis listed as a benefit; no published results | High on paper | [S] |
+| **NREL with TANGEDCO, 2021** | Analysis framework for rooftop solar impacts on Tamil Nadu feeders, covering inverter grid-support functions and hosting capacity. A study, not a product; details unread (abstract only) | **Indian prior art for hosting-capacity analysis.** We are not the first to do this. | **[V]** abstract only |
+| TERI + BSES (2025 MoU), CEEW + Tata Power-DDL (2019 MoU on optimum rooftop share per transformer) | Research collaborations; no published results found | Research partners | [S] |
+| Tata Power-DDL + AutoGrid (2021 pilot) | Behavioural demand response for 4,000 homes; **no voltage content**; solar only as a future phase | Low | **[V]** |
+| Gridspertise with Tata Power-DDL | Secondary-substation automation | Low | [S] |
+| WorkOnGrid (Bengaluru, Rs 22.5 cr, 7 Apr 2026) | Utility data platform: theft, faulty meters, maintenance; no rooftop hosting capacity or voltage analysis stated | Adjacent; possible data partner | **[V]** |
+| Bidgely, Prescinto, Renkube, The Solar Labs | Analytics and monitoring adjacent to rooftop solar | Adjacent | [S] |
+| GEAPP "India Grids of the Future Accelerator" ($25M, March 2026; utilities in Delhi and Rajasthan first; ENTICE 3.0 challenge) | Funding and programme channel | Possible route in; cohort list not found | [S] |
+
+### 8.2 International products with the same idea
 
 | Player | What they do | Overlap | Evidence |
 |---|---|---|---|
-| Venios (DE) with TERI, BRPL Delhi | Cloud digital twin pilot; DER impact analysis promised | High on paper; no results published | [S] |
-| Edge Electra with JVVNL (Jaipur) | Whole-network digital twin, "predictive utility" | Medium; network-wide, status unknown | [S] |
-| ISA / Rajasthan digital twin | 15 consortia responded; winner unknown | Unknown | [S] |
-| MSEDCL digital twin (Dec 2025) | Solar integration; vendor unknown | Unknown | [S] |
-| Gridspertise with Tata Power-DDL | Secondary-substation automation | Low | [S] |
-| TERI + BSES (2025 MoU) | 3-year DER, storage, twin, AI research | Research partner | [S] |
-| WorkOnGrid (Bengaluru, ₹22.5 cr, 7 Apr 2026) | Utility data platform: theft, faulty meters, maintenance, natural-language queries; **no rooftop hosting capacity or voltage analysis stated** | Adjacent; possible data partner | **[V]** |
-| Bidgely (US/India) | Theft, load forecasting, grid stability analytics | Adjacent | [S] |
-| Prescinto, Renkube, The Solar Labs | Solar monitoring, AI for renewables, site assessment | Adjacent (plant-side) | [S] |
-| SolarSquare, Freyr, ZunRoof | Rooftop installers | Channel, not competitors | [S] |
-| CYME (Eaton), Synergi (DNV), PowerFactory (DIgSILENT) | Commercial hosting-capacity modules | Engineer tools, licensed, not Indian-calibrated | [S] |
-| Smarter Grid Solutions (Mitsubishi Electric) | Active network management and DERMS; 521 MW (vendor claim) | Real-time, needs control infrastructure | [S] |
-| Opus One (GE Digital DERMS), Camus | DERMS, flexible limits | Real-time, needs SCADA | [S] |
-| Utilidata | Edge AI voltage optimisation, pivoting to data centres | Different market now | [S] |
-| Genus, Itron | DT monitoring hardware and analytics | Potential data source | [S] |
+| **envelio (Germany), deployed by E.ON** | Grid digital twin: 700,000 km, 180,000 measurement devices; automates renewable connection requests (**over 410,000 in 2024**); LV expansion needs; more than 70 grid operators | **High on the idea of a transformer-level connection decision** | **[V]** news release read by Gemini |
+| **Adaion with UFD (Spain)** | GIS + smart meter digital twin with hosting-capacity assessment; proof of concept on 52 LV networks | **High on LV hosting capacity** | **[V]** summary page |
+| Siemens "LV Insights X" (Gridscale X) | LV digital twin product (used by Alliander) | High, incumbent | [S] |
+| Hitachi Energy DERMS, Schneider ADMS/DERMS | DER management inside ADMS; no Indian DISCOM deployment found | Medium; needs control systems | [S] |
+| Kraken / KrakenFlex, Zaphiro, GridCARE, Gridsight, Encoord, GridAstra, Piq Energy | Grid analytics, capacity planning, monitoring; several funded in 2025-2026 (figures from aggregator pages) | Medium-low | [S] |
+| CYME (Eaton), Synergi (DNV), PowerFactory (DIgSILENT) | Engineer-run hosting-capacity modules | Engineer tools, licensed | [S] |
+| Smarter Grid Solutions (Mitsubishi), Opus One (GE Digital), Camus, GridUnity, Stem, Kevala | ANM, DERMS, interconnection workflow, analytics | Real-time or workflow; not LV day-ahead | [S] |
+| Utilidata, Genus, Itron | Edge AI voltage optimisation; DT monitoring hardware | Different layer; possible data source | [S] |
 
-**Finding:** across all of these I found no product offering day-ahead low-voltage risk plus a ranked fix list plus transformer-level hosting capacity for Indian rooftop solar, and no Indian DISCOM hosting-capacity map. This is absence of evidence from a limited search, not proof.
+### 8.3 What this changes
+
+1. **We are not first at "digital twin", "hosting capacity" or "connection decisions".** Indian DISCOMs already have twin programmes (JVVNL, MSEDCL, Rajasthan), NREL did an Indian hosting-capacity study, and envelio automates connection requests in Germany.
+2. **What I still did not find:** public evidence that any of these offers, for Indian single-phase rooftop solar on high-resistance low-voltage wire, a **calibrated day-ahead risk**, a **ranked physics-verified fix list including phase reallocation and export limits**, and a **state-rule-aware verdict**. The Indian twins' public descriptions are about assets, SCADA data and forecasting at utility scale, not LV rooftop decisions.
+3. **Patents:** I found no patent covering day-ahead LV violation probability with ranked inverter and tap actions. Related tap-changer patents driven by load forecasts exist (US8531173B2 family). Claims were not read and no freedom-to-operate check was done.
+4. **Positioning:** present GridTwin as the **LV rooftop-solar decision layer** that can sit on top of an asset twin such as DUET, not as a rival to it. That is also safer: a DUET-style programme is a plausible buyer or partner.
+5. **Limits of this evidence:** Indian twin projects publish little technical detail, so "not stated" does not mean "not built". Ask in person (mentors, DISCOM contacts) before claiming a gap.
 
 ---
 
@@ -202,13 +219,13 @@ Drop: the 2026–2030 roadmap, the ER diagram, the "conceptual" heatmap and scat
 | Predictive Volt/VAR | **Yes** (Waterloo, 2604.07106) | LV and Indian conditions; cost accounting (reactive loss, transformer loading, R/X map) |
 | Operating envelopes | **Yes** (Australia, open code) | No Indian equivalent found; framed as the alternative to blunt curtailment |
 | Phase identification | **Yes** (Hoogsteyn) | Using it as an **action**: assign the next connection to a phase (Rajasthan rule) and score its effect |
-| Transformer hosting capacity | **Yes** (US utility maps) | None in India; replaces arbitrary state caps; works with the 10 kW feasibility exemption |
+| Transformer hosting capacity and automated connection checks | **Yes** (US utility maps; envelio/E.ON; Adaion/UFD; **NREL study for Tamil Nadu, 2021**) | No public Indian DISCOM map or tool found; ours would replace flat state caps and work with the 10 kW feasibility exemption. Not a first. |
 | Conformal calibration of PV forecasts | **Yes** (Renkema) | Linking calibrated forecast intervals to voltage-violation probability: I found no paper doing this (search not exhaustive) |
 | LLM / explainable assistant | Concept only (NREL, MIT) | Numbers-only explanations from verified power flow |
 
 ### 9.2 Defensible whitespace statement
 
-> Existing work proves each ingredient abroad. We found no tool that, for an Indian low-voltage street with single-phase rooftop solar and high-resistance overhead wire, gives a DISCOM a **calibrated day-ahead risk**, a **physics-verified ranked fix** (including the phase to assign and per-house export limits), and a **transformer-level connection decision**, with an honest "no safe action" verdict and the state's own voltage rule.
+> Existing work proves each ingredient abroad, and Indian utilities are starting twin programmes. In the public material we found, no tool gives a DISCOM, for an Indian low-voltage street with single-phase rooftop solar and high-resistance overhead wire, a **calibrated day-ahead risk**, a **physics-verified ranked fix** (including the phase to assign and per-house export limits), and a **transformer-level connection decision**, with an honest "no safe action" verdict and the state's own voltage rule.
 
 ### 9.3 Innovation list for v2
 
@@ -273,7 +290,7 @@ Effort is my estimate; nothing here is built yet.
 | Open-Meteo API terms | Code is AGPL; API terms for commercial use unchecked |
 | ppOPF and the Hosting-Capacity repo licences | Use as references only |
 | About 45 sources are snippet-only | Do not cite them as findings without a full read |
-| Competitor search was limited | "No competitor found" is not proof |
+| Competitor evidence is public-only | Indian twin projects publish little; "not stated" is not "not built". DUET, MSEDCL and Rajasthan/ISA are the ones to ask about in person |
 
 ---
 
@@ -338,4 +355,18 @@ Status key: **R** read in depth by Gemini or by me, **A** official API, **S** sn
 
 ## Appendix B: method
 
-Searches: web search (standard mode). Reading: Gemini `antigravity/gemini-3.7-flash-high` through a local OmniRoute gateway, one structured summary per source (files in `research/summaries/`). Repo and dataset facts: GitHub API and Harvard Dataverse API. My own checks: CEEW raw-text search and a Volt/VAR simulation on the Round 1 street. Gemini summaries are model-generated and were spot-checked for the claims that carry weight (the ±6% rule, the 70% figure, the repo licences). Counts: 31 sources read in depth, 44 repos plus 1 dataset record via API, 2 own checks, 6 blocked, about 45 snippet-only.
+Searches: web search (standard mode). Reading: Gemini `antigravity/gemini-3.7-flash-high` through a local OmniRoute gateway, one structured summary per source (files in `research/summaries/`). Repo and dataset facts: GitHub API and Harvard Dataverse API. My own checks: CEEW raw-text search and a Volt/VAR simulation on the Round 1 street. Gemini summaries are model-generated and were spot-checked for the claims that carry weight (the ±6% rule, the 70% figure, the repo licences). Counts after the third pass: 38 sources read in depth (one is abstract-level), 44 repos plus 1 dataset record via API, 2 own checks, 7 blocked, about 65 snippet-only; about 155 items touched.
+
+## Appendix A2: competitor pass (third round)
+
+| Source | Status |
+|---|---|
+| JVVNL DUET article (Powerline, Jan 2026) | R |
+| ISA / Rajasthan digital twin article (Electrical Mirror) | R |
+| E.ON / envelio deployment (Kurrant) | R |
+| Adaion / UFD LV digital twin case study (EDSO) | R |
+| Tata Power-DDL / AutoGrid pilot release | R |
+| MSEDCL / GEAPP Statement of Intent | R |
+| NREL / TANGEDCO 2021 framework (landing page) | R (abstract only) |
+| ISA / Rajasthan Framework for Action, July 2026 (Statesman, SolarQuarter) | X (403); facts from search snippets |
+| Siemens LV Insights X, Hitachi DERMS, Schneider ADMS, Zaphiro, KrakenFlex, Gridcog, Lumenaza, GridCARE, Gridsight, Encoord, GridAstra, Piq Energy, ConnectDER, GridUnity, Camus, Kevala, Heila, Stem, GEAPP accelerator, ENTICE 3.0, Dassault Energize India hackathon, tap-changer patent family US8531173B2 | S |

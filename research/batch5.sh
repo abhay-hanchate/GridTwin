@@ -1,0 +1,12 @@
+#!/bin/bash
+run() { n="$1"; u="$2"; need="$3"; for i in 1 2 3; do python -I research/omni_read.py read "$u" "$need" > "research/summaries/$n.md" 2>&1 && ! grep -q "HTTP 5" "research/summaries/$n.md" && break; sleep 5; done; echo "done $n"; }
+run nrel_tangedco_2021 "https://research-hub.nlr.gov/en/publications/an-analysis-framework-for-distribution-network-der-integration-an/" "NREL + TANGEDCO analysis framework for distribution-network DER integration (rooftop solar, Tamil Nadu): tools used, what is computed (voltage, loading, hosting capacity), data, results, whether it is software or a one-off study, code availability" &
+run isa_rajasthan_twin "https://electricalmirror.net/rajasthan-to-lead-indias-power-sector-digital-transformation-with-digital-twin-network/" "Rajasthan ISA digital twin of distribution network: scope, what it models, forecasting, consortium, vendor, timeline, whether rooftop solar voltage or hosting capacity is included" &
+run isa_framework_ajmer "https://www.thestatesman.com/india/international-solar-alliance-signs-framework-for-action-with-rajasthan-government-1503614585.html" "Rajasthan ISA Framework for Action July 2026: AI-enabled digital twin pilot at Ajmer Discom, scope, delivery partner, timeline" &
+run jvvnl_duet "https://powerline.net.in/2026/01/15/jvvnl-efforts-to-enhance-jaipurs-power-distribution-efficiency/" "JVVNL DUET digital twin: what it covers, vendor, assets digitised, any LV network power-flow, rooftop solar voltage, hosting capacity, forecasting" &
+wait
+run envelio_eon "https://kurrant.com/kurrantly-news/e-on-deploys-digital-twin-to-support-germanys-energy-transition/" "E.ON / envelio digital twin: what it does for LV grids, hosting capacity, data used, scale" &
+run adaion_ufd "https://www.edsoforsmartgrids.eu/success_cases/lv-advanced-planning/" "Digital twins + smart meters LV advanced planning (Adaion, UFD): hosting capacity method, 52 LV networks, results, data needs" &
+run tata_autogrid "https://www.tatapower-ddl.com/pr-details/199/1753686/tata-power-ddl-joins-hands-with-autogrid-to-deploy-ai-enabled-smart-energy-management-system" "Tata Power-DDL and AutoGrid AI demand response pilot: scope, whether it covers voltage or rooftop solar" &
+run geapp_msedcl "https://energyalliance.org/alliance-to-strengthen-grid-digitalization-in-maharashtra/" "GEAPP + MSEDCL grid digitalisation statement of intent: scope, digital twin, vendor, solar integration" &
+wait
