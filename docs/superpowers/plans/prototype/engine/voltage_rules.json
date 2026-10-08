@@ -1,0 +1,40 @@
+{
+  "rules": [
+    {
+      "id": "pm10",
+      "label": "±10% of 230 V (default)",
+      "vmin_pu": 0.90, "vmax_pu": 1.10, "nominal_v": 230.0,
+      "region": "Generic",
+      "source": "Round 1 default; the CEEW (2020) report also evaluates this band as its second reference range",
+      "verification": "unverified",
+      "note": "The 2021 CEA panel's preference is quoted in the Final Project Document and has not been re-checked."
+    },
+    {
+      "id": "up_2005",
+      "label": "Uttar Pradesh Supply Code 2005: ±6% of 230 V",
+      "vmin_pu": 0.94, "vmax_pu": 1.06, "nominal_v": 230.0,
+      "region": "Uttar Pradesh",
+      "source": "UPERC, UP Electricity Supply Code 2005, as cited in CEEW (2020) 'What Smart Meters Can Tell Us' (prescribed 230 V ± 6%, 216-244 V)",
+      "verification": "secondary",
+      "note": "Cited second-hand; confirm against the Supply Code text."
+    },
+    {
+      "id": "mh_plus10_minus15",
+      "label": "Maharashtra: +10% / -15% of 230 V",
+      "vmin_pu": 0.85, "vmax_pu": 1.10, "nominal_v": 230.0,
+      "region": "Maharashtra",
+      "source": "GridTwin Final Project Document section 3 (state regulator variant)",
+      "verification": "unverified",
+      "note": "Not re-checked in the v2 research."
+    },
+    {
+      "id": "plus6_minus10",
+      "label": "+6% / -10% of 230 V",
+      "vmin_pu": 0.90, "vmax_pu": 1.06, "nominal_v": 230.0,
+      "region": "Generic (reported for several state codes)",
+      "source": "GridTwin Round 2 playbook (4 Oct 2026)",
+      "verification": "unverified",
+      "note": "Not re-checked in the v2 research."
+    }
+  ]
+}
