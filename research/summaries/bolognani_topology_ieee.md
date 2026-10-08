@@ -1,0 +1,1 @@
+Please paste or attach the text of the research paper after **`--- PAPER TEXT ---`**. Once provided, I will evaluate it directly against GridTwin's topology identification requirements using your exact 6-part structure.

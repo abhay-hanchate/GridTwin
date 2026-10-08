@@ -32,3 +32,7 @@ ml/models/*
 !ml/models/solar_p10.txt
 !ml/models/solar_p50.txt
 !ml/models/solar_p90.txt
+
+# secrets
+.env
+research/.env
