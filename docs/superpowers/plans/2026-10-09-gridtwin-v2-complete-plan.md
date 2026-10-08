@@ -96,7 +96,7 @@ If time runs out, cut from the bottom. Each tier ends in something demonstrable.
 
 **Tier 2: credibility (should have).** P2.1 to P2.7 (all data, demand v2, upstream), P3.4 and P3.5, P4.1 and P4.2 (solar v2, live), P5.3 (reliability), P7.2 and P7.3 (headroom, connection check), P8.4, P9.5 and P9.6, P10.1, P10.4, P10.7. Result: a Proof page with measured gates, planning tools, better forecasts.
 
-**Tier 3: completeness (nice to have).** P4.3 and P4.4 (benchmark, calibration, cold start), P7.1, P7.4 to P7.6, P8.5, P9.4, P10.3, P10.5, P10.6, P10.8 to P10.12, Hindi strings, Docker.
+**Tier 3: completeness (nice to have).** P4.3 and P4.4 (benchmark, calibration, cold start), P7.1, P7.4 to P7.7, P8.5, P9.4, P10.3, P10.5, P10.6, P10.8 to P10.12, Hindi strings, Docker.
 
 ## 0.5 Merge points
 
@@ -118,6 +118,40 @@ Person-hours assuming the prototype files are copied rather than retyped: Phase 
 2. If a gate fails, the UI shows the failure. A failed gate is a result, not a bug to hide.
 3. Keep the legacy API until the dashboard has switched; the demo must never be broken by a half-finished migration.
 4. Precompute the demo (P8.3 `scripts/nightly.py`) and keep `GRIDTWIN_OFFLINE=1` working so a dead network cannot stop the presentation.
+
+## 0.8 Pick the best method DURING the build (bake-offs), not in the plan
+
+The plan names a **current best hypothesis** for each component. It does not claim the winner. While executing, the person who owns a component runs the comparison below on the real data, applies the decision rule that is written **before** the run, and records the result. Numbers the plan quotes as "spike" or "measured on 9 Oct 2026" are one early look at the data, there to seed expectations; **the build re-runs them and the build's numbers decide.**
+
+**Protocol for every bake-off (about 1 to 3 hours each):**
+1. **Pre-register.** In `docs/DECISIONS.md` write the candidates, the metric, the split, and the decision rule before running anything. Do not change the rule after seeing results.
+2. **Same data for everyone.** Identical train, calibration and test masks for all candidates. Never tune on the test period. Always include the simplest baseline and the Round 1 method.
+3. **Run and record.** `scripts/bakeoff.py <component>` (written when the first bake-off is needed; it is a thin wrapper that calls each candidate and writes `data/results/bakeoff_<component>.json` with candidates, metric values, split, rule, winner, git hash, timestamp). The file feeds `results.json` (P10.4) and the Proof page.
+4. **Ties go to the simpler method.** A complex candidate wins only by the margin in the rule. Losing candidates stay in the record.
+5. **Keep the loser callable** behind a config switch until the release, so a surprise can be reverted without rewriting.
+6. **Research if needed (time-box 45 minutes per component).** Before running, search for 2 or 3 candidates the table does not list: use web search, arXiv, GitHub and the paper reader (`research/omni_read.py`). Add a candidate only if it can be implemented in about 2 hours or less, and note its source and verification tag ([V] read, [S] snippet, [U] unverified) in `docs/DECISIONS.md`. If research changes a component's hypothesis, update the plan note in that task in the same commit.
+
+| Component | Candidates to try (add more from research) | Metric and data | Decision rule (pre-registered) |
+|---|---|---|---|
+| Power-flow engine | power-grid-model, pandapower, any faster solver found | Voltage and loading parity on the 99-home street; time per day | Gate G1: parity within 0.1% and at least 10x faster |
+| Solar median forecast | Round 1 model; physics on one blended NWP; physics mean of N models; LightGBM direct target; LightGBM residual target; bias-corrected mean; Chronos-2; TimesFM 2.5; newer solar models found by research | MAE and weighted interval score (WIS) on the identical 2025 daylight mask; per-season table | Lowest WIS wins if it is at least 3% better than the simplest candidate that already beats Round 1 (gate G3); a foundation model needs at least 5% and inputs that exist in production |
+| Solar intervals | raw quantiles; Round 1 scale factor; split conformal with rolling windows 30 / 60 / 120 days; conformalised quantile regression; adaptive conformal; per-hour widths | Coverage per season (target 78-82%) and WIS | Within the coverage band in every season, then lowest WIS |
+| Demand forecast | lag-1d, lag-7d, mean baselines; LightGBM on log-ratio; LightGBM direct; seasonal naive with holidays; Chronos-2 / TimesFM; with and without oracle weather | MAE, WIS, coverage; time split and held-out district; strict vs oracle variants | Gate G4 (at least 10% skill against the best baseline and coverage 78-82%), else report the true number and make no AI claim |
+| Upstream voltage | AR(1) plus daily shape (current); LightGBM quantile; historical-day bootstrap; Gaussian process | Coverage of the 80% interval of the day maximum; CRPS; held-out district | Best coverage within 70-90% on both districts, then lowest CRPS |
+| Scenario generator | independent draws; Gaussian copula; t-copula; joint-day bootstrap | Brier skill from the reliability backtest (G8); day-level energy score | Highest Brier skill; the copula must beat independent draws to be kept |
+| Risk calibration | raw probabilities; isotonic; Platt scaling; conformal on the unsafe indicator | Brier score and reliability error per bin | Lowest Brier with every bin within 0.15 of ideal, else report the gap |
+| Phase reallocation | CP-SAT; greedy swap; simulated annealing; MILP on voltage sensitivities | Unsafe steps removed at equal moves; runtime | Most unsafe steps removed with at most 15 moves; runtime at most 20 s |
+| Export envelopes | per-step bisection; linearised sensitivity LP; proportional-fair rule | Curtailed kWh at zero unsafe steps | Least curtailed kWh |
+| Battery control | sensitivity droop (current); LP schedule on sensitivities; rule-based peak shaving | Smallest battery size that clears the day; throughput | Smallest size that clears all scenarios, then least throughput |
+| Feeder switching | greedy one-tie; exhaustive over candidate ties; none | Unsafe steps removed, operations | Fewest operations that clear the most steps |
+| Hosting capacity sampling | plain Monte Carlo; Latin hypercube; fixed grid | Stability of P50 as draws grow | Fewest draws within 2 percentage points of the 500-draw answer |
+| Cold-start PV | district forecast x kWp with shrinkage (current); physics-synthetic history plus fine-tuning; direct transfer | Error over the first 30 days on held-out rooftops (ERA5 PV at perturbed tilt and azimuth if no real roofs) | Lowest error; the simple method wins ties |
+
+**Examples of what early looks suggested (hypotheses to confirm, not results to cite):** averaging several weather models helped the solar forecast far more than the choice of learner; Round 1's interval scale did not transfer across seasons; a foundation model was close but needed yesterday's observed PV; the risk percentages were not yet reliable on the old data. Each of these is a bake-off in the table above.
+
+**Who runs which:** Person A runs the engine, scenario generator, risk calibration, phase, envelope, battery, switching and hosting-capacity bake-offs; Person B runs solar, intervals, demand, upstream voltage and cold-start. Each bake-off happens at the start of the task that implements the component (for example the solar bake-off is the first step of P4.1), before the code is copied from `prototype/`.
+
+**Where the answers go:** `docs/DECISIONS.md` (human-readable, one entry per bake-off), `data/results/bakeoff_*.json` (machine-readable), the Proof page, and the model cards (P10.9).
 
 ---
 
@@ -239,7 +273,7 @@ GNN power-flow surrogate, OpenDER, reinforcement-learning control, LLM-driven co
 
 ## 4. Best method, model and dataset per component, with gates
 
-"Gate" = the measurement that must pass before the new method replaces the old one. A failed gate means: keep the old method, report the number honestly, and say nothing stronger in the UI or documents.
+The method named in each subsection below is the **current best hypothesis**; section 0.8 says how the build confirms or replaces it. "Gate" = the measurement that must pass before the new method replaces the old one. A failed gate means: keep the old method, report the number honestly, and say nothing stronger in the UI or documents.
 
 ### 4.1 Engine (A5, C4) · Gate G1 (passed in spike S1), Gate G5
 
@@ -4393,7 +4427,7 @@ Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 
 **Deliverable:** a multi-model solar forecast that beats Round 1 on the identical 2025 mask (gate G3) with honest intervals; its live inference path; a Chronos-2 benchmark with a written adoption rule; a measured-plant yield calibration; a cold-start forecast for new rooftops.
 
-**Measured evidence (9 Oct 2026, Mathura, truth = ERA5-driven PV, 4,414 daylight hours of 2025; train 2024-01 to 10, first conformal pool 2024-11 and 12).** The Round 1 pipeline was rebuilt first from freshly downloaded data and reproduced Round 1's published numbers exactly (MAE 0.0396, physics-only 0.0411, persistence 0.0456), so the comparison below is like for like.
+**Spike results, a starting point and not a decision (9 Oct 2026, Mathura, truth = ERA5-driven PV, 4,414 daylight hours of 2025; train 2024-01 to 10, first conformal pool 2024-11 and 12).** The Round 1 pipeline was rebuilt first from freshly downloaded data and reproduced Round 1's published numbers exactly (MAE 0.0396, physics-only 0.0411, persistence 0.0456), so the comparison below is like for like.
 
 | Variant | MAE kW/kWp | 80% interval coverage | WIS |
 |---|---|---|---|
@@ -4412,7 +4446,7 @@ What this says, without spin:
 2. **Round 1's interval scale 2.5 was tuned on two winter months** and does not transfer to other seasons; the raw quantiles cover only 52–58% in 2025. A **rolling 60-day conformal width** restores 79–80% in every season (winter 77%, summer 82–86%, monsoon 77–78%, post-monsoon 82–83% across window variants).
 3. **Solar v2 is 16.9% better than Round 1 on MAE and 26% better on WIS.** By season (direct-target variant): winter 0.0349 vs 0.0418, monsoon 0.0462 vs 0.0503, post-monsoon 0.0276 vs 0.0513, **summer 0.0181 vs 0.0173 (slightly worse)**. The summer result stays on the Proof page.
 4. **ECMWF IFS matters in the ensemble** (dropping it costs 6.5% MAE) although it is the worst single model by itself (0.0476).
-5. **Chronos-2 is 3.3% better on WIS than solar v2, below the 5% adoption bar**, and it needs yesterday's observed PV, which the LightGBM pipeline does not. Not adopted; kept as a documented benchmark.
+5. **In the spike Chronos-2 was 3.3% better on WIS than solar v2, below the 5% adoption bar**, and it needs yesterday's observed PV, which the LightGBM pipeline does not. Spike verdict: not adopted. The build re-runs this bake-off (section 0.8) and decides.
 6. **Gate G2 (measured):** GFS, ICON, GEM, Météo-France ARPEGE and ECMWF IFS return 100% of hours from their first valid hour (ECMWF starts 6 March 2024, the others 19 January 2024). JMA GSM returns nothing and UKMO 10 km returns 73% (from January 2025): both are dropped. The gate text is refined to **≥95% non-null from the model's first valid hour and in the test year**, because a full-window rule would have wrongly discarded ECMWF, which is complete after its start date.
 
 ### Task P4.1: Multi-model downloader and solar forecast v2 (B2), gates G2 and G3
@@ -5160,7 +5194,7 @@ Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 - Consumes: `ml.solar_v2` (P4.1), `ml.metrics` (P2.4).
 - Produces: `build_frames`, `chronos_forecast(past, future, pipeline=None, batch_days=60)`, `compare(y, mask, candidates, reference)` with an `adopt` flag, `run(district)`.
 
-**Adoption rule (written before the result was known):** a candidate replaces the reference only if its WIS is at least 5% lower on 2025 **and** the deployment can supply yesterday's observed PV. Measured: Chronos-2 with `pv_mean`, `ghi_mean`, `cloud_mean` covariates and a 14-day context scores MAE 0.0318, coverage 78.6%, WIS 0.0207 against solar v2's 0.0214, a 3.3% gain, so **it is not adopted**. TimesFM 2.5 was not run: its Hugging Face repository answers (spike S4) but its Python API was not inspected, and adding a second foundation model before the first one clears the bar would not change a decision. Document it as "not evaluated".
+**Adoption rule (written before the result was known):** a candidate replaces the reference only if its WIS is at least 5% lower on 2025 **and** the deployment can supply yesterday's observed PV. Measured: Chronos-2 with `pv_mean`, `ghi_mean`, `cloud_mean` covariates and a 14-day context scores MAE 0.0318, coverage 78.6%, WIS 0.0207 against solar v2's 0.0214, a 3.3% gain, so the spike verdict is **not adopted**; the build re-runs the comparison with the final features and decides by this rule. TimesFM 2.5 was not run in the spike: its Hugging Face repository answers (spike S4) but its Python API was not inspected, and adding a second foundation model before the first one clears the bar would not change a decision. Document it as "not evaluated".
 
 - [ ] **Step 1: Install the optional packages**
 
@@ -7099,7 +7133,9 @@ Commit: `feat(fixes): tournament with phase reallocation, export envelopes, swit
 **Files:** Create `engine/connection.py`; Test `tests/test_connection.py`.
 **Interface:** `check_connection(network, scn, rule, *, node: int, kw: float, count: int = 1, phase: int | None = None) -> dict` returning `decision` (`approve`, `approve_with_conditions`, `refuse`), `phase` used (best phase if none given), `binding_limit`, `conditions` (for example "export limit 2.5 kW on phase B at midday" from the envelope of P6.3, or "Volt/VAR required"), `margin_v`, `evidence` (before/after unsafe steps).
 **Method:** try the request on each phase (or the requested one) without any control; if unsafe, try the cheapest control from the tournament (Volt/VAR, then envelope); if still unsafe, `refuse` with the binding limit and the smaller size that would pass (bisect on kW). Physics decides; no ML in this path.
-**Tests:** a small request at the transformer is approved; a large request at the far end on the loaded phase is refused with a named limit; a phase suggestion is never worse than the worst phase; response time under 5 s on the benchmark.
+**10 kW exemption (reported in the research as [S]; verify the exact rule before relying on it):** rooftop systems up to 10 kW are reported to be exempt from a technical feasibility study, so nobody checks their cumulative effect on the transformer. Add `exempt_below_kw: float = 10.0` and `existing: list[dict] | None` (already-connected systems as `{node, phase, kwp}`) to `check_connection`. For a request at or below the threshold the response adds `regulatory_status: "exempt from feasibility study (reported, unverified)"` and still returns the physics decision as `advisory`. A second function `cumulative_check(network, scn, rule, existing, new)` adds all existing plus new systems and reports the combined binding limit and the remaining headroom per phase, because the harm comes from many small exempt systems on one transformer. The response always says whether the request alone is safe and whether the request plus the exempt systems already connected is safe.
+**Tests:** a 5 kW request alone is safe but fails `cumulative_check` when enough exempt systems already sit on the same phase; the response carries the `regulatory_status` text; the threshold is a parameter, not a constant buried in code.
+**Other tests:** a small request at the transformer is approved; a large request at the far end on the loaded phase is refused with a named limit; a phase suggestion is never worse than the worst phase; response time under 5 s on the benchmark.
 
 ### Task P7.4: Meter-first ranking (E4)
 
@@ -7119,6 +7155,13 @@ Commit: `feat(fixes): tournament with phase reallocation, export envelopes, swit
 **Interface:** `rx_map(network, scn, rule, *, r_scales=(0.5, 1, 1.5, 2), x_scales=(0.5, 1, 1.5, 2)) -> dict` giving, per (R scale, X scale), the peak voltage with and without standard Volt/VAR and the unsafe steps.
 **Why:** reactive-power control works when X is large relative to R; Indian overhead LV has high R, so Volt/VAR may help less than the literature suggests. The map shows where Volt/VAR works on this street and is a Proof-page figure. Reactance is an estimate (provenance), so the map doubles as the sensitivity to that estimate.
 **Tests:** at a high R/X ratio Volt/VAR reduces the peak by less than at a low ratio.
+
+### Task P7.7: Which transformers to meter first (E4, across transformers)
+
+**Files:** Create `engine/portfolio.py`; Test `tests/test_portfolio.py`.
+**Interface:** `rank_transformers(portfolio: list[dict], rule) -> list[dict]` where each portfolio item is `{id, network, scenarios, connected_kw, metered: bool}`; returns the transformers ordered by risk of unseen overload or over-voltage, each with `score`, `headroom_kw`, `connected_kw`, `share_of_headroom_used`, `binding_limit`, `metered`.
+**Method:** run `headroom` (P7.2) per transformer; score = `connected_kw / headroom_kw` (how much of the safe room is already used), boosted when the transformer is unmetered, since there the utility cannot see the problem; ties by lowest headroom. The five archetypes act as a five-transformer demo portfolio; a utility's own list comes in through the onboarding schema (P10.3, add a `transformers.csv`). The flat state caps appear beside the result so a planner sees where a flat cap and the physics disagree.
+**Tests:** a small, long, heavily connected transformer ranks above a large, short, lightly connected one; an unmetered transformer outranks an otherwise identical metered one; an empty portfolio is a clear error.
 
 **Phase 7 exit check:** tests green; one `data/results/planning_<archetype>.json` per archetype with headroom and hosting capacity for `pm10` and `up_2005`.
 
@@ -7237,7 +7280,7 @@ Commit: `feat(fixes): tournament with phase reallocation, export envelopes, swit
 ### Task P10.4: Evaluation harness and `results.json` (G1, G2)
 
 **Files:** Create `scripts/evaluate.py`, `docs/generated/` (generated); Test `tests/test_evaluate.py`.
-**What it does:** runs the gates G1–G8 and the headline numbers and writes `data/results/results.json` with `{gate, measured, threshold, passed, provenance, command, git_hash, timestamp}`; generates `docs/generated/proof.md` from it. All UI and docs numbers come from this file. **Tests:** a failed gate is written as failed; the file validates against a schema.
+**What it does:** runs the gates G1–G8 and the headline numbers and writes `data/results/results.json` with `{gate, measured, threshold, passed, provenance, command, git_hash, timestamp}`; generates `docs/generated/proof.md` from it. It also ingests every `data/results/bakeoff_*.json` (section 0.8) so the Proof page can show which method won and by how much. All UI and docs numbers come from this file. **Tests:** a failed gate is written as failed; the file validates against a schema.
 
 ### Task P10.5: Nightly run
 
