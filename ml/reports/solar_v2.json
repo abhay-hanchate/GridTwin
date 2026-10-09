@@ -60,8 +60,8 @@
   "scores_2025": {
     "n": 4414,
     "mae_p50": 0.0329,
-    "p10_p90_coverage": 0.799,
-    "wis": 0.0213,
+    "p10_p90_coverage": 0.794,
+    "wis": 0.0214,
     "mae_persistence": 0.0456,
     "skill_vs_persistence": 0.279,
     "mae_physics_only_best_match": 0.0411,
@@ -76,5 +76,12 @@
     "p50": "cbce4d7f16f35f10c6d9bc465fa7223ea50db6b87c25cd26f9f9e60007b19a4a",
     "p90": "bb7b38dde5eac43dd3f70839a27c99b3cb146e9a6c22887af7b4dacfebe843d3"
   },
-  "conformal_q_end_of_2025": 0.023931
+  "conformal_q_end_of_2025": 0.023931,
+  "conformal_method": "by_season_all_earlier",
+  "conformal_q_by_season": {
+    "monsoon": 0.017971,
+    "post_monsoon": 0.012107,
+    "summer": 0.004902,
+    "winter": 0.019422
+  }
 }
