@@ -7,6 +7,7 @@ from backend.v2 import metrics
 from backend.v2.errors import ApiError
 from backend.v2.schemas import Health, Readiness, Rule
 from backend.v2.settings import Settings
+from engine.archetypes import ARCHETYPES, CONDUCTORS, list_archetypes
 from engine.rules import load_rules
 
 router = APIRouter()
@@ -20,6 +21,20 @@ def _settings(request: Request) -> Settings:
 def rules() -> list[dict]:
     """Every voltage rule the engine can check, with its source and how well it is verified."""
     return [r.as_dict() for r in load_rules().values()]
+
+
+@router.get("/networks")
+def networks() -> list[dict]:
+    """The feeder archetypes and what is real about each (conductor data) and what is not (topology, reactance)."""
+    out = []
+    for row in list_archetypes():
+        a, cond = ARCHETYPES[row["id"]], CONDUCTORS[row["conductor"]]
+        out.append({**row, "description": a.note, "conductor_r_ohm_per_km": cond["r_ohm_per_km"],
+                    "conductor_ampacity_a": cond["i_a"],
+                    "provenance": {"topology": "benchmark: SimBench 1-LV-rural2 scaled in length, not a surveyed Indian feeder",
+                                   "conductor": "IS 398 Part II (1996) ACSR table",
+                                   "reactance": "Round 1 assumption" if row["id"] == "benchmark_250" else "estimate, not from the standard"}})
+    return out
 
 
 @router.get("/health", response_model=Health)

@@ -60,3 +60,10 @@ def test_metrics_count_requests_by_route_template():
     text = c.get("/metrics").text
     assert 'gridtwin_requests_total{route="/rules",status="200"}' in text
     assert "gridtwin_request_seconds_bucket" in text
+
+
+def test_networks_list_the_archetypes_with_provenance():
+    rows = {r["id"]: r for r in _client().get("/networks").json()}
+    assert set(rows) == {"benchmark_250", "urban_short_160", "suburban_100", "rural_long_100", "rural_weak_63"}
+    assert rows["rural_weak_63"]["trafo_kva"] == 63.0 and rows["rural_weak_63"]["conductor_r_ohm_per_km"] == 0.9289
+    assert rows["urban_short_160"]["provenance"]["topology"].startswith("benchmark")
