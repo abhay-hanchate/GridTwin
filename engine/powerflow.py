@@ -1,5 +1,6 @@
 """Full-day (96 x 15-minute) power flow and violation detection."""
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Callable, Optional
 
 import numpy as np
@@ -20,12 +21,20 @@ class DayInputs:
     upstream_vm_pu: pd.Series     # 96
 
 
-def day_inputs(date: str) -> DayInputs:
-    """Real profiles for one day; only meters with a complete day are used."""
-    loads = pd.read_parquet(config.PROCESSED_DIR / "load_kw.parquet").loc[date]
+def day_inputs(date: str, district: str | None = None, processed_dir: Path | None = None) -> DayInputs:
+    """Real profiles for one day; only meters with a complete day are used.
+
+    `district=None` reads the Round 1 (legacy) Mathura files so existing results do not move;
+    a district name reads the v2 per-district files.
+    """
+    if district is None:
+        base, suffix = config.PROCESSED_DIR, ""
+    else:
+        base, suffix = (processed_dir or config.PROCESSED_DIR / "v2"), f"_{district}"
+    loads = pd.read_parquet(base / f"load_kw{suffix}.parquet").loc[date]
     loads = loads.loc[:, loads.notna().all()]
-    pv = pd.read_parquet(config.PROCESSED_DIR / "pv_kw_per_kwp.parquet")["pv_kw_per_kwp"].reindex(loads.index).fillna(0)
-    vm = pd.read_parquet(config.PROCESSED_DIR / "upstream_vm_pu.parquet")["upstream_vm_pu"]
+    pv = pd.read_parquet(base / f"pv_kw_per_kwp{suffix}.parquet")["pv_kw_per_kwp"].reindex(loads.index).fillna(0)
+    vm = pd.read_parquet(base / f"upstream_vm_pu{suffix}.parquet")["upstream_vm_pu"]
     vm = vm.reindex(loads.index).interpolate(limit_direction="both")
     if len(loads) != 96 or loads.shape[1] == 0:
         raise ValueError(f"{date}: no complete day of meter data")
