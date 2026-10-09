@@ -110,7 +110,7 @@ export default function StoryView({ go }: { go: Go }) {
           </div>
         )}
         <p className="muted">
-          We tested 7 possible fixes on the computer copy, each across the whole day, and only accept a fix if the street
+          We tested 10 possible fixes on the computer copy, each across the whole day, and only accept a fix if the street
           is safe every minute.
           {strict.data && !strict.data.verdict.safe_action_found &&
             ' Under the Uttar Pradesh supply-code rule (±6%), no fix is enough, and GridTwin says so honestly instead of pretending.'}
