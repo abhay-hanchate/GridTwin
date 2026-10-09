@@ -47,3 +47,15 @@ def test_headroom_runs_as_a_job(client, monkeypatch):
         time.sleep(0.05)
     assert body["result"]["adoption"] == 0.5
     assert client.get("/headroom", params={"adoption": 2}).status_code == 422
+
+
+def test_hosting_runs_as_a_job_and_reports_both_cases(client, monkeypatch):
+    monkeypatch.setattr(compute, "hosting_payload", lambda d, n, r: {"without_fix": {}, "with_volt_var": {}, "rule": r})
+    r = client.get("/hosting", params={"date": "2025-05-15", "rule": "6"})
+    assert r.status_code == 202
+    for _ in range(100):
+        body = client.get(f"/jobs/{r.json()['job_id']}").json()
+        if body["status"] == "done":
+            break
+        time.sleep(0.05)
+    assert body["result"]["rule"] == "up_2005" and set(body["result"]) >= {"without_fix", "with_volt_var"}

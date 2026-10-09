@@ -270,3 +270,15 @@ def connection_payload(date: str, network_id: str, rule_id: str, node: int, kw: 
     except ValueError as exc:
         raise ApiError(422, str(exc), details={"valid_nodes": [int(n) for n in net.lv_nodes]}) from exc
     return {"date": date, "network": network_id, "adoption": adoption, **out, "provenance": PROVENANCE}
+
+
+def hosting_payload(date: str, network_id: str, rule_id: str, draws: int = 30) -> dict:
+    """P10/P50/P90 hosting capacity on the design-case day, without a fix and with standard Volt/VAR."""
+    from engine.hosting import hosting_capacity
+    net = network(network_id)
+    design = _design(robust_set(scenarios(date, net)))
+    r = rule(rule_id)
+    return {"date": date, "network": network_id, "rule": r.id,
+            "without_fix": hosting_capacity(net, design, r, draws=draws),
+            "with_volt_var": hosting_capacity(net, design, r, draws=draws, controls=Controls(volt_var=_VV)),
+            "provenance": PROVENANCE}

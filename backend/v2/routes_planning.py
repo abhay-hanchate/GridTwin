@@ -41,3 +41,11 @@ def connection_check(request: Request, body: ConnectionRequest):
     day = body.date.isoformat() if body.date else default_date(_store(request), "risk")
     return compute.connection_payload(day, body.network, body.rule or _settings(request).rule_default, body.node,
                                       body.kw, body.count, body.phase, body.adoption)
+
+
+@router.get("/hosting")
+def hosting(request: Request, date: Date | None = None, network: str = DEFAULT_NETWORK, rule: str | None = None):
+    """Probabilistic hosting capacity (share of homes and kW), without a fix and with standard Volt/VAR."""
+    params = {"date": date.isoformat() if date else default_date(_store(request), "risk"), "network": network,
+              "rule": rule or _settings(request).rule_default}
+    return _serve(request, "hosting", params, lambda **p: compute.hosting_payload(p["date"], p["network"], p["rule"]))

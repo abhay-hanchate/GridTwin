@@ -2,7 +2,8 @@
 
 Usage:  python -m scripts.nightly [--networks benchmark_250] [--rules pm10 up_2005] [--force] [--no-live]
 
-Writes data/results/v2/<cache key>.json for /risk and /fixes on three demo dates (sunny, mixed, cloudy, picked from
+Writes data/results/v2/<cache key>.json for /risk and /fixes on three demo dates (and /headroom and
+/hosting on the sunny one) (sunny, mixed, cloudy, picked from
 the solar v2 2025 forecast) and data/results/v2/index.json. These files are what GRIDTWIN_OFFLINE=1 serves.
 Then fetches tomorrow's multi-model solar forecast and records it with scripts.monitor.log_forecast; a network
 failure there is reported and does not fail the run.
@@ -40,11 +41,14 @@ def precompute(settings: Settings, networks: list[str], rules: list[str], force:
     entries = []
     jobs = [("risk", lambda d, n, r: compute.risk_payload(d, n, r, "none"), {"fix": "none"}),
             ("fixes", lambda d, n, r: compute.fixes_payload(d, n, r), {})]
+    planning = [("headroom", lambda d, n, r: compute.headroom_payload(d, n, r, compute.DEFAULT_ADOPTION),
+                 {"adoption": compute.DEFAULT_ADOPTION}),
+                ("hosting", lambda d, n, r: compute.hosting_payload(d, n, r), {})]
     for kind, day in dates.items():
         for network in networks:
             for rule in rules:
                 rule_id = compute.rule(rule).id
-                for route, fn, extra in jobs:
+                for route, fn, extra in jobs + (planning if kind == "sunny" else []):
                     params = {"date": day, "network": network, "rule": rule_id, **extra}
                     key = cache_key(route, settings.code_version, **params)
                     path = out_dir / f"{key}.json"
@@ -53,7 +57,8 @@ def precompute(settings: Settings, networks: list[str], rules: list[str], force:
                     started = time.perf_counter()
                     result = load_or_compute(out_dir, key, lambda: fn(day, network, rule_id))
                     seconds = round(time.perf_counter() - started, 1)
-                    summary = result.get("level") or result.get("verdict", {}).get("message", "")
+                    summary = (result.get("level") or result.get("verdict", {}).get("message")
+                               or result.get("without_fix", {}).get("adoption_share") or "")
                     print(f"{route:5s} {kind:6s} {day} {network} {rule_id:8s} {seconds:6.1f}s  {summary}", flush=True)
                     entries.append({"route": route, "date": day, "day_type": kind, "key": key, **params})
     index = {"generated_at": datetime.now(timezone.utc).isoformat(), "code_version": settings.code_version,
