@@ -13,7 +13,7 @@ export default function RiskStrip({ p, times, watch, act }: Props) {
     <figure className="risk-strip">
       <svg role="img" aria-label={label} viewBox={`0 0 ${p.length} 100`} preserveAspectRatio="none">
         {p.map((v, i) => (
-          <rect key={i} data-step={i} className={`bar bar-${levelOf(v, watch, act)}`}
+          <rect key={i} data-step={i} className={`step step-${levelOf(v, watch, act)}`}
             x={i + 0.1} width={0.8} y={100 - v * 100} height={Math.max(v * 100, 0.6)}>
             <title>{`${times[i]} · ${pct(v)}`}</title>
           </rect>

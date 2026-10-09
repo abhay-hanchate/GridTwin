@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { useV2, v2Path } from '../api/v2'
 import type { Risk, Rule } from '../api/v2types'
+import { DEFAULT_NETWORK, DEFAULT_RULE } from '../app/defaults'
 import Prov from '../components/Prov'
 import RiskStrip from '../components/RiskStrip'
+import RuleSelector from '../components/RuleSelector'
 import Status from '../components/Status'
 import Verdict from '../components/Verdict'
 import { one, stepTime, volts } from '../format'
@@ -10,28 +12,15 @@ import { useT } from '../i18n'
 
 // Watch and act levels of feature D1; the API states the ones it used and these are only the fallback.
 const DEFAULT_THRESHOLDS = { watch: 0.2, act: 0.5 }
-export const DEFAULT_NETWORK = 'benchmark_250'
 
-export function RuleSelector({ rules, value, onChange }: { rules: Rule[]; value: string; onChange: (id: string) => void }) {
-  const t = useT()
-  const current = rules.find((r) => r.id === value)
-  return (
-    <div className="rule-select">
-      <span className="label" id="rule-label">{t('home.rule')}</span>
-      <div className="segmented" role="group" aria-labelledby="rule-label">
-        {rules.map((r) => (
-          <button key={r.id} aria-pressed={r.id === value} className={`seg ${r.id === value ? 'active' : ''}`}
-            onClick={() => onChange(r.id)}>{r.label}</button>
-        ))}
-      </div>
-      {current && <p className="muted">{t('home.rule_source', { source: current.source, verification: current.verification })}</p>}
-    </div>
-  )
-}
+type Props = { network?: string; rule?: string; onRule?: (id: string) => void }
 
-export default function Home({ network = DEFAULT_NETWORK }: { network?: string }) {
+/** Tomorrow's risk. The rule can be owned by the caller (shared with Fixes) or by the page itself. */
+export default function Home({ network = DEFAULT_NETWORK, rule: ruleProp, onRule }: Props) {
   const t = useT()
-  const [rule, setRule] = useState('up_2005')
+  const [ownRule, setOwnRule] = useState(DEFAULT_RULE)
+  const rule = ruleProp ?? ownRule
+  const setRule = onRule ?? setOwnRule
   const rules = useV2<Rule[]>('/rules')
   const risk = useV2<Risk>(v2Path('/risk', { network, rule }))
   const band = rules.data?.find((r) => r.id === rule)

@@ -3,6 +3,10 @@ import { LANGS, useLang, useT, type StringKey } from '../i18n'
 import { AREAS, type Area } from './areas'
 
 const label = (area: Area) => `area.${area}` as StringKey
+const fromHash = (): Area | null => {
+  const id = window.location.hash.slice(1)
+  return (AREAS as readonly string[]).includes(id) ? (id as Area) : null
+}
 
 type Props = {
   render: (area: Area, go: (area: Area) => void) => ReactNode
@@ -12,7 +16,12 @@ type Props = {
 
 /** The v2 layout: language switch, five areas as WAI-ARIA tabs, one panel. Pages come from `render`. */
 export function Shell({ render, initial = 'home', banner }: Props) {
-  const [area, setArea] = useState<Area>(initial)
+  // The URL hash names the area (#fixes), so a demo can link straight to a page.
+  const [area, setAreaState] = useState<Area>(() => fromHash() ?? initial)
+  const setArea = (id: Area) => {
+    setAreaState(id)
+    history.replaceState(null, '', `#${id}`)
+  }
   const { lang, setLang } = useLang()
   const t = useT()
 

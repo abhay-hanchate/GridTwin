@@ -8,7 +8,7 @@ import { Shell } from './Shell'
 
 const ui = () => render(<LangProvider><Shell render={(area) => <p>page {area}</p>} /></LangProvider>)
 
-beforeEach(() => localStorage.clear())
+beforeEach(() => { localStorage.clear(); history.replaceState(null, '', '#') })
 afterEach(cleanup)
 
 describe('Shell', () => {
@@ -38,6 +38,22 @@ describe('Shell', () => {
     expect(screen.getByText('page try')).toBeTruthy()
     fireEvent.keyDown(screen.getByRole('tab', { name: en['area.try'] }), { key: 'End' })
     expect(screen.getByText('page proof')).toBeTruthy()
+  })
+
+  it('opens the area named in the URL hash and keeps the hash in step', () => {
+    window.location.hash = '#fixes'
+    ui()
+    expect(screen.getByText('page fixes')).toBeTruthy()
+    fireEvent.click(screen.getByRole('tab', { name: en['area.proof'] }))
+    expect(window.location.hash).toBe('#proof')
+    window.location.hash = ''
+  })
+
+  it('ignores an unknown hash', () => {
+    window.location.hash = '#nope'
+    ui()
+    expect(screen.getByText('page home')).toBeTruthy()
+    window.location.hash = ''
   })
 
   it('has a skip link to the content', () => {
