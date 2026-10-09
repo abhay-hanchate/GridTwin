@@ -59,3 +59,24 @@ def test_hosting_runs_as_a_job_and_reports_both_cases(client, monkeypatch):
             break
         time.sleep(0.05)
     assert body["result"]["rule"] == "up_2005" and set(body["result"]) >= {"without_fix", "with_volt_var"}
+
+
+def test_planning_defaults_to_its_own_precomputed_date(tmp_path, monkeypatch):
+    import json
+    from backend.v2.app import create_app
+    from backend.v2.settings import Settings
+    (tmp_path / "v2").mkdir()
+    (tmp_path / "v2" / "index.json").write_text(json.dumps({"entries": [
+        {"route": "risk", "date": "2025-11-19"}, {"route": "headroom", "date": "2025-05-15"},
+        {"route": "hosting", "date": "2025-05-15"}]}))
+    seen = []
+    monkeypatch.setattr(compute, "headroom_payload", lambda d, n, r, a: seen.append(("headroom", d)) or {})
+    monkeypatch.setattr(compute, "hosting_payload", lambda d, n, r: seen.append(("hosting", d)) or {})
+    c = TestClient(create_app(Settings(code_version="d1", results_dir=tmp_path)), raise_server_exceptions=False)
+    for route in ("/headroom", "/hosting"):
+        job = c.get(route).json()
+        for _ in range(100):
+            if c.get(f"/jobs/{job['job_id']}").json()["status"] == "done":
+                break
+            time.sleep(0.05)
+    assert sorted(seen) == [("headroom", "2025-05-15"), ("hosting", "2025-05-15")]      # not the latest risk date

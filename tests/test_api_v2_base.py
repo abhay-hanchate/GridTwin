@@ -11,7 +11,13 @@ from backend.v2.middleware import RateLimiter
 from backend.v2.settings import Settings
 
 
-def _client(**overrides) -> TestClient:
+def _client(tmp_path=None, **overrides) -> TestClient:
+    # Own results folder and own rate-limited path: the real /whatif route must never be hit from these tests
+    # (it would start real what-if jobs and write into data/results/v2).
+    import tempfile
+    from pathlib import Path
+    overrides.setdefault("results_dir", Path(tmp_path or tempfile.mkdtemp()))
+    overrides.setdefault("rate_limited_paths", ("/limited",))
     app = create_app(Settings(code_version="test", **overrides))
     extra = APIRouter()
 
@@ -27,8 +33,8 @@ def _client(**overrides) -> TestClient:
     def conflict():
         raise ApiError(409, "job not ready", details={"job_id": "abc"})
 
-    @extra.post("/whatif")
-    def whatif(body: dict):
+    @extra.post("/limited")
+    def limited(body: dict):
         return {"ok": True}
 
     app.include_router(extra)
@@ -74,17 +80,15 @@ def test_every_response_has_a_request_id_and_security_headers(client):
 
 
 def test_an_oversize_body_is_refused_before_the_route_runs(client):
-    r = client.post("/whatif", content=json.dumps({"x": "a" * 5000}), headers={"content-type": "application/json"})
+    r = client.post("/limited", content=json.dumps({"x": "a" * 5000}), headers={"content-type": "application/json"})
     assert r.status_code == 413 and r.json()["error"]["code"] == "payload_too_large"
 
 
-def test_rate_limit_applies_only_to_the_expensive_routes(tmp_path):
-    # The real /whatif route is mounted first, so it answers (200 cached or 202 job); a temporary results directory
-    # keeps its job and cache out of data/results/v2. Only the limiter's decision is under test here.
-    c = _client(rate_limit_per_minute=3, results_dir=tmp_path)
-    codes = [c.post("/whatif", json={}).status_code for _ in range(4)]
-    assert 429 not in codes[:3] and codes[3] == 429
-    r = c.post("/whatif", json={})
+def test_rate_limit_applies_only_to_the_expensive_routes():
+    c = _client(rate_limit_per_minute=3)
+    codes = [c.post("/limited", json={}).status_code for _ in range(4)]
+    assert codes == [200, 200, 200, 429]
+    r = c.post("/limited", json={})
     assert r.json()["error"]["code"] == "rate_limited" and r.headers["retry-after"] == "60"
     assert all(c.get("/health").status_code == 200 for _ in range(10))
 

@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-10-09T13:58:46.831993+00:00",
- "git_hash": "9afca95",
+ "generated_at": "2026-10-09T16:18:24.911179+00:00",
+ "git_hash": "10a96d3",
  "summary": {
   "pass": 4,
   "fail": 2,
@@ -18,9 +18,9 @@
     "max_voltage_diff_pct": 0.0005,
     "max_voltage_diff_v": 0.001,
     "max_trafo_loading_diff_pts": 0.0,
-    "day_seconds_pgm": 0.023,
-    "day_seconds_pandapower": 18.93,
-    "speedup": 813.1
+    "day_seconds_pgm": 0.012,
+    "day_seconds_pandapower": 7.79,
+    "speedup": 647.1
    },
    "threshold": "max voltage difference <= 0.1% and at least 10x faster",
    "provenance": "benchmark: SimBench street, 15 May 2019",
@@ -202,7 +202,7 @@
    "up_2005": "No safe action: every option leaves violations. Closest is 'Tap +1, Volt/VAR and per-house export limits' with 12 unsafe steps. The limit that stops it: voltage fell to 214 V against a 216 V limit in 7 steps."
   },
   "demo": {
-   "code_version": "598a51478206",
+   "code_version": "fcd030a4e165",
    "results": [
     {
      "route": "risk",
@@ -373,6 +373,24 @@
      "safe_action_found": false,
      "recommended": null,
      "closest": "tap1_volt_var"
+    },
+    {
+     "route": "whatif",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10",
+     "label": "Standard smart inverters (IEEE 1547 Volt/VAR)",
+     "unsafe_steps_before": 30,
+     "unsafe_steps_after": 0
+    },
+    {
+     "route": "whatif",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10",
+     "label": "Evening EV charging at 20% of homes, with transformer tap +1",
+     "unsafe_steps_before": 43,
+     "unsafe_steps_after": 31
     }
    ]
   }

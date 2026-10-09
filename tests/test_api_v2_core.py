@@ -50,8 +50,9 @@ def test_offline_mode_needs_only_the_precomputed_results(tmp_path):
     c = _client(offline=True, results_dir=tmp_path)
     assert c.get("/readiness").status_code == 503
     (tmp_path / "v2").mkdir()
-    (tmp_path / "v2" / "index.json").write_text("{}")
-    assert c.get("/readiness").json() == {"ready": True, "mode": "offline", "checks": {"precomputed_results": True}}
+    (tmp_path / "v2" / "index.json").write_text('{"code_version": "abc1234"}')
+    assert c.get("/readiness").json() == {"ready": True, "mode": "offline",
+                                          "checks": {"precomputed_results": True, "precomputed_match_code": True}}
 
 
 def test_metrics_count_requests_by_route_template():
@@ -67,3 +68,13 @@ def test_networks_list_the_archetypes_with_provenance():
     assert set(rows) == {"benchmark_250", "urban_short_160", "suburban_100", "rural_long_100", "rural_weak_63"}
     assert rows["rural_weak_63"]["trafo_kva"] == 63.0 and rows["rural_weak_63"]["conductor_r_ohm_per_km"] == 0.9289
     assert rows["urban_short_160"]["provenance"]["topology"].startswith("benchmark")
+
+
+def test_offline_readiness_fails_when_saved_results_belong_to_older_code(tmp_path):
+    import json
+    (tmp_path / "v2").mkdir()
+    (tmp_path / "v2" / "index.json").write_text(json.dumps({"code_version": "old123"}))
+    r = _client(offline=True, results_dir=tmp_path).get("/readiness")
+    assert r.status_code == 503 and r.json()["error"]["details"]["checks"]["precomputed_match_code"] is False
+    (tmp_path / "v2" / "index.json").write_text(json.dumps({"code_version": "abc1234"}))
+    assert _client(offline=True, results_dir=tmp_path).get("/readiness").status_code == 200

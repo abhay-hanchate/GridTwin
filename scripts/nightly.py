@@ -61,9 +61,36 @@ def precompute(settings: Settings, networks: list[str], rules: list[str], force:
                                or result.get("without_fix", {}).get("adoption_share") or "")
                     print(f"{route:5s} {kind:6s} {day} {network} {rule_id:8s} {seconds:6.1f}s  {summary}", flush=True)
                     entries.append({"route": route, "date": day, "day_type": kind, "key": key, **params})
+    entries += precompute_whatif(settings, dates["sunny"], networks[0], force)
     index = {"generated_at": datetime.now(timezone.utc).isoformat(), "code_version": settings.code_version,
              "demo_dates": dates, "entries": entries}
     (out_dir / "index.json").write_text(json.dumps(index, indent=1), encoding="utf-8")
+    return entries
+
+
+# Two example changes for the "Try a change" page, so it can show something with GRIDTWIN_OFFLINE=1.
+WHATIF_EXAMPLES = [
+    {"label": "Standard smart inverters (IEEE 1547 Volt/VAR)", "changes": [], "fixes": [{"id": "fix.volt_var"}]},
+    {"label": "Evening EV charging at 20% of homes, with transformer tap +1",
+     "changes": [{"id": "change.ev_charging", "params": {"share_of_homes": 0.2}}], "fixes": [{"id": "fix.tap"}]},
+]
+
+
+def precompute_whatif(settings: Settings, day: str, network: str, force: bool = False) -> list[dict]:
+    from backend.v2.jobs import JobStore
+    from backend.v2.routes_whatif import WhatIf, normalise, whatif_payload
+    store, out_dir, entries = JobStore(settings.results_dir), settings.results_dir / "v2", []
+    for example in WHATIF_EXAMPLES:
+        spec = WhatIf(date=day, network=network, rule="pm10", changes=example["changes"], fixes=example["fixes"])
+        norm, key = normalise(spec, settings, store)
+        if force and (out_dir / f"{key}.json").exists():
+            (out_dir / f"{key}.json").unlink()
+        started = time.perf_counter()
+        load_or_compute(out_dir, key, lambda norm=norm: whatif_payload(**norm))
+        print(f"whatif {day} {example['label']}: {time.perf_counter() - started:.1f}s", flush=True)
+        entries.append({"route": "whatif", "date": day, "day_type": "sunny", "key": key, "label": example["label"],
+                        "network": norm["network"], "rule": norm["rule"],
+                        "spec": {k: norm[k] for k in ("network", "rule", "adoption", "changes", "fixes")}})
     return entries
 
 

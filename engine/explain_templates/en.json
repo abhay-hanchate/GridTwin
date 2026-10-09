@@ -1,12 +1,16 @@
 {
-  "_meta": {"language": "English", "review": "final"},
+  "_meta": {
+    "language": "English",
+    "review": "final"
+  },
   "risk_act": "Tomorrow: ACT. Unsafe voltage is likely from {first_act}; expect about {hours} hours of unsafe time (between {hours_p10} and {hours_p90} hours in 8 of 10 cases). The highest voltage is likely around {peak_v} V against a {limit_v} V limit.",
   "risk_watch": "Tomorrow: WATCH. There is a real chance of unsafe voltage from {first_watch}; expect about {hours} hours of unsafe time (between {hours_p10} and {hours_p90} hours in 8 of 10 cases).",
   "risk_ok": "Tomorrow: no action needed. No 15-minute period reaches a {watch_pct}% chance of unsafe voltage.",
-  "risk_uncalibrated": "These chances are not yet calibrated against history; treat them as a ranking, not exact odds.",
+  "risk_uncalibrated": "These chances are not reliable as odds; read them as a ranking of the riskiest hours.",
   "fix_recommended": "Recommended: {label}. It keeps every 15 minutes safe in every scenario, wastes {curtailed_kwh} kWh of solar and needs {operations} switching or phase operations.",
   "fix_phase_moves": "Move {count} homes to another phase.",
   "fix_export_limits": "Limit solar export at {count} homes tomorrow; the limits are listed per home and time.",
   "verdict_no_safe": "No safe action: every option leaves unsafe time. The closest is {closest_label}, with {closest_steps} unsafe 15-minute periods. What stops it: {limit}.",
-  "verdict_still_needs": "To make it safe the street still needs {still_needs}."
+  "verdict_still_needs": "To make it safe the street still needs {still_needs}.",
+  "risk_calibrated": "These chances are slightly better than the historical average (checked on held-out days)."
 }

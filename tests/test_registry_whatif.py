@@ -86,3 +86,13 @@ def test_real_whatif_compares_before_and_after():
     assert len(out["t"]) == 96 and len(out["before"]["node_max_v"]) == 96
     assert len(out["before"]["node_max_v"][0]) == len(out["nodes"])
     assert out["after"]["summary"]["max_vm_pu"] < out["before"]["summary"]["max_vm_pu"]
+
+
+def test_nightly_and_route_compute_the_same_whatif_key(tmp_path):
+    from backend.v2.jobs import JobStore
+    from backend.v2.routes_whatif import WhatIf, normalise
+    s = Settings(code_version="k1", results_dir=tmp_path)
+    store = JobStore(tmp_path)
+    a = normalise(WhatIf(date="2025-05-15", rule="10", fixes=[{"id": "fix.tap"}]), s, store)[1]
+    b = normalise(WhatIf(date="2025-05-15", rule="pm10", fixes=[{"id": "fix.tap", "params": {"tap_pos": 1}}]), s, store)[1]
+    assert a == b                                                   # alias and filled-in defaults give one key
