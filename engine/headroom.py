@@ -3,7 +3,8 @@
 Method: add a probe rooftop system (following the scenarios' own solar shape) at a node and phase, and bisect its size
 until the first failure on any scenario. Two criteria, because a street can already be unsafe without new solar:
   strict    zero unsafe steps in every scenario (0 kW when the street is already unsafe)
-  no_worse  the number of unsafe steps does not grow (the Round 1 hosting-capacity criterion)
+  no_worse  no step worsened against the street without the request (engine.violations.worsened_steps): a safe
+            step stays safe and an unsafe one goes no further past its limit
 Physics decides every answer: nothing here is learned.
 """
 from __future__ import annotations
@@ -18,7 +19,7 @@ from engine.rules import VoltageRule
 from engine.solver import DaySolver
 from engine.types import Controls, DayScenarioBatch, Network
 from engine.verdict import binding_limit_arrays
-from engine.violations import evaluate
+from engine.violations import evaluate, worsened_steps
 
 PHASES = ("A", "B", "C")
 # Flat state caps on rooftop solar as a share of the distribution transformer rating. Reported in the research
@@ -73,17 +74,17 @@ def _bisect(ok, hi: float, tol: float) -> float:
 def headroom(network: Network, scn: DayScenarioBatch, rule: VoltageRule, *, max_kw: float = 60.0,
              tol_kw: float = 0.5, controls: Controls = Controls()) -> dict:
     """Extra kW of rooftop solar per probe location and phase, under both criteria."""
-    _, base = _run(network, scn, rule, controls)
+    base_res, base = _run(network, scn, rule, controls)
     base_unsafe = int(base.unsafe.sum())
     out = {"rule": rule.id, "baseline_unsafe_steps": base_unsafe, "scenarios": scn.shape[0], "locations": {}}
     for where, node in probe_nodes(network).items():
         per_phase = {}
         for phase in range(3):
-            def unsafe(kw, node=node, phase=phase):
+            def trial(kw, node=node, phase=phase):
                 net, s = with_new_homes(network, scn, node, phase, kw)
-                return int(_run(net, s, rule, controls)[1].unsafe.sum())
-            no_worse = _bisect(lambda kw: unsafe(kw) <= base_unsafe, max_kw, tol_kw)
-            strict = _bisect(lambda kw: unsafe(kw) == 0, max_kw, tol_kw) if base_unsafe == 0 else 0.0
+                return _run(net, s, rule, controls)
+            no_worse = _bisect(lambda kw: not worsened_steps(base_res, trial(kw)[0], rule).any(), max_kw, tol_kw)
+            strict = _bisect(lambda kw: not trial(kw)[1].unsafe.any(), max_kw, tol_kw) if base_unsafe == 0 else 0.0
             net, s = with_new_homes(network, scn, node, phase, min(no_worse + tol_kw, max_kw))
             res, viol = _run(net, s, rule, controls)
             worst = int(viol.unsafe.sum(axis=1).argmax())
@@ -111,28 +112,30 @@ def check_connection(network: Network, scn: DayScenarioBatch, rule: VoltageRule,
     """
     if node not in set(int(n) for n in network.lv_nodes):
         raise ValueError(f"node {node} is not a low-voltage node of {network.name}")
-    _, base = _run(network, scn, rule, Controls())
+    base_res, base = _run(network, scn, rule, Controls())
     base_unsafe = int(base.unsafe.sum())
     phases = [phase] if phase is not None else [0, 1, 2]
 
     def trial(ph, size, controls=Controls()):
+        """(result, violations, number of steps the request worsens)."""
         net, s = with_new_homes(network, scn, node, ph, size, count)
         res, viol = _run(net, s, rule, controls)
-        return res, viol, int(viol.unsafe.sum())
+        return res, viol, int(worsened_steps(base_res, res, rule).sum())
 
     tried = {ph: trial(ph, kw) for ph in phases}
     best = min(phases, key=lambda ph: (tried[ph][2], float(np.nanmax(tried[ph][0].u_pu))))
-    res, viol, unsafe = tried[best]
+    # the condition tried below with Volt/VAR is judged against the same base street (no control)
+    res, viol, worse = tried[best]
     out = {"node": node, "kw": kw, "count": count, "phase": PHASES[best], "rule": rule.id,
-           "evidence": {"baseline_unsafe_steps": base_unsafe, "unsafe_steps_with_request": unsafe,
-                        "per_phase_unsafe_steps": {PHASES[p]: tried[p][2] for p in phases}},
+           "evidence": {"baseline_unsafe_steps": base_unsafe, "unsafe_steps_with_request": int(viol.unsafe.sum()),
+                        "worsened_steps": worse,
+                        "per_phase_worsened_steps": {PHASES[p]: tried[p][2] for p in phases}},
            "regulatory_status": (f"at or below {exempt_below_kw:g} kW: reported exempt from a technical feasibility "
                                  "study (unverified); this physics result is advisory") if kw <= exempt_below_kw else
                                 "above the exemption threshold: feasibility study expected"}
-    if unsafe <= base_unsafe:
+    if worse == 0:
         return {**out, "decision": "approve", "conditions": [], "binding_limit": None}
-    _, _, vv_unsafe = trial(best, kw, Controls(volt_var=VoltVarCurve()))
-    if vv_unsafe <= base_unsafe:
+    if trial(best, kw, Controls(volt_var=VoltVarCurve()))[2] == 0:
         return {**out, "decision": "approve_with_conditions", "binding_limit": None,
                 "conditions": ["standard IEEE 1547 Volt/VAR on the street's inverters"]}
     n_old, t = network.n_homes, scn.shape[1]
@@ -140,12 +143,12 @@ def check_connection(network: Network, scn: DayScenarioBatch, rule: VoltageRule,
     def limited(limit_kw):
         lim = np.full((t, n_old + count), NO_LIMIT_KW)
         lim[:, n_old:] = limit_kw
-        return trial(best, kw, Controls(export_limit_kw=lim))[2] <= base_unsafe
+        return trial(best, kw, Controls(export_limit_kw=lim))[2] == 0
     limit = _bisect(limited, kw, tol_kw)
     if limit > 0:
         return {**out, "decision": "approve_with_conditions", "binding_limit": None,
                 "conditions": [f"export limit of {limit:.1f} kW per new system"]}
-    largest = _bisect(lambda size: trial(best, size)[2] <= base_unsafe, kw, tol_kw)
+    largest = _bisect(lambda size: trial(best, size)[2] == 0, kw, tol_kw)
     worst = int(viol.unsafe.sum(axis=1).argmax())
     return {**out, "decision": "refuse", "conditions": [], "largest_kw_that_passes": round(largest, 1),
             "binding_limit": binding_limit_arrays(viol, res, rule, worst)}
@@ -158,7 +161,7 @@ def cumulative_check(network: Network, scn: DayScenarioBatch, rule: VoltageRule,
     Both answers are judged against the street with none of these systems, so harm already done by earlier
     exempt connections is not hidden in the baseline.
     """
-    _, base = _run(network, scn, rule, Controls())
+    base_res, base = _run(network, scn, rule, Controls())
     base_unsafe = int(base.unsafe.sum())
     phase = new.get("phase")
     alone = check_connection(network, scn, rule, node=new["node"], kw=new["kw"], phase=phase)
@@ -168,10 +171,10 @@ def cumulative_check(network: Network, scn: DayScenarioBatch, rule: VoltageRule,
     ph = PHASES.index(alone["phase"])
     net, s = with_new_homes(net, s, int(new["node"]), ph, float(new["kw"]))
     res, viol = _run(net, s, rule, Controls())
-    together = int(viol.unsafe.sum())
+    worse = int(worsened_steps(base_res, res, rule).sum())
     return {"baseline_unsafe_steps": base_unsafe, "existing_kw": round(sum(float(e["kwp"]) for e in existing), 1),
             "request_alone": alone["decision"], "phase": alone["phase"],
-            "unsafe_steps_with_existing_and_request": together,
-            "safe_with_existing": together <= base_unsafe,
-            "binding_limit": None if together <= base_unsafe else
+            "unsafe_steps_with_existing_and_request": int(viol.unsafe.sum()), "worsened_steps": worse,
+            "safe_with_existing": worse == 0,
+            "binding_limit": None if worse == 0 else
             binding_limit_arrays(viol, res, rule, int(viol.unsafe.sum(axis=1).argmax()))}

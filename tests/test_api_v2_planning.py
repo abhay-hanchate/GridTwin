@@ -26,7 +26,7 @@ def test_connection_check_gives_a_decision_with_a_phase_and_a_reason(client):
     assert r.status_code == 200, r.text
     body = r.json()
     assert body["decision"] in ("approve", "approve_with_conditions", "refuse") and body["phase"] in ("A", "B", "C")
-    assert "regulatory_status" in body and set(body["evidence"]["per_phase_unsafe_steps"]) == {"A", "B", "C"}
+    assert "regulatory_status" in body and set(body["evidence"]["per_phase_worsened_steps"]) == {"A", "B", "C"}
     assert body["provenance"]["grid"].startswith("benchmark")
     assert time.perf_counter() - t < 60          # live budget is 5 s once warm; the first call also fits the models
 

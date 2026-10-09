@@ -44,8 +44,8 @@ def test_new_homes_extend_the_network_and_the_scenarios(street):
 def test_the_far_end_has_less_headroom_than_the_transformer_end(room):
     near, far = room["locations"]["near"]["phases"], room["locations"]["far"]["phases"]
     assert max(p["no_worse_kw"] for p in far.values()) < max(p["no_worse_kw"] for p in near.values())
-    # Measured 9 Oct 2026: far end 0.9 / 6.1 / 3.3 kW on A / B / C - the phase matters as much as the place.
-    assert min(p["no_worse_kw"] for p in far.values()) < 2.0
+    # Measured 9 Oct 2026: far end 0.5 / 2.8 / 1.9 kW on A / B / C - the phase matters as much as the place.
+    assert min(p["no_worse_kw"] for p in far.values()) < 1.0
 
 
 def test_strict_headroom_is_zero_when_the_street_is_already_unsafe(room):
@@ -66,13 +66,18 @@ def test_a_weak_feeder_has_less_headroom():
 
 
 def test_a_small_request_is_approved_on_a_safe_phase(street):
+    # Measured 9 Oct 2026: 2 kW at the far end is approved on C; on A it would worsen 11 steps.
     net, scn = street
-    far = probe_nodes(net)["far"]
-    c = check_connection(net, scn, RULE, node=far, kw=5)
-    assert c["decision"] == "approve" and c["phase"] == "B"
-    per = c["evidence"]["per_phase_unsafe_steps"]
-    assert per["B"] == min(per.values()) and per["A"] > per["B"]                  # the wrong phase would hurt
+    c = check_connection(net, scn, RULE, node=probe_nodes(net)["far"], kw=2)
+    per = c["evidence"]["per_phase_worsened_steps"]
+    assert c["decision"] == "approve" and c["phase"] != "A" and per["A"] > 0 == per[c["phase"]]
     assert "advisory" in c["regulatory_status"]
+
+
+def test_five_kw_at_the_far_end_needs_standard_volt_var(street):
+    net, scn = street
+    c = check_connection(net, scn, RULE, node=probe_nodes(net)["far"], kw=5)
+    assert c["decision"] == "approve_with_conditions" and "Volt/VAR" in c["conditions"][0]
 
 
 def test_a_large_far_request_needs_conditions(street):
@@ -86,9 +91,9 @@ def test_a_large_far_request_needs_conditions(street):
 def test_exempt_systems_add_up(street):
     net, scn = street
     far = probe_nodes(net)["far"]
-    cu = cumulative_check(net, scn, RULE, [{"node": far, "phase": 0, "kwp": 9.5}] * 4, {"node": far, "kw": 5})
-    assert cu["request_alone"] == "approve" and cu["safe_with_existing"] is False
-    assert cu["unsafe_steps_with_existing_and_request"] > cu["baseline_unsafe_steps"]
+    near = probe_nodes(net)["near"]
+    cu = cumulative_check(net, scn, RULE, [{"node": far, "phase": 0, "kwp": 9.5}] * 4, {"node": near, "kw": 2})
+    assert cu["request_alone"] == "approve" and cu["safe_with_existing"] is False and cu["worsened_steps"] > 0
 
 
 def test_an_unknown_node_is_rejected(street):

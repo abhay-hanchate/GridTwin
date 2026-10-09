@@ -46,3 +46,28 @@ def summarise(res: DayResult, viol: Violations, s: int = 0) -> dict:
         "max_vuf_pct": round(float(np.nanmax(res.vuf_pct[s][ok])), 2) if ok.any() else float("nan"),
         "max_neutral_a": round(float(np.nanmax(res.neutral_a[s][ok])), 1) if ok.any() else float("nan"),
     }
+
+
+def exceedance(res: DayResult, rule: VoltageRule) -> dict[str, np.ndarray]:
+    """How far each step is beyond its limits: voltage in volts (above or below the band), loading in points over 100%."""
+    with np.errstate(invalid="ignore"):
+        over = np.nanmax(res.u_pu - rule.vmax_pu, axis=(2, 3)) * rule.nominal_v
+        under = np.nanmax(rule.vmin_pu - res.u_pu, axis=(2, 3)) * rule.nominal_v
+        line = np.nanmax(res.line_loading_pct, axis=2) - 100
+        trafo = res.trafo_loading_pct - 100
+    clip = lambda a: np.nan_to_num(np.clip(a, 0, None), nan=0.0)  # noqa: E731
+    return {"voltage_v": np.maximum(clip(over), clip(under)), "loading_pct": np.maximum(clip(line), clip(trafo))}
+
+
+def worsened_steps(base: DayResult, new: DayResult, rule: VoltageRule, *, tol_v: float = 0.5,
+                   tol_pct: float = 1.0) -> np.ndarray:
+    """(S, T) steps that new solar makes worse than the base street: a safe step becomes unsafe, an unsafe step goes
+    further past a limit (by more than tol_v volts or tol_pct loading points), or the solver fails where it did not.
+
+    Counting only unsafe steps would miss harm on a street that is already unsafe (a strict rule saturates the count).
+    """
+    vb, vn = evaluate(base, rule), evaluate(new, rule)
+    eb, en = exceedance(base, rule), exceedance(new, rule)
+    newly = vn.unsafe & ~vb.unsafe
+    deeper = vn.unsafe & ((en["voltage_v"] > eb["voltage_v"] + tol_v) | (en["loading_pct"] > eb["loading_pct"] + tol_pct))
+    return newly | deeper | (vn.solver & ~vb.solver)

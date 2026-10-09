@@ -67,3 +67,18 @@ def test_summary_keys_and_cost_accounting():
     assert s["pv_kwh"] == pytest.approx(8.0)
     assert s["inverter_kvarh"] == pytest.approx(0.5)               # only absorption counts
     assert s["losses_kwh"] == pytest.approx(0.4)
+
+
+def test_worsened_steps_see_harm_on_a_street_that_is_already_unsafe():
+    from engine.violations import worsened_steps
+    rule = get_rule("up_2005")
+    base, new = _result(), _result()
+    base.u_pu[0, 0, 0, 0] = 1.07                   # already over 1.06 on step 0
+    new.u_pu[0, 0, 0, 0] = 1.09                    # solar pushes it further: 6.9 V more, counted
+    new.u_pu[0, 1, 0, 0] = 1.065                   # a safe step becomes unsafe, counted
+    base.u_pu[0, 2, 0, 0] = 1.08
+    new.u_pu[0, 2, 0, 0] = 1.081                   # 0.23 V more: within tolerance, not counted
+    new.converged[0, 3] = False                    # a new solver failure, counted
+    new.u_pu[0, 3] = np.nan
+    assert worsened_steps(base, new, rule)[0].tolist() == [True, True, False, True]
+    assert not worsened_steps(base, base, rule).any()
