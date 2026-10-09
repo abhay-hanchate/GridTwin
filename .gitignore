@@ -46,3 +46,7 @@ data/processed/v2/
 
 # drift-monitor runtime state (forecast log, conformal width, WARN); written by scripts/monitor.py
 data/monitor/
+
+# live feeds recorded by scripts/record_up_demand.py
+data/live/
+!ml/models/live_dayahead_*

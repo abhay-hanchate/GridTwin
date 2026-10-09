@@ -1,0 +1,230 @@
+{
+  "generated_at": "2026-10-09T06:33:15.682959+00:00",
+  "rule": "accuracy first: lowest MAE with P10-P90 coverage 75-85% overall and 70-92% per season (owner change on 9 Oct 2026 after round 2; see docs/DECISIONS.md)",
+  "targets": {
+    "demand": {
+      "unit": "kW per home",
+      "rows": 124761,
+      "months_tested": [
+        "2019-11",
+        "2019-12",
+        "2020-01",
+        "2020-02",
+        "2020-03",
+        "2020-04",
+        "2020-05",
+        "2020-06",
+        "2020-07",
+        "2020-08",
+        "2020-09",
+        "2020-10",
+        "2020-11",
+        "2020-12",
+        "2021-01",
+        "2021-02",
+        "2021-03",
+        "2021-04",
+        "2021-05",
+        "2021-06",
+        "2021-07",
+        "2021-08",
+        "2021-09",
+        "2021-10"
+      ],
+      "walk_forward": {
+        "climatology": {
+          "n": 97141,
+          "mae": 0.1308,
+          "coverage": 0.831,
+          "wis": 0.0784,
+          "by_season": {
+            "monsoon": 0.803,
+            "post_monsoon": 0.784,
+            "summer": 0.789,
+            "winter": 0.907
+          },
+          "mae_by_season": {
+            "monsoon": 0.1335,
+            "post_monsoon": 0.1607,
+            "summer": 0.1052,
+            "winter": 0.1347
+          },
+          "mae_by_district": {
+            "bareilly": 0.1109,
+            "mathura": 0.1629
+          }
+        },
+        "pattern_only": {
+          "n": 97141,
+          "mae": 0.07,
+          "coverage": 0.835,
+          "wis": 0.046,
+          "by_season": {
+            "monsoon": 0.793,
+            "post_monsoon": 0.91,
+            "summer": 0.8,
+            "winter": 0.858
+          },
+          "mae_by_season": {
+            "monsoon": 0.0917,
+            "post_monsoon": 0.067,
+            "summer": 0.0723,
+            "winter": 0.0533
+          },
+          "mae_by_district": {
+            "bareilly": 0.0708,
+            "mathura": 0.0686
+          }
+        },
+        "live_anchored": {
+          "n": 97141,
+          "mae": 0.0705,
+          "coverage": 0.836,
+          "wis": 0.0461,
+          "by_season": {
+            "monsoon": 0.798,
+            "post_monsoon": 0.907,
+            "summer": 0.803,
+            "winter": 0.858
+          },
+          "mae_by_season": {
+            "monsoon": 0.0912,
+            "post_monsoon": 0.0684,
+            "summer": 0.0729,
+            "winter": 0.054
+          },
+          "mae_by_district": {
+            "bareilly": 0.0712,
+            "mathura": 0.0693
+          }
+        }
+      },
+      "skill_vs_climatology": {
+        "climatology": 0.0,
+        "pattern_only": 0.465,
+        "live_anchored": 0.461
+      },
+      "held_out_district_mae": {
+        "pattern_only": 0.0934,
+        "live_anchored": 0.0926,
+        "climatology": 0.1081
+      },
+      "decision": {
+        "adopted": "pattern_only",
+        "reason": "lowest MAE among candidates inside the coverage bands"
+      }
+    },
+    "voltage": {
+      "unit": "V",
+      "rows": 129348,
+      "months_tested": [
+        "2019-11",
+        "2019-12",
+        "2020-01",
+        "2020-02",
+        "2020-03",
+        "2020-04",
+        "2020-05",
+        "2020-06",
+        "2020-07",
+        "2020-08",
+        "2020-09",
+        "2020-10",
+        "2020-11",
+        "2020-12",
+        "2021-01",
+        "2021-02",
+        "2021-03",
+        "2021-04",
+        "2021-05",
+        "2021-06",
+        "2021-07",
+        "2021-08",
+        "2021-09",
+        "2021-10"
+      ],
+      "walk_forward": {
+        "climatology": {
+          "n": 97139,
+          "mae": 5.9129,
+          "coverage": 0.784,
+          "wis": 3.7216,
+          "by_season": {
+            "monsoon": 0.829,
+            "post_monsoon": 0.893,
+            "summer": 0.709,
+            "winter": 0.756
+          },
+          "mae_by_season": {
+            "monsoon": 5.272,
+            "post_monsoon": 6.8918,
+            "summer": 5.7466,
+            "winter": 6.058
+          },
+          "mae_by_district": {
+            "bareilly": 5.6545,
+            "mathura": 6.3284
+          }
+        },
+        "pattern_only": {
+          "n": 97139,
+          "mae": 3.7865,
+          "coverage": 0.822,
+          "wis": 2.4313,
+          "by_season": {
+            "monsoon": 0.815,
+            "post_monsoon": 0.906,
+            "summer": 0.795,
+            "winter": 0.809
+          },
+          "mae_by_season": {
+            "monsoon": 4.4176,
+            "post_monsoon": 3.4261,
+            "summer": 3.8382,
+            "winter": 3.4442
+          },
+          "mae_by_district": {
+            "bareilly": 3.5746,
+            "mathura": 4.1273
+          }
+        },
+        "live_anchored": {
+          "n": 97139,
+          "mae": 3.7221,
+          "coverage": 0.83,
+          "wis": 2.3917,
+          "by_season": {
+            "monsoon": 0.815,
+            "post_monsoon": 0.914,
+            "summer": 0.798,
+            "winter": 0.826
+          },
+          "mae_by_season": {
+            "monsoon": 4.2504,
+            "post_monsoon": 3.3514,
+            "summer": 3.8164,
+            "winter": 3.4282
+          },
+          "mae_by_district": {
+            "bareilly": 3.527,
+            "mathura": 4.0357
+          }
+        }
+      },
+      "skill_vs_climatology": {
+        "climatology": 0.0,
+        "pattern_only": 0.36,
+        "live_anchored": 0.371
+      },
+      "held_out_district_mae": {
+        "pattern_only": 4.8278,
+        "live_anchored": 4.7449,
+        "climatology": 5.0253
+      },
+      "decision": {
+        "adopted": "live_anchored",
+        "reason": "lowest MAE among candidates inside the coverage bands"
+      }
+    }
+  }
+}
