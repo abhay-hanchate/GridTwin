@@ -5,7 +5,7 @@ from __future__ import annotations
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.v2 import errors, routes_core, routes_decision
+from backend.v2 import errors, routes_core, routes_decision, routes_planning
 from backend.v2.jobs import JobStore
 from backend.v2.middleware import GuardMiddleware
 from backend.v2.settings import Settings, get_settings
@@ -21,6 +21,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     errors.install(app)
     app.include_router(routes_core.router)
     app.include_router(routes_decision.router)
+    app.include_router(routes_planning.router)
     app.add_middleware(CORSMiddleware, allow_origins=settings.cors_origin_list, allow_methods=["GET", "POST"],
                        allow_headers=["content-type"])
     app.add_middleware(GuardMiddleware, settings=settings)      # added last = outermost: sees every request

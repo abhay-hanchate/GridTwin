@@ -237,3 +237,36 @@ def simulate_payload(date: str, network_id: str, rule_id: str, fix: str = "none"
                     "unsafe": [bool(x) for x in v.unsafe[0]], "summary": summarise(res, v)}
     return out
 
+
+
+# ---- planning (/headroom, /connection-check) -------------------------------------------------------------------
+
+DEFAULT_ADOPTION = 0.3
+
+
+def planning_street(date: str, network_id: str, adoption: float = DEFAULT_ADOPTION):
+    """The street with `adoption` of its homes on solar (spread evenly along it) and the design-case day."""
+    net = network(network_id)
+    chosen = np.zeros(net.n_homes, dtype=bool)
+    chosen[np.round(np.linspace(0, net.n_homes - 1, int(round(adoption * net.n_homes)))).astype(int)] = True
+    net = net.with_pv(net.house_kwp * chosen)
+    return net, _design(robust_set(scenarios(date, net)))
+
+
+def headroom_payload(date: str, network_id: str, rule_id: str, adoption: float = DEFAULT_ADOPTION) -> dict:
+    from engine.headroom import headroom
+    net, design = planning_street(date, network_id, adoption)
+    out = headroom(net, design, rule(rule_id))
+    return {"date": date, "network": network_id, "adoption": adoption, **out, "provenance": PROVENANCE}
+
+
+def connection_payload(date: str, network_id: str, rule_id: str, node: int, kw: float, count: int,
+                       phase: str | None, adoption: float = DEFAULT_ADOPTION) -> dict:
+    from engine.headroom import check_connection
+    net, design = planning_street(date, network_id, adoption)
+    try:
+        out = check_connection(net, design, rule(rule_id), node=node, kw=kw, count=count,
+                               phase=None if phase is None else PHASE.index(phase))
+    except ValueError as exc:
+        raise ApiError(422, str(exc), details={"valid_nodes": [int(n) for n in net.lv_nodes]}) from exc
+    return {"date": date, "network": network_id, "adoption": adoption, **out, "provenance": PROVENANCE}
