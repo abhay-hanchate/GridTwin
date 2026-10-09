@@ -17,8 +17,8 @@ const DEFAULT_THRESHOLDS = { watch: 0.2, act: 0.5 }
 export default function Home({ network = DEFAULT_NETWORK, ...props }: ViewProps) {
   const t = useT()
   const { lang } = useLang()
-  const view = useView(props)
-  const risk = useV2<Risk>(v2Path('/risk', { network, rule: view.rule, date: view.date }))
+  const view = useView(props, 'risk')
+  const risk = useV2<Risk>(view.ready ? v2Path('/risk', { network, rule: view.rule, date: view.date }) : null)
   // The printable evening report (F2) for exactly what this page shows: same day, street, rule and language.
   const report = risk.data && `${V2_BASE}${v2Path('/report', { date: risk.data.date, network, rule: view.rule, lang })}`
 

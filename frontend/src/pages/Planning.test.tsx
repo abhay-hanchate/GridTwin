@@ -1,4 +1,6 @@
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import connections from '../fixtures/v2/connection_samples.json'
 import headroom from '../fixtures/v2/headroom_sample.json'
@@ -6,6 +8,10 @@ import hosting from '../fixtures/v2/hosting_sample.json'
 import rules from '../fixtures/v2/rules_sample.json'
 import { LangProvider } from '../i18n'
 import Planning from './Planning'
+import type { Results } from '../api/v2types'
+
+// The file GET /results serves (written by python -m scripts.evaluate), read directly so the test never checks a copy.
+const results: Results = JSON.parse(readFileSync(resolve(import.meta.dirname, '../../../data/results/results.json'), 'utf-8'))
 
 type Decision = 'approve' | 'approve_with_conditions' | 'refuse'
 const json = (body: unknown) => Promise.resolve(new Response(JSON.stringify(body), { status: 200 }))
@@ -14,6 +20,7 @@ function serve(decision: Decision = 'approve') {
   return vi.spyOn(globalThis, 'fetch').mockImplementation((input, init) => {
     const url = new URL(String(input), 'http://x')
     if (url.pathname === '/api/v2/rules') return json(rules.rules)
+    if (url.pathname === '/api/v2/results') return json(results)
     if (url.pathname === '/api/v2/headroom') return json(headroom)
     if (url.pathname === '/api/v2/hosting') return json(hosting)
     if (url.pathname === '/api/v2/connection-check' && init?.method === 'POST') return json(connections[decision])
@@ -48,6 +55,22 @@ describe('Planning: headroom and hosting capacity', () => {
     expect(bars.length).toBe(2)
     expect(bars[0].textContent).toContain(`${Math.round(hosting.without_fix.adoption_share.p50 * 100)}%`)
     expect(bars[1].textContent).toContain(`${Math.round(hosting.with_volt_var.adoption_share.p50 * 100)}%`)
+  })
+})
+
+describe('Planning: which day', () => {
+  const planningDays = [...new Set(results.headlines.demo!.results.filter((r) => r.route === 'headroom').map((r) => r.date))]
+
+  it('asks only for a day the planning results were precomputed for, even when another day is chosen elsewhere', async () => {
+    const fetchMock = serve()
+    render(<LangProvider><Planning rule="up_2005" onRule={() => {}} date="2025-08-05" onDate={() => {}} /></LangProvider>)
+    await settle()
+    await settle()
+    const asked = fetchMock.mock.calls.map((c) => String(c[0])).filter((u) => u.includes('/headroom') || u.includes('/hosting'))
+    expect(asked.length).toBeGreaterThan(0)
+    expect(asked.at(-1)).toContain(`date=${planningDays[0]}`)
+    const days = screen.getByRole('group', { name: /day/i })
+    expect(days.querySelectorAll('button').length).toBe(planningDays.length)
   })
 })
 

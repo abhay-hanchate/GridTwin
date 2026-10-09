@@ -1,10 +1,15 @@
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import risk from '../fixtures/v2/risk_sample.json'
-import results from '../fixtures/v2/results.json'
 import rules from '../fixtures/v2/rules_sample.json'
 import { LangProvider } from '../i18n'
 import Home from './Home'
+import type { Results } from '../api/v2types'
+
+// The file GET /results serves (written by python -m scripts.evaluate), read directly so the test never checks a copy.
+const results: Results = JSON.parse(readFileSync(resolve(import.meta.dirname, '../../../data/results/results.json'), 'utf-8'))
 
 const json = (body: unknown) => Promise.resolve(new Response(JSON.stringify(body), { status: 200 }))
 
@@ -90,8 +95,9 @@ describe('Home', () => {
     const riskCalls = () => fetchMock.mock.calls.map((c) => String(c[0])).filter((u) => u.includes('/risk'))
     const days = screen.getByRole('group', { name: /day/i })
     expect(within(days).getAllByRole('button').length).toBe(3)
-    // the day the API answered for is the one shown as selected
-    expect(within(days).getByRole('button', { pressed: true }).textContent).toContain('Sunny')
+    // with no day chosen, the latest precomputed day is selected and requested (the API's own default)
+    expect(within(days).getByRole('button', { pressed: true }).textContent).toContain('Mixed')
+    expect(riskCalls().at(-1)).toContain('date=2025-11-19')
     fireEvent.click(within(days).getByRole('button', { name: /cloudy/i }))
     await act(async () => { await new Promise((r) => setTimeout(r, 0)) })
     expect(riskCalls().at(-1)).toContain('date=2025-08-05')

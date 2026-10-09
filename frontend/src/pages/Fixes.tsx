@@ -15,8 +15,8 @@ import { useT, type StringKey } from '../i18n'
 
 /** The ranked tournament and the honest verdict (D2, D7). */
 export default function Fixes({ network = DEFAULT_NETWORK, ...props }: ViewProps) {
-  const view = useView(props)
-  const fixes = useV2<FixesResult>(v2Path('/fixes', { network, rule: view.rule, date: view.date }))
+  const view = useView(props, 'fixes')
+  const fixes = useV2<FixesResult>(view.ready ? v2Path('/fixes', { network, rule: view.rule, date: view.date }) : null)
   return (
     <div className="v2-page">
       <Controls view={view} answered={fixes.data?.date} />

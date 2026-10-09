@@ -102,7 +102,7 @@ def test_no_secrets_or_env_files_are_tracked():
     hits = []
     for name in names:
         path = ROOT / name
-        if path.suffix in {".parquet", ".txt", ".png", ".pdf", ".jpg", ".ico", ".woff2"} or not path.is_file():
+        if path.suffix in {".parquet", ".png", ".pdf", ".jpg", ".ico", ".woff2"} or not path.is_file():
             continue
         if path.stat().st_size < 5_000_000 and SECRET.search(path.read_bytes()):
             hits.append(name)

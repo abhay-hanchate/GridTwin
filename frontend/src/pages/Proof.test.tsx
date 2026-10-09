@@ -1,8 +1,13 @@
 import { act, cleanup, render, screen, within } from '@testing-library/react'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import results from '../fixtures/v2/results.json'
 import { LangProvider } from '../i18n'
 import Proof from './Proof'
+import type { Results } from '../api/v2types'
+
+// The file GET /results serves (written by python -m scripts.evaluate), read directly so the test never checks a copy.
+const results: Results = JSON.parse(readFileSync(resolve(import.meta.dirname, '../../../data/results/results.json'), 'utf-8'))
 
 const json = (body: unknown, status = 200) => Promise.resolve(new Response(JSON.stringify(body), { status }))
 function serve(body: unknown = results, status = 200) {

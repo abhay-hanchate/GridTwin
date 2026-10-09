@@ -12,10 +12,10 @@ import { useT } from '../i18n'
 /** Planning (E1-E3, P9.5): per-phase headroom beside the flat caps, hosting capacity, and the connection check. */
 export default function Planning({ network = DEFAULT_NETWORK, ...props }: ViewProps) {
   const t = useT()
-  const view = useView(props)
+  const view = useView(props, 'headroom')
   const query = { network, rule: view.rule, date: view.date }
-  const headroom = useV2<Headroom>(v2Path('/headroom', query))
-  const hosting = useV2<Hosting>(v2Path('/hosting', query))
+  const headroom = useV2<Headroom>(view.ready ? v2Path('/headroom', query) : null)
+  const hosting = useV2<Hosting>(view.ready ? v2Path('/hosting', query) : null)
   return (
     <div className="v2-page">
       <Controls view={view} answered={headroom.data?.date} />

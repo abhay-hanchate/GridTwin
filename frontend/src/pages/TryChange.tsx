@@ -19,33 +19,41 @@ const ADOPTION = { type: 'number', minimum: 0, maximum: 1 } as const
 
 /** Try a change (F4, P9.4): any mix of registered changes and fixes, run through the engine on the design day. */
 export default function TryChange({ network = DEFAULT_NETWORK, ...props }: ViewProps) {
-  const view = useView(props)
+  const t = useT()
+  const view = useView(props, 'risk')
   const catalog = useV2<CatalogEntry[]>('/catalog')
+  // GRIDTWIN_OFFLINE=1 serves only precomputed results, and what-if requests are never precomputed.
+  const offline = useV2<{ mode: string }>('/readiness').data?.mode === 'offline'
   return (
     <div className="v2-page">
       <Controls view={view} />
       <Status state={catalog} />
-      {catalog.data && <Form catalog={catalog.data} network={network} rule={view.rule} date={view.date} />}
+      {offline && <p className="note" role="note">{t('try.offline', { setting: 'GRIDTWIN_OFFLINE=0' })}</p>}
+      {catalog.data && <Form catalog={catalog.data} network={network} rule={view.rule} date={view.date} offline={offline} />}
     </div>
   )
 }
 
-function Form({ catalog, network, rule, date }: { catalog: CatalogEntry[]; network: string; rule: string; date: string | null }) {
+type FormProps = { catalog: CatalogEntry[]; network: string; rule: string; date: string | null; offline: boolean }
+
+function Form({ catalog, network, rule, date, offline }: FormProps) {
   const t = useT()
   const [choices, setChoices] = useState<Record<string, Choice>>(() => initialChoices(catalog))
   const [adoption, setAdoption] = useState('1')
-  const [submitted, setSubmitted] = useState<string | null>(null)
+  // The request with the rule and day it was made for; a result is shown only while those are still selected.
+  const [submitted, setSubmitted] = useState<{ body: string; rule: string; date: string | null } | null>(null)
+  const current = submitted && submitted.rule === rule && submitted.date === date ? submitted.body : null
   const adoptionProblem = paramProblem(ADOPTION, adoption)
-  const valid = adoptionProblem === null && choicesValid(catalog, choices)
-  const result = useV2<WhatIfResult>(submitted ? '/whatif' : null, submitted ?? undefined)
+  const valid = !offline && adoptionProblem === null && choicesValid(catalog, choices)
+  const result = useV2<WhatIfResult>(current ? '/whatif' : null, current ?? undefined)
   const groups = useMemo(() => (['change', 'fix'] as const).map((kind) => [kind, catalog.filter((e) => e.kind === kind)] as const), [catalog])
 
   const run = () => {
     if (!valid) return
-    setSubmitted(JSON.stringify({
+    setSubmitted({ rule, date, body: JSON.stringify({
       network, rule, ...(date ? { date } : {}), adoption: Number(adoption),
       changes: chosen(catalog, choices, 'change'), fixes: chosen(catalog, choices, 'fix'),
-    }))
+    }) })
   }
 
   return (
@@ -69,7 +77,7 @@ function Form({ catalog, network, rule, date }: { catalog: CatalogEntry[]; netwo
         ))}
         <button type="submit" className="primary" disabled={!valid}>{t('try.run')}</button>
       </form>
-      {submitted && <Status state={result} />}
+      {current && <Status state={result} />}
       {result.data && <Outcome result={result.data} />}
     </>
   )

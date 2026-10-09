@@ -169,5 +169,6 @@
   "proof.not_built.llm": "Letting a language model choose or operate fixes.",
   "proof.not_built.scada": "Live SCADA streaming.",
   "proof.not_built.markets": "Energy trading between neighbours.",
-  "home.report": "Open the printable evening report"
+  "home.report": "Open the printable evening report",
+  "try.offline": "This copy runs offline and serves only precomputed results, so it cannot run new changes. Start it with {setting} to use this page."
 }

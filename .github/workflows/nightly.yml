@@ -41,7 +41,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: data/monitor
-          key: monitor-${{ github.run_id }}
+          key: monitor-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: monitor-
       - name: Is the committed offline demo current?
         # GRIDTWIN_OFFLINE=1 serves only results whose cache key matches the current engine code.
@@ -63,6 +63,11 @@ jobs:
         run: python -m scripts.nightly
       - name: Drift monitor
         run: python -m scripts.monitor
+      - name: Show a drift warning
+        # the monitor writes data/monitor/WARN and exits 0 on drift; make it visible in the run summary
+        if: success()
+        run: |
+          if [ -f data/monitor/WARN ]; then echo "::warning::drift: $(head -1 data/monitor/WARN)"; fi
       - name: Write WARN
         if: failure()
         run: |
@@ -74,7 +79,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: data/monitor
-          key: monitor-${{ github.run_id }}
+          key: monitor-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Upload the evening results
         if: always()
         uses: actions/upload-artifact@v4

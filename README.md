@@ -194,7 +194,7 @@ dashboard and serves it with API v2 at <http://localhost:8000>:
 
 ```bash
 docker compose up --build                  # offline demo: serves only the precomputed results in data/results/v2
-GRIDTWIN_OFFLINE=0 docker compose up       # computes requests that were not precomputed (a new day can take minutes)
+GRIDTWIN_OFFLINE=0 docker compose up --build   # also computes requests that were not precomputed (can take minutes)
 ```
 
 `/api/v2/health` answers while the process runs; `/api/v2/readiness` answers 200 only when the data the mode needs is

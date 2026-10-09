@@ -1,7 +1,9 @@
 # GridTwin v2: the API and the v2 dashboard in one container (P10.10, F6).
 #   docker build -t gridtwin:v2 .
 #   docker run -p 8000:8000 gridtwin:v2            # offline demo: serves only the precomputed results
-#   docker run -p 8000:8000 -e GRIDTWIN_OFFLINE=0 gridtwin:v2   # computes on demand (needs data/processed/v2)
+#   docker run -p 8000:8000 -e GRIDTWIN_OFFLINE=0 gridtwin:v2   # computes on demand
+# Online, /readiness also wants data/processed/v2 (built by scripts/build_data.py, not in git): an image built from a
+# clean checkout serves the offline demo and computes on demand, but reports not ready in online mode.
 
 # ---- 1. the dashboard -----------------------------------------------------------------------------------------
 FROM node:24-slim AS frontend

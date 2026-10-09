@@ -9,16 +9,13 @@ services:
     environment:
       GRIDTWIN_OFFLINE: "${GRIDTWIN_OFFLINE:-1}"
       GRIDTWIN_CORS_ORIGINS: "http://localhost:8000"
-    read_only: true
     tmpfs:
       - /tmp
     volumes:
-      # results computed on demand and the drift monitor's state survive a restart; the image's precomputed demo
-      # is copied into the volume the first time it is created
-      - results:/app/data/results
+      # The drift monitor's state survives a restart. The results stay in the image on purpose: a volume over
+      # data/results would keep serving an old demo after `docker compose up --build`.
       - monitor:/app/data/monitor
     restart: unless-stopped
 
 volumes:
-  results:
   monitor:

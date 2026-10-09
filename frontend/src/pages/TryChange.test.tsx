@@ -9,10 +9,11 @@ import TryChange from './TryChange'
 const json = (body: unknown) => Promise.resolve(new Response(JSON.stringify(body), { status: 200 }))
 const AFTER = { ...whatif.after, summary: { ...whatif.after.summary, violation_steps: 12, max_vm_pu: 1.05 } }
 
-function serve() {
+function serve(mode = 'online') {
   return vi.spyOn(globalThis, 'fetch').mockImplementation((input, init) => {
     const url = new URL(String(input), 'http://x')
     if (url.pathname === '/api/v2/rules') return json(rules.rules)
+    if (url.pathname === '/api/v2/readiness') return json({ ready: true, mode, checks: {} })
     if (url.pathname === '/api/v2/catalog') return json(catalog)
     if (url.pathname === '/api/v2/whatif' && init?.method === 'POST') return json({ ...whatif, after: AFTER })
     return Promise.resolve(new Response('{}', { status: 503 }))
@@ -79,5 +80,25 @@ describe('Try a change', () => {
     expect(table.textContent).toContain(String(Math.round(whatif.before.summary.max_vm_pu * 230)))
     expect(table.textContent).toContain(String(Math.round(1.05 * 230)))
     expect(screen.getByRole('img', { name: /along the street/i })).toBeTruthy()
+  })
+
+  it('a result is never shown under a rule it was not computed for', async () => {
+    serve()
+    const { rerender } = render(<LangProvider><TryChange rule="up_2005" onRule={() => {}} /></LangProvider>)
+    await settle()
+    fireEvent.click(screen.getByRole('button', { name: /run/i }))
+    await settle()
+    expect(screen.getByRole('table', { name: /before and after/i })).toBeTruthy()
+    rerender(<LangProvider><TryChange rule="pm10" onRule={() => {}} /></LangProvider>)
+    await settle()
+    expect(screen.queryByRole('table', { name: /before and after/i })).toBeNull()
+  })
+
+  it('in offline mode it says what-if needs the live engine and does not offer to run', async () => {
+    const fetchMock = serve('offline')
+    await show()
+    expect(screen.getByRole('note').textContent).toMatch(/offline/i)
+    expect((screen.getByRole('button', { name: /run/i }) as HTMLButtonElement).disabled).toBe(true)
+    expect(posts(fetchMock).length).toBe(0)
   })
 })
