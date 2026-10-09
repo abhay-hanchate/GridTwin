@@ -112,3 +112,11 @@ account; the build has none, so the outcome is **(b)**: the calibration script i
 `scripts/calibrate_pv.py` and its tests are in place, so a teammate with an IEEE account can download the file and
 run it (see the plan, P4.4 step 5). The cold-start interval widening (15% at zero history, 30-day prior weight)
 is an assumption, not a measurement.
+
+### Demand result (run 9 Oct 2026, `python -m ml.demand_v2`)
+
+**Gate G4 failed:** strict variant, Mathura 2021: skill +8.4% against the mean of lag-1d and lag-7d (needs 10%),
+coverage 83.3% (needs 78 to 82%). Round 1's demand model stays; no AI improvement is claimed. The Mathura 2021
+file ends on 20 Feb 2021, so this protocol covers 51 winter days only. On the held-out district (Bareilly) the
+skill is +11.6% but coverage is 76.6% (monsoon 73.0%). The oracle-weather variant changes skill by under 1.5
+points. Details: `docs/generated/data_v2.md`.
