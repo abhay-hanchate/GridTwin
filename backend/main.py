@@ -35,6 +35,7 @@ from ml.live_forecast import (  # noqa: E402
     tomorrow_local,
 )
 from backend.cache import CorruptCacheError, load_or_compute  # noqa: E402
+from backend.v2.app import create_app as create_v2_app  # noqa: E402
 from backend.schemas import (  # noqa: E402
     EarlyWarningResponse,
     LiveForecastResponse,
@@ -55,6 +56,8 @@ cors_origins = [
     if origin.strip()
 ]
 app.add_middleware(CORSMiddleware, allow_origins=cors_origins, allow_methods=["GET"], allow_headers=["*"])
+# API v2 is its own sub-application: own error model, middleware and docs at /api/v2/docs.
+app.mount("/api/v2", create_v2_app())
 
 
 def _cached(name: str, compute):
