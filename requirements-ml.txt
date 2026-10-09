@@ -1,0 +1,6 @@
+-r requirements.txt
+chronos-forecasting
+accelerate
+einops
+# torch is installed separately to match the local CUDA build:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu124
