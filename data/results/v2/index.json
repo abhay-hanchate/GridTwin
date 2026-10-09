@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-09T14:39:15.662189+00:00",
+ "generated_at": "2026-10-09T16:18:10.693826+00:00",
  "code_version": "fcd030a4e165",
  "demo_dates": {
   "sunny": "2025-05-15",
@@ -142,6 +142,60 @@
    "key": "fixes_2da8eb1880ace81ba36b",
    "network": "benchmark_250",
    "rule": "up_2005"
+  },
+  {
+   "route": "whatif",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "whatif_1f67d1133882dc1da0c5",
+   "label": "Standard smart inverters (IEEE 1547 Volt/VAR)",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "spec": {
+    "network": "benchmark_250",
+    "rule": "pm10",
+    "adoption": 1.0,
+    "changes": [],
+    "fixes": [
+     {
+      "id": "fix.volt_var",
+      "params": {}
+     }
+    ]
+   }
+  },
+  {
+   "route": "whatif",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "whatif_ae7c31d0684e994611d3",
+   "label": "Evening EV charging at 20% of homes, with transformer tap +1",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "spec": {
+    "network": "benchmark_250",
+    "rule": "pm10",
+    "adoption": 1.0,
+    "changes": [
+     {
+      "id": "change.ev_charging",
+      "params": {
+       "share_of_homes": 0.2,
+       "kw": 3.3,
+       "start_hour": 19,
+       "hours": 4
+      }
+     }
+    ],
+    "fixes": [
+     {
+      "id": "fix.tap",
+      "params": {
+       "tap_pos": 1
+      }
+     }
+    ]
+   }
   }
  ]
 }

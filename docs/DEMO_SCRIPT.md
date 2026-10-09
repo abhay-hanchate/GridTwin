@@ -8,7 +8,7 @@ Before the demo: `python -m scripts.nightly`, then start the API with `GRIDTWIN_
 
 - Rule selector on **UP Supply Code (+/-6%)**. Level **ACT** from 00:00; about 17.5 hours (between 15.0 and 20.2 in 8 of 10 scenarios) unsafe.
 - Switch to +/-10% for a moment to show the shape: the chance of unsafe voltage is highest around **10:15** (99%), against 98% at 12:00.
-- Point at the calibration note: the chances are *not yet calibrated* under this rule.
+- Point at the calibration note: the chances are *not reliable as odds* under this rule.
 
 ## 2. Switch the rule to +/-10% (30 s)
 
@@ -31,7 +31,7 @@ Before the demo: `python -m scripts.nightly`, then start the API with `GRIDTWIN_
 
 ## 5. Proof: how much to trust it (60 s)
 
-- Engine checked against pandapower: 0.001 V apart, about 537 times faster (G1).
+- Engine checked against pandapower: 0.001 V apart, about 647 times faster (G1).
 - Risk calibration (G8): +/-10% calibrated skill +0.023; UP +/-6% -5.46 - shown as failed, not hidden.
 - Gates: G1 pass, G2 pass, G3 pass, G4 fail, G5 pass, G6 conditional, G7 not_run, G8 fail.
 - Say: a failed gate is a result, not a bug to hide.
