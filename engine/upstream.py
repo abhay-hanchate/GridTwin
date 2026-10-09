@@ -234,9 +234,8 @@ class LgbmDayQuantiles:
 
 
 CANDIDATES = {c.name: c for c in (Climatology, AnalogDays, AR1Shape, LgbmDayQuantiles)}
-# The model of record is chosen by the pre-registered bake-off (docs/DECISIONS.md); until it has run on the real
-# data this is the plan's hypothesis.
-UpstreamModel = AR1Shape
+# Model of record: winner of the pre-registered bake-off run 9 Oct 2026 (docs/DECISIONS.md, data/results/bakeoff_upstream.json).
+UpstreamModel = LgbmDayQuantiles
 
 
 # ---- evaluation ----------------------------------------------------------------------------------------------

@@ -180,3 +180,18 @@ runs this bake-off (it is the first step of P2.5); Person B reuses `engine.upstr
   the lowest CRPS of the day maximum averaged over the two protocols. Candidates within 2% of that CRPS count as
   tied and the simplest of them wins. If none is in the band on both protocols, the candidate with the smallest
   worst-protocol distance from 80% wins, and the miss is reported, not tuned away.
+
+### Result (run 9 Oct 2026, `python -m engine.upstream --bakeoff`)
+
+| Candidate | Mathura 2021 (50 days): day-max coverage / CRPS | Bareilly (875 days): day-max coverage / CRPS |
+| --- | --- | --- |
+| climatology | 18.0% / 0.01288 | 44.2% / 0.01390 |
+| analog_days | 70.0% / 0.00796 | 51.8% / 0.01085 |
+| ar1_shape | 70.0% / 0.00985 | 65.3% / 0.01060 |
+| **lgbm_day_quantiles** | **82.0% / 0.00536** | **69.3% / 0.00970** |
+
+**Winner: `lgbm_day_quantiles`, through the fallback branch of the rule.** No candidate is inside 70-90% on both
+protocols; it has the smallest worst-protocol distance from 80% (Bareilly 69.3%), and it also has the lowest CRPS on
+both. **Recorded as a miss:** on the held-out district its interval is slightly too narrow. The Mathura 2021 test has
+only 50 usable days, so its coverage is uncertain by several points. The plan's hypothesis (AR(1) plus shape) loses on
+both coverage and CRPS. `engine.upstream.UpstreamModel` now points to the winner.
