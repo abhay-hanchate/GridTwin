@@ -149,14 +149,20 @@ def g8(root: Path) -> dict:
                       "days": d["days"], "observed_unsafe_share": d["observed_unsafe_share_of_steps"],
                       "unsafe_hours_predicted": d["unsafe_hours"]["predicted_mean"],
                       "unsafe_hours_observed": d["unsafe_hours"]["observed_mean"]}
-        statuses.append("pass" if (d["brier_skill"] or 0) > 0 else "fail")
+        cal = _read(root, f"data/results/risk_calibration_{rule}.json")
+        if cal:                                   # the recalibrated values are what the API serves
+            rows[rule]["brier_skill_calibrated"] = cal["held_out_test"]["skill_calibrated"]
+            rows[rule]["calibrated_reliable"] = cal["reliable"]
+        skill = rows[rule].get("brier_skill_calibrated", d["brier_skill"])
+        statuses.append("pass" if (skill or 0) > 0 else "fail")
     status = "missing" if not rows else ("pass" if all(s == "pass" for s in statuses) else "fail")
     return gate("G8", "Risk probabilities are reliable", status, measured=rows,
                 threshold="Brier skill > 0 against the base rate, on every rule",
                 provenance="observed: replay of held-out 2021 days", source="data/results/reliability_mathura_*.json",
                 command="python -m scripts.run_reliability --rule <rule>",
-                note="The 2021 test window is January-February only and about 5 V above the training years. "
-                     "The API keeps calibration.reliable = false.")
+                note="Judged on the isotonic-recalibrated values the API serves (fitted on 2020-05..12, tested on "
+                     "held-out 2021). The 2021 window is January-February only and about 5 V above the training years; "
+                     "under +/-6% almost every step is unsafe, so nothing beats the base rate there.")
 
 
 def bakeoffs(root: Path) -> list[dict]:

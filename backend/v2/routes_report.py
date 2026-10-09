@@ -23,10 +23,12 @@ def report(request: Request, date: Date | None = None, network: str = DEFAULT_NE
     compute.check_network(network)
     day = date.isoformat() if date else default_date(store, "risk")
     rule_id = compute.rule(rule or s.rule_default).id
+    from backend.v2.live_inputs import is_live, today_ist
+    extra = {"issued": today_ist().isoformat()} if is_live(day) else {}      # same keys as /risk and /fixes
     parts = {
-        "risk": (cache_key("risk", s.code_version, date=day, network=network, rule=rule_id, fix="none"),
+        "risk": (cache_key("risk", s.code_version, date=day, network=network, rule=rule_id, fix="none", **extra),
                  lambda: compute.risk_payload(day, network, rule_id, "none")),
-        "fixes": (cache_key("fixes", s.code_version, date=day, network=network, rule=rule_id),
+        "fixes": (cache_key("fixes", s.code_version, date=day, network=network, rule=rule_id, **extra),
                   lambda: compute.fixes_payload(day, network, rule_id)),
     }
     results = {}

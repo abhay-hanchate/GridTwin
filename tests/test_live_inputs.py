@@ -2,6 +2,7 @@ import sys
 import types
 from datetime import date
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -17,7 +18,9 @@ def fake_ml(monkeypatch):
     solar = pd.DataFrame({"p10": 0.1, "p50": 0.2, "p90": 0.3}, index=pd.date_range("2030-01-02", periods=96, freq="15min"))
     live_solar_v2 = types.SimpleNamespace(fetch_payload=lambda target: {}, frames_from_payload=lambda p, t: {},
                                           predict_live=lambda frames, target: (solar, "monitor state for winter"))
-    live_dayahead = types.SimpleNamespace(live_forecast=lambda district, target: {
+    def no_anchor(target):
+        raise FileNotFoundError("data/raw/zenodo_state_demand/...")
+    live_dayahead = types.SimpleNamespace(current_ratio=no_anchor, live_forecast=lambda district, target, ratio=None: {
         "anchor": {"note": "pattern only"}, "demand": {"model": "pattern_only", "points": _points(0.5)},
         "voltage": {"model": "pattern_only", "points": _points(241.5)}})
     ml = types.ModuleType("ml")
@@ -32,7 +35,8 @@ def test_live_forecasts_return_96_rows_and_voltage_in_per_unit(fake_ml):
     assert all(len(f[k]) == 96 for k in ("solar", "demand", "voltage_pu"))
     assert f["voltage_pu"]["p50"].iloc[0] == pytest.approx(241.5 / 230)
     assert f["demand"]["p90"].iloc[0] == pytest.approx(0.55)
-    assert "pattern_only" in f["provenance"]["voltage"] and "winter" in f["provenance"]["solar"]
+    assert "pattern only model" in f["provenance"]["voltage"] and "live-anchored" not in f["provenance"]["voltage"]
+    assert f["provenance"]["anchor"] == "pattern only" and "winter" in f["provenance"]["solar"]
 
 
 def test_only_today_and_later_are_live(monkeypatch):
@@ -44,3 +48,17 @@ def test_only_today_and_later_are_live(monkeypatch):
 def test_a_short_forecast_is_rejected():
     with pytest.raises(ValueError, match="96"):
         live_inputs._frame(_points(1.0)[:48])
+
+
+def test_live_dates_use_the_live_forecasts_and_their_provenance(monkeypatch):
+    from backend.v2 import compute
+    flat = pd.DataFrame({"p10": 0.0, "p50": 0.0, "p90": 0.0}, index=range(96))
+    fake = {"solar": flat, "demand": flat + 0.4, "voltage_pu": flat + 1.07,
+            "provenance": {"voltage": "modeled: live day-ahead grid voltage (pattern_only)"}}
+    monkeypatch.setattr(live_inputs, "is_live", lambda d: d == "2030-01-02")
+    monkeypatch.setattr(compute, "_live", lambda d: fake)
+    net = compute.network("benchmark_250")
+    scn = compute.scenarios("2030-01-02", net, n=5)
+    assert np.allclose(scn.upstream_pu, 1.07) and np.allclose(scn.pv_per_kwp, 0.0)
+    assert "pattern_only" in compute.provenance("2030-01-02")["voltage"]
+    assert compute.provenance("2025-05-15") == compute.PROVENANCE           # demo dates are unchanged

@@ -38,6 +38,9 @@ def _serve(request: Request, route: str, params: dict, fn) -> object:
     s, store = _settings(request), _store(request)
     compute.check_network(params["network"])                 # validate before any work: 404 on unknown ids
     params["rule"] = compute.rule(params["rule"]).id
+    from backend.v2.live_inputs import is_live, today_ist
+    if is_live(params["date"]):
+        params["issued"] = today_ist().isoformat()          # tomorrow's forecast changes as tomorrow approaches
     key = cache_key(route, s.code_version, **params)
     if s.offline:
         result = store.cached(key)

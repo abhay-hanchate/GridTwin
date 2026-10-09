@@ -119,8 +119,13 @@ class ScenarioGenerator:
     intraday_phi: float = 0.9       # AR(1) persistence of the remaining, hour-to-hour part
 
     def sample(self, date, n: int, solar_fc: pd.DataFrame, demand_fc: pd.DataFrame, prev_day_upstream_mean: float,
-               n_homes: int, rng: np.random.Generator, temperature_c: np.ndarray | None = None, load_pf: float = 0.95) -> DayScenarioBatch:
-        """`n` correlated scenarios for `date`. Both forecasts are 96-row frames with p10, p50, p90."""
+               n_homes: int, rng: np.random.Generator, temperature_c: np.ndarray | None = None, load_pf: float = 0.95,
+               upstream_fc: pd.DataFrame | None = None) -> DayScenarioBatch:
+        """`n` correlated scenarios for `date`. Forecasts are 96-row frames with p10, p50, p90.
+
+        `upstream_fc` (per unit) replaces the upstream model when a live voltage forecast exists: each scenario's grid
+        voltage is drawn from its quantiles with the copula's day-level draw plus an AR(1) wobble of its own.
+        """
         if len(solar_fc) != SLOTS or len(demand_fc) != SLOTS:
             raise ValueError("forecasts must have 96 quarter-hour rows")
         date = pd.Timestamp(date)
@@ -136,7 +141,18 @@ class ScenarioGenerator:
         demand_mean = quantile_path(demand_fc, z[:, 1])                                # (n, T)
         ratios = self.analogs.home_ratios(date, n, n_homes, rng)                       # (n, T, H)
         load = demand_mean[:, :, None] * ratios
-        upstream = self.upstream.sample(date, n, prev_day_upstream_mean, rng, day_z=z[:, 2])
+        if upstream_fc is None:
+            upstream = self.upstream.sample(date, n, prev_day_upstream_mean, rng, day_z=z[:, 2])
+        else:
+            if len(upstream_fc) != SLOTS:
+                raise ValueError("forecasts must have 96 quarter-hour rows")
+            eps_u = rng.normal(size=(n, SLOTS))
+            wobble_u = np.empty_like(eps_u)
+            wobble_u[:, 0] = eps_u[:, 0]
+            for t in range(1, SLOTS):
+                wobble_u[:, t] = self.intraday_phi * wobble_u[:, t - 1] + np.sqrt(1 - self.intraday_phi ** 2) * eps_u[:, t]
+            z_up = np.sqrt(self.day_share) * z[:, [2]] + np.sqrt(1 - self.day_share) * wobble_u
+            upstream = np.clip(quantile_path(upstream_fc, z_up), 0.8, 1.2)
         ambient = None if temperature_c is None else np.tile(np.asarray(temperature_c, float), (n, 1))
         return DayScenarioBatch(t=pd.date_range(date, periods=SLOTS, freq="15min"), load_kw=load, pv_per_kwp=pv,
                                 upstream_pu=upstream, load_pf=load_pf, labels=tuple(f"{date.date()}#{i}" for i in range(n)),

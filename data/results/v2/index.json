@@ -1,0 +1,147 @@
+{
+ "generated_at": "2026-10-09T13:57:22.630523+00:00",
+ "code_version": "598a51478206",
+ "demo_dates": {
+  "sunny": "2025-05-15",
+  "mixed": "2025-11-19",
+  "cloudy": "2025-08-05"
+ },
+ "entries": [
+  {
+   "route": "risk",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "risk_48a7fb1fb7b64040faab",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "fixes_ccc9cecd876895aa362b",
+   "network": "benchmark_250",
+   "rule": "pm10"
+  },
+  {
+   "route": "headroom",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "headroom_0b4e4a0b46638830754c",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "adoption": 0.3
+  },
+  {
+   "route": "hosting",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "hosting_8e72a1cce3a78dc5cbda",
+   "network": "benchmark_250",
+   "rule": "pm10"
+  },
+  {
+   "route": "risk",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "risk_c0e47422a1de4f651fd6",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "fixes_5d8fc72dae4b84310a04",
+   "network": "benchmark_250",
+   "rule": "up_2005"
+  },
+  {
+   "route": "headroom",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "headroom_8a335183b24e29e5450f",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "adoption": 0.3
+  },
+  {
+   "route": "hosting",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "hosting_21db26fc6d21d1362ece",
+   "network": "benchmark_250",
+   "rule": "up_2005"
+  },
+  {
+   "route": "risk",
+   "date": "2025-11-19",
+   "day_type": "mixed",
+   "key": "risk_9221671271c6ade33a11",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-11-19",
+   "day_type": "mixed",
+   "key": "fixes_d7fe210286d4e4e92fb4",
+   "network": "benchmark_250",
+   "rule": "pm10"
+  },
+  {
+   "route": "risk",
+   "date": "2025-11-19",
+   "day_type": "mixed",
+   "key": "risk_6a516cc17f5be71eedbd",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-11-19",
+   "day_type": "mixed",
+   "key": "fixes_8a418fd68d276b3f5582",
+   "network": "benchmark_250",
+   "rule": "up_2005"
+  },
+  {
+   "route": "risk",
+   "date": "2025-08-05",
+   "day_type": "cloudy",
+   "key": "risk_a774308fa917f7ecc166",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-08-05",
+   "day_type": "cloudy",
+   "key": "fixes_c78157bd60ba3d177fb5",
+   "network": "benchmark_250",
+   "rule": "pm10"
+  },
+  {
+   "route": "risk",
+   "date": "2025-08-05",
+   "day_type": "cloudy",
+   "key": "risk_7d8697c7c52ede4fe6b8",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-08-05",
+   "day_type": "cloudy",
+   "key": "fixes_a92e958411ca9e092de7",
+   "network": "benchmark_250",
+   "rule": "up_2005"
+  }
+ ]
+}

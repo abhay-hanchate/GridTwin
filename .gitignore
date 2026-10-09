@@ -53,3 +53,6 @@ data/onboarding/
 # live feeds recorded by scripts/record_up_demand.py
 data/live/
 !ml/models/live_dayahead_*
+
+# local browser-automation screenshots and page snapshots
+.playwright-mcp/
