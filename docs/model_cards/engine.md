@@ -19,7 +19,7 @@ damped fixed point over whole batches. pandapower runs the same day as a cross-c
 
 | Gate | Measured | Needed | Result |
 |---|---|---|---|
-| G1: parity with pandapower | largest voltage difference 0.0005% (0.001 V), transformer loading identical; one day in 0.023 s against 18.93 s (813.1 times faster) | at most 0.1% difference and at least 10 times faster | passed |
+| G1: parity with pandapower | largest voltage difference 0.0005% (0.001 V), transformer loading identical; one day in 0.026 s against 10.49 s (403.6 times faster in the latest run; the factor varies with machine load) | at most 0.1% difference and at least 10 times faster | passed |
 | G5: convergence and zero-sequence sensitivity | every step converged in every phase layout and every r0/x0 ratio from 2 to 4; peak voltage 268.4 to 272.6 V across those ratios | at least 99% of steps converge | passed |
 
 What the phase layout does to the peak voltage on that day (`data/results/engine_sensitivity.json`):

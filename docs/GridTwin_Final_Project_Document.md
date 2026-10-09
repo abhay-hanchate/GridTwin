@@ -364,7 +364,7 @@ Volt/VAR alone, tap +2 with Volt/VAR). On the cloudy day (5 August 2025) the ±1
 
 | Gate | Measured | Result |
 |---|---|---|
-| G1 engine parity | 0.001 V (0.0005%) from pandapower; one day in 0.012 s against 7.79 s | pass |
+| G1 engine parity | 0.001 V (0.0005%) from pandapower; one day in 0.026 s against 10.49 s (latest run) | pass |
 | G2 weather models | five models used (GFS, ICON, GEM, ARPEGE, IFS) | pass |
 | G3 solar v2 | MAE 0.0329 against Round 1's 0.0396; 79.4% inside the 80% range | pass |
 | G4 demand v2 | skill 8.4% (needed 10%), coverage 83.3% (needed 78–82%) | fail: Round 1's demand model stays |

@@ -1,5 +1,19 @@
 # Changelog
 
+## Since v2.0.0: Round 1 removed (plan task P10.12)
+
+- The dashboard is v2 only; no build switch (`VITE_DASHBOARD` is gone). The Round 1 screens and the chart library
+  they used (recharts) are removed, so the first page load is smaller.
+- The Round 1 API routes (`/api/run`, `/api/actions`, `/api/grid`, ...) are removed; `backend/main.py` serves API v2
+  under `/api/v2` and the dashboard. An unknown `/api/...` path is a JSON 404, never the dashboard page.
+- Removed the Round 1 fix, ranking, scenario, simulation and hosting-capacity modules (`engine/actions.py`,
+  `ranking.py`, `scenarios.py`, `simulate.py`, `hosting_capacity.py`), the Round 1 inverter loop, the Round 1
+  early warning and its evaluation (`ml/early_warning.py`, `ml/evaluate_warning.py`), the feature-importance report
+  (`ml/explain.py`), `scripts/precompute.py` and the results only those routes served. v2 keeps the Round 1 power
+  flow (`engine/grid.py`, `engine/powerflow.py`), the Round 1 forecasting base (`ml/forecast.py`,
+  `ml/live_forecast.py`) and the Round 1 solar model, which v2 builds on.
+- Round 1 documents moved to `docs/round1/`. The release tag `v2.0.0` still contains everything removed here.
+
 ## v2.0.0
 
 Round 1 answered "is this street unsafe on a past day, and which fix works?". Version 2 answers it **for tomorrow,
@@ -35,7 +49,7 @@ every method choice and its result is in [docs/DECISIONS.md](docs/DECISIONS.md);
 | Solar forecast error (MAE, kW per kW) | 0.0396 | 0.0329 (gate G3) |
 | Solar range in winter, share of real values inside | — (74.9% in the first v2 version, one width for all seasons) | 79.5% (per-season widths) |
 | Tomorrow's demand and voltage | a usual-value guess | 46% (demand) and 37% (voltage) better than that guess |
-| Engine time for one day | 7.79 s (pandapower) | 0.012 s, 0.001 V apart (gate G1) |
+| Engine time for one day | 10.49 s (pandapower, latest run) | 0.026 s, 0.001 V apart (gate G1) |
 | Smart inverters | fixed power factor 0.9 | IEEE 1547 Volt/VAR and Volt/Watt |
 | Peak voltage on the reference day | 263.1 V (balanced model, understated) | 268.9 V (homes on single phases) |
 
