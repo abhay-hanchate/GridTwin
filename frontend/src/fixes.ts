@@ -9,7 +9,7 @@ const NOMINAL_V = 230
 export function bindingText(t: T, limit: BindingLimit): string {
   const name = t(`limit.${limit.type}` as StringKey)
   if (limit.type === 'overvoltage' || limit.type === 'undervoltage') {
-    return t('fixes.binding_voltage', { limit: name, value: volts(limit.worst.value * NOMINAL_V),
+    return t(limit.type === 'undervoltage' ? 'fixes.binding_undervoltage' : 'fixes.binding_voltage', { limit: name, value: volts(limit.worst.value * NOMINAL_V),
       bound: volts(limit.worst.limit * NOMINAL_V), steps: limit.steps })
   }
   if (limit.type === 'solver_failure') return t('fixes.binding_solver', { steps: limit.steps })
