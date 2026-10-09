@@ -253,3 +253,19 @@ Still no candidate inside 78-82% in every season. By the fallback, **by season**
 80% against 5.1 for the shipped width): winter is fixed (74.9% to 79.5%) and post-monsoon drops to 75.8%, because
 post-monsoon 2025 has only November 2024 to learn from. WIS is unchanged. Sky classes did not help winter, so the
 winter miss is seasonal (haze and fog), not about clouds. Solar v2 switches to per-season widths.
+
+---
+
+## Chronos-2, round 2: a context that exists live (owner: Person B)
+
+Pre-registered 9 Oct 2026, before running. Round 1 fed Chronos-2 the last 14 days of ERA5-driven PV, which arrives
+days late, so it could not run live.
+
+- **Candidate:** Chronos-2 whose 14-day context is PV computed from the weather service's **same-day (day-0)
+  estimate** of irradiance, the historical counterpart of what the live forecast API returns for yesterday
+  (`past_days=1`). Covariates unchanged (`pv_mean`, `ghi_mean`, `cloud_mean`).
+- **Reference:** solar v2 as shipped (per-season interval widths), same 4,414-hour 2025 mask.
+- **Also reported, not a candidate:** round 1's ERA5-context Chronos-2, as the upper bound of what better context
+  would give.
+- **Rule (unchanged):** adopt only if WIS is at least 5% lower than the reference; deployability is now satisfied by
+  construction.
