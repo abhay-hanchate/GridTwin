@@ -1,6 +1,8 @@
 """Read-only v2 routes: voltage rules, liveness, readiness and Prometheus metrics."""
 from __future__ import annotations
 
+import json
+
 from fastapi import APIRouter, Request, Response
 
 from backend.v2 import metrics
@@ -46,7 +48,13 @@ def health(request: Request) -> dict:
 
 def readiness_checks(s: Settings) -> dict[str, bool]:
     if s.offline:
-        return {"precomputed_results": (s.results_dir / "v2" / "index.json").is_file()}
+        index = s.results_dir / "v2" / "index.json"
+        try:
+            saved = json.loads(index.read_text(encoding="utf-8")).get("code_version")
+        except (OSError, ValueError):
+            return {"precomputed_results": False, "precomputed_match_code": False}
+        # Results keyed to an older code version would never be found: offline would serve nothing.
+        return {"precomputed_results": True, "precomputed_match_code": saved == s.code_version}
     try:
         rules_ok = bool(load_rules())
     except (OSError, ValueError):
@@ -76,7 +84,6 @@ def readiness(request: Request) -> dict:
 def results(request: Request) -> dict:
     """Every gate and headline (data/results/results.json, written by python -m scripts.evaluate). Failed gates
     are included as failed; the Proof page shows them."""
-    import json
     path = _settings(request).results_dir / "results.json"
     try:
         return json.loads(path.read_text(encoding="utf-8"))
