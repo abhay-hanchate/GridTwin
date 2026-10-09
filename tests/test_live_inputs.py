@@ -35,7 +35,8 @@ def test_live_forecasts_return_96_rows_and_voltage_in_per_unit(fake_ml):
     assert all(len(f[k]) == 96 for k in ("solar", "demand", "voltage_pu"))
     assert f["voltage_pu"]["p50"].iloc[0] == pytest.approx(241.5 / 230)
     assert f["demand"]["p90"].iloc[0] == pytest.approx(0.55)
-    assert "pattern_only" in f["provenance"]["voltage"] and "winter" in f["provenance"]["solar"]
+    assert "pattern only model" in f["provenance"]["voltage"] and "live-anchored" not in f["provenance"]["voltage"]
+    assert f["provenance"]["anchor"] == "pattern only" and "winter" in f["provenance"]["solar"]
 
 
 def test_only_today_and_later_are_live(monkeypatch):

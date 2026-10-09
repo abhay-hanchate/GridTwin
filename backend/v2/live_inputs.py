@@ -14,7 +14,9 @@ from datetime import datetime, timedelta, timezone
 
 import pandas as pd
 
-NOMINAL_V = 230.0
+from engine.config import NOMINAL_VOLTAGE_V as NOMINAL_V        # B's voltage = per unit x this (230 V), phase-to-neutral
+
+MODEL_LABEL = {"pattern_only": "pattern only", "live_anchored": "live-anchored"}
 IST = timezone(timedelta(hours=5, minutes=30))
 
 
@@ -31,6 +33,11 @@ def _frame(points: list[dict], scale: float = 1.0) -> pd.DataFrame:
     if len(df) != 96:
         raise ValueError(f"expected 96 quarter-hour rows, got {len(df)}")
     return df.reset_index(drop=True)
+
+
+def _label(model: str) -> str:
+    """Readable model name; never 'live-anchored' unless the model really used the UP anchor."""
+    return MODEL_LABEL.get(model, model)
 
 
 def live_forecasts(date: str, district: str = "mathura") -> dict:
@@ -52,7 +59,8 @@ def live_forecasts(date: str, district: str = "mathura") -> dict:
         "voltage_pu": _frame(dv["voltage"]["points"], NOMINAL_V),
         "provenance": {
             "solar": f"modeled: live solar v2 forecast ({solar_source})",
-            "demand": f"modeled: live day-ahead demand ({dv['demand']['model']}); {dv['anchor']['note']}",
-            "voltage": f"modeled: live day-ahead grid voltage ({dv['voltage']['model']})",
+            "demand": f"modeled: live day-ahead demand, {_label(dv['demand']['model'])} model",
+            "voltage": f"modeled: live day-ahead grid voltage, {_label(dv['voltage']['model'])} model",
+            "anchor": dv["anchor"]["note"],
         },
     }
