@@ -77,6 +77,14 @@ def test_mondrian_widening_uses_earlier_months_of_the_same_season_only():
     assert pools == {"2019-12": "none", "2020-01": "season", "2020-06": "all", "2020-12": "season"}
 
 
+def test_mondrian_widening_accepts_truth_for_more_rows_than_were_predicted():
+    raw = pd.DataFrame({"p10": 0.0, "p50": 0.5, "p90": 1.0, "month": np.repeat(["2020-01", "2020-02"], 600),
+                        "season": "winter"}, index=pd.RangeIndex(100, 1300))
+    y = pd.Series(1.5, index=pd.RangeIndex(0, 1400))                      # the untested first months are in y too
+    out = lda.mondrian_widen(raw, y)
+    assert out.loc[out.month == "2020-02", "p90"].iloc[0] == pytest.approx(1.5)
+
+
 def test_live_forecast_falls_back_to_pattern_only_without_the_anchor(tmp_path):
     data = _data(8)
     lda.train_final(data, model_dir=tmp_path, n_estimators=40)

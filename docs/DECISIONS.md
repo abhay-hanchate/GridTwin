@@ -161,3 +161,30 @@ Pre-registered 9 Oct 2026, before any model below was trained. Design: `docs/sup
 - **Rule:** the live-anchored model is adopted if its MAE is at least 10% below climatology and below pattern-only,
   and its P10-P90 coverage is 78-82% overall and 70-90% in every season. Otherwise the best model that does meet the
   coverage rule is used and the true numbers are reported.
+
+### Round 1 result (run 9 Oct 2026, `python -m ml.live_dayahead`, 22 walk-forward months, 2019-11 to 2021-10)
+
+| Target | Candidate | MAE | Skill vs climatology | Coverage | Post-monsoon coverage |
+|---|---|---|---|---|---|
+| Demand (kW/home) | climatology | 0.1415 | | 78.6% | 29.5% |
+| | pattern only | 0.0713 | +49.6% | 77.1% | 43.6% |
+| | live anchored | 0.0727 | +48.6% | 76.5% | 40.6% |
+| Voltage (V) | climatology | 6.23 | | 73.7% | 45.2% |
+| | pattern only | 3.77 | +39.5% | 76.8% | 54.2% |
+| | live anchored | 3.75 | +39.8% | 76.9% | 49.2% |
+
+No candidate met the coverage rule. The UP anchor did not beat pattern-only (tomorrow's temperature already carries
+most of what state demand says). Diagnosis of the post-monsoon miss: (1) the first tested month (2019-11) had no
+earlier out-of-sample errors, so its interval was never widened (coverage 32-42%); (2) Bareilly in October 2021 used
+0.16 kW per home more than any earlier pattern (a level shift no model without live household data can see);
+(3) the anchor needed all eight days, and 65 missing days in the UP history (mostly August to December 2020) blanked
+248 of 976 anchor days.
+
+### Round 2, pre-registered before running
+
+Same candidates, same rule, same months. Two method fixes, applied to every candidate alike:
+- **A. Warm-up interval:** when a month has no earlier out-of-sample errors, its interval width comes from a
+  cross-fitted pool inside the training data (fit without the last training month, predict that month).
+- **B. Anchor robustness:** `up_ratio` needs yesterday plus at least 5 of the 7 days before it (was: all 7).
+Not added: a year-on-year UP level term. It would target the October 2021 shift, but it cannot run live (no UP
+daily data for 2025 is reachable), so it fails the deployability condition.

@@ -145,6 +145,7 @@ def walk_forward(data: pd.DataFrame, target: str, features: list[str] | None, *,
 def mondrian_widen(raw: pd.DataFrame, y: pd.Series, *, min_points: int = 500) -> pd.DataFrame:
     """Widen each month's interval by split-conformal scores of earlier months in the same season (all earlier months
     when the season has fewer than `min_points`). Months are processed in order, so no month sees its own errors."""
+    y = y.reindex(raw.index)                     # truth may cover untested months too
     out = raw.copy()
     out["cal_pool"] = "none"
     for month in sorted(raw["month"].unique()):
