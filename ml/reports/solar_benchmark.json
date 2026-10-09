@@ -1,0 +1,28 @@
+{
+  "scores_2025": {
+    "solar_v2_lightgbm": {
+      "n": 4414,
+      "mae_p50": 0.0329,
+      "coverage": 0.799,
+      "wis": 0.0213,
+      "wis_gain_vs_reference": 0.0,
+      "adopt": false
+    },
+    "chronos2_with_covariates": {
+      "n": 4414,
+      "mae_p50": 0.0318,
+      "coverage": 0.786,
+      "wis": 0.0207,
+      "wis_gain_vs_reference": 0.028,
+      "adopt": false
+    }
+  },
+  "nwp_models_used": [
+    "gfs_global",
+    "icon_global",
+    "gem_global",
+    "meteofrance_arpege_world",
+    "ecmwf_ifs025"
+  ],
+  "caveat": "Chronos-2 sees the previous 14 days of observed PV; the LightGBM pipeline needs none. Adoption therefore also requires a live source of yesterday's PV."
+}

@@ -120,3 +120,29 @@ coverage 83.3% (needs 78 to 82%). Round 1's demand model stays; no AI improvemen
 file ends on 20 Feb 2021, so this protocol covers 51 winter days only. On the held-out district (Bareilly) the
 skill is +11.6% but coverage is 76.6% (monsoon 73.0%). The oracle-weather variant changes skill by under 1.5
 points. Details: `docs/generated/data_v2.md`.
+
+---
+
+## Foundation-model benchmark: Chronos-2 (P4.3, owner: Person B)
+
+Pre-registered 9 Oct 2026, before Chronos-2 was run in the build. The rule is the plan's, unchanged.
+
+- **Reference:** solar v2 as shipped (LightGBM residual, 30-day conformal window), on the same 2025 daylight mask.
+- **Candidate:** Chronos-2 with covariates (`pv_mean`, `ghi_mean`, `cloud_mean`) and a 14-day context of past PV.
+  TimesFM 2.5: not evaluated (its Python API was not inspected; a second foundation model cannot change the decision
+  until the first clears the bar).
+- **Rule:** adopt only if WIS is at least 5% lower than the reference **and** the deployment can supply yesterday's
+  observed PV.
+- **Known before the run:** in this project "observed PV" is ERA5-driven, and ERA5 is published several days late,
+  so yesterday's value is not available when tomorrow's forecast is made. Unless rooftop meters supply it, the
+  second condition fails whatever the score; the WIS result is still recorded.
+
+### Result (run 9 Oct 2026, `python -m ml.benchmark`, RTX 4050, 35 s)
+
+| | MAE | Coverage | WIS | WIS gain vs solar v2 |
+|---|---|---|---|---|
+| Solar v2 (as shipped, 30-day window) | 0.0329 | 79.9% | 0.0213 | |
+| Chronos-2 with covariates | 0.0318 | 78.6% | 0.0207 | 2.8% |
+
+**Not adopted.** The WIS gain is 2.8%, below the 5% bar, and the second condition fails anyway (no live source of
+yesterday's PV). Chronos-2 stays a benchmark; `ml/reports/solar_benchmark.json` holds the record.
