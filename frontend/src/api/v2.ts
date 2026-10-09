@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react'
 /** Typed client for /api/v2. Heavy results come from cache; a cache miss answers with a job to poll. */
 export const V2_BASE = '/api/v2'
 export const POLL_MS = 2000
-/** Build-time switch: VITE_DASHBOARD=v2 shows the v2 layout. */
-export const V2_DASHBOARD = import.meta.env.VITE_DASHBOARD === 'v2'
 
 export type V2Status = 'loading' | 'running' | 'done' | 'error'
 export interface V2State<T> { status: V2Status; data: T | null; error: string | null; jobId: string | null }

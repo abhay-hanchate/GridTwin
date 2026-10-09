@@ -12,7 +12,7 @@ export default defineConfig({
     rolldownOptions: {
       output: {
         // Libraries change rarely, so they get their own long-cached chunks; each screen is
-        // split separately by the lazy imports in App.tsx.
+        // split separately by the lazy imports in app/V2App.tsx.
         codeSplitting: {
           groups: [
             { name: 'react', test: /node_modules[\\/](react|react-dom|scheduler)[\\/]/, priority: 2 },

@@ -11,8 +11,6 @@ WORKDIR /src/frontend
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY frontend/ ./
-# The v2 layout; built in the image, so the Round 1 layout is never what a container serves.
-ENV VITE_DASHBOARD=v2
 RUN npm run build
 
 # ---- 2. the API -----------------------------------------------------------------------------------------------

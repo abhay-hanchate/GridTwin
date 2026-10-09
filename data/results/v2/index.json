@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-10-09T16:18:10.693826+00:00",
- "code_version": "fcd030a4e165",
+ "generated_at": "2026-10-09T19:56:25.260627+00:00",
+ "code_version": "cdc278fc9b87",
  "demo_dates": {
   "sunny": "2025-05-15",
   "mixed": "2025-11-19",
@@ -11,7 +11,7 @@
    "route": "risk",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "risk_aacd7f000a19f71a9c3e",
+   "key": "risk_23eabad536f8beca7f1d",
    "network": "benchmark_250",
    "rule": "pm10",
    "fix": "none"
@@ -20,7 +20,7 @@
    "route": "fixes",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "fixes_8bc4b33bf017a5245192",
+   "key": "fixes_10fb2d8c71bad274825a",
    "network": "benchmark_250",
    "rule": "pm10"
   },
@@ -28,7 +28,7 @@
    "route": "headroom",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "headroom_6491d25f0040e010e4aa",
+   "key": "headroom_60ef6c2a85281a9367ae",
    "network": "benchmark_250",
    "rule": "pm10",
    "adoption": 0.3
@@ -37,7 +37,7 @@
    "route": "hosting",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "hosting_c93841252fb8242a9fbc",
+   "key": "hosting_e88ddc7e8b5840e2c43a",
    "network": "benchmark_250",
    "rule": "pm10"
   },
@@ -45,7 +45,7 @@
    "route": "risk",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "risk_4ae1a12143303897f447",
+   "key": "risk_a05f75801c7d3565f62a",
    "network": "benchmark_250",
    "rule": "up_2005",
    "fix": "none"
@@ -54,7 +54,7 @@
    "route": "fixes",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "fixes_d0925ff986ff2093cf93",
+   "key": "fixes_4a21a007fd100263a2a5",
    "network": "benchmark_250",
    "rule": "up_2005"
   },
@@ -62,7 +62,7 @@
    "route": "headroom",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "headroom_bbc87dc275234c434c74",
+   "key": "headroom_9129045300fb9a2d1cfe",
    "network": "benchmark_250",
    "rule": "up_2005",
    "adoption": 0.3
@@ -71,7 +71,7 @@
    "route": "hosting",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "hosting_8cfe277b2d32edfbae78",
+   "key": "hosting_1e0f9275758e3bf7c7e1",
    "network": "benchmark_250",
    "rule": "up_2005"
   },
@@ -79,7 +79,7 @@
    "route": "risk",
    "date": "2025-11-19",
    "day_type": "mixed",
-   "key": "risk_b9895bf524b562982442",
+   "key": "risk_5850112f3ebdc3fce91b",
    "network": "benchmark_250",
    "rule": "pm10",
    "fix": "none"
@@ -88,7 +88,7 @@
    "route": "fixes",
    "date": "2025-11-19",
    "day_type": "mixed",
-   "key": "fixes_bb824675891f5325d6ca",
+   "key": "fixes_ecf8f75bd7178fc9037b",
    "network": "benchmark_250",
    "rule": "pm10"
   },
@@ -96,7 +96,7 @@
    "route": "risk",
    "date": "2025-11-19",
    "day_type": "mixed",
-   "key": "risk_d37f08364e4c503851f7",
+   "key": "risk_1a7e33d592c7621e2923",
    "network": "benchmark_250",
    "rule": "up_2005",
    "fix": "none"
@@ -105,7 +105,7 @@
    "route": "fixes",
    "date": "2025-11-19",
    "day_type": "mixed",
-   "key": "fixes_6b1dbcead8674dc04ddd",
+   "key": "fixes_6029f35f20a26700f8b7",
    "network": "benchmark_250",
    "rule": "up_2005"
   },
@@ -113,7 +113,7 @@
    "route": "risk",
    "date": "2025-08-05",
    "day_type": "cloudy",
-   "key": "risk_45c5ca228719b4b51f36",
+   "key": "risk_e15e8b9ba2fae4593fdc",
    "network": "benchmark_250",
    "rule": "pm10",
    "fix": "none"
@@ -122,7 +122,7 @@
    "route": "fixes",
    "date": "2025-08-05",
    "day_type": "cloudy",
-   "key": "fixes_748f9847791d7fc08223",
+   "key": "fixes_f8df030860ec2be6f510",
    "network": "benchmark_250",
    "rule": "pm10"
   },
@@ -130,7 +130,7 @@
    "route": "risk",
    "date": "2025-08-05",
    "day_type": "cloudy",
-   "key": "risk_1d9846f338bae027e277",
+   "key": "risk_170ad4a05e69c75af9c7",
    "network": "benchmark_250",
    "rule": "up_2005",
    "fix": "none"
@@ -139,7 +139,7 @@
    "route": "fixes",
    "date": "2025-08-05",
    "day_type": "cloudy",
-   "key": "fixes_2da8eb1880ace81ba36b",
+   "key": "fixes_a90bb28097413b8194a3",
    "network": "benchmark_250",
    "rule": "up_2005"
   },
@@ -147,7 +147,7 @@
    "route": "whatif",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "whatif_1f67d1133882dc1da0c5",
+   "key": "whatif_7195e381264c02616b28",
    "label": "Standard smart inverters (IEEE 1547 Volt/VAR)",
    "network": "benchmark_250",
    "rule": "pm10",
@@ -168,7 +168,7 @@
    "route": "whatif",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "whatif_ae7c31d0684e994611d3",
+   "key": "whatif_9d49289c6e9e884de308",
    "label": "Evening EV charging at 20% of homes, with transformer tap +1",
    "network": "benchmark_250",
    "rule": "pm10",

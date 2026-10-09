@@ -3,7 +3,20 @@ import warnings
 import pytest
 
 from engine.grid import build_grid, topology
-from engine.scenarios import run_scenario
+from engine.powerflow import day_inputs, run_day
+
+DAY = "2019-05-15"
+
+
+def run_street(pv_share: float) -> dict:
+    """The reference day on the benchmark street with `pv_share` of homes on 3 kW solar, plus the no-solar baseline."""
+    inputs = day_inputs(DAY)
+    result = run_day(build_grid(pv_share), inputs, band="10", detail=False)
+    baseline = run_day(build_grid(0.0), inputs, band="10", detail=False)
+    result["summary"]["violation_steps_without_solar"] = baseline["summary"]["violation_steps"]
+    result["summary"]["violation_steps_from_solar"] = (
+        result["summary"]["violation_steps"] - baseline["summary"]["violation_steps"])
+    return result
 
 warnings.filterwarnings("ignore")
 
@@ -24,7 +37,7 @@ def test_topology_has_coordinates():
 
 @pytest.fixture(scope="module")
 def s4():
-    return run_scenario("S4", detail=False)
+    return run_street(1.0)
 
 
 def test_full_day_runs_cleanly(s4):
@@ -41,12 +54,10 @@ def test_solar_causes_violations(s4):
 
 import pandapower as pp  # noqa: E402
 
-from engine.powerflow import day_inputs, run_day  # noqa: E402
-
 
 @pytest.fixture(scope="module")
 def s1():
-    return run_scenario("S1", detail=False)
+    return run_street(0.0)
 
 
 def test_solver_failure_counts_as_unsafe(monkeypatch):

@@ -50,7 +50,7 @@ dashboard's Proof page shows them, failed ones included.
 
 | Gate | What | Result |
 | --- | --- | --- |
-| G1 | Engine matches pandapower (0.001 V apart) and is 647 times faster | pass |
+| G1 | Engine matches pandapower (0.001 V apart) and is far faster (403.6 times in the latest run; the factor varies with machine load) | pass |
 | G2 | At least three weather models available (five used) | pass |
 | G3 | Solar forecast error 0.0329 against Round 1's 0.0396 | pass |
 | G4 | Demand v2: 8.4% skill, needed 10% | **fail** (Round 1's demand model stays) |
@@ -126,7 +126,7 @@ poll `/jobs/{id}`. Errors are always `{"error": {"code", "message", "details"}}`
 | `GET /report?lang=en\|hi` | The printable evening report |
 | `GET /health`, `GET /readiness`, `GET /metrics` | Operations |
 
-The Round 1 API (`/api/...`) still runs beside it until the legacy path is removed.
+The Round 1 API and dashboard were removed after the `v2.0.0` release; that tag still contains them.
 
 ## Run it
 
@@ -145,7 +145,7 @@ GRIDTWIN_OFFLINE=0 docker compose up --build    # also computes requests that we
 python -m venv .venv
 source .venv/bin/activate            # Windows PowerShell: .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt -c constraints.txt
-cd frontend && npm ci && VITE_DASHBOARD=v2 npm run build && cd ..   # without VITE_DASHBOARD=v2: the Round 1 dashboard
+cd frontend && npm ci && npm run build && cd ..
 uvicorn backend.main:app             # http://127.0.0.1:8000; set GRIDTWIN_OFFLINE=1 to serve only precomputed results
 ```
 
@@ -182,11 +182,11 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 
 ## Quality
 
-- **Tests:** about 380 Python tests (engine, API, models, honesty and security) and 72 dashboard tests; `python
+- **Tests:** about 350 Python tests (engine, API, models, honesty and security) and 74 dashboard tests; `python
   scripts/check.py` runs lint, tests and the dashboard build like CI.
 - **Honesty rules:** every number on screen comes from `results.json` or an API response; dashboard strings carry
   numbers only through placeholders; failed gates are shown.
-- **Accessibility:** Lighthouse 100 on all five pages; about 81 KB of JavaScript on first load.
+- **Accessibility:** Lighthouse 100 on all five pages; about 79 KB of JavaScript on first load.
 - **CI:** Python 3.12 and 3.13, the dashboard build and tests, dependency audit; nightly parity and performance tests
   and the evening precompute.
 - **Demo:** [five-minute demo script](docs/DEMO_SCRIPT.md), generated from the saved results.
@@ -257,4 +257,3 @@ Every assumption and limitation — what is observed, modeled or benchmark — i
 - A live deployment with a public link.
 - Gate G7: calibrate solar yield against the measured Karnataka plant once the data is accessible.
 - Record UP state demand daily so tomorrow's demand and voltage forecasts are anchored to it.
-- Remove the Round 1 path and make the v2 dashboard the default build (after the `v2.0.0` tag).
