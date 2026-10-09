@@ -38,6 +38,16 @@ def test_script_reads_every_number_from_the_results(tmp_path, monkeypatch):
     monkeypatch.setattr(demo_script, "V2", v2)
     text = demo_script.build()
     assert "Tap +1 with IEEE 1547 Volt/VAR" in text and "**No safe action**" in text and "heavier conductor" in text
-    assert "about 16.7 hours" in text and "0.001 V" in text and "813 times" in text and "-5.46" in text
+    assert "about 16.7 hours" in text and "0.001 V" in text and "813.1 times" in text and "-5.46" in text
+    assert "switch the rule selector to +/-10%" in text and "Connection check** form" in text and "POST" not in text
     assert "G8 fail" in text and "not reliable as odds" in text
     assert "around **09:00** (90%), against 10% at 12:00" in text            # computed from the curve, not asserted
+
+
+def test_numbers_round_like_the_dashboard():
+    # Checked with Node: (20.25).toFixed(1) "20.3", (15).toFixed(1) "15.0" (one() drops ".0"), (1.05).toFixed(1) "1.1",
+    # (0.15).toFixed(1) "0.1" (the float is 0.1499...), Math.round(0.125 * 100) 13, Math.round(0.985 * 100) 99.
+    one, pct = demo_script.one, demo_script.pct
+    assert one(20.25) == "20.3" and round(20.25, 1) == 20.2              # Python's round would say a number not on screen
+    assert one(15.0) == "15" and one(16.7) == "16.7" and one(1.05) == "1.1" and one(0.15) == "0.1"
+    assert pct(0.125) == "13%" and pct(0.985) == "99%" and pct(0.0) == "0%"

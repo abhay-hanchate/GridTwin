@@ -8,6 +8,8 @@ never states a number that is not in a results file (plan section 0.7). Regenera
 from __future__ import annotations
 
 import json
+import math
+from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,9 +28,29 @@ def results_by(route: str, day_type: str, rule: str) -> dict | None:
     return None
 
 
+# ---- numbers exactly as the dashboard shows them (frontend/src/format.ts) ----------------------------------------
+# JavaScript's toFixed rounds the float's exact binary value half up, and Math.round is floor(x + 0.5); Python's round()
+# rounds half to even (20.25 -> 20.2 where the screen shows 20.3), so it is not used for any number said aloud.
+
+def one(x: float) -> str:
+    """format.ts one(): String(Number(x.toFixed(1))) - one decimal, half up, trailing .0 dropped."""
+    d = Decimal(x).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP)
+    return str(d.normalize()) if d != d.to_integral() else str(int(d))
+
+
+def pct(p: float) -> str:
+    """format.ts pct(): Math.round(p * 100) + '%'."""
+    return f"{math.floor(p * 100 + 0.5)}%"
+
+
+def raw(x) -> str:
+    """The Proof page prints results.json values as stored (JavaScript String(number))."""
+    return str(int(x)) if isinstance(x, float) and x.is_integer() else str(x)
+
+
 def _hours(risk: dict) -> str:
     h = risk["expected_unsafe_hours"]
-    return f"about {h['mean']:.1f} hours (between {h['p10']:.1f} and {h['p90']:.1f} in 8 of 10 scenarios)"
+    return f"about {one(h['mean'])} hours (between {one(h['p10'])} and {one(h['p90'])} in 8 of 10 scenarios)"
 
 
 def _verdict(fixes: dict) -> str:
@@ -72,7 +94,7 @@ def build() -> str:
         f"- Rule selector on **UP Supply Code (+/-6%)**. Level **{sun_up['level'].upper()}** from {sun_up['first_act']}; "
         f"{_hours(sun_up)} unsafe.",
         f"- Switch to +/-10% for a moment to show the shape: the chance of unsafe voltage is highest around "
-        f"**{peak_time(sun_10)}** ({max(sun_10['p_unsafe']):.0%}), against {sun_10['p_unsafe'][48]:.0%} at 12:00.",
+        f"**{peak_time(sun_10)}** ({pct(max(sun_10['p_unsafe']))}), against {pct(sun_10['p_unsafe'][48])} at 12:00.",
         f"- Point at the calibration note: the chances are *{'slightly better than the historical average' if sun_up['calibration']['reliable'] else 'not reliable as odds'}* under this rule.",
         "",
         "## 2. Switch the rule to +/-10% (30 s)",
@@ -90,27 +112,30 @@ def build() -> str:
         "",
         "## 4. Planning: can we approve this connection? (60 s)",
         "",
+        "- Open **Planning** and **switch the rule selector to +/-10%** (it is still on UP +/-6% from step 3). The numbers "
+        "below are the +/-10% results; under UP +/-6% the street has almost no room left, which is the point of step 3.",
     ]
     if room:
         def kw(phases: dict) -> str:
             # 60 kW is the top of the search (engine.headroom max_kw): reaching it means "at least 60 kW"
-            return ", ".join("{} {}{:g} kW".format(p, "" if v["no_worse_kw"] < 60 else "at least ", v["no_worse_kw"])
+            return ", ".join("{} {}{} kW".format(p, "" if v["no_worse_kw"] < 60 else "at least ", one(v["no_worse_kw"]))
                              for p, v in phases.items())
-        lines += [f"- Extra rooftop solar the street can take with {room['adoption']:.0%} of homes already on solar "
+        lines += [f"- Extra rooftop solar the street can take with {pct(room['adoption'])} of homes already on solar "
                   f"(no step made worse): far end {kw(far)}; next to the transformer {kw(near)}.",
                   "- Say: the place **and the phase** decide; a flat state cap cannot see either."]
     if host:
         a, b = host["without_fix"]["adoption_share"], host["with_volt_var"]["adoption_share"]
-        lines += [f"- Hosting capacity (share of homes that can add solar, P10-P90): without a fix {a['p10']:.0%}-{a['p90']:.0%}; "
-                  f"with standard Volt/VAR {b['p10']:.0%}-{b['p90']:.0%}."]
+        lines += [f"- Hosting capacity (share of homes that can add solar, P10-P90): without a fix {pct(a['p10'])}-{pct(a['p90'])}; "
+                  f"with standard Volt/VAR {pct(b['p10'])}-{pct(b['p90'])}."]
     lines += [
-        "- Live: `POST /api/v2/connection-check` for 5 kW at the far end - show the decision, the phase and the reason.",
+        "- In the **Connection check** form on the same page: pick the far end of the street, 5 kW, one system, best "
+        "phase, then **Check this request** - read out the decision, the phase it chose and the reason on screen.",
         "",
         "## 5. Proof: how much to trust it (60 s)",
         "",
-        f"- Engine checked against pandapower: {g1['max_voltage_diff_v']} V apart, about {g1['speedup']:.0f} times faster (G1).",
-        f"- Risk calibration (G8): +/-10% calibrated skill {g8['pm10']['brier_skill_calibrated']:+.3f}; "
-        f"UP +/-6% {g8['up_2005']['brier_skill_calibrated']:+.2f} - shown as failed, not hidden.",
+        f"- Engine checked against pandapower: {raw(g1['max_voltage_diff_v'])} V apart, {raw(g1['speedup'])} times faster (G1).",
+        f"- Risk calibration (G8): +/-10% calibrated skill {raw(g8['pm10']['brier_skill_calibrated'])}; "
+        f"UP +/-6% {raw(g8['up_2005']['brier_skill_calibrated'])} - shown as failed, not hidden.",
         "- Gates: " + ", ".join(f"{k} {v['status']}" for k, v in gates.items()) + ".",
         "- Say: a failed gate is a result, not a bug to hide.",
         "",
