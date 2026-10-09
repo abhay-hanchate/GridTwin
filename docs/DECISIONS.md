@@ -101,3 +101,14 @@ Pre-registered 9 Oct 2026, before the demand model was run on the real data.
 - **Known gap, recorded before the run:** demand v2 widens its interval with one fixed 60-day calibration window
   before the test period; section 4.2 of the plan asks for a rolling window. If coverage drifts out of the band
   across the test year, a rolling window is the first candidate to add.
+
+---
+
+## Gate G7: measured-plant yield calibration (P4.4, owner: Person B)
+
+Recorded 9 Oct 2026. The Karnataka 72 kWp plant data is on IEEE DataPort, whose downloads need a signed-in
+account; the build has none, so the outcome is **(b)**: the calibration script is not run, the PV model keeps the
+14% system-loss assumption, and the Proof page says "yield not calibrated against measured data".
+`scripts/calibrate_pv.py` and its tests are in place, so a teammate with an IEEE account can download the file and
+run it (see the plan, P4.4 step 5). The cold-start interval widening (15% at zero history, 30-day prior weight)
+is an assumption, not a measurement.
