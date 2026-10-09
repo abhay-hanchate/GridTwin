@@ -42,8 +42,4 @@ PV_AZIMUTH_DEG = 180
 PV_SYSTEM_LOSSES = 0.14
 PV_GAMMA_PDC = -0.004
 
-# Voltage bands (per unit of 230 V). CEA panel: +/-10% now, +/-6% planned.
-BANDS = {
-    "10": (0.90, 1.10),
-    "6": (0.94, 1.06),
-}
+# Voltage bands live in engine/voltage_rules.json (engine.rules), each with its source.

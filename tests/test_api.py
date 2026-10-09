@@ -116,3 +116,22 @@ def test_forecast_simulation_predicts_the_real_day():
     predicted = r["before"]["summary"]["violation_steps"]
     actual = r["after"]["summary"]["violation_steps"]
     assert abs(predicted - actual) <= 4
+
+
+def test_rules_endpoint_lists_sources_and_verification():
+    rules = client.get("/api/rules").json()
+    ids = [r["id"] for r in rules]
+    assert {"pm10", "up_2005"} <= set(ids)
+    up = next(r for r in rules if r["id"] == "up_2005")
+    assert up["vmin_v"] == 216.2 and up["vmax_v"] == 243.8
+    assert up["verification"] == "secondary" and "UPERC" in up["source"]
+
+
+def test_scenario_s5_names_the_rule():
+    scenarios = {s["id"]: s for s in client.get("/api/scenarios").json()}
+    assert "UP Supply Code" in scenarios["S5"]["name"] and scenarios["S5"]["band"] == "up_2005"
+
+
+def test_hosting_capacity_rejects_an_unknown_rule_with_the_valid_ids():
+    response = client.get("/api/hosting-capacity", params={"band": "nope"})
+    assert response.status_code == 422 and "up_2005" in response.json()["detail"]

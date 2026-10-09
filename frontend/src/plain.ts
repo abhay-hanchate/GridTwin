@@ -14,7 +14,7 @@ export const SCENARIO_TEXT: Record<string, { short: string; long: string }> = {
   S2: { short: '3 in 10 homes', long: '3 in 10 homes have 3 kW rooftop solar' },
   S3: { short: '6 in 10 homes', long: '6 in 10 homes have 3 kW rooftop solar' },
   S4: { short: 'Every home', long: 'Every home has 3 kW rooftop solar' },
-  S5: { short: 'Every home, strict rule', long: 'Every home has solar, judged by the stricter ±6% safety rule' },
+  S5: { short: 'Every home, UP rule (±6%)', long: 'Every home has solar, judged by the Uttar Pradesh supply-code rule (±6% of 230 V)' },
 }
 
 export const ACTION_TEXT: Record<string, { name: string; how: string }> = {
@@ -52,7 +52,7 @@ export const actionName = (id: string, fallback: string) => ACTION_TEXT[id]?.nam
 
 export const GLOSSARY: [string, string][] = [
   ['Voltage', 'The "pressure" of electricity. Indian homes are meant to get 230 V.'],
-  ['Safe limit', '±10% of 230 V, so between 207 V and 253 V. Above that, appliances and solar inverters can fail.'],
+  ['Safe limit', 'Default ±10% of 230 V (207–253 V). The Uttar Pradesh supply code uses ±6% (216–244 V). Above the limit, appliances and solar inverters can fail.'],
   ['Transformer', 'The box on the pole that feeds the whole street. Its setting decides the starting voltage.'],
   ['Inverter', 'The device that turns a home\'s solar power into usable electricity. Modern ones can help control voltage.'],
   ['Digital twin', 'A computer copy of the street that we can test ideas on before touching the real one.'],

@@ -8,6 +8,7 @@ import pandapower as pp
 
 from engine import config
 from engine.grid import LOAD_POWER_FACTOR, lv_buses
+from engine.rules import get_rule
 
 TAN_PHI = float(np.tan(np.arccos(LOAD_POWER_FACTOR)))
 
@@ -44,7 +45,8 @@ Hook = Callable[[pp.pandapowerNet, int], None]
 def run_day(net: pp.pandapowerNet, inputs: DayInputs, band: str = "10",
             hook: Optional[Hook] = None, detail: bool = True) -> dict:
     """Simulate 96 steps. `hook(net, step)` lets a corrective action adjust the grid each step."""
-    vmin, vmax = config.BANDS[band]
+    rule = get_rule(band)
+    vmin, vmax = rule.vmin_pu, rule.vmax_pu
     lv = lv_buses(net)
     meters = assign_meters(net, inputs.load_kw.columns)
     load_matrix = inputs.load_kw[meters].to_numpy() / 1000          # MW, 96 x houses
@@ -105,7 +107,7 @@ def run_day(net: pp.pandapowerNet, inputs: DayInputs, band: str = "10",
     ok = [s for s in steps if not s.get("solver_failed")]
     return {
         "date": inputs.date,
-        "limits": {"vm_min_pu": vmin, "vm_max_pu": vmax, "loading_max_pct": 100},
+        "limits": {"vm_min_pu": vmin, "vm_max_pu": vmax, "loading_max_pct": 100, "rule": rule.id},
         "steps": steps,
         "summary": {
             "max_vm_pu": max(s["max_vm_pu"] for s in ok),

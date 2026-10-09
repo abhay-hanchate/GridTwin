@@ -4,7 +4,7 @@ export interface Scenario {
   id: ScenarioId
   name: string
   pv_share: number
-  band: '10' | '6'
+  band: string            // voltage rule id (see /api/rules); Round 1 aliases '10' and '6' still work
   default_date: string
 }
 
