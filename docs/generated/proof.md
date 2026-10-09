@@ -1,10 +1,10 @@
 # Proof: gates and headline results
 
-Generated 2026-10-09T13:58 UTC from `data/results/results.json` (git 9afca95). Do not edit by hand: run `python -m scripts.evaluate`.
+Generated 2026-10-09T14:39 UTC from `data/results/results.json` (git b58e194). Do not edit by hand: run `python -m scripts.evaluate`.
 
 | Gate | What | Status | Measured | Threshold |
 | --- | --- | --- | --- | --- |
-| G1 | Engine parity with pandapower | **pass** | {"max_voltage_diff_pct": 0.0005, "max_voltage_diff_v": 0.001, "max_trafo_loading_diff_pts": 0.0, "day_seconds_pgm": 0.023, "day_seconds_pandapower": 18.93, "speedup": 813.1} | max voltage difference <= 0.1% and at least 10x faster |
+| G1 | Engine parity with pandapower | **pass** | {"max_voltage_diff_pct": 0.0005, "max_voltage_diff_v": 0.001, "max_trafo_loading_diff_pts": 0.0, "day_seconds_pgm": 0.016, "day_seconds_pandapower": 8.53, "speedup": 536.8} | max voltage difference <= 0.1% and at least 10x faster |
 | G2 | Weather-model availability | **pass** | {"models_used": ["gfs_global", "icon_global", "gem_global", "meteofrance_arpege_world", "ecmwf_ifs025"], "dropped": ["jma_gsm", "ukmo_global_deterministic_10km"]} | >= 95% non-null hours from the first valid hour and in the test year, per model |
 | G3 | Solar v2 beats Round 1 | **pass** | {"mae_p50": 0.0329, "round1_mae": 0.0396, "coverage_80": 0.794, "wis": 0.0214} | MAE below 0.0396 kW/kWp on the identical 2025 daylight mask |
 | G4 | Demand v2 skill and coverage | **fail** | {"skill_vs_best_baseline": 0.084, "coverage_80": 0.833} | skill >= 10% against the best baseline and coverage 78-82% (strict variant, Mathura 2021) |

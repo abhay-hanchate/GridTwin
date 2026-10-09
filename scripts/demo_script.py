@@ -39,6 +39,12 @@ def _verdict(fixes: dict) -> str:
     return f"**No safe action** - {v['message'].split('.', 1)[1].strip()}" + (f" Still needs: {v['still_needs']}." if v.get("still_needs") else "")
 
 
+def peak_time(risk: dict) -> str:
+    """Time of day with the highest chance of unsafe voltage (read from the result, not assumed)."""
+    p = risk["p_unsafe"]
+    return risk["t"][max(range(len(p)), key=p.__getitem__)]
+
+
 def build() -> str:
     index = _load(V2 / "index.json")
     gates = {g["gate"]: g for g in _load(ROOT / "data" / "results" / "results.json")["gates"]}
@@ -65,7 +71,8 @@ def build() -> str:
         "",
         f"- Rule selector on **UP Supply Code (+/-6%)**. Level **{sun_up['level'].upper()}** from {sun_up['first_act']}; "
         f"{_hours(sun_up)} unsafe.",
-        f"- Say: risk peaks in the **morning**, not at noon - the grid already arrives high, and solar adds to it.",
+        f"- Switch to +/-10% for a moment to show the shape: the chance of unsafe voltage is highest around "
+        f"**{peak_time(sun_10)}** ({max(sun_10['p_unsafe']):.0%}), against {sun_10['p_unsafe'][48]:.0%} at 12:00.",
         f"- Point at the calibration note: the chances are *{'better than the historical average' if sun_up['calibration']['reliable'] else 'not yet calibrated'}* under this rule.",
         "",
         "## 2. Switch the rule to +/-10% (30 s)",
@@ -86,8 +93,11 @@ def build() -> str:
     ]
     if room:
         def kw(phases: dict) -> str:
-            return ", ".join("{} {:g} kW".format(p, v["no_worse_kw"]) for p, v in phases.items())
-        lines += [f"- Headroom on the far end of the street: {kw(far)}; near the transformer: {kw(near)}.",
+            # 60 kW is the top of the search (engine.headroom max_kw): reaching it means "at least 60 kW"
+            return ", ".join("{} {}{:g} kW".format(p, "" if v["no_worse_kw"] < 60 else "at least ", v["no_worse_kw"])
+                             for p, v in phases.items())
+        lines += [f"- Extra rooftop solar the street can take with {room['adoption']:.0%} of homes already on solar "
+                  f"(no step made worse): far end {kw(far)}; next to the transformer {kw(near)}.",
                   "- Say: the place **and the phase** decide; a flat state cap cannot see either."]
     if host:
         a, b = host["without_fix"]["adoption_share"], host["with_volt_var"]["adoption_share"]

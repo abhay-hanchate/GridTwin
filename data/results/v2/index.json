@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-10-09T13:57:22.630523+00:00",
- "code_version": "598a51478206",
+ "generated_at": "2026-10-09T14:39:15.662189+00:00",
+ "code_version": "fcd030a4e165",
  "demo_dates": {
   "sunny": "2025-05-15",
   "mixed": "2025-11-19",
@@ -11,7 +11,7 @@
    "route": "risk",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "risk_48a7fb1fb7b64040faab",
+   "key": "risk_aacd7f000a19f71a9c3e",
    "network": "benchmark_250",
    "rule": "pm10",
    "fix": "none"
@@ -20,7 +20,7 @@
    "route": "fixes",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "fixes_ccc9cecd876895aa362b",
+   "key": "fixes_8bc4b33bf017a5245192",
    "network": "benchmark_250",
    "rule": "pm10"
   },
@@ -28,7 +28,7 @@
    "route": "headroom",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "headroom_0b4e4a0b46638830754c",
+   "key": "headroom_6491d25f0040e010e4aa",
    "network": "benchmark_250",
    "rule": "pm10",
    "adoption": 0.3
@@ -37,7 +37,7 @@
    "route": "hosting",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "hosting_8e72a1cce3a78dc5cbda",
+   "key": "hosting_c93841252fb8242a9fbc",
    "network": "benchmark_250",
    "rule": "pm10"
   },
@@ -45,7 +45,7 @@
    "route": "risk",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "risk_c0e47422a1de4f651fd6",
+   "key": "risk_4ae1a12143303897f447",
    "network": "benchmark_250",
    "rule": "up_2005",
    "fix": "none"
@@ -54,7 +54,7 @@
    "route": "fixes",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "fixes_5d8fc72dae4b84310a04",
+   "key": "fixes_d0925ff986ff2093cf93",
    "network": "benchmark_250",
    "rule": "up_2005"
   },
@@ -62,7 +62,7 @@
    "route": "headroom",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "headroom_8a335183b24e29e5450f",
+   "key": "headroom_bbc87dc275234c434c74",
    "network": "benchmark_250",
    "rule": "up_2005",
    "adoption": 0.3
@@ -71,7 +71,7 @@
    "route": "hosting",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "hosting_21db26fc6d21d1362ece",
+   "key": "hosting_8cfe277b2d32edfbae78",
    "network": "benchmark_250",
    "rule": "up_2005"
   },
@@ -79,7 +79,7 @@
    "route": "risk",
    "date": "2025-11-19",
    "day_type": "mixed",
-   "key": "risk_9221671271c6ade33a11",
+   "key": "risk_b9895bf524b562982442",
    "network": "benchmark_250",
    "rule": "pm10",
    "fix": "none"
@@ -88,7 +88,7 @@
    "route": "fixes",
    "date": "2025-11-19",
    "day_type": "mixed",
-   "key": "fixes_d7fe210286d4e4e92fb4",
+   "key": "fixes_bb824675891f5325d6ca",
    "network": "benchmark_250",
    "rule": "pm10"
   },
@@ -96,7 +96,7 @@
    "route": "risk",
    "date": "2025-11-19",
    "day_type": "mixed",
-   "key": "risk_6a516cc17f5be71eedbd",
+   "key": "risk_d37f08364e4c503851f7",
    "network": "benchmark_250",
    "rule": "up_2005",
    "fix": "none"
@@ -105,7 +105,7 @@
    "route": "fixes",
    "date": "2025-11-19",
    "day_type": "mixed",
-   "key": "fixes_8a418fd68d276b3f5582",
+   "key": "fixes_6b1dbcead8674dc04ddd",
    "network": "benchmark_250",
    "rule": "up_2005"
   },
@@ -113,7 +113,7 @@
    "route": "risk",
    "date": "2025-08-05",
    "day_type": "cloudy",
-   "key": "risk_a774308fa917f7ecc166",
+   "key": "risk_45c5ca228719b4b51f36",
    "network": "benchmark_250",
    "rule": "pm10",
    "fix": "none"
@@ -122,7 +122,7 @@
    "route": "fixes",
    "date": "2025-08-05",
    "day_type": "cloudy",
-   "key": "fixes_c78157bd60ba3d177fb5",
+   "key": "fixes_748f9847791d7fc08223",
    "network": "benchmark_250",
    "rule": "pm10"
   },
@@ -130,7 +130,7 @@
    "route": "risk",
    "date": "2025-08-05",
    "day_type": "cloudy",
-   "key": "risk_7d8697c7c52ede4fe6b8",
+   "key": "risk_1d9846f338bae027e277",
    "network": "benchmark_250",
    "rule": "up_2005",
    "fix": "none"
@@ -139,7 +139,7 @@
    "route": "fixes",
    "date": "2025-08-05",
    "day_type": "cloudy",
-   "key": "fixes_a92e958411ca9e092de7",
+   "key": "fixes_2da8eb1880ace81ba36b",
    "network": "benchmark_250",
    "rule": "up_2005"
   }

@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-10-09T13:58:46.831993+00:00",
- "git_hash": "9afca95",
+ "generated_at": "2026-10-09T14:39:38.908432+00:00",
+ "git_hash": "b58e194",
  "summary": {
   "pass": 4,
   "fail": 2,
@@ -18,9 +18,9 @@
     "max_voltage_diff_pct": 0.0005,
     "max_voltage_diff_v": 0.001,
     "max_trafo_loading_diff_pts": 0.0,
-    "day_seconds_pgm": 0.023,
-    "day_seconds_pandapower": 18.93,
-    "speedup": 813.1
+    "day_seconds_pgm": 0.016,
+    "day_seconds_pandapower": 8.53,
+    "speedup": 536.8
    },
    "threshold": "max voltage difference <= 0.1% and at least 10x faster",
    "provenance": "benchmark: SimBench street, 15 May 2019",
@@ -202,7 +202,7 @@
    "up_2005": "No safe action: every option leaves violations. Closest is 'Tap +1, Volt/VAR and per-house export limits' with 12 unsafe steps. The limit that stops it: voltage fell to 214 V against a 216 V limit in 7 steps."
   },
   "demo": {
-   "code_version": "598a51478206",
+   "code_version": "fcd030a4e165",
    "results": [
     {
      "route": "risk",

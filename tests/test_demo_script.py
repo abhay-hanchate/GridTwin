@@ -4,8 +4,11 @@ from scripts import demo_script
 
 
 def _risk(level, first, mean, reliable):
+    p = [0.1] * 96
+    p[36] = 0.9                                           # 09:00 is the riskiest quarter hour
     return {"level": level, "first_act": first, "expected_unsafe_hours": {"mean": mean, "p10": mean - 2, "p90": mean + 2},
-            "calibration": {"reliable": reliable}}
+            "calibration": {"reliable": reliable}, "p_unsafe": p,
+            "t": [f"{i // 4:02d}:{i % 4 * 15:02d}" for i in range(96)]}
 
 
 def test_script_reads_every_number_from_the_results(tmp_path, monkeypatch):
@@ -37,3 +40,4 @@ def test_script_reads_every_number_from_the_results(tmp_path, monkeypatch):
     assert "Tap +1 with IEEE 1547 Volt/VAR" in text and "**No safe action**" in text and "heavier conductor" in text
     assert "about 16.7 hours" in text and "0.001 V" in text and "813 times" in text and "-5.46" in text
     assert "G8 fail" in text and "not yet calibrated" in text
+    assert "around **09:00** (90%), against 10% at 12:00" in text            # computed from the curve, not asserted
