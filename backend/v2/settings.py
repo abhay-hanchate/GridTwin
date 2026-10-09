@@ -1,7 +1,7 @@
 """Environment settings for API v2 (plan section 13). Every variable is optional; defaults suit local development."""
 from __future__ import annotations
 
-import subprocess
+import hashlib
 from functools import lru_cache
 from pathlib import Path
 
@@ -9,14 +9,25 @@ from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ROOT = Path(__file__).resolve().parents[2]
+RESULT_SOURCES = ("engine", "backend/v2/compute.py")
+CRLF, LF = bytes([13, 10]), bytes([10])
 
 
-def _git_version() -> str:
-    try:
-        return subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, text=True,
-                                       stderr=subprocess.DEVNULL).strip()
-    except (OSError, subprocess.CalledProcessError):
-        return "unknown"
+def results_version(root: Path = ROOT) -> str:
+    """Hash of the code and rule data that produce the numbers (engine/ and the compute module).
+
+    Used in every cache key: a change to that code invalidates cached results, while a docs or UI commit does not.
+    Line endings are normalised so Windows and Linux checkouts agree.
+    """
+    digest = hashlib.sha256()
+    for source in RESULT_SOURCES:
+        base = root / source
+        files = sorted(base.rglob("*")) if base.is_dir() else [base]
+        for f in files:
+            if f.is_file() and f.suffix in (".py", ".json") and "__pycache__" not in f.parts:
+                digest.update(f.relative_to(root).as_posix().encode())
+                digest.update(f.read_bytes().replace(CRLF, LF))
+    return digest.hexdigest()[:12]
 
 
 class Settings(BaseSettings):
@@ -30,7 +41,7 @@ class Settings(BaseSettings):
     offline: bool = False                                  # serve only the bundled precomputed results
     log_level: str = "INFO"
     rule_default: str = "up_2005"
-    code_version: str = Field(default_factory=_git_version)  # part of every cache key
+    code_version: str = Field(default_factory=results_version)  # part of every cache key
     max_body_bytes: int = 1_000_000
     rate_limit_per_minute: int = 30
     rate_limited_paths: tuple[str, ...] = ("/whatif", "/connection-check")
