@@ -3,9 +3,9 @@
 Usage:  python -m scripts.monitor [--as-of YYYY-MM-DD]      (run nightly, after the forecast is logged)
 
 - The nightly run logs every issued forecast with the conformal width it used (`log_forecast`).
-- The width is re-estimated from the *raw* intervals (the logged width removed again) over the last
-  `conformal_window_days` (from the solar v2 manifest, chosen by the bake-off) and written to
-  data/monitor/conformal_state.json, which ml.live_solar_v2 reads.
+- The widths are re-estimated from the *raw* intervals (the logged width removed again): one per season from every
+  earlier logged day of that season (the shipped method), plus one over the last `conformal_window_days` as the
+  fallback; both go to data/monitor/conformal_state.json, which ml.live_solar_v2 reads.
 - data/monitor/WARN is written when coverage over 14 days leaves 70 to 90% or MAE rises more than 25% above the
   model card baseline (the manifest's 2025 MAE); it is removed again when both are healthy.
 
@@ -24,6 +24,7 @@ import pandas as pd
 import requests
 
 from engine import config, profiles
+from ml import solar_v2
 from ml.conformal import conformal_q
 
 MONITOR_DIR = config.ROOT / "data" / "monitor"
@@ -72,6 +73,19 @@ def conformal_width(log: pd.DataFrame, truth: pd.Series, *, as_of: date, window_
     return round(conformal_q(raw[sel], y[sel], ALPHA), 6)
 
 
+def season_widths(log: pd.DataFrame, truth: pd.Series, *, as_of: date) -> dict:
+    """One width per season from every earlier logged day of that season (the shipped interval method)."""
+    _, raw, y = _paired(log, truth)
+    earlier = raw.index < pd.Timestamp(as_of)
+    seasons = pd.Series(solar_v2.season_of_index(raw.index), index=raw.index)
+    out = {}
+    for s in sorted(seasons[earlier].unique()):
+        sel = earlier & (seasons == s).to_numpy()
+        if sel.sum() >= MIN_POINTS:
+            out[s] = round(conformal_q(raw[sel], y[sel], ALPHA), 6)
+    return out
+
+
 def recent_scores(log: pd.DataFrame, truth: pd.Series, *, as_of: date, days: int = COVERAGE_DAYS) -> dict:
     issued, _, y = _paired(log, truth)
     sel = _between(issued.index, as_of, days)
@@ -86,9 +100,11 @@ def run_checks(log: pd.DataFrame, truth: pd.Series, *, as_of: date, baseline_mae
                out_dir: Path = MONITOR_DIR) -> dict:
     out_dir.mkdir(parents=True, exist_ok=True)
     q = conformal_width(log, truth, as_of=as_of, window_days=window_days)
+    q_by_season = season_widths(log, truth, as_of=as_of)
     if q is not None:      # too little history keeps whatever width was there (state file or manifest)
         (out_dir / "conformal_state.json").write_text(json.dumps(
-            {"q": q, "as_of": as_of.isoformat(), "window_days": window_days}, indent=2), encoding="utf-8")
+            {"q": q, "q_by_season": q_by_season, "as_of": as_of.isoformat(), "window_days": window_days}, indent=2),
+            encoding="utf-8")
     s = recent_scores(log, truth, as_of=as_of)
     reasons = []
     if s["n"] >= MIN_POINTS:
@@ -103,7 +119,7 @@ def run_checks(log: pd.DataFrame, truth: pd.Series, *, as_of: date, baseline_mae
         warn.write_text(f"solar forecast drift as of {as_of.isoformat()}\n" + "\n".join(reasons) + "\n", encoding="utf-8")
     elif warn.exists():
         warn.unlink()
-    return {"as_of": as_of.isoformat(), "q": q, "coverage_14d": s["coverage"], "mae_14d": s["mae"], "n_14d": s["n"],
+    return {"as_of": as_of.isoformat(), "q": q, "q_by_season": q_by_season, "coverage_14d": s["coverage"], "mae_14d": s["mae"], "n_14d": s["n"],
             "warn": bool(reasons), "reasons": reasons}
 
 

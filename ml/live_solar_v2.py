@@ -68,12 +68,20 @@ def frames_from_payload(payload: dict, target: date, models: tuple[str, ...] = s
     return frames
 
 
-def _conformal_q(manifest: dict, state_path: Path) -> tuple[float, str]:
+def _conformal_q(manifest: dict, state_path: Path, target: date | None = None) -> tuple[float, str]:
+    """Interval width and where it came from: the monitor's width for the target day's season, the monitor's recent
+    width, the manifest's width for that season, or the manifest's single width (in that order)."""
+    season = solar_v2.season_of_index(pd.DatetimeIndex([pd.Timestamp(target)]))[0] if target else None
     try:
         state = json.loads(state_path.read_text(encoding="utf-8"))
+        if season and season in state.get("q_by_season", {}):
+            return float(state["q_by_season"][season]), f"monitor state for {season} from {state['as_of']}"
         return float(state["q"]), f"monitor state from {state['as_of']}"
-    except (OSError, ValueError, KeyError):
-        return float(manifest["conformal_q"]), "manifest value from the end of the training year"
+    except (OSError, ValueError, KeyError, TypeError):
+        pass
+    if season and season in manifest.get("conformal_q_by_season", {}):
+        return float(manifest["conformal_q_by_season"][season]), f"manifest value for {season} (per-season width)"
+    return float(manifest["conformal_q"]), "manifest value from the end of the training year"
 
 
 def predict_live(frames: dict[str, pd.DataFrame], target: date, model_dir: Path = MODEL_DIR,
@@ -101,7 +109,7 @@ def predict_live(frames: dict[str, pd.DataFrame], target: date, model_dir: Path 
     out[:] = np.sort(out.to_numpy(), axis=1)
     out = out.add(X["pv_mean"], axis=0).clip(lower=0)
     out[~day] = 0.0
-    q_width, source = _conformal_q(manifest, state_path)
+    q_width, source = _conformal_q(manifest, state_path, target)
     out.loc[day, "p10"] = (out.loc[day, "p10"] - q_width).clip(lower=0)
     out.loc[day, "p90"] = out.loc[day, "p90"] + q_width
     out = out.clip(upper=1.0)

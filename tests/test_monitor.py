@@ -94,3 +94,17 @@ def test_log_forecast_replaces_a_day_instead_of_duplicating_it(tmp_path):
     monitor.log_forecast(first.assign(p50=0.25), 0.03, path)
     log = pd.read_parquet(path)
     assert len(log) == 96 and log["p50"].iloc[0] == 0.25 and log["q_used"].iloc[0] == 0.03
+
+
+def test_state_holds_one_width_per_season_from_all_earlier_days_of_that_season(tmp_path):
+    summer_log, summer_truth = _history(30, noise=0.02, seed=1)                 # August: monsoon, small errors
+    autumn_log, autumn_truth = _history(30, noise=0.10, seed=2)                 # shifted to October: post-monsoon
+    shift = pd.Timedelta(days=61)
+    autumn_log.index += shift
+    autumn_truth.index += shift
+    log = pd.concat([summer_log, autumn_log])
+    truth = pd.concat([summer_truth, autumn_truth])
+    out = monitor.run_checks(log, truth, as_of=date(2026, 11, 1), baseline_mae=0.05, window_days=30, out_dir=tmp_path)
+    by_season = json.loads((tmp_path / "conformal_state.json").read_text())["q_by_season"]
+    assert set(by_season) == {"monsoon", "post_monsoon"} and out["q_by_season"] == by_season
+    assert by_season["post_monsoon"] > by_season["monsoon"]
