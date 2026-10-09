@@ -1,0 +1,60 @@
+{
+  "model_type": "LightGBM residual quantiles over a multi-NWP physical ensemble, rolling split-conformal",
+  "model_version": "2.0.0",
+  "quantiles": [
+    "p10",
+    "p50",
+    "p90"
+  ],
+  "model_files": {
+    "p10": "solar_v2_p10.txt",
+    "p50": "solar_v2_p50.txt",
+    "p90": "solar_v2_p90.txt"
+  },
+  "model_sha256": {
+    "p10": "1c46aa531514e9adcfb2c8ff4ea35bcca46e66e28d3a5db42d6d88d11c503544",
+    "p50": "cbce4d7f16f35f10c6d9bc465fa7223ea50db6b87c25cd26f9f9e60007b19a4a",
+    "p90": "bb7b38dde5eac43dd3f70839a27c99b3cb146e9a6c22887af7b4dacfebe843d3"
+  },
+  "nwp_models": [
+    "gfs_global",
+    "icon_global",
+    "gem_global",
+    "meteofrance_arpege_world",
+    "ecmwf_ifs025"
+  ],
+  "conformal_window_days": 30,
+  "conformal_q": 0.023931,
+  "feature_names": [
+    "pv_mean",
+    "pv_min",
+    "pv_max",
+    "pv_std",
+    "ghi_mean",
+    "cloud_mean",
+    "clearsky_ghi",
+    "hour",
+    "doy",
+    "n_models"
+  ],
+  "truth": "ERA5 reanalysis through pvlib PVWatts (reference proxy, not measured rooftop PV)",
+  "scores_2025": {
+    "n": 4414,
+    "mae_p50": 0.0329,
+    "p10_p90_coverage": 0.799,
+    "wis": 0.0213,
+    "mae_persistence": 0.0456,
+    "skill_vs_persistence": 0.279,
+    "mae_physics_only_best_match": 0.0411,
+    "skill_vs_physics_only_best_match": 0.199,
+    "mae_physics_only_ensemble": 0.0335,
+    "skill_vs_physics_only_ensemble": 0.019,
+    "gate_g3_passes": true,
+    "interval_without_conformal": 0.518
+  },
+  "limitations": [
+    "Coverage is tuned to the ERA5-driven proxy, not to rooftop meters.",
+    "Open-Meteo previous-runs history for some models starts in 2024 only.",
+    "conformal_q is the value at the end of the training year; the nightly monitor refreshes it."
+  ]
+}
