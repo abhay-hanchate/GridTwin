@@ -90,7 +90,8 @@ SECRET = re.compile(rb"sk-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*
 
 
 def test_the_secret_pattern_catches_the_usual_shapes():
-    assert SECRET.search(b"key = sk-" + b"a" * 30) and SECRET.search(b"-----BEGIN RSA PRIVATE KEY-----")
+    # built from parts so this file does not match its own scan
+    assert SECRET.search(b"key = sk-" + b"a" * 30) and SECRET.search(b"-----BEGIN RSA " + b"PRIVATE KEY-----")
     assert not SECRET.search(b"sk-short and AKIA-not-a-key")
 
 
