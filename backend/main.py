@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Literal
 
 import pandas as pd
-from fastapi import FastAPI, HTTPException, Query 
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -24,6 +24,7 @@ from engine import config  # noqa: E402
 from engine.grid import build_grid, topology  # noqa: E402
 from engine.hosting_capacity import estimate_hosting_capacity  # noqa: E402
 from engine.ranking import evaluate_actions  # noqa: E402
+from engine.rules import get_rule, load_rules  # noqa: E402
 from engine.scenarios import DEFAULT_DATE, SCENARIOS, run_scenario  # noqa: E402
 from engine.simulate import ACTIONS_BY_ID, simulate_fix  # noqa: E402
 from ml.early_warning import DEFAULT_FORECAST_DATE, early_warning, forecast_sim, live_warning  # noqa: E402
@@ -134,12 +135,22 @@ def actions(scenario: str = "S4", date: Date = Date.fromisoformat(DEFAULT_DATE))
 
 
 @app.get("/api/hosting-capacity")
-def hosting_capacity(date: str = DEFAULT_DATE, band: str = Query("10", pattern="^(10|6)$")):
+def hosting_capacity(date: str = DEFAULT_DATE, band: str = "10"):
     """Estimate solar adoption the feeder can host, with and without the recommended fix."""
+    try:
+        get_rule(band)
+    except KeyError as exc:
+        raise HTTPException(422, str(exc)) from exc
     try:
         return _cached(f"hosting_capacity_{date}_{band}", lambda: estimate_hosting_capacity(date, band))
     except (KeyError, ValueError) as e:
         raise HTTPException(422, f"No complete meter data for {date}: {e}")
+
+
+@app.get("/api/rules")
+def rules():
+    """Every voltage rule the engine can check, with its source and how well it is verified."""
+    return [r.as_dict() for r in load_rules().values()]
 
 
 @lru_cache
