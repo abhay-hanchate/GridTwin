@@ -113,3 +113,16 @@ def test_unknown_forecast_date_is_a_404_with_the_range():
     with pytest.raises(compute.ApiError) as err:
         compute.solar_forecast("2019-01-01")
     assert err.value.status == 404 and "2025" in err.value.message
+
+
+def test_calibration_applies_the_stored_map_and_its_verdict(tmp_path, monkeypatch):
+    import json as _json
+    from engine import config
+    (tmp_path / "data" / "results").mkdir(parents=True)
+    (tmp_path / "data" / "results" / "risk_calibration_pm10.json").write_text(_json.dumps(
+        {"map": {"x": [0.0, 0.5, 1.0], "y": [0.2, 0.8, 1.0]}, "reliable": True,
+         "held_out_test": {"skill_calibrated": 0.12}}))
+    monkeypatch.setattr(config, "ROOT", tmp_path)
+    cal = compute.calibration("pm10", [0.0, 0.25, 1.0])
+    assert cal["calibrated"] == [0.2, 0.5, 1.0] and cal["reliable"] is True and cal["held_out_skill"] == 0.12
+    assert compute.calibration("up_2005", [0.3])["reliable"] is False           # no map for this rule

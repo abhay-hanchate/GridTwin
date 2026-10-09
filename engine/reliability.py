@@ -96,8 +96,10 @@ def brier(pred: np.ndarray, observed: np.ndarray) -> float:
 
 
 def backtest(network: Network, rule: VoltageRule, load_kw: pd.DataFrame, pv: pd.Series, upstream: pd.Series, *,
-             split: str, n_days: int = 40, n_scenarios: int = 30, seed: int = 42, controls: Controls = Controls()) -> dict:
-    """Fit everything on days before `split`, then predict and replay `n_days` evenly spaced later days."""
+             split: str, n_days: int = 40, n_scenarios: int = 30, seed: int = 42, controls: Controls = Controls(),
+             test_end: str | None = None, return_pairs: bool = False) -> dict:
+    """Fit everything on days before `split`, then predict and replay `n_days` evenly spaced days from `split` (up to
+    `test_end` when given). `return_pairs` adds the raw (predicted, observed) step arrays for recalibration."""
     train_loads, train_up = load_kw[load_kw.index < split], upstream[upstream.index < split]
     table = day_table(train_loads, pv[pv.index < split], train_up)
     full = day_table(load_kw, pv, upstream)
@@ -112,7 +114,8 @@ def backtest(network: Network, rule: VoltageRule, load_kw: pd.DataFrame, pv: pd.
         return (len(loads) == SLOTS and int(loads.notna().all().sum()) >= 5 and len(pv.loc[day]) == SLOTS
                 and upstream.loc[day].notna().sum() == SLOTS and upstream.loc[prev].notna().sum() == SLOTS)
 
-    test_days = [d for d in full.index if d >= pd.Timestamp(split) and usable(d)]
+    end = pd.Timestamp(test_end) if test_end else pd.Timestamp.max
+    test_days = [d for d in full.index if pd.Timestamp(split) <= d < end and usable(d)]
     chosen = [test_days[i] for i in np.linspace(0, len(test_days) - 1, min(n_days, len(test_days))).astype(int)]
     predicted, observed, hours_pred, hours_obs = [], [], [], []
     for d in chosen:
@@ -129,7 +132,7 @@ def backtest(network: Network, rule: VoltageRule, load_kw: pd.DataFrame, pv: pd.
     pred, obs = np.array(predicted), np.array(observed)
     base_rate = float(obs.mean())
     b, b_ref = brier(pred, obs), brier(np.full_like(pred, base_rate), obs)
-    return {
+    out = {
         "days": len(chosen), "scenarios_per_day": n_scenarios, "split": split, "rule": rule.id,
         "observed_unsafe_share_of_steps": round(base_rate, 4),
         "brier": round(b, 4), "brier_climatology": round(b_ref, 4),
@@ -139,3 +142,6 @@ def backtest(network: Network, rule: VoltageRule, load_kw: pd.DataFrame, pv: pd.
                          "correlation": round(float(np.corrcoef(hours_pred, hours_obs)[0, 1]), 3) if np.std(hours_obs) > 0 and np.std(hours_pred) > 0 else None},
         "limitation": "Generator conditioned on coarse weather class, month, day type and yesterday's voltage; not live forecasts.",
     }
+    if return_pairs:
+        out["pairs"] = {"predicted": pred, "observed": obs}
+    return out

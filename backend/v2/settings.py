@@ -9,7 +9,8 @@ from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ROOT = Path(__file__).resolve().parents[2]
-RESULT_SOURCES = ("engine", "backend/v2/compute.py")
+RESULT_SOURCES = ("engine", "backend/v2/compute.py", "data/results/risk_calibration_pm10.json",
+                  "data/results/risk_calibration_up_2005.json")
 # Presentation code: changing it never changes a computed number, so it must not invalidate the precomputed results.
 # Routes that do depend on one of these (e.g. /whatif on the registry) add that file's own hash to their cache key.
 NOT_RESULTS = {"engine/registry.py", "engine/explain.py", "engine/report.py", "engine/onboard.py"}
@@ -26,10 +27,10 @@ def results_version(root: Path = ROOT) -> str:
     digest = hashlib.sha256()
     for source in RESULT_SOURCES:
         base = root / source
-        files = sorted(base.rglob("*")) if base.is_dir() else [base]
+        files = sorted(base.rglob("*")) if base.is_dir() else [base] if base.exists() else []
         for f in files:
             rel = f.relative_to(root).as_posix()
-            if rel in NOT_RESULTS or rel.startswith(NOT_RESULTS_DIRS):
+            if rel in NOT_RESULTS or rel.startswith(NOT_RESULTS_DIRS) or rel == "engine/reliability.py":
                 continue
             if f.is_file() and f.suffix in (".py", ".json") and "__pycache__" not in f.parts:
                 digest.update(rel.encode())

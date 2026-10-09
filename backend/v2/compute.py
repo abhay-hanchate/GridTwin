@@ -8,6 +8,7 @@ Scenarios are drawn by the copula generator (engine.scenario_gen) with a fixed s
 """
 from __future__ import annotations
 
+import json
 from functools import lru_cache
 
 import numpy as np
@@ -151,9 +152,21 @@ def risk_payload(date: str, network_id: str, rule_id: str, fix: str | None = Non
         "window_risk": {WINDOW_KEYS[k]: round(v, 3) for k, v in res.window_risk.items()},
         "shares": {SHARE_KEYS[k]: round(v, 3) for k, v in res.shares.items()},
         "n_scenarios": res.n_scenarios, "provenance": PROVENANCE,
-        # The reliability backtest (gate G8) has not passed yet, so the probabilities are not called calibrated.
-        "calibration": {"reliable": False, "raw": p, "calibrated": p},
+        "calibration": calibration(r.id, p),
     }
+
+
+def calibration(rule_id: str, raw: list[float]) -> dict:
+    """Isotonic map from scripts.calibrate_risk when it exists; `reliable` only if it beat the base rate held out."""
+    path = config.ROOT / "data" / "results" / f"risk_calibration_{rule_id}.json"
+    try:
+        cal = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {"reliable": False, "raw": raw, "calibrated": raw, "method": "none (gate G8 not met)"}
+    mapped = np.interp(raw, cal["map"]["x"], cal["map"]["y"])
+    return {"reliable": bool(cal["reliable"]), "raw": raw, "calibrated": [round(float(x), 3) for x in mapped],
+            "method": "isotonic, fitted on 2020-05..12, tested on held-out 2021",
+            "held_out_skill": cal["held_out_test"]["skill_calibrated"]}
 
 
 # ---- /fixes ----------------------------------------------------------------------------------------------------
