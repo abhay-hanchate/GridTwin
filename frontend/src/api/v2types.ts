@@ -73,3 +73,45 @@ export interface Fixes {
   verdict: Verdict
   outcomes: Outcome[]
 }
+
+/** GET /results: data/results/results.json, written by `python -m scripts.evaluate` (P10.4). */
+export type GateStatus = 'pass' | 'fail' | 'conditional' | 'not_run' | 'missing'
+
+export interface Gate {
+  gate: string
+  name: string
+  status: GateStatus
+  passed: boolean | null
+  measured: unknown
+  threshold: string
+  provenance: string
+  source: string
+  command: string
+  note: string
+}
+
+export interface Bakeoff {
+  component: string
+  winner: string | Record<string, string>
+  rule: string
+  split: string
+  git_hash: string
+  source: string
+}
+
+export interface DemoResult {
+  route: string
+  date: string
+  day_type: string
+  rule: string
+  [field: string]: unknown
+}
+
+export interface Results {
+  generated_at: string
+  git_hash: string
+  summary: Record<GateStatus, number>
+  gates: Gate[]
+  bakeoffs: Bakeoff[]
+  headlines: { demo?: { code_version: string; results: DemoResult[] }; [name: string]: unknown }
+}

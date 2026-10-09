@@ -11,11 +11,10 @@ const fromHash = (): Area | null => {
 type Props = {
   render: (area: Area, go: (area: Area) => void) => ReactNode
   initial?: Area
-  banner?: ReactNode
 }
 
 /** The v2 layout: language switch, five areas as WAI-ARIA tabs, one panel. Pages come from `render`. */
-export function Shell({ render, initial = 'home', banner }: Props) {
+export function Shell({ render, initial = 'home' }: Props) {
   // The URL hash names the area (#fixes), so a demo can link straight to a page.
   const [area, setAreaState] = useState<Area>(() => fromHash() ?? initial)
   const setArea = (id: Area) => {
@@ -65,7 +64,6 @@ export function Shell({ render, initial = 'home', banner }: Props) {
           </div>
         </nav>
       </header>
-      {banner}
       <main id="content" tabIndex={-1}>
         <div id="panel" role="tabpanel" aria-labelledby={`area-${area}`}>{render(area, setArea)}</div>
       </main>

@@ -7,7 +7,6 @@
   "shell.running": "Computing… the first run of a new case takes up to a minute.",
   "shell.error": "Could not load: {message}",
   "shell.footer": "Meter data: CEEW smart meters (public domain) · Weather: Open-Meteo · Street layout: SimBench benchmark with Indian overhead wires",
-  "shell.fixtures": "Sample data for building the dashboard. These are not forecasts.",
   "area.home": "Home",
   "area.try": "Try a change",
   "area.fixes": "Fixes",
@@ -38,7 +37,9 @@
   "home.peak": "Highest voltage at any home",
   "home.peak_range": "{p10} to {p90} V (P10 to P90); the rule allows {vmin} to {vmax} V",
   "home.inputs": "Inputs: solar {solar} · demand {demand} · grid voltage {voltage}",
-  "home.uncalibrated": "These chances are not yet calibrated: the reliability check has not confirmed that the stated chances match how often unsafe steps really happen.",
+  "home.anchor": "Forecast level: {note}",
+  "home.uncalibrated": "Not reliable as odds under this rule: on held-out days these chances did no better than the historical average. Use them to see which hours are riskiest.",
+  "home.calibrated": "Checked on held-out days: these chances are slightly better than the historical average. They are a guide, not exact odds.",
   "fixes.recommended": "Recommended",
   "fixes.safe_title": "Safe fix for tomorrow: {label}",
   "fixes.safe_body": "Replayed through the full power flow for every scenario and every quarter hour: no unsafe step remains.",
@@ -74,5 +75,9 @@
   "fixes.col_margin": "Margin, V",
   "fixes.col_limit": "Binding limit",
   "fixes.yes": "Yes",
-  "fixes.no": "No"
+  "fixes.no": "No",
+  "day.label": "Demo day",
+  "day.sunny": "Sunny",
+  "day.cloudy": "Cloudy",
+  "day.mixed": "Mixed"
 }

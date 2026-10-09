@@ -1,5 +1,5 @@
 {
-  "_note": "Hand-made sample in the /api/v2 shape (plan P8.3) for building the dashboard; not a forecast.",
+  "_note": "Hand-made test input in the /api/v2 shape (plan P8.3), covering cases the precomputed demo lacks; not a forecast. Tests only.",
   "date": "2025-05-15",
   "network": "benchmark_250",
   "rule": "pm10",

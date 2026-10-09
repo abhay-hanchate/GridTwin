@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react'
-import { loadFixture } from './fixtures'
 
 /** Typed client for /api/v2. Heavy results come from cache; a cache miss answers with a job to poll. */
 export const V2_BASE = '/api/v2'
 export const POLL_MS = 2000
-/** Build-time switches: VITE_DASHBOARD=v2 shows the v2 layout; VITE_V2_FIXTURES=1 serves hand-made sample JSON. */
+/** Build-time switch: VITE_DASHBOARD=v2 shows the v2 layout. */
 export const V2_DASHBOARD = import.meta.env.VITE_DASHBOARD === 'v2'
-export const FIXTURES = import.meta.env.VITE_V2_FIXTURES === '1'
 
 export type V2Status = 'loading' | 'running' | 'done' | 'error'
 export interface V2State<T> { status: V2Status; data: T | null; error: string | null; jobId: string | null }
@@ -31,7 +29,7 @@ async function fetchJSON(url: string): Promise<unknown> {
   return body
 }
 
-const load = FIXTURES ? loadFixture : fetchJSON
+const load = fetchJSON
 
 const JOB_STATES = ['queued', 'running', 'done', 'failed']
 const isJob = (body: unknown): body is JobBody =>

@@ -1,6 +1,7 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import risk from '../fixtures/v2/risk_sample.json'
+import results from '../fixtures/v2/results.json'
 import rules from '../fixtures/v2/rules_sample.json'
 import { LangProvider } from '../i18n'
 import Home from './Home'
@@ -11,6 +12,7 @@ function serve(overrides: Record<string, unknown> = {}) {
   return vi.spyOn(globalThis, 'fetch').mockImplementation((input) => {
     const url = new URL(String(input), 'http://x')
     if (url.pathname === '/api/v2/rules') return json(rules.rules)
+    if (url.pathname === '/api/v2/results') return json(results)
     if (url.pathname === '/api/v2/risk') return json({ ...risk, rule: url.searchParams.get('rule'), ...overrides })
     return Promise.resolve(new Response('{}', { status: 404 }))
   })
@@ -62,10 +64,37 @@ describe('Home', () => {
     blocks.forEach((b) => expect(b.querySelector('[data-provenance]'), b.getAttribute('data-numbers') ?? '').not.toBeNull())
   })
 
-  it('an uncalibrated risk shows a visible note', async () => {
+  it('chances that failed the held-out check say they are not reliable odds', async () => {
     serve()
     await show()
-    expect(screen.getByRole('note').textContent).toMatch(/not yet calibrated/i)
+    expect(screen.getByRole('note').textContent).toMatch(/no better than the historical average/i)
+  })
+
+  it('chances that passed the held-out check are called slightly better than the historical average, never accurate', async () => {
+    serve({ calibration: { reliable: true, raw: risk.p_unsafe, calibrated: risk.p_unsafe } })
+    await show()
+    const note = screen.getByRole('note').textContent ?? ''
+    expect(note).toMatch(/slightly better than the historical average/i)
+    expect(note).not.toMatch(/accurate/i)
+  })
+
+  it('a live forecast shows its anchor note with the inputs', async () => {
+    serve({ provenance: { ...risk.provenance, anchor: 'pattern only: the UP anchor needs yesterday' } })
+    await show()
+    expect(screen.getByText(/pattern only: the UP anchor needs yesterday/)).toBeTruthy()
+  })
+
+  it('the demo-day selector lists the precomputed days and changes the requested date', async () => {
+    const fetchMock = serve()
+    await show()
+    const riskCalls = () => fetchMock.mock.calls.map((c) => String(c[0])).filter((u) => u.includes('/risk'))
+    const days = screen.getByRole('group', { name: /day/i })
+    expect(within(days).getAllByRole('button').length).toBe(3)
+    // the day the API answered for is the one shown as selected
+    expect(within(days).getByRole('button', { pressed: true }).textContent).toContain('Sunny')
+    fireEvent.click(within(days).getByRole('button', { name: /cloudy/i }))
+    await act(async () => { await new Promise((r) => setTimeout(r, 0)) })
+    expect(riskCalls().at(-1)).toContain('date=2025-08-05')
   })
 
   it('the strip has one bar per 15 minutes and the watch and act lines', async () => {
