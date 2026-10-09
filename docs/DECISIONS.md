@@ -282,3 +282,12 @@ days late, so it could not run live.
 yesterday estimate that exists live (the same-day NWP irradiance) is itself far from the truth (MAE 0.0507 against
 0.0335 for our five-model day-ahead mean; checked for a time shift: none), and Chronos-2 inherits that error. Even
 with the true history it would gain 3.3%, below the 5% bar. Solar v2 stays.
+
+---
+
+## Owner decisions, 9 Oct 2026
+
+- **Gate G4 is not retired.** It stays recorded as failed (`docs/generated/data_v2.md`).
+- **The UP recorder is not scheduled.** `scripts/record_up_demand.py` runs only when started by hand, so the live
+  forecast normally runs without the UP anchor: voltage uses its pattern-only model (36.0% better than climatology
+  in round 2, against 37.1% with the anchor) and every forecast says which model it used.
