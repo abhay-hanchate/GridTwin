@@ -2,7 +2,7 @@
 
 **HackMatrix 5.0 · Track: Energy · ENR-02 — Renewable Distribution Grid Digital Twin**
 
-> This is the complete project document for GridTwin. It is the single source for the Round 1 PPT and the video. It describes the full system we are building. The numbers in §9 are measured on our working Round 1 prototype; every other section describes how the complete system works.
+> This is the complete project document for GridTwin. It describes the full system, now built as **version 2** (tag `v2.0.0`). The v2 results in §9A are read from `data/results/results.json` and the saved demo results in `data/results/v2`; §9B keeps the Round 1 prototype's results for reference. §19–21 are the Round 1 pitch material: for v2 numbers use §9A and [docs/DEMO_SCRIPT.md](DEMO_SCRIPT.md). What changed is in [CHANGELOG.md](../CHANGELOG.md).
 
 ---
 
@@ -41,7 +41,8 @@
 | **Evidence** | Smart meters in 38 Mathura homes read a typical **245.5 V** against a 230 V nominal, and **27.2%** of readings were already above 253 V — **before any rooftop solar**. |
 | **Gap** | Utilities cannot answer: *"If more homes on this street add solar, when will it go unsafe — on voltage or on overload — and what is the cheapest action that keeps it safe all day?"* Commercial planning suites are expensive and not calibrated to Indian low-voltage streets; open-source engines only calculate, they do not forecast or recommend. |
 | **GridTwin** | A computer model of a street's low-voltage network, calibrated with real Indian smart-meter data and Indian overhead-wire values, that (1) **forecasts tomorrow** with an AI that knows its own uncertainty, (2) **turns that forecast into a probability of unsafe voltage or overload**, (3) **tests every corrective action** — transformer tap, smart-inverter curves, battery, feeder switching, limited curtailment — over the whole day with physics, (4) **reports how much solar the street can safely host**, and (5) **says "no safe action" honestly** when nothing works. |
-| **Headline result (prototype, real day)** | Solar on every home: unsafe time rises from **1 h 15 min to 6 h 30 min**, peak **263 V**. Best fix — transformer one notch lower + smart inverters — brings it to **0 min unsafe with 0 kWh solar wasted**. The common approach (throw away 40% of solar) still leaves **3 h 45 min unsafe** and wastes **489 kWh**. Safe solar capacity rises from **30 kW to 297 kW** with two setting changes. |
+| **Headline result (v2, sunny demo day 15 May 2025, modeled)** | Under ±10%: **ACT** from 06:15, about **9 unsafe hours** (7 to 11.8 in 8 of 10 scenarios); the recommended fix is **tap +1 with IEEE 1547 Volt/VAR**. Under Uttar Pradesh's own ±6% rule: about **17.5 unsafe hours** and **no safe action**: the closest option leaves 25 unsafe quarter hours, because evenings fall to **208 V** against a 216 V limit. Hosting capacity rises from **20–50%** of homes to **80–100%** with standard Volt/VAR (±10%). Four gates pass, two fail and are shown as failed (§9A). |
+| **Headline result (Round 1 prototype, real day)** | Solar on every home: unsafe time rises from **1 h 15 min to 6 h 30 min**, peak **263 V**. Best fix — transformer one notch lower + smart inverters — brings it to **0 min unsafe with 0 kWh solar wasted**. The common approach (throw away 40% of solar) still leaves **3 h 45 min unsafe** and wastes **489 kWh**. Safe solar capacity rises from **30 kW to 297 kW** with two setting changes. |
 | **One line** | *GridTwin tells a utility the evening before which streets will go unsafe tomorrow, how likely it is, and the cheapest verified action that keeps them safe without wasting solar.* |
 | **Principle** | **AI predicts, physics decides.** No recommendation is ever made by the ML model alone; every action is replayed through a full AC power flow for all 96 fifteen-minute steps of the day. |
 
@@ -338,7 +339,53 @@ $$|Q^{inv}_{i,t}|\le\sqrt{(S^{inv}_i)^2-(P^{pv}_{i,t})^2},\quad \text{network ra
 
 ## 9. Results
 
-All results in this section are measured on our Round 1 prototype, on a real day (15 May 2019): real Mathura demand and voltage, real weather, the 99-home street with Indian overhead wire, safe band 207–253 V.
+### 9A. Version 2 results
+
+Read from `data/results/results.json` (written by `python -m scripts.evaluate`) and the saved demo results in
+`data/results/v2` (written by `python -m scripts.nightly`). The street is the benchmark 99-home street with homes on
+single phases; demand, solar and grid voltage for the 2025 demo days are modeled.
+
+**Tomorrow's risk and the tournament, sunny demo day (15 May 2025)**
+
+| | ±10% of 230 V | UP Supply Code, ±6% |
+|---|---|---|
+| Level | ACT from 06:15 | ACT from 00:00 |
+| Expected unsafe hours (P10 to P90) | 9.03 (7.0 to 11.75) | 17.52 (14.97 to 20.25) |
+| Peak voltage at any home (P10 to P90) | 261.6 to 272.8 V | 261.6 to 272.8 V |
+| Tournament | Recommended: tap +1 with IEEE 1547 Volt/VAR | No safe action; closest: tap +2 with Volt/VAR, 25 unsafe steps; voltage falls to 208 V against 216 V |
+| Hosting capacity, share of homes (P10 to P90) | 20% to 50%; with Volt/VAR 80% to 100% | 0%; with Volt/VAR 0% to 11% |
+| Extra solar at the far end, no harm, by phase | 4.2 to 7 kW | 0 to 1.4 kW |
+
+Across the three demo days the UP rule gives **no safe action** every time (closest options leave 25, 16 and 34
+unsafe steps on the sunny, cloudy and mixed days); under ±10% a safe fix exists on all three (tap +1 with Volt/VAR,
+Volt/VAR alone, tap +2 with Volt/VAR). On the cloudy day (5 August 2025) the ±10% level is OK.
+
+**Decision gates**
+
+| Gate | Measured | Result |
+|---|---|---|
+| G1 engine parity | 0.001 V (0.0005%) from pandapower; one day in 0.012 s against 7.79 s | pass |
+| G2 weather models | five models used (GFS, ICON, GEM, ARPEGE, IFS) | pass |
+| G3 solar v2 | MAE 0.0329 against Round 1's 0.0396; 79.4% inside the 80% range | pass |
+| G4 demand v2 | skill 8.4% (needed 10%), coverage 83.3% (needed 78–82%) | fail: Round 1's demand model stays |
+| G5 phase-aware engine | every step converges; peak 268.4 to 272.6 V across zero-sequence ratios; 263.1 V if balanced | pass |
+| G6 licences | Open-Meteo free API: non-commercial use only | conditional |
+| G7 measured-plant yield | IEEE DataPort needs a login | not run |
+| G8 risk reliability | ±10%: calibrated Brier skill 0.023 (slightly better than the historical average); ±6%: −5.46 | fail |
+
+**What the numbers say**
+1. **Single-phase homes matter.** The balanced model of Round 1 put the reference-day peak at 263.1 V; with homes on
+   phases it is 268.9 V, and up to 294.1 V if every home sat on one phase.
+2. **The rule a state chooses changes the answer.** The same street and day is fixable under ±10% and not under ±6%.
+3. **Place and phase decide a connection.** Near the transformer each phase takes 60 kW or more under ±10%; at the far
+   end 4.2 to 7 kW, depending on the phase.
+4. **Failures are results.** Demand v2 and risk reliability did not reach their bars; both are shown, not tuned away.
+
+### 9B. Round 1 prototype results (kept for reference)
+
+Measured on the Round 1 prototype on a real day (15 May 2019): real Mathura demand and voltage, real weather, the
+99-home street with Indian overhead wire on a balanced three-phase model, safe band 207–253 V. v2 supersedes the
+fixes, hosting-capacity and forecast numbers below (§9A).
 
 ### 9.1 How solar changes the street
 | Homes with 3 kW rooftop solar | Unsafe time per day | Caused by solar | Highest voltage |
@@ -506,8 +553,8 @@ Every number in the dashboard carries its type — observed, modeled or benchmar
 | Actions | Unsafe time left, solar wasted (kWh), switching count, battery throughput, losses | Before/after over the full day |
 | Forecasts | MAE, skill vs "same as yesterday", P10–P90 coverage | Held-out test periods never used in training or calibration |
 | Warning | Unsafe-duration error, warning-start error, peak-voltage error, unsafe-day precision and recall | Multi-day evaluation over 2025, including cloudy and high-ramp days chosen before seeing the outcome |
-| Risk | Reliability of P(unsafe): of steps given 30%, about 30% should be unsafe | Calibration curve on held-out days |
-| ML shortcut | Voltage error (V), loading error (%), and — decisive — whether its top candidates contain the physics-verified best action | Held-out scenarios; the physics engine is the referee |
+| Risk | Reliability of P(unsafe): of steps given 30%, about 30% should be unsafe | Brier skill against the base rate on held-out 2021 days, after isotonic recalibration (gate G8, §9A) |
+| ML shortcut | Not built in v2: the batch power flow solves a day in about 0.01 s, so a learned stand-in is not needed | — |
 | Robustness | Results under ±10% conductor resistance, forecast error, high upstream voltage, full-output stress | Sensitivity sweeps (§9.4) |
 | Three-phase | Per-phase voltage vs balanced result; hosting capacity balanced vs unbalanced | Same scenarios in both modes |
 

@@ -5,210 +5,191 @@
 
 **HackMatrix 5.0 · Energy track · ENR-02 — Renewable Distribution Grid Digital Twin**
 
-GridTwin is a computer copy of a rural Indian street's electricity network. It shows **when rooftop solar will make voltage unsafe, how much of that is solar's fault, and the cheapest fix that keeps the street safe all day** — and our AI warns a day in advance. It runs on real household electricity use and real measured voltage from smart meters in Mathura, real weather, and a physics-based power-flow engine.
+GridTwin is a day-ahead guard for low-voltage streets with rooftop solar. For tomorrow it gives the **chance of unsafe
+voltage every 15 minutes**, **ranks the fixes that physics confirms are safe** (or says honestly that none is), and
+tells a planner **how much more solar each part of the street and each phase can take**. Every number comes from a
+power-flow run on real Indian smart-meter data and weather forecasts, and carries its provenance: observed, modeled or
+benchmark.
+
+This is **version 2**. What changed since Round 1, including what did not work, is in [CHANGELOG.md](CHANGELOG.md).
 
 ## The problem, in real data
 
-India is putting rooftop solar on 1 crore homes (PM Surya Ghar). At midday, solar makes more power than homes use, so the surplus flows back up the street's wire and **raises** the voltage. Too much voltage damages appliances and makes solar inverters switch off.
-
-Smart meters in 38 Mathura homes (CEEW, 2019) show the street is already close to the edge:
+India is putting rooftop solar on 1 crore homes (PM Surya Ghar). At midday the surplus flows back up the street's
+wire and **raises** the voltage, which damages appliances and trips solar inverters. Smart meters in 38 Mathura homes
+(CEEW, 2019; observed) show streets already at the edge:
 
 | Measured at real homes | Value |
 | --- | --- |
 | Typical voltage (should be 230 V) | **245.5 V** |
-| Time above the 253 V safe limit (+10%) | **27.2%** |
+| Time above 253 V (+10%) | **27.2%** |
+| Time above 244 V (+6%, the UP Supply Code limit) | 54.9% |
 | Time below 207 V (−10%) | 6.1% |
 
-## What GridTwin shows
+## What v2 finds
 
-On a real day (15 May 2019) for a 99-home street with one 250 kVA transformer, safe band 207–253 V:
+On the benchmark street (99 homes on single phases, one 250 kVA transformer) for the sunny demo day, 15 May 2025.
+All values are modeled, from the precomputed results in `data/results/v2`:
 
-| Homes with 3 kW rooftop solar | Unsafe time per day | Caused by solar | Highest voltage |
-| --- | --- | --- | --- |
-| None | 1 h 15 min | 0 | 256 V |
-| 3 in 10 | 3 h | 1 h 45 min | 256 V |
-| 6 in 10 | 4 h | 2 h 45 min | 259 V |
-| Every home | **6 h 30 min** | **5 h 15 min** | **263 V** |
-| Every home, UP Supply Code rule (±6%) | 11 h 45 min | 1 h | 263 V |
-
-**Ten fixes tested, each replayed over the whole day.** Smart inverters follow the IEEE 1547 standard curves; the Round 1 fixed power factor is kept only as a labelled comparison.
-
-| Fix | Unsafe time left | Solar thrown away |
+| | ±10% of 230 V | UP Supply Code, ±6% |
 | --- | --- | --- |
-| **Transformer one notch lower + standard smart inverters** (recommended) | **0 min** | **0 kWh** |
-| Standard smart inverters (IEEE 1547 Volt/VAR) only | 0 min | 0 kWh |
-| Smart inverters with Volt/VAR and Volt/Watt | 0 min | 0.1 kWh |
-| Transformer two notches lower | 45 min (evenings drop to 206 V) | 0 kWh |
-| Transformer one notch lower | 2 h | 0 kWh |
-| Fixed power factor 0.9 (Round 1 setting, not a standard curve) | 2 h 45 min | 0 kWh |
-| Throw away 40% of solar (common today) | 3 h 45 min | 489 kWh |
-| Inverters trim output above 1.06 pu (Volt/Watt only) | 4 h 45 min | 181 kWh |
-| Neighbourhood battery 50 kW | 5 h | 0 kWh |
-| Throw away 20% of solar | 5 h 30 min | 245 kWh |
+| Tomorrow's level | ACT from 06:15 | ACT from 00:00 |
+| Expected unsafe hours (P10 to P90) | 9 (7 to 11.8) | 17.5 (15 to 20.3) |
+| Fix tournament | **Recommended: tap +1 with IEEE 1547 Volt/VAR** | **No safe action.** Closest: tap +2 with Volt/VAR, 25 unsafe quarter hours left; the evening voltage falls to 208 V against the 216 V limit |
+| Hosting capacity, share of homes (P10 to P90) | 20% to 50%; with Volt/VAR 80% to 100% | 0%; with Volt/VAR 0% to 11% |
+| Extra solar a new home can add at the far end (no harm), by phase | 4.2 to 7 kW | 0 to 1.4 kW |
 
-Under the Uttar Pradesh Supply Code rule (±6% of 230 V, 216–244 V; UPERC 2005 as cited by CEEW) **no fix is enough**: the closest, tap +1 with standard Volt/VAR, still leaves 3 h above 244 V (peak 246 V). GridTwin says so and names the limit instead of pretending.
+The UP rule squeezes from both sides: lowering the voltage enough for midday pushes evenings below 216 V, so no
+setting tried is safe all day. The place **and the phase** of a new connection matter as much as its size, which a
+flat state cap cannot see. On the cloudy demo day (5 August) the ±10% level is OK.
 
-**AI early warning:** for 15 May 2025, the forecast predicted **6 h 45 min** of unsafe voltage a day ahead; **7 h** happened.
+## How much to trust it
+
+Every gate is measured by `python -m scripts.evaluate` into [data/results/results.json](data/results/results.json); the
+dashboard's Proof page shows them, failed ones included.
+
+| Gate | What | Result |
+| --- | --- | --- |
+| G1 | Engine matches pandapower (0.001 V apart) and is 647 times faster | pass |
+| G2 | At least three weather models available (five used) | pass |
+| G3 | Solar forecast error 0.0329 against Round 1's 0.0396 | pass |
+| G4 | Demand v2: 8.4% skill, needed 10% | **fail** (Round 1's demand model stays) |
+| G5 | Phase-aware engine converges; peak 268.4 to 272.6 V across zero-sequence assumptions | pass |
+| G6 | Licences: Open-Meteo's free API is non-commercial only | conditional |
+| G7 | Solar yield checked against a measured plant | not run (data needs an IEEE DataPort login) |
+| G8 | Risk probabilities reliable on every rule: ±10% slightly better than the historical average; ±6% not | **fail** |
 
 ## The dashboard
 
-Five dashboard screens that follow the story.
+Five areas, in English and Hindi, usable on a phone:
 
-**1 · The story** — the whole project in four plain steps: the voltage is already too high, solar pushes it over at midday, two cheap settings fix it, and the AI warns a day early.
-
-![The story](docs/images/story.png)
-
-**2 · Live map** — the street coloured by voltage at every point; press play to watch a day. Switch between no solar, 3 in 10 homes, 6 in 10 homes, every home, and the strict rule.
-
-![Live map](docs/images/grid-twin.png)
-
-**3 · Fixes** — the fix simulator plays two maps side by side, without and with the chosen fix, on one clock; a live line says what the fix is doing (for example, inverters absorbing 70 kvar), and impact cards show the before and after. All ten fixes are ranked below.
-
-![Fix simulator](docs/images/fixes.png)
-
-**4 · AI forecast** — how the warning is made, the AI's predicted street next to an ERA5/PVWatts reference simulation, and the separate solar and demand forecast evaluations.
-
-![AI forecast](docs/images/forecast.png)
-
-**5 · Hosting capacity** — how much rooftop solar the feeder can host at 10% adoption steps, with and without the recommended fix. The estimate compares against the existing no-solar voltage baseline and requires the corrected case to be safe all day.
+1. **Home** — tomorrow's risk strip, the one-line answer, expected unsafe hours, the peak voltage against the rule, a
+   rule and demo-day selector, and a printable evening report.
+2. **Try a change** — any mix of changes (panel size, grid voltage, EV charging, heatwave) and fixes, run through the
+   engine; the form is generated from the API's catalogue.
+3. **Fixes** — the ranked tournament with costs, phase moves and per-home export limits, or the honest "No safe
+   action" with the limit that stops it and what it would still need.
+4. **Planning** — headroom per phase and place beside the flat state caps, hosting capacity, and a connection check
+   that approves, approves with conditions or refuses.
+5. **Proof** — every gate, every method bake-off, and what was deliberately not built.
 
 ## How it works
 
 ```mermaid
 flowchart TD
-  A[Real homes<br/>CEEW smart meters] --> E[Computer copy of the street<br/>AC power flow, 96 moments a day]
-  B[Real weather<br/>Open-Meteo + pvlib solar] --> E
-  C[Street layout<br/>SimBench + Indian overhead wires] --> E
-  D[AI forecast<br/>LightGBM on the day-ahead forecast] --> E
-  E --> F[Unsafe time<br/>with vs without solar]
-  E --> G[Fix tournament<br/>7 fixes replayed all day]
-  E --> H[Early warning<br/>a day ahead]
-  F --> I[Dashboard]
-  G --> I
-  H --> I
+  A[CEEW smart meters<br/>2 districts, 2019-2021] --> D[Day-ahead forecasts<br/>solar, demand, grid voltage]
+  B[Open-Meteo<br/>5 weather models] --> D
+  D --> S[Scenario generator<br/>100 correlated days]
+  N[Street<br/>SimBench + IS 398 wires, single-phase homes] --> E
+  S --> E[Batch power flow<br/>power-grid-model, 3 phases + neutral]
+  E --> R[Risk: P unsafe per 15 min]
+  E --> T[Fix tournament]
+  E --> P[Planning: headroom, hosting, connection check]
+  R --> API[API v2] --> UI[Dashboard and evening report]
+  T --> API
+  P --> API
 ```
 
-| Component | What it does | Why it exists |
+| Part | Where | Notes |
 | --- | --- | --- |
-| `engine/profiles.py` | Turns 3-minute meter readings into 15-minute household use and street voltage; models solar with pvlib | The twin must run on real Indian data |
-| `engine/grid.py` | Builds the 99-home street with Indian overhead-wire values and working transformer taps | A public benchmark layout, adapted to Indian conditions |
-| `engine/powerflow.py` | Replays a day in 96 steps, solving the physics at each and flagging unsafe voltage | The core of the twin |
-| `engine/scenarios.py` | Five solar scenarios, each also run without solar | Shows how much unsafe time solar itself causes |
-| `engine/actions.py` | The ten fixes as small functions applied at every step | New fixes plug in without new simulation code |
-| `engine/rules.py`, `engine/voltage_rules.json` | Voltage rules with their source and verification status | Every limit is traceable |
-| `engine/inverters.py` | IEEE 1547 Volt/VAR and Volt/Watt curves and their damped solve | Standard smart-inverter behaviour |
-| `engine/verdict.py` | Names the limit that stops a fix (binding limit) | Honest no-safe-action verdicts |
-| `engine/ranking.py` | Keeps only fixes safe all day, ranks them by solar wasted, battery use and losses, or reports no safe action | Honest, verifiable recommendations |
-| `engine/hosting_capacity.py` | Sweeps solar adoption in 10% steps and checks hosting capacity with and without the recommended fix | Estimates feeder headroom |
-| `engine/simulate.py` | The same day without and with a fix, point by point | Powers the side-by-side simulators |
-| `ml/forecast.py` | LightGBM forecasts of solar and household use with calibrated ranges | The AI layer |
-| `ml/live_forecast.py` | Fetches issue-time Open-Meteo weather and runs the frozen solar ensemble | Operational tomorrow inference |
-| `ml/early_warning.py` | Runs tomorrow's predicted solar through the street | The day-ahead warning |
-| `backend/main.py` | FastAPI service; serves precomputed results instantly | Connects the engine to the dashboard |
-| `frontend/` | React dashboard with the story, live map, fix simulator, forecast and hosting-capacity screens | Understandable by non-engineers |
+| Data and quality checks | `scripts/build_data.py`, `engine/profiles.py` | All six CEEW files; outages and surges treated as missing |
+| Solar forecast v2 | `ml/solar_v2.py`, `ml/live_solar_v2.py` | LightGBM on five weather models, per-season conformal ranges |
+| Demand and voltage for tomorrow | `ml/live_dayahead.py` | Anchored to live UP state demand when recorded, past patterns otherwise |
+| Grid-side voltage | `engine/upstream.py` | Whole-day paths, chosen by a pre-registered bake-off |
+| Scenarios | `engine/scenario_gen.py` | Gaussian copula couples sun, demand and grid voltage |
+| Engine | `engine/solver.py`, `engine/network.py` | Phase-aware batch solver, IEEE 1547 inverters, pandapower cross-check |
+| Violations and verdict | `engine/violations.py`, `engine/verdict.py` | Voltage, loading, neutral, unbalance, solver failure; the binding limit |
+| Risk | `engine/risk.py`, `scripts/calibrate_risk.py` | Watch at 20%, act at 50%; isotonic recalibration |
+| Fixes | `engine/fixes/` | Tap, inverters, export limits, phase moves (CP-SAT), switching, battery |
+| Planning | `engine/headroom.py`, `engine/hosting.py` | Per-phase headroom, probabilistic hosting capacity, connection check |
+| API v2 | `backend/v2/` | Cached results or a background job; offline mode; error model, metrics |
+| Dashboard | `frontend/src/` | React, lazy-loaded pages, English and Hindi |
+| Operations | `scripts/nightly.py`, `scripts/monitor.py`, `.github/workflows/` | Evening precompute, drift monitor, CI |
 
-## AI / ML
+Method choices were written down before each run, with the result kept even where it went against the plan:
+[docs/DECISIONS.md](docs/DECISIONS.md). Model cards: [docs/model_cards/](docs/model_cards/).
 
-| Model | Inputs | Tested on (never seen) | Result |
-| --- | --- | --- | --- |
-| Solar, LightGBM quantile | The weather forecast issued the day before | 2025 | 13% more accurate than "same hour yesterday"; 82% of real values inside the predicted range |
-| Household use, LightGBM quantile | Lagged demand, time, weekday and temperature delayed by at least one day | Nov–Dec 2019 | 0.9% more accurate than "same time yesterday"; 75.3% inside the nominal 80% range |
+## API v2
 
-The AI predicts; physics verifies. Every fix and every warning is checked by a full power-flow simulation. Solar uses genuine day-ahead forecasts scored against an independent ERA5/PVWatts reference proxy. Demand and upstream voltage in the 2025 warning are explicitly labelled same-calendar-day 2019 proxies; the separate demand-model demo does not currently drive that warning. See [`docs/ml.md`](docs/ml.md) for splits, provenance, leakage controls and permitted pitch wording.
-
-## API
+All under `/api/v2` (documentation at `/api/v2/docs`). Slow results answer `202 {"status": "running", "job_id"}`;
+poll `/jobs/{id}`. Errors are always `{"error": {"code", "message", "details"}}`.
 
 | Route | Returns |
 | --- | --- |
-| `/api/insights` | Measured voltage quality from the real meters |
-| `/api/summary` | Headline numbers for every scenario |
-| `/api/scenarios`, `/api/grid` | Scenario list; street layout with coordinates |
-| `/api/run?scenario=S4` | A full simulated day |
-| `/api/actions?scenario=S4` | All ten fixes, ranked, with the binding limit of each |
-| `/api/rules` | Voltage rules with source and verification status |
-| `/api/fix-sim?scenario=S4&action=tap1_volt_var` | The day without and with one fix, step by step |
-| `/api/forecast`, `/api/metrics` | Forecast curves and model scores |
-| `/api/hosting-capacity` | Solar adoption headroom with and without the recommended fix |
-| `/api/model-report?target=solar` | Gain and held-out permutation importance |
-| `/api/early-warning`, `/api/forecast-sim` | Day-ahead prediction vs reference simulation |
-| `/api/live-forecast`, `/api/live-early-warning` | Keyless live tomorrow solar forecast and feeder-risk warning |
-| `/api/readiness` | Required ML/data artifact availability |
+| `GET /risk` | Chance of an unsafe step per 15 minutes, expected unsafe hours, level, calibration |
+| `GET /fixes` | The tournament: ranked safe fixes, or the no-safe-action verdict with the binding limit |
+| `GET /simulate` | The design day without and with one fix |
+| `GET /headroom`, `GET /hosting`, `POST /connection-check` | Planning |
+| `GET /catalog`, `POST /whatif` | Every change and fix with its parameter schema; run any combination |
+| `GET /rules`, `GET /networks` | Voltage rules with source and verification; street archetypes |
+| `GET /results` | Every gate (`results.json`) |
+| `GET /report?lang=en\|hi` | The printable evening report |
+| `GET /health`, `GET /readiness`, `GET /metrics` | Operations |
 
+The Round 1 API (`/api/...`) still runs beside it until the legacy path is removed.
 
 ## Run it
 
-Requires Python 3.12 or 3.13 and Node.js 20.19+ or 22.12+ (Vite 8 requirement).
+Requires Python 3.12 or 3.13 and Node.js 20.19+ or 22.12+.
 
-From the repository root, create a virtual environment and install the Python dependencies. In Windows PowerShell:
+**With Docker (the demo):**
 
-```powershell
+```bash
+docker compose up --build                       # http://localhost:8000, offline: serves the precomputed demo
+GRIDTWIN_OFFLINE=0 docker compose up --build    # also computes requests that were not precomputed (can take minutes)
+```
+
+**From source:**
+
+```bash
 python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
+source .venv/bin/activate            # Windows PowerShell: .\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt -c constraints.txt
+cd frontend && npm ci && VITE_DASHBOARD=v2 npm run build && cd ..   # without VITE_DASHBOARD=v2: the Round 1 dashboard
+uvicorn backend.main:app             # http://127.0.0.1:8000; set GRIDTWIN_OFFLINE=1 to serve only precomputed results
 ```
 
-On Linux or macOS:
+`/api/v2/readiness` answers 200 only when the data the mode needs is present; offline it also checks that the
+precomputed results match the code. After any engine change, run `python -m scripts.nightly` and commit
+`data/results/v2` (see [docs/runbooks/](docs/runbooks/)).
+
+**Rebuild from raw data** (about 1 GB download):
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-```
-
-Build the dashboard with the committed, precomputed results:
-
-```text
-cd frontend
-npm install
-npm run build
-cd ..
-```
-
-Start the API and dashboard from the repository root:
-
-```text
-uvicorn backend.main:app
-```
-
-Open <http://127.0.0.1:8000> in a browser. Keep the terminal running while using the dashboard. You can confirm the API is ready at <http://127.0.0.1:8000/api/health>; it should return `{"status":"ok"}`.
-
-With the virtual environment active and from the repository root, rebuild everything from raw data (about 15 minutes):
-
-```bash
-python scripts/download_data.py    # CEEW smart meters, Open-Meteo weather and forecasts into data/raw (not committed)
-python scripts/build_data.py       # 15-minute profiles into data/processed
-python -m ml.forecast              # train the forecasts, write ml/reports/metrics.json
-python -m ml.explain               # gain + held-out permutation importance
-python -m ml.evaluate_warning      # multi-day warning evaluation; intentionally compute-heavy
-python scripts/precompute.py       # scenarios, fixes, simulators and early warning into data/results
-pytest -q tests
+python scripts/download_data.py      # CEEW meters, Open-Meteo weather and forecasts into data/raw (not committed)
+python scripts/build_data.py         # per-district 15-minute profiles and the quality report
+python -m ml.solar_v2                # solar v2 and gates G2, G3
+python -m ml.live_dayahead           # tomorrow's demand and voltage models
+python -m scripts.nightly            # precompute the demo results
+python -m scripts.evaluate           # every gate into data/results/results.json
+python -m scripts.demo_script        # docs/DEMO_SCRIPT.md from the saved results
 ```
 
 For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn backend.main:app --reload`.
 
-### The v2 dashboard and Docker
+## Limits
 
-The v2 dashboard (Home, Try a change, Fixes, Planning, Proof, in English and Hindi) is built with
-`VITE_DASHBOARD=v2 npm run build`; without that variable the Round 1 dashboard is built. The container builds the v2
-dashboard and serves it with API v2 at <http://localhost:8000>:
-
-```bash
-docker compose up --build                  # offline demo: serves only the precomputed results in data/results/v2
-GRIDTWIN_OFFLINE=0 docker compose up --build   # also computes requests that were not precomputed (can take minutes)
-```
-
-`/api/v2/health` answers while the process runs; `/api/v2/readiness` answers 200 only when the data the mode needs is
-present. The offline demo is valid only for the engine code it was computed with; after an engine change, run
-`python -m scripts.nightly` and commit `data/results/v2` (see `docs/runbooks/cache_corruption.md`).
+- **No real-life check.** No public live household meters exist, so tomorrow's forecasts cannot be scored day by day;
+  the drift monitor checks solar against ERA5 instead.
+- **The street is a benchmark** (SimBench with Indian conductors), not a surveyed feeder, and which phase each home is
+  on is assumed. A utility's own feeder and phase data replace both ([docs/ONBOARDING.md](docs/ONBOARDING.md)).
+- **Short test windows:** the Mathura 2021 file ends on 20 February 2021, so the demand and risk hold-outs cover only
+  winter days.
+- **Live demand and voltage run on past patterns** until the UP state-demand recorder runs daily.
+- **Weather licence:** a utility deployment needs a paid or other licensed weather source (gate G6).
+- All assumptions, with their status: [docs/assumptions.md](docs/assumptions.md). What was deliberately not built is on
+  the Proof page.
 
 ## Quality
 
-- **Tests:** engine, API contracts, simulators and the feature tracker (`pytest -q tests`).
-- **QA plan:** [test plan, manual dashboard checks and defect report format](docs/test-plan.md).
-- **Demo:** [three-minute video script and recording checklist](docs/demo-script.md).
-- **CI:** GitHub Actions runs the tests and the dashboard build on every pull request.
-- **Workflow:** every feature is built on its own branch and merged through a pull request after CI passes.
-- **Feature tracker:** when a pull request is merged, a GitHub Action marks its feature Done in [features.csv](features.csv) and regenerates the table below.
+- **Tests:** about 380 Python tests (engine, API, models, honesty and security) and 72 dashboard tests; `python
+  scripts/check.py` runs lint, tests and the dashboard build like CI.
+- **Honesty rules:** every number on screen comes from `results.json` or an API response; dashboard strings carry
+  numbers only through placeholders; failed gates are shown.
+- **Accessibility:** Lighthouse 100 on all five pages; about 81 KB of JavaScript on first load.
+- **CI:** Python 3.12 and 3.13, the dashboard build and tests, dependency audit; nightly parity and performance tests
+  and the evening precompute.
+- **Demo:** [five-minute demo script](docs/DEMO_SCRIPT.md), generated from the saved results.
 
 ## Features
 
@@ -259,7 +240,7 @@ present. The offline demo is valid only for the engine code it was computed with
 
 | Data | Source | Licence / access |
 | --- | --- | --- |
-| Household use and voltage | [CEEW smart meter data, Mathura](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/GOCHJH) | CC0 |
+| Household use and voltage | [CEEW smart meter data, Mathura and Bareilly](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/GOCHJH) | CC0 |
 | Weather, reanalysis, day-ahead forecasts | [Open-Meteo](https://open-meteo.com/) | CC BY 4.0 data; free API is non-commercial only |
 | Street layout | [SimBench](https://github.com/e2nIEE/simbench) | Database ODbL 1.0, code BSD-3-Clause |
 | Overhead conductor | ACSR Rabbit, IS 398 | Indian standard |
@@ -270,12 +251,9 @@ Every assumption and limitation — what is observed, modeled or benchmark — i
 
 **Licence note (gate G6):** Open-Meteo's free API is for non-commercial use. The demo and research use fit that; a utility deployment must use a paid Open-Meteo plan or another licensed weather source. The full register, including the SimBench ODbL terms for derived networks, is [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md) and [NOTICE](NOTICE).
 
-## Roadmap (finale)
+## Next
 
-Built in Round 1 and shown in the dashboard: hosting capacity (30 kW without a fix, 297 kW with the recommended fix).
-
-
-- Feeder reconfiguration (switching) as a fix
-- Machine-learning shortcut model of the power flow to test hundreds of fixes in milliseconds
-- AI assistant that explains each recommendation in plain language
-- Live deployment with a public link
+- A live deployment with a public link.
+- Gate G7: calibrate solar yield against the measured Karnataka plant once the data is accessible.
+- Record UP state demand daily so tomorrow's demand and voltage forecasts are anchored to it.
+- Remove the Round 1 path and make the v2 dashboard the default build (after the `v2.0.0` tag).
