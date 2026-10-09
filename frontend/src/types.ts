@@ -9,7 +9,7 @@ export interface Scenario {
 }
 
 export interface Violation {
-  type: 'overvoltage' | 'undervoltage' | 'line_overload' | 'trafo_overload'
+  type: 'overvoltage' | 'undervoltage' | 'line_overload' | 'trafo_overload' | 'solver_failure'
   element: string
   id: number
   value: number
