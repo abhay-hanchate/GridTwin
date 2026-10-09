@@ -85,7 +85,7 @@ def test_only_get_and_post_are_allowed(client):
     assert client.put("/whatif", json={}).status_code == 405
 
 
-SECRET = re.compile(rb"sk-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|ghp_[A-Za-z0-9]{36}"
+SECRET = re.compile(rb"(?<![A-Za-z0-9])sk-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|ghp_[A-Za-z0-9]{36}"
                     rb"|AIza[0-9A-Za-z_-]{35}")
 
 
@@ -93,6 +93,8 @@ def test_the_secret_pattern_catches_the_usual_shapes():
     # built from parts so this file does not match its own scan
     assert SECRET.search(b"key = sk-" + b"a" * 30) and SECRET.search(b"-----BEGIN RSA " + b"PRIVATE KEY-----")
     assert not SECRET.search(b"sk-short and AKIA-not-a-key")
+    # "sk-" inside a word is not a key: a news URL ".../blackout-risk-as-bess-projects-..." once matched
+    assert not SECRET.search(b"https://example.com/kseb-faces-blackout-risk-as-bess-projects-lag-1803470")
 
 
 def test_no_secrets_or_env_files_are_tracked():
