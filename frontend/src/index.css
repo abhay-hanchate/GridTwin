@@ -308,3 +308,19 @@ input[type='range']:focus-visible { outline-offset: 4px; }
 .include { display: flex; gap: 6px; align-items: center; font-size: 13px; }
 .whatif-form .primary { justify-self: start; padding: 8px 16px; font: inherit; font-weight: 600; cursor: pointer; }
 .whatif-form .primary:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Planning: hosting capacity bars and the connection decision */
+.hosting-row { margin: 10px 0; }
+.hosting-bar { position: relative; height: 12px; border-radius: 6px; background: var(--line); margin: 6px 0 4px; }
+.hosting-bar .range { position: absolute; top: 0; bottom: 0; border-radius: 6px; background: var(--safe); opacity: .45; min-width: 3px; }
+.hosting-bar .mid { position: absolute; top: -3px; bottom: -3px; width: 3px; margin-left: -1px; background: var(--ink-2); }
+.conn-form { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+.conn-form select { padding: 6px 8px; font: inherit; max-width: 100%; }
+.conn-form .primary { padding: 8px 16px; font: inherit; font-weight: 600; cursor: pointer; }
+.conn-form .primary:disabled { opacity: .5; cursor: not-allowed; }
+.decision { margin-top: 12px; padding: 10px 12px; border-radius: var(--radius); border: 1px solid var(--line); }
+.decision-line { font-weight: 600; margin: 0 0 6px; }
+.decision-approve { border-color: var(--safe); }
+.decision-approve .decision-line { color: var(--safe-text); }
+.decision-refuse { border-color: var(--unsafe); }
+.decision-refuse .decision-line { color: var(--unsafe-text); }

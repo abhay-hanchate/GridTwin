@@ -167,3 +167,37 @@ export interface WhatIfResult {
   before: WhatIfRun
   after: WhatIfRun
 }
+
+export interface Quantiles { p10: number; p50: number; p90: number }
+
+/** GET /headroom (engine.headroom.headroom): extra kW per probe location and phase, beside the flat state caps. */
+export interface HeadroomPhase { no_worse_kw: number; strict_kw: number; binding_limit: BindingLimit | null }
+export interface Headroom {
+  date: string
+  rule: string
+  adoption: number
+  baseline_unsafe_steps: number
+  locations: Record<string, { node: number; phases: Record<string, HeadroomPhase> }>
+  installed_kw: number
+  flat_caps: Record<string, { cap_pct: number; cap_kw: number; installed_share_of_cap: number; tag: string }>
+  provenance: Record<string, string>
+}
+
+/** GET /hosting (engine.hosting.hosting_capacity): share of homes and kW the street takes, over random placements. */
+export interface HostingRun { adoption_share: Quantiles; installed_kw: Quantiles; draws: number; binding: string | null }
+export interface Hosting { date: string; rule: string; without_fix: HostingRun; with_volt_var: HostingRun; provenance: Record<string, string> }
+
+/** POST /connection-check (engine.headroom.check_connection). */
+export interface ConnectionCheck {
+  node: number
+  kw: number
+  count: number
+  phase: string
+  rule: string
+  decision: 'approve' | 'approve_with_conditions' | 'refuse'
+  conditions: string[]
+  binding_limit: BindingLimit | null
+  largest_kw_that_passes?: number
+  evidence: { baseline_unsafe_steps: number; unsafe_steps_with_request: number; worsened_steps: number; per_phase_worsened_steps: Record<string, number> }
+  regulatory_status: string
+}

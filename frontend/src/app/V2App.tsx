@@ -8,9 +8,9 @@ import type { ViewProps } from './view'
 const Home = lazy(() => import('../pages/Home'))
 const Fixes = lazy(() => import('../pages/Fixes'))
 const TryChange = lazy(() => import('../pages/TryChange'))
+const Planning = lazy(() => import('../pages/Planning'))
 // Areas without a v2 page yet show their Round 1 screen, which still talks to the legacy API, so the v2 layout is
 // always demonstrable.
-const CapacityView = lazy(() => import('../components/CapacityView'))
 const ForecastView = lazy(() => import('../components/ForecastView'))
 
 function Page({ area, view }: { area: Area; view: ViewProps }) {
@@ -18,7 +18,7 @@ function Page({ area, view }: { area: Area; view: ViewProps }) {
     case 'home': return <Home {...view} />
     case 'try': return <TryChange {...view} />
     case 'fixes': return <Fixes {...view} />
-    case 'planning': return <CapacityView />
+    case 'planning': return <Planning {...view} />
     case 'proof': return <ForecastView />
   }
 }
