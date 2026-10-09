@@ -59,6 +59,12 @@ input[type='range']:focus-visible { outline-offset: 4px; }
 .tab { border: 0; background: transparent; padding: 8px 14px; border-radius: 9px; color: var(--ink-2); font-weight: 500; }
 .tab.active { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
 
+/* v2 shell */
+.lang-switch { margin-left: auto; }
+.lang-switch .seg { padding: 5px 10px; }
+.areas { flex-basis: 100%; }
+.fixture-banner { margin: 14px 0 0; padding: 8px 12px; border-radius: 10px; background: #fff4e6; border: 1px dashed #d99a1b; font-size: 13px; color: var(--ink-2); }
+
 /* Insight banner */
 .insight {
   margin: 16px 0; padding: 14px 18px; border-radius: var(--radius);
@@ -159,7 +165,7 @@ input[type='range']:focus-visible { outline-offset: 4px; }
   .action > .col { grid-column: 2; }
 }
 @media (max-width: 560px) {
-  .app { padding: 14px 14px 40px; }
+  .app { padding: 14px 16px 40px; }
   .warn-grid, .metrics-row { grid-template-columns: 1fr; }
   .insight { gap: 10px 20px; padding: 12px 14px; }
   .insight .source { margin-left: 0; }

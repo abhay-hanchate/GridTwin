@@ -1,0 +1,16 @@
+{
+  "shell.skip": "Skip to content",
+  "shell.tagline": "Tomorrow's voltage risk on a street with rooftop solar, and the fix that physics confirms.",
+  "shell.language": "Language",
+  "shell.areas": "Areas",
+  "shell.loading": "Loading…",
+  "shell.running": "Computing… the first run of a new case takes up to a minute.",
+  "shell.error": "Could not load: {message}",
+  "shell.footer": "Meter data: CEEW smart meters (public domain) · Weather: Open-Meteo · Street layout: SimBench benchmark with Indian overhead wires",
+  "shell.fixtures": "Sample data for building the dashboard. These are not forecasts.",
+  "area.home": "Home",
+  "area.try": "Try a change",
+  "area.fixes": "Fixes",
+  "area.planning": "Planning",
+  "area.proof": "Proof"
+}
