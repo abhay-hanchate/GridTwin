@@ -57,6 +57,18 @@ def readiness(request: Request) -> dict:
     return {"ready": True, "mode": mode, "checks": checks}
 
 
+@router.get("/results")
+def results(request: Request) -> dict:
+    """Every gate and headline (data/results/results.json, written by python -m scripts.evaluate). Failed gates
+    are included as failed; the Proof page shows them."""
+    import json
+    path = _settings(request).results_dir / "results.json"
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise ApiError(503, "results.json is missing; run python -m scripts.evaluate") from exc
+
+
 @router.get("/metrics", include_in_schema=False)
 def prometheus() -> Response:
     body, content_type = metrics.render()
