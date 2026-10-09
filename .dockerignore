@@ -1,0 +1,25 @@
+# Only what the image needs; never secrets, raw data or local tooling.
+.git
+.github
+.venv
+**/__pycache__
+**/*.pyc
+.pytest_cache
+.ruff_cache
+.kilo
+.playwright-mcp
+.vscode
+.idea
+.env
+**/.env
+research
+docs
+tests
+frontend/node_modules
+frontend/dist
+data/raw
+data/cache
+data/live
+data/monitor
+data/onboarding
+*.zip

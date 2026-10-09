@@ -1,0 +1,24 @@
+# docker compose up --build          -> http://localhost:8000 (offline demo: precomputed results only)
+# GRIDTWIN_OFFLINE=0 docker compose up   -> computes cache misses on demand
+services:
+  gridtwin:
+    build: .
+    image: gridtwin:v2
+    ports:
+      - "8000:8000"
+    environment:
+      GRIDTWIN_OFFLINE: "${GRIDTWIN_OFFLINE:-1}"
+      GRIDTWIN_CORS_ORIGINS: "http://localhost:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    volumes:
+      # results computed on demand and the drift monitor's state survive a restart; the image's precomputed demo
+      # is copied into the volume the first time it is created
+      - results:/app/data/results
+      - monitor:/app/data/monitor
+    restart: unless-stopped
+
+volumes:
+  results:
+  monitor:
