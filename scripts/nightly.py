@@ -74,7 +74,10 @@ def log_live_forecast() -> str:
     target = live.tomorrow_local()
     forecast, source = live.predict_live(live.frames_from_payload(live.fetch_payload(target), target), target)
     manifest = json.loads((live.MODEL_DIR / "solar_v2_manifest.json").read_text(encoding="utf-8"))
-    q_used, _ = live._conformal_q(manifest, live.STATE_PATH)
+    import inspect
+    # Solar v2 on v2/build widens per season and takes the target date; older versions take no date.
+    takes_target = "target" in inspect.signature(live._conformal_q).parameters
+    q_used, _ = live._conformal_q(manifest, live.STATE_PATH, target) if takes_target else         live._conformal_q(manifest, live.STATE_PATH)
     index = pd.date_range(pd.Timestamp(target), periods=len(forecast), freq="15min")
     log_forecast(forecast.set_axis(index), q_used)
     return f"logged {target} ({source})"
