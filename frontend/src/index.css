@@ -63,7 +63,6 @@ input[type='range']:focus-visible { outline-offset: 4px; }
 .lang-switch { margin-left: auto; }
 .lang-switch .seg { padding: 5px 10px; }
 .areas { flex-basis: 100%; }
-.fixture-banner { margin: 14px 0 0; padding: 8px 12px; border-radius: 10px; background: #fff4e6; border: 1px dashed #d99a1b; font-size: 13px; color: var(--ink-2); }
 
 /* Insight banner */
 .insight {
@@ -294,3 +293,50 @@ input[type='range']:focus-visible { outline-offset: 4px; }
 .key-before { background: var(--unsafe); }
 .key-after { background: var(--brand); }
 .key-rule { border-top: 2px dashed var(--ink-2); height: 0; }
+
+/* Try a change: the form generated from /catalog */
+.whatif-form { display: grid; gap: 12px; margin: 12px 0; }
+.param-group { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.param-group h2 { grid-column: 1 / -1; margin: 8px 0 0; font-size: 15px; }
+.param-entry { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; margin: 0; background: var(--surface); }
+.param-entry.on { border-color: var(--ink-3); }
+.param-entry legend { font-weight: 600; padding: 0 4px; }
+.param-entry .muted { margin: 4px 0 8px; font-size: 12.5px; }
+.param { display: grid; gap: 4px; margin-top: 6px; }
+.param label { font-size: 13px; }
+.param input[type=number] { max-width: 160px; padding: 6px 8px; font: inherit; }
+.include { display: flex; gap: 6px; align-items: center; font-size: 13px; }
+.whatif-form .primary { justify-self: start; padding: 8px 16px; font: inherit; font-weight: 600; cursor: pointer; }
+.whatif-form .primary:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Planning: hosting capacity bars and the connection decision */
+.hosting-row { margin: 10px 0; }
+.hosting-bar { position: relative; height: 12px; border-radius: 6px; background: var(--line); margin: 6px 0 4px; }
+.hosting-bar .range { position: absolute; top: 0; bottom: 0; border-radius: 6px; background: var(--safe); opacity: .45; min-width: 3px; }
+.hosting-bar .mid { position: absolute; top: -3px; bottom: -3px; width: 3px; margin-left: -1px; background: var(--ink-2); }
+.conn-form { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+.conn-form select { padding: 6px 8px; font: inherit; max-width: 100%; }
+.conn-form .primary { padding: 8px 16px; font: inherit; font-weight: 600; cursor: pointer; }
+.conn-form .primary:disabled { opacity: .5; cursor: not-allowed; }
+.decision { margin-top: 12px; padding: 10px 12px; border-radius: var(--radius); border: 1px solid var(--line); }
+.decision-line { font-weight: 600; margin: 0 0 6px; }
+.decision-approve { border-color: var(--safe); }
+.decision-approve .decision-line { color: var(--safe-text); }
+.decision-refuse { border-color: var(--unsafe); }
+.decision-refuse .decision-line { color: var(--unsafe-text); }
+
+/* Proof: gate verdicts and measured values */
+.gate-summary { display: flex; flex-wrap: wrap; gap: 8px 16px; list-style: none; padding: 0; margin: 0 0 6px; font-weight: 600; }
+.gate-badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12.5px; font-weight: 600; border: 1px solid var(--line); white-space: nowrap; }
+.gate-pass.gate-badge, .gate-summary .gate-pass { color: var(--safe-text); }
+.gate-fail.gate-badge, .gate-summary .gate-fail { color: var(--unsafe-text); }
+.gate-badge.gate-pass { border-color: var(--safe); }
+.gate-badge.gate-fail { border-color: var(--unsafe); }
+.gate-table td { vertical-align: top; }
+.gate-note { margin: 6px 0 0; font-size: 12.5px; color: var(--ink-2); }
+.measured { margin: 0; display: grid; gap: 2px; font-size: 12.5px; }
+.measured > div { display: flex; flex-wrap: wrap; gap: 0 6px; }
+.measured dt { color: var(--ink-3); }
+.measured dd { margin: 0; }
+.measured .measured { padding-left: 10px; }
+.gate-table code { font-size: 11.5px; overflow-wrap: anywhere; }

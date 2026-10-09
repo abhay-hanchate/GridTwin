@@ -137,7 +137,7 @@ The AI predicts; physics verifies. Every fix and every warning is checked by a f
 
 ## Run it
 
-Requires Python 3.11 and Node.js 20.19+ or 22.12+ (Vite 8 requirement).
+Requires Python 3.12 or 3.13 and Node.js 20.19+ or 22.12+ (Vite 8 requirement).
 
 From the repository root, create a virtual environment and install the Python dependencies. In Windows PowerShell:
 
@@ -185,6 +185,21 @@ pytest -q tests
 ```
 
 For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn backend.main:app --reload`.
+
+### The v2 dashboard and Docker
+
+The v2 dashboard (Home, Try a change, Fixes, Planning, Proof, in English and Hindi) is built with
+`VITE_DASHBOARD=v2 npm run build`; without that variable the Round 1 dashboard is built. The container builds the v2
+dashboard and serves it with API v2 at <http://localhost:8000>:
+
+```bash
+docker compose up --build                  # offline demo: serves only the precomputed results in data/results/v2
+GRIDTWIN_OFFLINE=0 docker compose up --build   # also computes requests that were not precomputed (can take minutes)
+```
+
+`/api/v2/health` answers while the process runs; `/api/v2/readiness` answers 200 only when the data the mode needs is
+present. The offline demo is valid only for the engine code it was computed with; after an engine change, run
+`python -m scripts.nightly` and commit `data/results/v2` (see `docs/runbooks/cache_corruption.md`).
 
 ## Quality
 

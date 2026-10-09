@@ -1,36 +1,36 @@
-import { useState } from 'react'
-import { useV2, v2Path } from '../api/v2'
+import { useV2, V2_BASE, v2Path } from '../api/v2'
 import type { Risk, Rule } from '../api/v2types'
-import { DEFAULT_NETWORK, DEFAULT_RULE } from '../app/defaults'
+import { DEFAULT_NETWORK } from '../app/defaults'
+import { useView, type ViewProps } from '../app/view'
+import Controls from '../components/Controls'
 import Prov from '../components/Prov'
 import RiskStrip from '../components/RiskStrip'
-import RuleSelector from '../components/RuleSelector'
 import Status from '../components/Status'
 import Verdict from '../components/Verdict'
 import { one, stepTime, volts } from '../format'
-import { useT } from '../i18n'
+import { useLang, useT } from '../i18n'
 
 // Watch and act levels of feature D1; the API states the ones it used and these are only the fallback.
 const DEFAULT_THRESHOLDS = { watch: 0.2, act: 0.5 }
 
-type Props = { network?: string; rule?: string; onRule?: (id: string) => void }
-
-/** Tomorrow's risk. The rule can be owned by the caller (shared with Fixes) or by the page itself. */
-export default function Home({ network = DEFAULT_NETWORK, rule: ruleProp, onRule }: Props) {
+/** Tomorrow's risk. The rule and day can be owned by the caller (shared with Fixes) or by the page itself. */
+export default function Home({ network = DEFAULT_NETWORK, ...props }: ViewProps) {
   const t = useT()
-  const [ownRule, setOwnRule] = useState(DEFAULT_RULE)
-  const rule = ruleProp ?? ownRule
-  const setRule = onRule ?? setOwnRule
-  const rules = useV2<Rule[]>('/rules')
-  const risk = useV2<Risk>(v2Path('/risk', { network, rule }))
-  const band = rules.data?.find((r) => r.id === rule)
+  const { lang } = useLang()
+  const view = useView(props, 'risk')
+  const risk = useV2<Risk>(view.ready ? v2Path('/risk', { network, rule: view.rule, date: view.date }) : null)
+  // The printable evening report (F2) for exactly what this page shows: same day, street, rule and language.
+  const report = risk.data && `${V2_BASE}${v2Path('/report', { date: risk.data.date, network, rule: view.rule, lang })}`
 
   return (
     <div className="v2-page">
-      {rules.data ? <RuleSelector rules={rules.data} value={rule} onChange={setRule} /> : <Status state={rules} />}
+      <Controls view={view} answered={risk.data?.date} />
       <Status state={risk} />
-      {risk.data && <RiskView risk={risk.data} band={band} />}
-      {risk.data && !risk.data.calibration?.reliable && <p className="note" role="note">{t('home.uncalibrated')}</p>}
+      {risk.data && <RiskView risk={risk.data} band={view.band} />}
+      {report && <p><a className="report-link" href={report} target="_blank" rel="noopener">{t('home.report')}</a></p>}
+      {risk.data && (
+        <p className="note" role="note">{t(risk.data.calibration?.reliable ? 'home.calibrated' : 'home.uncalibrated')}</p>
+      )}
     </div>
   )
 }
@@ -67,6 +67,7 @@ function RiskView({ risk, band }: { risk: Risk; band?: Rule }) {
       <p className="muted inputs">{t('home.inputs', {
         solar: risk.provenance.solar ?? '', demand: risk.provenance.demand ?? '', voltage: risk.provenance.voltage ?? '',
       })}</p>
+      {risk.provenance.anchor && <p className="muted inputs">{t('home.anchor', { note: risk.provenance.anchor })}</p>}
     </>
   )
 }

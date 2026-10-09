@@ -2,11 +2,16 @@ name: Nightly
 
 on:
   schedule:
-    - cron: "30 20 * * *"
+    - cron: "30 20 * * *"      # 02:00 IST: parity and performance
+    - cron: "0 13 * * *"       # 18:30 IST: the evening run (P10.5)
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   parity-and-perf:
+    if: github.event.schedule != '0 13 * * *'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,3 +21,72 @@ jobs:
           cache: pip
       - run: pip install -r requirements-dev.txt -c constraints.txt
       - run: pytest -q -m "perf" tests/test_performance.py tests/test_solver_parity.py
+
+  evening:
+    # Precompute what the dashboard serves, log tomorrow's live solar forecast and run the drift monitor.
+    # Outputs are uploaded as an artifact; the drift monitor's history persists between runs in the Actions cache.
+    if: github.event.schedule == '0 13 * * *' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt -c constraints.txt
+      - name: Restore the drift monitor's history
+        uses: actions/cache/restore@v4
+        with:
+          path: data/monitor
+          key: monitor-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: monitor-
+      - name: Is the committed offline demo current?
+        # GRIDTWIN_OFFLINE=1 serves only results whose cache key matches the current engine code.
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from backend.v2.settings import results_version
+          index = Path("data/results/v2/index.json")
+          committed = json.loads(index.read_text())["code_version"] if index.exists() else None
+          current = results_version()
+          if committed != current:
+              print(f"::warning::the committed offline demo was computed for engine {committed}, the code is {current}: "
+                    "run python -m scripts.nightly and commit data/results/v2")
+          else:
+              print(f"offline demo is current ({current})")
+          PY
+      - name: Precompute the demo and log tomorrow's solar forecast
+        run: python -m scripts.nightly
+      - name: Drift monitor
+        run: python -m scripts.monitor
+      - name: Show a drift warning
+        # the monitor writes data/monitor/WARN and exits 0 on drift; make it visible in the run summary
+        if: success()
+        run: |
+          if [ -f data/monitor/WARN ]; then echo "::warning::drift: $(head -1 data/monitor/WARN)"; fi
+      - name: Write WARN
+        if: failure()
+        run: |
+          mkdir -p data/monitor
+          echo "nightly run failed: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> data/monitor/WARN
+          echo "::error::nightly run failed; data/monitor/WARN written"
+      - name: Save the drift monitor's history
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: data/monitor
+          key: monitor-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Upload the evening results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evening-${{ github.run_id }}
+          path: |
+            data/results/v2
+            data/monitor
+          if-no-files-found: ignore
+          retention-days: 14

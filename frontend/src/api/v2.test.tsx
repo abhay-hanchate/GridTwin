@@ -2,8 +2,8 @@ import { act, cleanup, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { v2Path, useV2 } from './v2'
 
-function Probe({ path }: { path: string | null }) {
-  const s = useV2<{ answer: number }>(path)
+function Probe({ path, body }: { path: string | null; body?: string }) {
+  const s = useV2<{ answer: number }>(path, body)
   return <p>{s.status}{s.data ? ` ${s.data.answer}` : ''}{s.error ? ` ${s.error}` : ''}</p>
 }
 
@@ -64,6 +64,22 @@ describe('useV2', () => {
     unmount()
     await act(async () => { await vi.advanceTimersByTimeAsync(10000) })
     expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('a body makes it a JSON POST; the job it starts is polled with GET', async () => {
+    const fetchMock = vi.spyOn(globalThis, 'fetch')
+      .mockImplementationOnce(() => json({ status: 'running', job_id: 'j4' }))
+      .mockImplementationOnce(() => json({ status: 'done', job_id: 'j4', result: { answer: 5 } }))
+    render(<Probe path="/whatif" body='{"fixes":[]}' />)
+    await flush()
+    const [url, init] = fetchMock.mock.calls[0]
+    expect(String(url)).toBe('/api/v2/whatif')
+    expect(init?.method).toBe('POST')
+    expect(init?.body).toBe('{"fixes":[]}')
+    expect(new Headers(init?.headers).get('content-type')).toBe('application/json')
+    await act(async () => { await vi.advanceTimersByTimeAsync(2000) })
+    expect(fetchMock.mock.calls[1][1]?.method ?? 'GET').toBe('GET')
+    expect(screen.getByText('done 5')).toBeTruthy()
   })
 })
 

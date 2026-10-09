@@ -1,9 +1,15 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import risk from '../fixtures/v2/risk_sample.json'
 import rules from '../fixtures/v2/rules_sample.json'
 import { LangProvider } from '../i18n'
 import Home from './Home'
+import type { Results } from '../api/v2types'
+
+// The file GET /results serves (written by python -m scripts.evaluate), read directly so the test never checks a copy.
+const results: Results = JSON.parse(readFileSync(resolve(import.meta.dirname, '../../../data/results/results.json'), 'utf-8'))
 
 const json = (body: unknown) => Promise.resolve(new Response(JSON.stringify(body), { status: 200 }))
 
@@ -11,6 +17,7 @@ function serve(overrides: Record<string, unknown> = {}) {
   return vi.spyOn(globalThis, 'fetch').mockImplementation((input) => {
     const url = new URL(String(input), 'http://x')
     if (url.pathname === '/api/v2/rules') return json(rules.rules)
+    if (url.pathname === '/api/v2/results') return json(results)
     if (url.pathname === '/api/v2/risk') return json({ ...risk, rule: url.searchParams.get('rule'), ...overrides })
     return Promise.resolve(new Response('{}', { status: 404 }))
   })
@@ -62,10 +69,50 @@ describe('Home', () => {
     blocks.forEach((b) => expect(b.querySelector('[data-provenance]'), b.getAttribute('data-numbers') ?? '').not.toBeNull())
   })
 
-  it('an uncalibrated risk shows a visible note', async () => {
+  it('chances that failed the held-out check say they are not reliable odds', async () => {
     serve()
     await show()
-    expect(screen.getByRole('note').textContent).toMatch(/not yet calibrated/i)
+    expect(screen.getByRole('note').textContent).toMatch(/no better than the historical average/i)
+  })
+
+  it('chances that passed the held-out check are called slightly better than the historical average, never accurate', async () => {
+    serve({ calibration: { reliable: true, raw: risk.p_unsafe, calibrated: risk.p_unsafe } })
+    await show()
+    const note = screen.getByRole('note').textContent ?? ''
+    expect(note).toMatch(/slightly better than the historical average/i)
+    expect(note).not.toMatch(/accurate/i)
+  })
+
+  it('a live forecast shows its anchor note with the inputs', async () => {
+    serve({ provenance: { ...risk.provenance, anchor: 'pattern only: the UP anchor needs yesterday' } })
+    await show()
+    expect(screen.getByText(/pattern only: the UP anchor needs yesterday/)).toBeTruthy()
+  })
+
+  it('the demo-day selector lists the precomputed days and changes the requested date', async () => {
+    const fetchMock = serve()
+    await show()
+    const riskCalls = () => fetchMock.mock.calls.map((c) => String(c[0])).filter((u) => u.includes('/risk'))
+    const days = screen.getByRole('group', { name: /day/i })
+    expect(within(days).getAllByRole('button').length).toBe(3)
+    // with no day chosen, the latest precomputed day is selected and requested (the API's own default)
+    expect(within(days).getByRole('button', { pressed: true }).textContent).toContain('Mixed')
+    expect(riskCalls().at(-1)).toContain('date=2025-11-19')
+    fireEvent.click(within(days).getByRole('button', { name: /cloudy/i }))
+    await act(async () => { await new Promise((r) => setTimeout(r, 0)) })
+    expect(riskCalls().at(-1)).toContain('date=2025-08-05')
+  })
+
+  it('links to the printable evening report for the same day, rule and language', async () => {
+    localStorage.setItem('gridtwin.lang', 'hi')
+    serve()
+    await show()
+    const href = screen.getByRole('link', { name: /रिपोर्ट/ }).getAttribute('href')!
+    const url = new URL(href, 'http://x')
+    expect(url.pathname).toBe('/api/v2/report')
+    expect(url.searchParams.get('rule')).toBe('up_2005')
+    expect(url.searchParams.get('date')).toBe(risk.date)
+    expect(url.searchParams.get('lang')).toBe('hi')
   })
 
   it('the strip has one bar per 15 minutes and the watch and act lines', async () => {

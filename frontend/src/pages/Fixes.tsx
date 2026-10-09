@@ -1,33 +1,27 @@
-import { useState } from 'react'
 import { useV2, v2Path } from '../api/v2'
-import type { Fixes as FixesResult, Outcome, Rule, Verdict } from '../api/v2types'
-import { DEFAULT_NETWORK, DEFAULT_RULE } from '../app/defaults'
+import type { Fixes as FixesResult, Outcome, Verdict } from '../api/v2types'
+import { DEFAULT_NETWORK } from '../app/defaults'
+import { useView, type ViewProps } from '../app/view'
+import Controls from '../components/Controls'
 import Envelope from '../components/Envelope'
 import FixCard from '../components/FixCard'
 import PhasePlan from '../components/PhasePlan'
 import Prov from '../components/Prov'
-import RuleSelector from '../components/RuleSelector'
 import Status from '../components/Status'
 import VoltageCompare from '../components/VoltageCompare'
 import { bindingText } from '../fixes'
 import { one } from '../format'
 import { useT, type StringKey } from '../i18n'
 
-type Props = { network?: string; rule?: string; onRule?: (id: string) => void }
-
 /** The ranked tournament and the honest verdict (D2, D7). */
-export default function Fixes({ network = DEFAULT_NETWORK, rule: ruleProp, onRule }: Props) {
-  const [ownRule, setOwnRule] = useState(DEFAULT_RULE)
-  const rule = ruleProp ?? ownRule
-  const setRule = onRule ?? setOwnRule
-  const rules = useV2<Rule[]>('/rules')
-  const fixes = useV2<FixesResult>(v2Path('/fixes', { network, rule }))
-  const band = rules.data?.find((r) => r.id === rule)
+export default function Fixes({ network = DEFAULT_NETWORK, ...props }: ViewProps) {
+  const view = useView(props, 'fixes')
+  const fixes = useV2<FixesResult>(view.ready ? v2Path('/fixes', { network, rule: view.rule, date: view.date }) : null)
   return (
     <div className="v2-page">
-      {rules.data ? <RuleSelector rules={rules.data} value={rule} onChange={setRule} /> : <Status state={rules} />}
+      <Controls view={view} answered={fixes.data?.date} />
       <Status state={fixes} />
-      {fixes.data && <FixesView result={fixes.data} vmax={band?.vmax_v} />}
+      {fixes.data && <FixesView result={fixes.data} vmax={view.band?.vmax_v} />}
     </div>
   )
 }
