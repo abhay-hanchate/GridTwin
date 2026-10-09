@@ -48,8 +48,18 @@ def test_hosting_capacity_rejects_unsupported_voltage_band():
 
 
 def test_strict_band_has_no_safe_action():
+    # Measured 9 Oct 2026: the closest fix (tap +1 with IEEE 1547 Volt/VAR) still peaks at 246 V against 244 V.
     r = client.get("/api/actions", params={"scenario": "S5"}).json()
     assert r["verdict"]["safe_action_found"] is False
+    assert r["verdict"]["binding_limit"]["type"] == "overvoltage"
+    assert "244 V limit" in r["verdict"]["message"]
+
+
+def test_standard_volt_var_alone_is_now_a_safe_fix():
+    # The IEEE 1547 curve acts only where voltage is high; the Round 1 fixed power factor left 2 h 45 min unsafe.
+    actions = {a["action_id"]: a for a in client.get("/api/actions", params={"scenario": "S4"}).json()["actions"]}
+    assert actions["volt_var"]["acceptable"] and actions["volt_var"]["cost"]["curtailed_kwh"] == 0
+    assert not actions["pf09_fixed"]["acceptable"]
 
 
 def test_forecast_bands_are_ordered():
