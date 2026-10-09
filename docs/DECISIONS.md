@@ -149,6 +149,53 @@ yesterday's PV). Chronos-2 stays a benchmark; `ml/reports/solar_benchmark.json` 
 
 ---
 
+## Upstream voltage (P2.5, owner: Person A)
+
+Pre-registered 9 Oct 2026, before any candidate below was run on the real data. Person A builds the model and
+runs this bake-off (it is the first step of P2.5); Person B reuses `engine.upstream.evaluate` in P2.7.
+
+- **Series:** median customer voltage per 15 minutes in pu of 230 V (`upstream_vm_pu_<district>.parquet`), used as
+  the voltage arriving at the transformer.
+- **What a candidate must produce:** whole-day sample paths (n x 96). The scenario generator replays paths, so
+  per-slot quantiles alone are not enough.
+- **Information at issue time:** the target date (month, weekday or weekend) and the previous day's observed mean
+  voltage. Nothing from the target day.
+- **Usable day:** at least 80 of 96 valid slots, and the previous day also usable.
+- **Protocols:** (a) time: fit on Mathura days before 2021-01-01, test Mathura 2021; (b) held-out district: fit on
+  all Mathura days, test all Bareilly days (conditioned on Bareilly's own previous day).
+- **Candidates, simplest first:**
+  1. `climatology`: whole training days drawn at random from the same calendar month (nearest month if none).
+  2. `analog_days`: whole training days drawn from the 30 days within +/-1 month whose previous-day mean is closest
+     to the target's previous-day mean (historical-day bootstrap conditioned on yesterday).
+  3. `ar1_shape`: monthly mean plus an AR(1) day-to-day deviation conditioned on yesterday, a (month, weekend) mean
+     intra-day shape and an AR(1) residual across slots (the plan's hypothesis).
+  4. `lgbm_day_quantiles`: LightGBM quantile regression (9 levels) of the day mean on yesterday's mean, maximum and
+     spread and the calendar; a day mean is drawn by inverting the interpolated quantiles, and the intra-day shape
+     is a same-month training day's deviation from its own mean (quantile regression, made into paths).
+  - Not run: Gaussian process (for one daily series with a seasonal mean it is close to AR(1) smoothing, and fitting
+    and tuning it exceeds the two-hour budget for no expected gain).
+- **Metrics (200 paths per test day, seed 0):** coverage of the 10-90% interval of the day maximum (primary);
+  sample CRPS of the day maximum; also reported: CRPS of the day mean and mean per-slot 80% coverage.
+- **Decision rule:** keep candidates whose day-maximum coverage is within 70-90% on BOTH protocols; the winner is
+  the lowest CRPS of the day maximum averaged over the two protocols. Candidates within 2% of that CRPS count as
+  tied and the simplest of them wins. If none is in the band on both protocols, the candidate with the smallest
+  worst-protocol distance from 80% wins, and the miss is reported, not tuned away.
+
+### Result (run 9 Oct 2026, `python -m engine.upstream --bakeoff`)
+
+| Candidate | Mathura 2021 (50 days): day-max coverage / CRPS | Bareilly (875 days): day-max coverage / CRPS |
+| --- | --- | --- |
+| climatology | 18.0% / 0.01288 | 44.2% / 0.01390 |
+| analog_days | 70.0% / 0.00796 | 51.8% / 0.01085 |
+| ar1_shape | 70.0% / 0.00985 | 65.3% / 0.01060 |
+| **lgbm_day_quantiles** | **82.0% / 0.00536** | **69.3% / 0.00970** |
+
+**Winner: `lgbm_day_quantiles`, through the fallback branch of the rule.** No candidate is inside 70-90% on both
+protocols; it has the smallest worst-protocol distance from 80% (Bareilly 69.3%), and it also has the lowest CRPS on
+both. **Recorded as a miss:** on the held-out district its interval is slightly too narrow. The Mathura 2021 test has
+only 50 usable days, so its coverage is uncertain by several points. The plan's hypothesis (AR(1) plus shape) loses on
+both coverage and CRPS. `engine.upstream.UpstreamModel` now points to the winner.
+
 ## Live day-ahead demand and voltage (owner: Person B)
 
 Pre-registered 9 Oct 2026, before any model below was trained. Design: `docs/superpowers/specs/2026-10-09-live-demand-voltage-design.md`.

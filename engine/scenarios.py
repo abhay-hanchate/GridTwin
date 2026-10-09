@@ -9,7 +9,7 @@ SCENARIOS = {
     "S2": {"name": "30% of homes with 3 kW solar", "pv_share": 0.3, "band": "10"},
     "S3": {"name": "60% of homes with 3 kW solar", "pv_share": 0.6, "band": "10"},
     "S4": {"name": "Every home with 3 kW solar", "pv_share": 1.0, "band": "10"},
-    "S5": {"name": "Every home with solar, strict +/-6% band", "pv_share": 1.0, "band": "6"},
+    "S5": {"name": "Every home with solar, UP Supply Code rule (+/-6%)", "pv_share": 1.0, "band": "up_2005"},
 }
 
 

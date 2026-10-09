@@ -3,6 +3,7 @@ from engine.actions import ACTIONS
 from engine.grid import build_grid
 from engine.powerflow import day_inputs, run_day
 from engine.scenarios import DEFAULT_DATE, SCENARIOS
+from engine.verdict import build_verdict
 
 
 def _worst_bus(result: dict) -> int:
@@ -52,7 +53,10 @@ def evaluate_actions(scenario_id: str, date: str = DEFAULT_DATE) -> dict:
             "remaining_violation_steps": s["violation_steps"],
             "before": before, "after": _snapshot(s),
             "cost": {"curtailed_kwh": s["curtailed_kwh"], "losses_kwh": s["losses_kwh"],
-                     "battery_throughput_kwh": s["battery_throughput_kwh"]},
+                     "battery_throughput_kwh": s["battery_throughput_kwh"],
+                     "reactive_loss_kvarh": s["reactive_loss_kvarh"], "inverter_kvarh": s["inverter_kvarh"],
+                     "max_trafo_loading_pct": s["max_trafo_loading_pct"]},
+            "binding_limit": s["binding_limit"],
             "reason_codes": _reasons(before, after),
         })
 
@@ -64,14 +68,7 @@ def evaluate_actions(scenario_id: str, date: str = DEFAULT_DATE) -> dict:
     for r in results:
         r.setdefault("rank", None)
 
-    best_partial = min(results, key=lambda r: (r["remaining_violation_steps"], r["cost"]["curtailed_kwh"]))
-    verdict = {
-        "safe_action_found": bool(safe),
-        "recommended": safe[0]["action_id"] if safe else None,
-        "message": (f"Recommended: {safe[0]['label']}" if safe else
-                    f"No safe action: every option leaves violations. Closest is "
-                    f"'{best_partial['label']}' with {best_partial['remaining_violation_steps']} unsafe steps."),
-    }
+    verdict = build_verdict(results, safe)
     ordered = safe + sorted((r for r in results if not r["acceptable"]), key=lambda r: r["remaining_violation_steps"])
     return {"scenario_id": scenario_id, "date": date, "band": spec["band"], "worst_bus": worst,
             "before": before, "actions": ordered, "verdict": verdict}

@@ -1,0 +1,31 @@
+{
+  "rules": [
+    {
+      "id": "pm10",
+      "label": "±10% of 230 V",
+      "vmin_pu": 0.90, "vmax_pu": 1.10, "nominal_v": 230.0,
+      "region": "India (transitional national band)",
+      "source": "CEA meeting to finalise the declared supply voltage (2022): 230/400 V with a ±10% band, to be reduced to ±6% in due course; CEEW (2020) also evaluates this range as its second reference",
+      "verification": "unverified",
+      "note": "The CEA minutes are behind a login on cea.nic.in; the decision is known only from a search snippet. Kept as the Round 1 default."
+    },
+    {
+      "id": "up_2005",
+      "label": "Uttar Pradesh Supply Code 2005: ±6% of 230 V",
+      "vmin_pu": 0.94, "vmax_pu": 1.06, "nominal_v": 230.0,
+      "region": "Uttar Pradesh",
+      "source": "UPERC Electricity Supply Code 2005, as cited in CEEW (2020) 'What Smart Meters Can Tell Us?', section 4.2: 'the prescribed ±6 per cent range of 230 V (UPERC 2005) ... (216-244 V)'",
+      "verification": "secondary",
+      "note": "Read in the CEEW report, not in the Supply Code itself. Consistent with Indian Electricity Rules 1956, rule 54 (low voltage may not vary from the declared voltage by more than 6 per cent)."
+    },
+    {
+      "id": "plus6_minus10",
+      "label": "+6% / -10% of 230 V (asymmetric example)",
+      "vmin_pu": 0.90, "vmax_pu": 1.06, "nominal_v": 230.0,
+      "region": "Generic",
+      "source": "GridTwin Round 2 playbook (4 Oct 2026): reported for several state codes",
+      "verification": "unverified",
+      "note": "No state code was found that uses this band; it exists to test asymmetric limits and for the stress lab."
+    }
+  ]
+}

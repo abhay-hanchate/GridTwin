@@ -29,21 +29,24 @@ On a real day (15 May 2019) for a 99-home street with one 250 kVA transformer, s
 | 3 in 10 | 3 h | 1 h 45 min | 256 V |
 | 6 in 10 | 4 h | 2 h 45 min | 259 V |
 | Every home | **6 h 30 min** | **5 h 15 min** | **263 V** |
-| Every home, stricter ±6% rule | 11 h 45 min | 1 h | 263 V |
+| Every home, UP Supply Code rule (±6%) | 11 h 45 min | 1 h | 263 V |
 
-**Seven fixes tested, each replayed over the whole day:**
+**Ten fixes tested, each replayed over the whole day.** Smart inverters follow the IEEE 1547 standard curves; the Round 1 fixed power factor is kept only as a labelled comparison.
 
 | Fix | Unsafe time left | Solar thrown away |
 | --- | --- | --- |
-| **Transformer one notch lower + smart inverters** (recommended) | **0 min** | **0 kWh** |
+| **Transformer one notch lower + standard smart inverters** (recommended) | **0 min** | **0 kWh** |
+| Standard smart inverters (IEEE 1547 Volt/VAR) only | 0 min | 0 kWh |
+| Smart inverters with Volt/VAR and Volt/Watt | 0 min | 0.1 kWh |
 | Transformer two notches lower | 45 min (evenings drop to 206 V) | 0 kWh |
 | Transformer one notch lower | 2 h | 0 kWh |
-| Smart inverters only | 2 h 45 min | 0 kWh |
+| Fixed power factor 0.9 (Round 1 setting, not a standard curve) | 2 h 45 min | 0 kWh |
 | Throw away 40% of solar (common today) | 3 h 45 min | 489 kWh |
+| Inverters trim output above 1.06 pu (Volt/Watt only) | 4 h 45 min | 181 kWh |
 | Neighbourhood battery 50 kW | 5 h | 0 kWh |
 | Throw away 20% of solar | 5 h 30 min | 245 kWh |
 
-Under the stricter ±6% rule **no fix is enough**, and GridTwin says so instead of pretending.
+Under the Uttar Pradesh Supply Code rule (±6% of 230 V, 216–244 V; UPERC 2005 as cited by CEEW) **no fix is enough**: the closest, tap +1 with standard Volt/VAR, still leaves 3 h above 244 V (peak 246 V). GridTwin says so and names the limit instead of pretending.
 
 **AI early warning:** for 15 May 2025, the forecast predicted **6 h 45 min** of unsafe voltage a day ahead; **7 h** happened.
 
@@ -59,7 +62,7 @@ Five dashboard screens that follow the story.
 
 ![Live map](docs/images/grid-twin.png)
 
-**3 · Fixes** — the fix simulator plays two maps side by side, without and with the chosen fix, on one clock; a live line says what the fix is doing (for example, inverters absorbing 70 kvar), and impact cards show the before and after. All seven fixes are ranked below.
+**3 · Fixes** — the fix simulator plays two maps side by side, without and with the chosen fix, on one clock; a live line says what the fix is doing (for example, inverters absorbing 70 kvar), and impact cards show the before and after. All ten fixes are ranked below.
 
 ![Fix simulator](docs/images/fixes.png)
 
@@ -91,7 +94,10 @@ flowchart TD
 | `engine/grid.py` | Builds the 99-home street with Indian overhead-wire values and working transformer taps | A public benchmark layout, adapted to Indian conditions |
 | `engine/powerflow.py` | Replays a day in 96 steps, solving the physics at each and flagging unsafe voltage | The core of the twin |
 | `engine/scenarios.py` | Five solar scenarios, each also run without solar | Shows how much unsafe time solar itself causes |
-| `engine/actions.py` | The seven fixes as small functions applied at every step | New fixes plug in without new simulation code |
+| `engine/actions.py` | The ten fixes as small functions applied at every step | New fixes plug in without new simulation code |
+| `engine/rules.py`, `engine/voltage_rules.json` | Voltage rules with their source and verification status | Every limit is traceable |
+| `engine/inverters.py` | IEEE 1547 Volt/VAR and Volt/Watt curves and their damped solve | Standard smart-inverter behaviour |
+| `engine/verdict.py` | Names the limit that stops a fix (binding limit) | Honest no-safe-action verdicts |
 | `engine/ranking.py` | Keeps only fixes safe all day, ranks them by solar wasted, battery use and losses, or reports no safe action | Honest, verifiable recommendations |
 | `engine/hosting_capacity.py` | Sweeps solar adoption in 10% steps and checks hosting capacity with and without the recommended fix | Estimates feeder headroom |
 | `engine/simulate.py` | The same day without and with a fix, point by point | Powers the side-by-side simulators |
@@ -118,7 +124,8 @@ The AI predicts; physics verifies. Every fix and every warning is checked by a f
 | `/api/summary` | Headline numbers for every scenario |
 | `/api/scenarios`, `/api/grid` | Scenario list; street layout with coordinates |
 | `/api/run?scenario=S4` | A full simulated day |
-| `/api/actions?scenario=S4` | All seven fixes, ranked |
+| `/api/actions?scenario=S4` | All ten fixes, ranked, with the binding limit of each |
+| `/api/rules` | Voltage rules with source and verification status |
 | `/api/fix-sim?scenario=S4&action=tap1_volt_var` | The day without and with one fix, step by step |
 | `/api/forecast`, `/api/metrics` | Forecast curves and model scores |
 | `/api/hosting-capacity` | Solar adoption headroom with and without the recommended fix |
@@ -191,7 +198,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 ## Features
 
 <!-- FEATURES:START -->
-**21 of 25 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
+**23 of 27 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
 
 | ID | Feature | Area | Owner | Status | Pull request |
 | --- | --- | --- | --- | --- | --- |
@@ -220,6 +227,8 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 | F23 | Machine-learning shortcut model of the power flow | ML | Team | 🏁 Finale |  |
 | F24 | AI assistant that explains each recommendation | ML | Team | 🏁 Finale |  |
 | F25 | Final project document and PDF for the PPT and video | Docs | P4 | ✅ Done | [#15](https://github.com/abhay-hanchate/GridTwin/pull/15) |
+| F26 | Live warning: separate solar-caused risk from the grid's own voltage |  | Tabsirshaikh | ✅ Done | [#17](https://github.com/abhay-hanchate/GridTwin/pull/17) |
+| F27 | Docs: hosting capacity is built  not roadmap |  | abhay-hanchate | ✅ Done | [#18](https://github.com/abhay-hanchate/GridTwin/pull/18) |
 <!-- FEATURES:END -->
 
 ## Team
@@ -248,7 +257,9 @@ Every assumption and limitation — what is observed, modeled or benchmark — i
 
 ## Roadmap (finale)
 
-- Hosting capacity: how much solar each street can take, with and without fixes
+Built in Round 1 and shown in the dashboard: hosting capacity (30 kW without a fix, 297 kW with the recommended fix).
+
+
 - Feeder reconfiguration (switching) as a fix
 - Machine-learning shortcut model of the power flow to test hundreds of fixes in milliseconds
 - AI assistant that explains each recommendation in plain language

@@ -1,0 +1,17 @@
+{
+  "model": "lgbm_day_quantiles",
+  "mathura_2021": {
+    "days": 50,
+    "day_max_coverage_80": 0.82,
+    "crps_day_max": 0.00536,
+    "crps_day_mean": 0.00687,
+    "slot_coverage_80": 0.598
+  },
+  "bareilly_all_years_with_mathura_model": {
+    "days": 875,
+    "day_max_coverage_80": 0.693,
+    "crps_day_max": 0.0097,
+    "crps_day_mean": 0.00634,
+    "slot_coverage_80": 0.696
+  }
+}

@@ -47,6 +47,9 @@ data/processed/v2/
 # drift-monitor runtime state (forecast log, conformal width, WARN); written by scripts/monitor.py
 data/monitor/
 
+# utility files uploaded for onboarding (never committed; scripts/onboard.py --purge deletes them)
+data/onboarding/
+
 # live feeds recorded by scripts/record_up_demand.py
 data/live/
 !ml/models/live_dayahead_*
