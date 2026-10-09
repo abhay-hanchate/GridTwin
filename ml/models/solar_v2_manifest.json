@@ -12,9 +12,9 @@
     "p90": "solar_v2_p90.txt"
   },
   "model_sha256": {
-    "p10": "9b050b7623dde6a683faf2e5ae7ab9498d1f110dd8fcc18ed4ab28fa4dba0a9b",
-    "p50": "b3b9b378c84ad77612991d896c95169425658fa6d92cebdd555e90159ffab387",
-    "p90": "c0f9ceb49cffcca363b5c8ee081c4ea1a7d2e6a74abcb7f1294f91f87f5fb855"
+    "p10": "1c46aa531514e9adcfb2c8ff4ea35bcca46e66e28d3a5db42d6d88d11c503544",
+    "p50": "cbce4d7f16f35f10c6d9bc465fa7223ea50db6b87c25cd26f9f9e60007b19a4a",
+    "p90": "bb7b38dde5eac43dd3f70839a27c99b3cb146e9a6c22887af7b4dacfebe843d3"
   },
   "nwp_models": [
     "gfs_global",

@@ -141,6 +141,15 @@ def evaluate(pred: pd.DataFrame, y: pd.Series, mask: pd.Series, baselines: dict[
     return scores
 
 
+def save_booster(model: lgb.LGBMRegressor, path: Path) -> str:
+    """Save with LF line endings (as .gitattributes stores ml/models/*.txt) and return the SHA-256 of those bytes,
+    so the manifest hash still matches after a fresh checkout on any platform."""
+    model.booster_.save_model(str(path))
+    data = path.read_bytes().replace(b"\r\n", b"\n")
+    path.write_bytes(data)
+    return hashlib.sha256(data).hexdigest()
+
+
 def write_manifest(path: Path, *, models_used: list[str], scores: dict, window: int, files: dict, sha256: dict, conformal_q: float) -> None:
     path.write_text(json.dumps({
         "model_type": "LightGBM residual quantiles over a multi-NWP physical ensemble, rolling split-conformal",
@@ -191,8 +200,7 @@ def run(district: str = "mathura", window: int = CONFORMAL_WINDOW_DAYS) -> dict:
     files, digests = {}, {}
     for q, m in models.items():
         f = MODEL_DIR / f"solar_v2_{q}.txt"
-        m.booster_.save_model(str(f))
-        files[q], digests[q] = f.name, hashlib.sha256(f.read_bytes()).hexdigest()
+        files[q], digests[q] = f.name, save_booster(m, f)
     last = pd.Timestamp("2025-12-31")
     pool = day & raw["p50"].notna() & (X.index >= last - pd.Timedelta(days=window - 1)) & (X.index <= last + pd.Timedelta(days=1))
     q_now = conformal_q(raw[pool], y[pool], 0.2)

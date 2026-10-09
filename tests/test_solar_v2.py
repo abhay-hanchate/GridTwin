@@ -106,3 +106,19 @@ def test_real_run_passes_gates_g2_and_g3():
     assert set(report["nwp_models_used"]) == set(solar_v2.MODELS)
     assert s["gate_g3_passes"] and s["mae_p50"] < 0.0396
     assert 0.77 <= s["p10_p90_coverage"] <= 0.83 and s["wis"] < 0.029
+
+
+def test_saved_booster_is_lf_and_its_hash_matches_the_bytes_git_stores(tmp_path):
+    """.gitattributes stores ml/models/*.txt with LF; a CRLF file would hash differently after checkout."""
+    import hashlib
+
+    import lightgbm as lgb
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    model = lgb.LGBMRegressor(n_estimators=5, verbose=-1).fit(rng.normal(size=(50, 2)), rng.normal(size=50))
+    path = tmp_path / "m.txt"
+    digest = solar_v2.save_booster(model, path)
+    data = path.read_bytes()
+    assert b"\r\n" not in data
+    assert digest == hashlib.sha256(data).hexdigest()
