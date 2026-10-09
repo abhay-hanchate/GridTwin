@@ -1,0 +1,78 @@
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import risk from '../fixtures/v2/risk_sample.json'
+import rules from '../fixtures/v2/rules_sample.json'
+import { LangProvider } from '../i18n'
+import Home from './Home'
+
+const json = (body: unknown) => Promise.resolve(new Response(JSON.stringify(body), { status: 200 }))
+
+function serve(overrides: Record<string, unknown> = {}) {
+  return vi.spyOn(globalThis, 'fetch').mockImplementation((input) => {
+    const url = new URL(String(input), 'http://x')
+    if (url.pathname === '/api/v2/rules') return json(rules.rules)
+    if (url.pathname === '/api/v2/risk') return json({ ...risk, rule: url.searchParams.get('rule'), ...overrides })
+    return Promise.resolve(new Response('{}', { status: 404 }))
+  })
+}
+
+const show = async () => {
+  render(<LangProvider><Home /></LangProvider>)
+  await act(async () => { await new Promise((r) => setTimeout(r, 0)) })
+}
+
+beforeEach(() => localStorage.clear())
+afterEach(cleanup)
+
+describe('Home', () => {
+  it('level act renders the act wording, the first act time and the end of the act window', async () => {
+    serve()
+    await show()
+    const headline = screen.getByRole('heading', { level: 2 })
+    expect(headline.textContent).toContain('ACT')
+    expect(headline.textContent).toContain(risk.first_act)
+    const lastAct = risk.t[risk.p_unsafe.map((p, i) => (p >= 0.5 ? i : -1)).filter((i) => i >= 0).at(-1)!]
+    expect(headline.textContent).toContain(lastAct)
+    expect(headline.textContent).toContain('over-voltage')
+  })
+
+  it('a quiet day says so instead of naming a time', async () => {
+    serve({ level: 'ok', first_watch: null, first_act: null, p_unsafe: Array(96).fill(0) })
+    await show()
+    expect(screen.getByRole('heading', { level: 2 }).textContent).toContain('OK')
+  })
+
+  it('the rule selector changes the request and shows the rule source and verification', async () => {
+    const fetchMock = serve()
+    await show()
+    const riskCalls = () => fetchMock.mock.calls.map((c) => String(c[0])).filter((u) => u.includes('/risk'))
+    expect(riskCalls().at(-1)).toContain('rule=up_2005')
+    fireEvent.click(screen.getByRole('button', { name: rules.rules[1].label }))
+    await act(async () => { await new Promise((r) => setTimeout(r, 0)) })
+    expect(riskCalls().at(-1)).toContain('rule=pm10')
+    expect(screen.getByText(new RegExp(rules.rules[1].source.replace(/[()]/g, '.')))).toBeTruthy()
+    expect(screen.getByText(/secondary/)).toBeTruthy()
+  })
+
+  it('every number block carries a provenance tag', async () => {
+    serve()
+    await show()
+    const blocks = document.querySelectorAll('[data-numbers]')
+    expect(blocks.length).toBeGreaterThanOrEqual(3)
+    blocks.forEach((b) => expect(b.querySelector('[data-provenance]'), b.getAttribute('data-numbers') ?? '').not.toBeNull())
+  })
+
+  it('an uncalibrated risk shows a visible note', async () => {
+    serve()
+    await show()
+    expect(screen.getByRole('note').textContent).toMatch(/not yet calibrated/i)
+  })
+
+  it('the strip has one bar per 15 minutes and the watch and act lines', async () => {
+    serve()
+    await show()
+    const strip = screen.getByRole('img', { name: /probability/i })
+    expect(strip.querySelectorAll('[data-step]').length).toBe(96)
+    expect(strip.querySelectorAll('[data-threshold]').length).toBe(2)
+  })
+})

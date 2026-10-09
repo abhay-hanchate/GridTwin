@@ -53,7 +53,7 @@ describe('strings', () => {
       for (const [key, text] of Object.entries(dict)) {
         // numbers come from the API or results.json through {placeholders}, never from the strings (honesty rule)
         // (quantile names such as P10 and P90 are labels, not values)
-        expect(text.replace(/\{[a-z_]+\}/g, '').replace(/\bP[159]0\b/g, ''), key).not.toMatch(/[0-9०-९]/)
+        expect(text.replace(/\{[a-z0-9_]+\}/g, '').replace(/\bP[159]0\b/g, ''), key).not.toMatch(/[0-9०-९]/)
       }
     }
   })

@@ -15,7 +15,7 @@ const STORAGE_KEY = 'gridtwin.lang'
 export function translate(lang: Lang, key: StringKey, vars?: Vars): string {
   const template = DICTS[lang][key] ?? en[key]
   if (!vars) return template
-  return template.replace(/\{([a-z_]+)\}/g, (whole, name: string) => (name in vars ? String(vars[name]) : whole))
+  return template.replace(/\{([a-z0-9_]+)\}/g, (whole, name: string) => (name in vars ? String(vars[name]) : whole))
 }
 
 function storedLang(): Lang {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { loadFixture } from './fixtures'
 
 /** Typed client for /api/v2. Heavy results come from cache; a cache miss answers with a job to poll. */
 export const V2_BASE = '/api/v2'
@@ -30,7 +31,7 @@ async function fetchJSON(url: string): Promise<unknown> {
   return body
 }
 
-const load = fetchJSON
+const load = FIXTURES ? loadFixture : fetchJSON
 
 const JOB_STATES = ['queued', 'running', 'done', 'failed']
 const isJob = (body: unknown): body is JobBody =>
