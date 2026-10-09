@@ -146,3 +146,18 @@ Pre-registered 9 Oct 2026, before Chronos-2 was run in the build. The rule is th
 
 **Not adopted.** The WIS gain is 2.8%, below the 5% bar, and the second condition fails anyway (no live source of
 yesterday's PV). Chronos-2 stays a benchmark; `ml/reports/solar_benchmark.json` holds the record.
+
+---
+
+## Live day-ahead demand and voltage (owner: Person B)
+
+Pre-registered 9 Oct 2026, before any model below was trained. Design: `docs/superpowers/specs/2026-10-09-live-demand-voltage-design.md`.
+
+- **Targets:** household demand (mean kW per home) and grid voltage (V), every 15 minutes, for tomorrow.
+- **Split:** walk-forward by month (train on all earlier months of both districts, test the month), for every month
+  after the first six; plus train Mathura, test Bareilly.
+- **Candidates:** climatology (district, month, weekday type, slot); pattern-only LightGBM (no `up_ratio`);
+  live-anchored LightGBM (with `up_ratio`). None uses household lags.
+- **Rule:** the live-anchored model is adopted if its MAE is at least 10% below climatology and below pattern-only,
+  and its P10-P90 coverage is 78-82% overall and 70-90% in every season. Otherwise the best model that does meet the
+  coverage rule is used and the true numbers are reported.
