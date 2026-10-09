@@ -1,7 +1,7 @@
 """Live next-day solar inference for v2: several NWP models from Open-Meteo, frozen v2 boosters, current conformal width.
 
 The conformal width comes from `data/monitor/conformal_state.json` when the nightly monitor has written one
-(the last 60 days of realised errors); otherwise the value stored in the model manifest is used and the result
+(the realised errors of the manifest's conformal window); otherwise the value stored in the model manifest is used and the result
 says so (`interval_source`).
 
 Usage: python -m ml.live_solar_v2 [--date YYYY-MM-DD]
