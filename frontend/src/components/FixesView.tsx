@@ -23,7 +23,7 @@ function doingText(kind: string, s: SimStep): string {
       return `The transformer is set ${s.tap_pos === 1 ? 'one notch' : `${s.tap_pos} notches`} lower all day, so every home receives ${(2.5 * s.tap_pos).toFixed(1)}% less voltage.`
     case 'volt_var':
       return sun
-        ? `Every solar inverter is absorbing reactive power (${Math.round(s.inverter_kvar)} kvar in total), which pulls the voltage down. All ${kw(s.pv_kw)} of solar still reaches the grid.`
+        ? `Inverters where the voltage is high are absorbing reactive power (${Math.round(s.inverter_kvar)} kvar in total), which pulls the voltage down. ${kw(s.pv_kw)} of the ${kw(s.pv_available_kw)} available solar reaches the grid.`
         : 'No sun right now, so the inverters are idle.'
     case 'combined':
       return `The transformer is one notch lower (−2.5%)${sun ? `, and the inverters are absorbing ${Math.round(s.inverter_kvar)} kvar. All ${kw(s.pv_kw)} of solar is used, nothing is thrown away.` : '. No sun right now, so the inverters are idle.'}`
@@ -31,6 +31,10 @@ function doingText(kind: string, s: SimStep): string {
       return sun
         ? `The panels could make ${kw(s.pv_available_kw)}, but only ${kw(s.pv_kw)} is allowed out: ${kw(s.pv_available_kw - s.pv_kw)} of clean power is being thrown away right now.`
         : 'No sun right now, so nothing is being thrown away.'
+    case 'volt_watt':
+      return sun
+        ? `Inverters cap their output where the local voltage is high: ${kw(s.pv_kw)} of the ${kw(s.pv_available_kw)} available is being sent out.`
+        : 'No sun right now, so the inverters are idle.'
     case 'battery':
       if (s.battery_kw > 0.5) return `The battery is charging at ${kw(s.battery_kw)}, soaking up power to pull the voltage down.`
       if (s.battery_kw < -0.5) return `The battery is giving back ${kw(s.battery_kw)} while there is room below the limit.`
