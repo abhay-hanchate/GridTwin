@@ -6,8 +6,8 @@ Pipeline for each hour:
   2. the mean, spread (min, max, std) of those forecasts plus mean cloud, mean irradiance and the clear-sky irradiance
      are the features;
   3. LightGBM quantile models predict the *residual* of truth over the ensemble mean (P10, P50, P90);
-  4. the interval is widened by split-conformal scores from the most recent 30 days of out-of-sample errors
-     (window chosen by the bake-off, see CONFORMAL_WINDOW_DAYS).
+  4. the interval is widened by split-conformal scores of earlier out-of-sample errors from the same season
+     (method chosen by the bake-off, see CONFORMAL_METHOD).
 
 The truth is ERA5-driven PV (a reference proxy, not measured rooftop output); see the model manifest.
 """
@@ -35,6 +35,12 @@ AVAILABILITY_MIN = 0.95              # gate G2
 # Bake-off of 9 Oct 2026 (docs/DECISIONS.md, data/results/bakeoff_solar.json): no window keeps 78-82% coverage in
 # every season; 30 days has the smallest worst-season miss (winter 74.9%). 60 and 120 days stay callable via `window`.
 CONFORMAL_WINDOW_DAYS = 30
+# Round 2 of the interval bake-off (docs/DECISIONS.md): one width per season, learnt from every earlier day of that
+# season, fixes the winter under-coverage (74.9% -> 79.5%). The 30-day width stays as the fallback and the monitor's
+# recent check.
+CONFORMAL_METHOD = "by_season_all_earlier"
+SEASONS = {12: "winter", 1: "winter", 2: "winter", 3: "summer", 4: "summer", 5: "summer",
+           6: "monsoon", 7: "monsoon", 8: "monsoon", 9: "monsoon", 10: "post_monsoon", 11: "post_monsoon"}
 FILL = {"wind_speed_10m": 5.0, "temperature_2m": 30.0, "diffuse_radiation": 0.0,
         "direct_normal_irradiance": 0.0, "shortwave_radiation": 0.0}
 
@@ -125,6 +131,75 @@ def rolling_conformal(pred: pd.DataFrame, y: pd.Series, daylight: pd.Series, day
     return out
 
 
+def season_of_index(index: pd.DatetimeIndex) -> np.ndarray:
+    return np.array([SEASONS[int(m)] for m in index.month])
+
+
+def sky_class(X: pd.DataFrame) -> pd.Series:
+    """Forecast sky per hour from the NWP ensemble: clear (clearness above 0.8), partly, cloudy (below 0.5), night."""
+    k = X["ghi_mean"] / X["clearsky_ghi"].where(X["clearsky_ghi"] > 0)
+    out = np.select([X["clearsky_ghi"] <= 0, k > 0.8, k < 0.5], ["night", "clear", "cloudy"], "partly")
+    return pd.Series(out, index=X.index, name="sky")
+
+
+def _conformal_from_scores(scores: np.ndarray, alpha: float) -> float:
+    n = len(scores)
+    k = min(n, int(np.ceil((n + 1) * (1 - alpha))))
+    return float(np.sort(scores)[k - 1])
+
+
+def _pool_window(pred: pd.DataFrame, y: pd.Series, daylight: pd.Series, calibration_start: str | None):
+    dates = pd.Series(pred.index.normalize(), index=pred.index)
+    pool = daylight & y.notna() & pred["p50"].notna()
+    if calibration_start is not None:
+        pool &= pred.index >= calibration_start
+    return dates, pool
+
+
+def rolling_conformal_groups(pred: pd.DataFrame, y: pd.Series, daylight: pd.Series, days: pd.DatetimeIndex,
+                             groups: pd.Series, *, window: int | None = 30, min_points: int = 50, alpha: float = 0.2,
+                             calibration_start: str | None = None) -> pd.DataFrame:
+    """Like `rolling_conformal`, but each group (sky class, season...) gets its own width from its own earlier hours.
+    `window=None` uses every earlier day. A group with fewer than `min_points` earlier hours uses the all-hours pool."""
+    out = pred.copy()
+    dates, pool = _pool_window(pred, y, daylight, calibration_start)
+    for d in days:
+        today = (dates == d) & daylight & pred["p50"].notna()
+        if not today.any():
+            continue
+        earlier = pool & (dates < d) & ((dates >= d - pd.Timedelta(days=window)) if window else True)
+        for g in groups[today].unique():
+            rows = today & (groups == g)
+            sel = earlier & (groups == g)
+            if sel.sum() < min_points:
+                sel = earlier
+            if sel.sum() < min_points:
+                continue
+            q = conformal_q(pred[sel], y[sel], alpha)
+            out.loc[rows, "p10"] = (pred.loc[rows, "p10"] - q).clip(lower=0)
+            out.loc[rows, "p90"] = pred.loc[rows, "p90"] + q
+    return out
+
+
+def rolling_conformal_scaled(pred: pd.DataFrame, y: pd.Series, daylight: pd.Series, days: pd.DatetimeIndex, *,
+                             window: int = 30, min_points: int = 50, alpha: float = 0.2,
+                             calibration_start: str | None = None) -> pd.DataFrame:
+    """Errors measured in units of the model's own P10-P90 spread, so hours the model is unsure about widen more."""
+    out = pred.copy()
+    dates, pool = _pool_window(pred, y, daylight, calibration_start)
+    spread = (pred["p90"] - pred["p10"]).clip(lower=1e-3)
+    scores = np.maximum(pred["p10"] - y, y - pred["p90"]) / spread
+    for d in days:
+        today = (dates == d) & daylight & pred["p50"].notna()
+        sel = pool & (dates < d) & (dates >= d - pd.Timedelta(days=window))
+        if not today.any() or sel.sum() < min_points:
+            continue
+        q = _conformal_from_scores(scores[sel].to_numpy(), alpha)
+        out.loc[today, "p10"] = (pred.loc[today, "p10"] - q * spread[today]).clip(lower=0)
+        out.loc[today, "p90"] = pred.loc[today, "p90"] + q * spread[today]
+    return out
+
+
 def evaluate(pred: pd.DataFrame, y: pd.Series, mask: pd.Series, baselines: dict[str, pd.Series]) -> dict:
     from ml import metrics
     t = mask & pred["p50"].notna()
@@ -150,8 +225,10 @@ def save_booster(model: lgb.LGBMRegressor, path: Path) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def write_manifest(path: Path, *, models_used: list[str], scores: dict, window: int, files: dict, sha256: dict, conformal_q: float) -> None:
+def write_manifest(path: Path, *, models_used: list[str], scores: dict, window: int, files: dict, sha256: dict, conformal_q: float,
+                   conformal_q_by_season: dict | None = None) -> None:
     path.write_text(json.dumps({
+        "conformal_method": CONFORMAL_METHOD, "conformal_q_by_season": conformal_q_by_season or {},
         "model_type": "LightGBM residual quantiles over a multi-NWP physical ensemble, rolling split-conformal",
         "model_version": "2.0.0", "quantiles": list(QUANTILES), "model_files": files, "model_sha256": sha256,
         "nwp_models": models_used, "conformal_window_days": window, "conformal_q": round(conformal_q, 6),
@@ -190,7 +267,9 @@ def run(district: str = "mathura", window: int = CONFORMAL_WINDOW_DAYS) -> dict:
     test = day & (X.index.year == 2025)
     models = fit(X, y, train)
     raw = predict(models, X)
-    pred = rolling_conformal(raw, y, day, pd.date_range("2025-01-01", "2025-12-31"), window=window, calibration_start="2024-11-01")
+    seasons = pd.Series(season_of_index(X.index), index=X.index)
+    pred = rolling_conformal_groups(raw, y, day, pd.date_range("2025-01-01", "2025-12-31"), seasons, window=None,
+                                    calibration_start="2024-11-01")
     best = read_previous_runs(raw_path(None, district)).reindex(y.index)
     baselines = {"persistence": y.shift(24), "physics_only_best_match": _pv(best), "physics_only_ensemble": X["pv_mean"]}
     scores = evaluate(pred, y, test, baselines)
@@ -204,10 +283,14 @@ def run(district: str = "mathura", window: int = CONFORMAL_WINDOW_DAYS) -> dict:
     last = pd.Timestamp("2025-12-31")
     pool = day & raw["p50"].notna() & (X.index >= last - pd.Timedelta(days=window - 1)) & (X.index <= last + pd.Timedelta(days=1))
     q_now = conformal_q(raw[pool], y[pool], 0.2)
+    out_of_sample = day & raw["p50"].notna() & y.notna() & (X.index >= "2024-11-01")
+    q_by_season = {s: round(conformal_q(raw[out_of_sample & (seasons == s)], y[out_of_sample & (seasons == s)], 0.2), 6)
+                   for s in sorted(seasons[out_of_sample].unique())}
     write_manifest(MODEL_DIR / "solar_v2_manifest.json", models_used=used, scores=scores, window=window,
-                   files=files, sha256=digests, conformal_q=q_now)
+                   files=files, sha256=digests, conformal_q=q_now, conformal_q_by_season=q_by_season)
     report = {"availability": json.loads(avail.reset_index().to_json(orient="records", date_format="iso")),
-              "nwp_models_used": used, "scores_2025": scores, "model_sha256": digests, "conformal_q_end_of_2025": round(q_now, 6)}
+              "nwp_models_used": used, "scores_2025": scores, "model_sha256": digests, "conformal_q_end_of_2025": round(q_now, 6),
+              "conformal_method": CONFORMAL_METHOD, "conformal_q_by_season": q_by_season}
     REPORT.write_text(json.dumps(report, indent=2), encoding="utf-8")
     pred.assign(actual=y).loc[test[test].index].to_parquet(config.PROCESSED_DIR / "solar_forecast_v2_2025.parquet")
     return report

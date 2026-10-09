@@ -92,3 +92,23 @@ def test_end_to_end_wiring_with_the_network_and_inference_stubbed(monkeypatch):
     r = live.live_solar_forecast_v2(TARGET)
     assert len(r["points"]) == 96 and r["interval_source"] == "stub" and r["nwp_models"] == sorted(solar_v2.MODELS)
     assert r["provenance"].startswith("modeled") and r["points"][0] == {"t": "00:00", "p10": 0.1, "p50": 0.2, "p90": 0.3}
+
+
+def test_the_target_days_season_picks_the_manifest_width(artifacts, tmp_path):
+    manifest_path = artifacts / "solar_v2_manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["conformal_q_by_season"] = {"winter": 0.0, "summer": 0.0, "monsoon": 0.0, "post_monsoon": 0.3}
+    manifest_path.write_text(json.dumps(manifest))
+    frames = live.frames_from_payload(_payload(), TARGET)                  # 12 October: post-monsoon
+    fc, source = live.predict_live(frames, TARGET, artifacts, tmp_path / "none.json")
+    assert source.startswith("manifest value") and "post_monsoon" in source
+    noon = fc.index.hour == 12
+    assert (fc.loc[noon, "p90"] - fc.loc[noon, "p50"]).min() > 0.25
+
+
+def test_monitor_state_per_season_overrides_everything(artifacts, tmp_path):
+    state = tmp_path / "state.json"
+    state.write_text(json.dumps({"q": 0.0, "q_by_season": {"post_monsoon": 0.2}, "as_of": "2026-10-11"}))
+    frames = live.frames_from_payload(_payload(), TARGET)
+    _, source = live.predict_live(frames, TARGET, artifacts, state)
+    assert source == "monitor state for post_monsoon from 2026-10-11"

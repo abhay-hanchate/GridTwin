@@ -122,3 +122,55 @@ def test_saved_booster_is_lf_and_its_hash_matches_the_bytes_git_stores(tmp_path)
     data = path.read_bytes()
     assert b"\r\n" not in data
     assert digest == hashlib.sha256(data).hexdigest()
+
+
+def _grouped_case():
+    idx = pd.date_range("2025-01-01", periods=24 * 40, freq="h")
+    day = pd.Series(True, index=idx)
+    groups = pd.Series(np.where(idx.hour < 12, "a", "b"), index=idx)
+    pred = pd.DataFrame({"p10": 0.4, "p50": 0.5, "p90": 0.6}, index=idx)
+    y = pd.Series(np.where(groups == "a", 0.55, 0.9), index=idx)        # group b misses by 0.3, group a never misses
+    return idx, day, groups, pred, y
+
+
+def test_grouped_conformal_gives_each_group_its_own_width():
+    idx, day, groups, pred, y = _grouped_case()
+    out = solar_v2.rolling_conformal_groups(pred, y, day, pd.date_range("2025-01-20", "2025-02-09"), groups, window=30)
+    jan25 = out.loc["2025-01-25"]
+    assert jan25.loc[jan25.index.hour < 12, "p90"].max() <= 0.6 + 1e-9    # group a needs no widening
+    assert jan25.loc[jan25.index.hour >= 12, "p90"].min() == pytest.approx(0.9)
+
+
+def test_grouped_conformal_never_uses_later_days():
+    idx, day, groups, pred, y = _grouped_case()
+    days = pd.date_range("2025-01-20", "2025-02-09")
+    a = solar_v2.rolling_conformal_groups(pred, y, day, days, groups, window=30)
+    later = y.copy()
+    later[later.index >= "2025-01-25"] += 0.4
+    b = solar_v2.rolling_conformal_groups(pred, later, day, days, groups, window=30)
+    pd.testing.assert_frame_equal(a.loc[:"2025-01-24"], b.loc[:"2025-01-24"])
+
+
+def test_grouped_conformal_falls_back_to_all_hours_for_a_thin_group():
+    idx, day, groups, pred, y = _grouped_case()
+    groups = groups.where(idx < pd.Timestamp("2025-01-25"), "new")       # a group with no history at all
+    out = solar_v2.rolling_conformal_groups(pred, y, day, pd.date_range("2025-01-25", "2025-01-25"), groups, window=30)
+    assert out.loc["2025-01-25", "p90"].iloc[0] > 0.6                      # widened from the all-hours pool
+
+
+def test_scaled_conformal_widens_in_proportion_to_the_spread():
+    idx = pd.date_range("2025-01-01", periods=24 * 40, freq="h")
+    day = pd.Series(True, index=idx)
+    spread = np.where(idx.hour < 12, 0.1, 0.4)
+    pred = pd.DataFrame({"p10": 0.5 - spread / 2, "p50": 0.5, "p90": 0.5 + spread / 2}, index=idx)
+    y = pd.Series(0.5 + spread, index=idx)                                # every miss is one spread above P90/2
+    out = solar_v2.rolling_conformal_scaled(pred, y, day, pd.date_range("2025-01-20", "2025-01-21"), window=30)
+    jan20 = out.loc["2025-01-20"]
+    narrow = jan20.loc[jan20.index.hour < 12, "p90"].iloc[0] - 0.55
+    wide = jan20.loc[jan20.index.hour >= 12, "p90"].iloc[0] - 0.70
+    assert wide == pytest.approx(4 * narrow)
+
+
+def test_sky_class_uses_forecast_clearness():
+    X = pd.DataFrame({"ghi_mean": [900.0, 500.0, 100.0, 0.0], "clearsky_ghi": [1000.0, 1000.0, 1000.0, 0.0]})
+    assert solar_v2.sky_class(X).tolist() == ["clear", "partly", "cloudy", "night"]

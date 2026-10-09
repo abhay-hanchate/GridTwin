@@ -64,22 +64,59 @@ def compare(y: pd.Series, mask: pd.Series, candidates: dict[str, pd.DataFrame], 
     return scores
 
 
+def nowcast_path(district: str = "mathura"):
+    from engine import config
+    return config.RAW_DIR / f"nowcast_day0_{district}_2024_2025.json"
+
+
+def download_nowcast(district: str = "mathura"):
+    """Same-day (day-0) NWP irradiance for 2024-2025: the historical counterpart of the live API's `past_days=1`."""
+    import requests
+    from engine import config
+    path = nowcast_path(district)
+    if not path.exists():
+        site = config.SITES[district]
+        r = requests.get("https://previous-runs-api.open-meteo.com/v1/forecast", timeout=180, params={
+            "latitude": site.latitude, "longitude": site.longitude, "timezone": config.TIMEZONE,
+            "start_date": "2024-01-01", "end_date": "2025-12-31",
+            "hourly": ",".join(f"{v}_previous_day0" for v in config.WEATHER_VARS)})
+        r.raise_for_status()
+        path.write_text(r.text)
+    return path
+
+
+def nowcast_pv(path) -> pd.Series:
+    """Hourly PV per kWp from day-0 irradiance, through the same PVWatts chain as the truth and the forecast."""
+    from engine import profiles
+    from ml import solar_v2
+    frame = profiles.read_weather(path)
+    frame.columns = [c.replace("_previous_day0", "") for c in frame.columns]
+    return solar_v2._pv(frame.apply(pd.to_numeric, errors="coerce"))
+
+
 def run(district: str = "mathura") -> dict:
-    """Chronos-2 against the solar v2 pipeline on daylight hours of 2025. Needs the raw files and requirements-ml.txt."""
+    """Chronos-2 against solar v2 as shipped, on daylight hours of 2025. Two Chronos contexts: the day-0 nowcast PV
+    (available live, the candidate) and ERA5-driven PV (arrives days late; reported as an upper bound only)."""
     import json
     from ml import solar_v2
     X, y, _, used = solar_v2.load_dataset(district)
     day = X["clearsky_ghi"] > 0
     test = day & (X.index.year == 2025)
+    days = pd.date_range("2025-01-01", "2025-12-31")
     raw = solar_v2.predict(solar_v2.fit(X, y, day & (X.index < "2024-11-01")), X)
-    v2 = solar_v2.rolling_conformal(raw, y, day, pd.date_range("2025-01-01", "2025-12-31"),
-                                    window=solar_v2.CONFORMAL_WINDOW_DAYS, calibration_start="2024-11-01")  # as shipped
-    past, future = build_frames(X, y, pd.date_range("2025-01-01", "2025-12-31"))
-    chronos = chronos_forecast(past, future).reindex(X.index)
-    scores = compare(y, test, {"solar_v2_lightgbm": v2, "chronos2_with_covariates": chronos}, reference="solar_v2_lightgbm")
-    report = {"scores_2025": scores, "nwp_models_used": used,
-              "caveat": "Chronos-2 sees the previous 14 days of observed PV; the LightGBM pipeline needs none. "
-                        "Adoption therefore also requires a live source of yesterday's PV."}
+    seasons = pd.Series(solar_v2.season_of_index(X.index), index=X.index)
+    v2 = solar_v2.rolling_conformal_groups(raw, y, day, days, seasons, window=None,
+                                           calibration_start="2024-11-01")                          # as shipped
+    nowcast = nowcast_pv(download_nowcast(district)).reindex(X.index).fillna(0.0)
+    candidates = {"solar_v2_lightgbm": v2}
+    for name, context in (("chronos2_nowcast_context", nowcast), ("chronos2_era5_context_upper_bound", y)):
+        past, future = build_frames(X, context, days)
+        candidates[name] = chronos_forecast(past, future).reindex(X.index)
+    scores = compare(y, test, candidates, reference="solar_v2_lightgbm")
+    scores["chronos2_era5_context_upper_bound"]["adopt"] = False                                   # not deployable
+    report = {"scores_2025": scores, "nwp_models_used": used, "reference_interval": solar_v2.CONFORMAL_METHOD,
+              "context_note": "nowcast = PV from the same-day NWP irradiance, which the live API returns for yesterday "
+                              "(past_days=1); ERA5 context arrives days late and is an upper bound only."}
     out = solar_v2.REPORT.with_name("solar_benchmark.json")
     out.write_text(json.dumps(report, indent=2), encoding="utf-8")
     return report

@@ -195,3 +195,146 @@ protocols; it has the smallest worst-protocol distance from 80% (Bareilly 69.3%)
 both. **Recorded as a miss:** on the held-out district its interval is slightly too narrow. The Mathura 2021 test has
 only 50 usable days, so its coverage is uncertain by several points. The plan's hypothesis (AR(1) plus shape) loses on
 both coverage and CRPS. `engine.upstream.UpstreamModel` now points to the winner.
+
+## Live day-ahead demand and voltage (owner: Person B)
+
+Pre-registered 9 Oct 2026, before any model below was trained. Design: `docs/superpowers/specs/2026-10-09-live-demand-voltage-design.md`.
+
+- **Targets:** household demand (mean kW per home) and grid voltage (V), every 15 minutes, for tomorrow.
+- **Split:** walk-forward by month (train on all earlier months of both districts, test the month), for every month
+  after the first six; plus train Mathura, test Bareilly.
+- **Candidates:** climatology (district, month, weekday type, slot); pattern-only LightGBM (no `up_ratio`);
+  live-anchored LightGBM (with `up_ratio`). None uses household lags.
+- **Rule:** the live-anchored model is adopted if its MAE is at least 10% below climatology and below pattern-only,
+  and its P10-P90 coverage is 78-82% overall and 70-90% in every season. Otherwise the best model that does meet the
+  coverage rule is used and the true numbers are reported.
+
+### Round 1 result (run 9 Oct 2026, `python -m ml.live_dayahead`, 22 walk-forward months, 2019-11 to 2021-10)
+
+| Target | Candidate | MAE | Skill vs climatology | Coverage | Post-monsoon coverage |
+|---|---|---|---|---|---|
+| Demand (kW/home) | climatology | 0.1415 | | 78.6% | 29.5% |
+| | pattern only | 0.0713 | +49.6% | 77.1% | 43.6% |
+| | live anchored | 0.0727 | +48.6% | 76.5% | 40.6% |
+| Voltage (V) | climatology | 6.23 | | 73.7% | 45.2% |
+| | pattern only | 3.77 | +39.5% | 76.8% | 54.2% |
+| | live anchored | 3.75 | +39.8% | 76.9% | 49.2% |
+
+No candidate met the coverage rule. The UP anchor did not beat pattern-only (tomorrow's temperature already carries
+most of what state demand says). Diagnosis of the post-monsoon miss: (1) the first tested month (2019-11) had no
+earlier out-of-sample errors, so its interval was never widened (coverage 32-42%); (2) Bareilly in October 2021 used
+0.16 kW per home more than any earlier pattern (a level shift no model without live household data can see);
+(3) the anchor needed all eight days, and 65 missing days in the UP history (mostly August to December 2020) blanked
+248 of 976 anchor days.
+
+### Round 2, pre-registered before running
+
+Same candidates, same rule, same months. Two method fixes, applied to every candidate alike:
+- **A. Warm-up interval:** when a month has no earlier out-of-sample errors, its interval width comes from a
+  cross-fitted pool inside the training data (fit without the last training month, predict that month).
+- **B. Anchor robustness:** `up_ratio` needs yesterday plus at least 5 of the 7 days before it (was: all 7).
+Not added: a year-on-year UP level term. It would target the October 2021 shift, but it cannot run live (no UP
+daily data for 2025 is reachable), so it fails the deployability condition.
+
+### Round 2 result (run 9 Oct 2026, 24 walk-forward months, 2019-11 to 2021-10)
+
+| Target | Candidate | MAE | Skill vs climatology | Coverage | Seasons (winter, summer, monsoon, post-monsoon) |
+|---|---|---|---|---|---|
+| Demand (kW/home), 124,761 rows | climatology | 0.1308 | | 83.1% | 90.7, 78.9, 80.3, 78.4 |
+| | pattern only | 0.0700 | +46.5% | 83.5% | 85.8, 80.0, 79.3, 91.0 |
+| | live anchored | 0.0705 | +46.1% | 83.6% | 85.8, 80.3, 79.8, 90.7 |
+| Voltage (V), 129,348 rows | climatology | 5.91 | | 78.4% | 75.6, 70.9, 82.9, 89.3 |
+| | pattern only | 3.79 | +36.0% | 82.2% | 80.9, 79.5, 81.5, 90.6 |
+| | live anchored | 3.72 | +37.1% | 83.0% | 82.6, 79.8, 81.5, 91.4 |
+
+Held-out district (train Mathura, test Bareilly), MAE: demand 0.0926 live / 0.0934 pattern / 0.1081 climatology;
+voltage 4.74 / 4.83 / 5.03 V.
+
+**Rule outcome, applied literally:** demand: no candidate meets the coverage rule, so pattern-only (lowest MAE) is
+reported. Voltage: only climatology meets the coverage rule, so the rule picks climatology, although its MAE is 59%
+higher than the live-anchored model's. The live UP anchor adds at most 1.7% (voltage) and nothing for demand.
+**Open question for the owner:** the rule ranks interval coverage above accuracy, so it picks a far less accurate
+model whose interval happens to land in the band. The rule is not changed here; changing it is the owner's decision
+and will be recorded as a rule change, not as a result.
+
+### Rule change by the owner (9 Oct 2026, after seeing round 2)
+
+The owner changed the rule to **accuracy first**: the lowest-MAE candidate whose P10-P90 coverage is 75-85% overall
+and 70-92% in every season. Reason given: coverage can be corrected by widening or narrowing the interval, accuracy
+cannot, so a rule that picks a model with 59% more error for its interval width is the wrong rule. This is a rule
+change made after the results were seen, and it is reported as one.
+
+Outcome on the round 2 numbers: **demand: pattern only** (MAE 0.0700 kW/home, +46.5% vs climatology, coverage
+83.5%); **voltage: live anchored** (MAE 3.72 V, +37.1%, coverage 83.0%; pattern-only is used live until the UP
+recorder has six days). Under the original rule the picks were pattern only and climatology.
+
+---
+
+## Solar intervals, round 2: different ranges for different kinds of day (owner: Person B)
+
+Pre-registered 9 Oct 2026, before any candidate below was run. Round 1 (above) found no method inside 78-82% in
+every season; winter under-covered (74.9%) with the shipped 30-day window.
+
+- **Median:** solar v2 (LightGBM residual), unchanged. Same split and the same 4,414-hour 2025 mask.
+- **Candidates** (all rolling, each day's width from earlier days only):
+  1. shipped: one width from the last 30 days (reference);
+  2. by sky: separate widths for forecast-clear, partly cloudy and cloudy hours, where the forecast clearness is
+     the ensemble mean irradiance over clear-sky irradiance (clear above 0.8, cloudy below 0.5), 30 and 60 days;
+  3. by season: separate widths per season from all earlier days of that season;
+  4. scaled: errors divided by the model's own P10-P90 spread, so wide-spread hours get wider intervals, 30 days.
+  A group with fewer than 50 earlier points uses the all-hours pool.
+- **Rule (unchanged from round 1):** lowest WIS among candidates inside 78-82% in every season; if none, the
+  smallest worst-season distance from 80%. A new candidate replaces the shipped one only if it wins by this rule.
+
+### Result (run 9 Oct 2026, `python -m scripts.bakeoff solar_intervals`)
+
+| Candidate | WIS | Overall | Winter | Summer | Monsoon | Post-monsoon |
+|---|---|---|---|---|---|---|
+| shipped, one width, 30 days | 0.0213 | 79.9% | 74.9% | 84.0% | 79.5% | 80.7% |
+| by sky, 30 days | 0.0214 | 79.6% | 74.0% | 84.5% | 79.2% | 80.1% |
+| by sky, 60 days | 0.0214 | 79.1% | 75.4% | 84.9% | 76.4% | 81.0% |
+| **by season, all earlier days** | 0.0214 | 79.4% | 79.5% | 82.4% | 78.5% | 75.8% |
+| scaled by spread, 30 days | 0.0218 | 79.6% | 82.0% | 81.2% | 79.1% | 74.8% |
+
+Still no candidate inside 78-82% in every season. By the fallback, **by season** wins (worst season 4.2 points from
+80% against 5.1 for the shipped width): winter is fixed (74.9% to 79.5%) and post-monsoon drops to 75.8%, because
+post-monsoon 2025 has only November 2024 to learn from. WIS is unchanged. Sky classes did not help winter, so the
+winter miss is seasonal (haze and fog), not about clouds. Solar v2 switches to per-season widths.
+
+---
+
+## Chronos-2, round 2: a context that exists live (owner: Person B)
+
+Pre-registered 9 Oct 2026, before running. Round 1 fed Chronos-2 the last 14 days of ERA5-driven PV, which arrives
+days late, so it could not run live.
+
+- **Candidate:** Chronos-2 whose 14-day context is PV computed from the weather service's **same-day (day-0)
+  estimate** of irradiance, the historical counterpart of what the live forecast API returns for yesterday
+  (`past_days=1`). Covariates unchanged (`pv_mean`, `ghi_mean`, `cloud_mean`).
+- **Reference:** solar v2 as shipped (per-season interval widths), same 4,414-hour 2025 mask.
+- **Also reported, not a candidate:** round 1's ERA5-context Chronos-2, as the upper bound of what better context
+  would give.
+- **Rule (unchanged):** adopt only if WIS is at least 5% lower than the reference; deployability is now satisfied by
+  construction.
+
+### Result (run 9 Oct 2026, `python -m ml.benchmark`)
+
+| | MAE | Coverage | WIS | WIS gain vs solar v2 |
+|---|---|---|---|---|
+| Solar v2 as shipped (per-season widths) | 0.0329 | 79.4% | 0.0214 | |
+| **Chronos-2, day-0 nowcast context (live-capable)** | 0.0511 | 45.2% | 0.0360 | **-68%** |
+| Chronos-2, ERA5 context (upper bound, not live) | 0.0318 | 78.6% | 0.0207 | +3.3% |
+
+**Not adopted, and closed.** Chronos-2's edge came entirely from seeing the true PV of the past days. The only
+yesterday estimate that exists live (the same-day NWP irradiance) is itself far from the truth (MAE 0.0507 against
+0.0335 for our five-model day-ahead mean; checked for a time shift: none), and Chronos-2 inherits that error. Even
+with the true history it would gain 3.3%, below the 5% bar. Solar v2 stays.
+
+---
+
+## Owner decisions, 9 Oct 2026
+
+- **Gate G4 is not retired.** It stays recorded as failed (`docs/generated/data_v2.md`).
+- **The UP recorder is not scheduled.** `scripts/record_up_demand.py` runs only when started by hand, so the live
+  forecast normally runs without the UP anchor: voltage uses its pattern-only model (36.0% better than climatology
+  in round 2, against 37.1% with the anchor) and every forecast says which model it used.

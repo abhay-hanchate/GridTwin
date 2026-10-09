@@ -198,7 +198,37 @@ def solar(district: str = "mathura") -> dict:
             "conformal_q_last_60d_of_2025_raw": round(q_end, 6)}
 
 
-COMPONENTS = {"solar": (solar, SOLAR_MEDIAN_RULE + " | " + SOLAR_INTERVAL_RULE, SOLAR_SPLIT)}
+def solar_intervals(district: str = "mathura") -> dict:
+    """Round 2 of the solar interval bake-off: one width (shipped) against widths per sky class, per season, or
+    scaled by the model's own spread. Median model and mask as in round 1."""
+    X, y, _, used = solar_v2.load_dataset(district)
+    day = X["clearsky_ghi"] > 0
+    start, days = "2024-11-01", pd.date_range("2025-01-01", "2025-12-31")
+    raw = solar_v2.predict(solar_v2.fit(X, y, day & (X.index < "2024-11-01")), X)
+    sky = solar_v2.sky_class(X)
+    seasons = pd.Series(np.asarray(season(X.index)), index=X.index)
+    candidates = {
+        "shipped_one_width_30d": solar_v2.rolling_conformal(raw, y, day, days, window=30, calibration_start=start),
+        "by_sky_30d": solar_v2.rolling_conformal_groups(raw, y, day, days, sky, window=30, calibration_start=start),
+        "by_sky_60d": solar_v2.rolling_conformal_groups(raw, y, day, days, sky, window=60, calibration_start=start),
+        "by_season_all_earlier": solar_v2.rolling_conformal_groups(raw, y, day, days, seasons, window=None,
+                                                                   calibration_start=start),
+        "scaled_by_spread_30d": solar_v2.rolling_conformal_scaled(raw, y, day, days, window=30, calibration_start=start),
+    }
+    mask = day & (X.index.year == 2025) & y.notna() & raw["p50"].notna()
+    rows = []
+    for n, f in candidates.items():
+        sc = _scores(f, y, mask)
+        rows.append({"name": n, "wis": sc["wis"], "mae_p50": sc["mae_p50"], "p10_p90_coverage": sc["p10_p90_coverage"],
+                     "by_season": {s: v["coverage"] for s, v in sc["by_season"].items()}})
+    decision = decide_interval(rows, band=(0.78, 0.82))
+    sky_mix = sky[mask].value_counts().to_dict()
+    return {"district": district, "nwp_models_used": used, "mask_hours": int(mask.sum()), "sky_hours_2025": sky_mix,
+            **decision, "candidates": rows, "winner": decision["winner"]}
+
+
+COMPONENTS = {"solar": (solar, SOLAR_MEDIAN_RULE + " | " + SOLAR_INTERVAL_RULE, SOLAR_SPLIT),
+              "solar_intervals": (solar_intervals, SOLAR_INTERVAL_RULE, SOLAR_SPLIT)}
 
 
 def main(argv: list[str] | None = None) -> None:
