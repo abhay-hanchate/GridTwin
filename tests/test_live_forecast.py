@@ -1,16 +1,10 @@
-from datetime import date, datetime, timedelta, timezone
+"""Round 1 solar model, still the base of solar v2's live inference (ml/live_solar_v2.py)."""
+from datetime import date, datetime, timezone
 
-import numpy as np
 import pandas as pd
-import pytest
-from fastapi.testclient import TestClient
 
-import backend.main as api
 from engine import config
-from ml.early_warning import live_warning
 from ml.live_forecast import predict_solar, tomorrow_local, weather_frame
-
-client = TestClient(api.app)
 
 
 def _weather_payload(target: date) -> dict:
@@ -29,22 +23,6 @@ def _weather_payload(target: date) -> dict:
     return {"hourly": hourly}
 
 
-def _live_result(target: date) -> dict:
-    return {
-        "target": "solar",
-        "unit": "kW per installed kW",
-        "date": target.isoformat(),
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "weather_source": "Open-Meteo live forecast",
-        "weather_url": "https://api.open-meteo.com/test",
-        "model": "GridTwin LightGBM quantile ensemble",
-        "points": [
-            {"t": f"{i // 4:02d}:{(i % 4) * 15:02d}", "p10": 0.1, "p50": 0.2, "p90": 0.3}
-            for i in range(96)
-        ],
-    }
-
-
 def test_tomorrow_uses_mathura_local_date():
     late_utc = datetime(2026, 9, 29, 20, 0, tzinfo=timezone.utc)
     assert tomorrow_local(late_utc) == date(2026, 10, 1)
@@ -59,71 +37,6 @@ def test_live_weather_and_frozen_models_produce_96_ordered_intervals():
     assert (forecast["p10"] <= forecast["p50"]).all()
     assert (forecast["p50"] <= forecast["p90"]).all()
     assert forecast.min().min() >= 0 and forecast.max().max() <= 1
-
-
-def test_live_forecast_api_contract_without_network(monkeypatch):
-    target = date(2026, 9, 30)
-    monkeypatch.setattr(api, "live_solar_forecast", lambda requested: _live_result(requested))
-    response = client.get("/api/live-forecast", params={"date": target.isoformat()})
-    assert response.status_code == 200
-    body = response.json()
-    assert body["date"] == target.isoformat()
-    assert body["model"] == "GridTwin LightGBM quantile ensemble"
-    assert len(body["points"]) == 96
-
-
-def test_live_warning_api_contract_without_network(monkeypatch):
-    target = date(2026, 9, 30)
-    monkeypatch.setattr(api, "live_solar_forecast", lambda requested: _live_result(requested))
-    monkeypatch.setattr(api, "live_warning", lambda date_value, frame, risk, band: {
-        "date": date_value,
-        "risk_band": risk,
-        "demand_mode": "historical_proxy",
-        "demand_proxy_date": "2019-09-30",
-        "pv_share": 1.0,
-        "band": band,
-        "cases": {key: {"violation_steps": 4, "max_vm_pu": 1.08,
-                         "first_unsafe": "12:00", "unsafe_times": ["12:00"]}
-                  for key in ("p10", "p50", "p90")},
-        "predicted": {"violation_steps": 4, "max_vm_pu": 1.08,
-                       "first_unsafe": "12:00", "unsafe_times": ["12:00"]},
-        "without_solar": {"violation_steps": 1, "max_vm_pu": 1.11,
-                          "first_unsafe": "00:00", "unsafe_times": ["00:00"]},
-        "solar_caused": {"violation_steps": 3, "first_unsafe": "12:00", "unsafe_times": ["12:00"]},
-        "provenance": {"reference": "unavailable until the target day has occurred"},
-    })
-    response = client.get("/api/live-early-warning", params={"date": target.isoformat(), "risk": "p90"})
-    assert response.status_code == 200
-    body = response.json()
-    assert body["predicted"]["violation_steps"] == 4
-    assert body["without_solar"]["first_unsafe"] == "00:00"
-    assert body["solar_caused"]["violation_steps"] == 3
-
-
-def _solar_frame(target: date, midday_kw_per_kwp: float) -> pd.DataFrame:
-    """A bell-shaped day: no sun before 06:00 or after 18:00."""
-    index = pd.date_range(target.isoformat(), periods=96, freq="15min")
-    hours = index.hour + index.minute / 60
-    shape = np.clip(np.sin((hours - 6) / 12 * np.pi), 0, None) * midday_kw_per_kwp
-    return pd.DataFrame({"p10": shape * 0.8, "p50": shape, "p90": shape * 1.1}, index=index)
-
-
-@pytest.mark.slow
-def test_live_warning_separates_solar_caused_time_from_the_grid_baseline():
-    result = live_warning("2026-09-30", _solar_frame(date(2026, 9, 30), 0.7))
-    predicted, baseline, solar = result["predicted"], result["without_solar"], result["solar_caused"]
-    assert set(solar["unsafe_times"]) == set(predicted["unsafe_times"]) - set(baseline["unsafe_times"])
-    assert solar["violation_steps"] == len(solar["unsafe_times"])
-    # Solar cannot cause anything while the sun is down.
-    assert all("06:00" <= t <= "18:00" for t in solar["unsafe_times"])
-    assert solar["first_unsafe"] == (solar["unsafe_times"][0] if solar["unsafe_times"] else None)
-
-
-@pytest.mark.slow
-def test_live_warning_without_sun_attributes_nothing_to_solar():
-    result = live_warning("2026-09-30", _solar_frame(date(2026, 9, 30), 0.0))
-    assert result["solar_caused"]["violation_steps"] == 0
-    assert result["predicted"]["unsafe_times"] == result["without_solar"]["unsafe_times"]
 
 
 def test_weather_schema_rejects_missing_fields():
