@@ -3,17 +3,25 @@
     "solar_v2_lightgbm": {
       "n": 4414,
       "mae_p50": 0.0329,
-      "coverage": 0.799,
-      "wis": 0.0213,
+      "coverage": 0.794,
+      "wis": 0.0214,
       "wis_gain_vs_reference": 0.0,
       "adopt": false
     },
-    "chronos2_with_covariates": {
+    "chronos2_nowcast_context": {
+      "n": 4414,
+      "mae_p50": 0.0511,
+      "coverage": 0.452,
+      "wis": 0.036,
+      "wis_gain_vs_reference": -0.682,
+      "adopt": false
+    },
+    "chronos2_era5_context_upper_bound": {
       "n": 4414,
       "mae_p50": 0.0318,
       "coverage": 0.786,
       "wis": 0.0207,
-      "wis_gain_vs_reference": 0.028,
+      "wis_gain_vs_reference": 0.033,
       "adopt": false
     }
   },
@@ -24,5 +32,6 @@
     "meteofrance_arpege_world",
     "ecmwf_ifs025"
   ],
-  "caveat": "Chronos-2 sees the previous 14 days of observed PV; the LightGBM pipeline needs none. Adoption therefore also requires a live source of yesterday's PV."
+  "reference_interval": "by_season_all_earlier",
+  "context_note": "nowcast = PV from the same-day NWP irradiance, which the live API returns for yesterday (past_days=1); ERA5 context arrives days late and is an upper bound only."
 }

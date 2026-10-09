@@ -69,3 +69,21 @@ def test_real_benchmark_reports_both_pipelines_on_the_same_hours():
     report = benchmark.run()
     a, b = report["scores_2025"]["solar_v2_lightgbm"], report["scores_2025"]["chronos2_with_covariates"]
     assert a["n"] == b["n"] and report["scores_2025"]["solar_v2_lightgbm"]["adopt"] is False
+
+
+def test_nowcast_pv_reads_day0_irradiance_through_the_same_pv_chain(tmp_path):
+    import json
+
+    from ml import solar_v2
+    times = pd.date_range("2025-01-10", periods=24, freq="h")
+    sun = np.clip(np.sin((times.hour.to_numpy() - 6) / 12 * np.pi), 0, None)
+    hourly = {"time": [t.strftime("%Y-%m-%dT%H:%M") for t in times],
+              "shortwave_radiation_previous_day0": list(sun * 700), "direct_normal_irradiance_previous_day0": list(sun * 500),
+              "diffuse_radiation_previous_day0": list(sun * 100), "temperature_2m_previous_day0": [20.0] * 24,
+              "cloud_cover_previous_day0": [10.0] * 24, "wind_speed_10m_previous_day0": [5.0] * 24}
+    path = tmp_path / "nowcast.json"
+    path.write_text(json.dumps({"hourly": hourly}))
+    pv = benchmark.nowcast_pv(path)
+    assert len(pv) == 24 and pv.max() > 0.3 and pv.iloc[2] == 0
+    frame = pd.DataFrame({k.replace("_previous_day0", ""): v for k, v in hourly.items() if k != "time"}, index=times)
+    pd.testing.assert_series_equal(pv, solar_v2._pv(frame), check_names=False, check_freq=False)
