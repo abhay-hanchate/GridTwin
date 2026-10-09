@@ -293,3 +293,18 @@ input[type='range']:focus-visible { outline-offset: 4px; }
 .key-before { background: var(--unsafe); }
 .key-after { background: var(--brand); }
 .key-rule { border-top: 2px dashed var(--ink-2); height: 0; }
+
+/* Try a change: the form generated from /catalog */
+.whatif-form { display: grid; gap: 12px; margin: 12px 0; }
+.param-group { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.param-group h3 { grid-column: 1 / -1; margin: 8px 0 0; font-size: 15px; }
+.param-entry { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; margin: 0; background: var(--surface); }
+.param-entry.on { border-color: var(--ink-3); }
+.param-entry legend { font-weight: 600; padding: 0 4px; }
+.param-entry .muted { margin: 4px 0 8px; font-size: 12.5px; }
+.param { display: grid; gap: 4px; margin-top: 6px; }
+.param label { font-size: 13px; }
+.param input[type=number] { max-width: 160px; padding: 6px 8px; font: inherit; }
+.include { display: flex; gap: 6px; align-items: center; font-size: 13px; }
+.whatif-form .primary { justify-self: start; padding: 8px 16px; font: inherit; font-weight: 600; cursor: pointer; }
+.whatif-form .primary:disabled { opacity: .5; cursor: not-allowed; }

@@ -115,3 +115,55 @@ export interface Results {
   bakeoffs: Bakeoff[]
   headlines: { demo?: { code_version: string; results: DemoResult[] }; [name: string]: unknown }
 }
+
+/** GET /catalog: every registered change and fix with the JSON schema of its parameters (feature F4). */
+export interface ParamSchema {
+  type: 'number' | 'integer' | string
+  title?: string
+  description?: string
+  default?: number
+  minimum?: number
+  maximum?: number
+  exclusiveMinimum?: number
+  exclusiveMaximum?: number
+}
+
+export interface CatalogEntry {
+  id: string
+  kind: 'change' | 'fix' | string
+  label: string
+  description: string
+  params: { properties?: Record<string, ParamSchema> }
+}
+
+/** Engine day summary (engine.violations.summarise), as sent by /whatif and /simulate. */
+export interface DaySummary {
+  max_vm_pu: number
+  min_vm_pu: number
+  violation_steps: number
+  solver_failed_steps: number
+  max_trafo_loading_pct: number
+  max_line_loading_pct: number
+  curtailed_kwh: number
+  [field: string]: number
+}
+
+export interface WhatIfRun {
+  summary: DaySummary
+  unsafe: boolean[]
+  max_v: number[]
+  node_max_v: number[][]          // [step][node]
+}
+
+export interface WhatIfResult {
+  date: string
+  rule: string
+  changes: string[]
+  fixes: string[]
+  t: string[]
+  limits_v: { min: number; max: number }
+  nodes: number[]
+  provenance: Record<string, string>
+  before: WhatIfRun
+  after: WhatIfRun
+}

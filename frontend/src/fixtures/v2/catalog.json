@@ -1,0 +1,193 @@
+[
+ {
+  "id": "change.panel_size",
+  "kind": "change",
+  "label": "Bigger or smaller rooftop systems",
+  "description": "Every home that has solar gets this size instead of 3 kW.",
+  "params": {
+   "properties": {
+    "kwp_per_home": {
+     "default": 3.0,
+     "description": "installed solar per home with solar, kW",
+     "maximum": 10,
+     "minimum": 0,
+     "title": "Kwp Per Home",
+     "type": "number"
+    }
+   },
+   "title": "PanelSize",
+   "type": "object"
+  }
+ },
+ {
+  "id": "change.upstream_shift",
+  "kind": "change",
+  "label": "Grid voltage higher or lower",
+  "description": "Shifts the voltage arriving at the transformer for the whole day.",
+  "params": {
+   "properties": {
+    "shift_pct": {
+     "default": 0.0,
+     "description": "change of the voltage arriving from the grid, % of 230 V",
+     "maximum": 10,
+     "minimum": -10,
+     "title": "Shift Pct",
+     "type": "number"
+    }
+   },
+   "title": "UpstreamShift",
+   "type": "object"
+  }
+ },
+ {
+  "id": "change.ev_charging",
+  "kind": "change",
+  "label": "Evening EV charging",
+  "description": "A share of homes (spread along the street) charge an EV every evening.",
+  "params": {
+   "properties": {
+    "share_of_homes": {
+     "default": 0.2,
+     "description": "share of homes with an EV charger",
+     "maximum": 1,
+     "minimum": 0,
+     "title": "Share Of Homes",
+     "type": "number"
+    },
+    "kw": {
+     "default": 3.3,
+     "description": "charger power, kW",
+     "exclusiveMinimum": 0,
+     "maximum": 11,
+     "title": "Kw",
+     "type": "number"
+    },
+    "start_hour": {
+     "default": 19,
+     "maximum": 23,
+     "minimum": 0,
+     "title": "Start Hour",
+     "type": "integer"
+    },
+    "hours": {
+     "default": 4,
+     "maximum": 12,
+     "minimum": 1,
+     "title": "Hours",
+     "type": "integer"
+    }
+   },
+   "title": "EvCharging",
+   "type": "object"
+  }
+ },
+ {
+  "id": "change.heatwave",
+  "kind": "change",
+  "label": "Heatwave demand",
+  "description": "Scales every home's demand for the whole day.",
+  "params": {
+   "properties": {
+    "load_factor": {
+     "default": 1.3,
+     "description": "multiplier on every home's demand (fans and AC)",
+     "maximum": 2,
+     "minimum": 1,
+     "title": "Load Factor",
+     "type": "number"
+    }
+   },
+   "title": "Heatwave",
+   "type": "object"
+  }
+ },
+ {
+  "id": "fix.tap",
+  "kind": "fix",
+  "label": "Transformer tap",
+  "description": "Off-load tap change, set once for the season.",
+  "params": {
+   "properties": {
+    "tap_pos": {
+     "default": 1,
+     "description": "transformer tap steps (+ lowers the street voltage by 2.5% each)",
+     "maximum": 2,
+     "minimum": -2,
+     "title": "Tap Pos",
+     "type": "integer"
+    }
+   },
+   "title": "Tap",
+   "type": "object"
+  }
+ },
+ {
+  "id": "fix.volt_var",
+  "kind": "fix",
+  "label": "Smart inverters: IEEE 1547 Volt/VAR",
+  "description": "Category B default curve on every inverter; absorbs reactive power only where voltage is high.",
+  "params": {
+   "properties": {},
+   "title": "NoParams",
+   "type": "object"
+  }
+ },
+ {
+  "id": "fix.volt_watt",
+  "kind": "fix",
+  "label": "Smart inverters: IEEE 1547 Volt/Watt",
+  "description": "Caps output above 1.06 pu, down to 20% of rating at 1.10 pu.",
+  "params": {
+   "properties": {},
+   "title": "NoParams",
+   "type": "object"
+  }
+ },
+ {
+  "id": "fix.curtail",
+  "kind": "fix",
+  "label": "Uniform export cap",
+  "description": "Every panel may send out only this share of its output.",
+  "params": {
+   "properties": {
+    "keep": {
+     "default": 0.8,
+     "description": "share of solar output allowed out",
+     "maximum": 1,
+     "minimum": 0,
+     "title": "Keep",
+     "type": "number"
+    }
+   },
+   "title": "Curtail",
+   "type": "object"
+  }
+ },
+ {
+  "id": "fix.battery",
+  "kind": "fix",
+  "label": "Community battery at the far end",
+  "description": "Charges when voltage is high, gives back in the evening while there is headroom.",
+  "params": {
+   "properties": {
+    "kw": {
+     "default": 50,
+     "exclusiveMinimum": 0,
+     "maximum": 500,
+     "title": "Kw",
+     "type": "number"
+    },
+    "hours": {
+     "default": 4,
+     "description": "energy = kW x hours",
+     "exclusiveMinimum": 0,
+     "maximum": 8,
+     "title": "Hours",
+     "type": "number"
+    }
+   },
+   "title": "Battery",
+   "type": "object"
+  }
+ }
+]
