@@ -1,5 +1,6 @@
 {
-  "generated_at": "2026-10-09T06:24:39.346542+00:00",
+  "generated_at": "2026-10-09T06:33:15.682959+00:00",
+  "rule": "accuracy first: lowest MAE with P10-P90 coverage 75-85% overall and 70-92% per season (owner change on 9 Oct 2026 after round 2; see docs/DECISIONS.md)",
   "targets": {
     "demand": {
       "unit": "kW per home",
@@ -110,7 +111,7 @@
       },
       "decision": {
         "adopted": "pattern_only",
-        "reason": "no candidate meets the coverage rule; lowest MAE reported with its miss"
+        "reason": "lowest MAE among candidates inside the coverage bands"
       }
     },
     "voltage": {
@@ -221,8 +222,8 @@
         "climatology": 5.0253
       },
       "decision": {
-        "adopted": "climatology",
-        "reason": "live-anchored model failed the rule; best candidate meeting the coverage rule"
+        "adopted": "live_anchored",
+        "reason": "lowest MAE among candidates inside the coverage bands"
       }
     }
   }

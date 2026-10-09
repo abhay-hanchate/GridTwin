@@ -29,7 +29,7 @@ History of UP daily energy for training: Zenodo record 14983362 (Grid-India repo
    (gitignored). One fetch a day is enough because each fetch holds all of yesterday.
 2. **Anchor feature, scale-free:** `up_ratio = E(d-1) / mean(E(d-8 .. d-2))`, the UP energy of the last full day
    against the week before it. A ratio cancels any scale difference between Zenodo history and the live feed.
-   Until eight days are recorded live, the forecast runs without the anchor and says so.
+   Until yesterday plus five of the seven days before are recorded, the forecast runs without the anchor and says so.
 3. **Models** (`ml/live_dayahead.py`), one for household demand (mean kW per home) and one for grid voltage (V),
    per 15 minutes, P10/P50/P90. Features known the evening before: slot, weekday, day of year (sine, cosine),
    UP holiday flags (day and next day), tomorrow's temperature (training uses ERA5 actual temperature as a stand-in

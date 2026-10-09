@@ -209,3 +209,14 @@ higher than the live-anchored model's. The live UP anchor adds at most 1.7% (vol
 **Open question for the owner:** the rule ranks interval coverage above accuracy, so it picks a far less accurate
 model whose interval happens to land in the band. The rule is not changed here; changing it is the owner's decision
 and will be recorded as a rule change, not as a result.
+
+### Rule change by the owner (9 Oct 2026, after seeing round 2)
+
+The owner changed the rule to **accuracy first**: the lowest-MAE candidate whose P10-P90 coverage is 75-85% overall
+and 70-92% in every season. Reason given: coverage can be corrected by widening or narrowing the interval, accuracy
+cannot, so a rule that picks a model with 59% more error for its interval width is the wrong rule. This is a rule
+change made after the results were seen, and it is reported as one.
+
+Outcome on the round 2 numbers: **demand: pattern only** (MAE 0.0700 kW/home, +46.5% vs climatology, coverage
+83.5%); **voltage: live anchored** (MAE 3.72 V, +37.1%, coverage 83.0%; pattern-only is used live until the UP
+recorder has six days). Under the original rule the picks were pattern only and climatology.

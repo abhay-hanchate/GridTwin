@@ -1,0 +1,106 @@
+{
+  "model_type": "LightGBM quantiles, no household lags, Mondrian (per-season) split-conformal",
+  "trained_at": "2026-10-09T06:38:48.118839+00:00",
+  "provenance": "modeled: household pattern learned from CEEW smart meters 2019-2021; level from live UP state demand (UPSLDC). No live household meters exist.",
+  "features": {
+    "pattern_only": [
+      "slot",
+      "dow",
+      "is_weekend",
+      "sin_doy",
+      "cos_doy",
+      "is_holiday",
+      "is_holiday_prev",
+      "temp",
+      "temp_daymax",
+      "temp_daymean",
+      "district_id"
+    ],
+    "live_anchored": [
+      "slot",
+      "dow",
+      "is_weekend",
+      "sin_doy",
+      "cos_doy",
+      "is_holiday",
+      "is_holiday_prev",
+      "temp",
+      "temp_daymax",
+      "temp_daymean",
+      "district_id",
+      "up_ratio"
+    ]
+  },
+  "files": {
+    "demand/pattern_only/p10": "live_dayahead_demand_pattern_only_p10.txt",
+    "demand/pattern_only/p50": "live_dayahead_demand_pattern_only_p50.txt",
+    "demand/pattern_only/p90": "live_dayahead_demand_pattern_only_p90.txt",
+    "demand/live_anchored/p10": "live_dayahead_demand_live_anchored_p10.txt",
+    "demand/live_anchored/p50": "live_dayahead_demand_live_anchored_p50.txt",
+    "demand/live_anchored/p90": "live_dayahead_demand_live_anchored_p90.txt",
+    "voltage/pattern_only/p10": "live_dayahead_voltage_pattern_only_p10.txt",
+    "voltage/pattern_only/p50": "live_dayahead_voltage_pattern_only_p50.txt",
+    "voltage/pattern_only/p90": "live_dayahead_voltage_pattern_only_p90.txt",
+    "voltage/live_anchored/p10": "live_dayahead_voltage_live_anchored_p10.txt",
+    "voltage/live_anchored/p50": "live_dayahead_voltage_live_anchored_p50.txt",
+    "voltage/live_anchored/p90": "live_dayahead_voltage_live_anchored_p90.txt"
+  },
+  "sha256": {
+    "live_dayahead_demand_pattern_only_p10.txt": "a085286f34167e6ade2b73b9e992eb2440901bfe81e269261c6d3531d37f2ee6",
+    "live_dayahead_demand_pattern_only_p50.txt": "42c3747d9191730de628977161723a1eb0ed49e37351d56a63ed3338c82708f0",
+    "live_dayahead_demand_pattern_only_p90.txt": "790d95e979277e1fb9153b0ff0a302ff524f1bce0dcf50753975698c8484d28a",
+    "live_dayahead_demand_live_anchored_p10.txt": "21a55fbaf067d2e19f7d2011edf67a2831682bbc0fb0b521d1d88a6cea8410ed",
+    "live_dayahead_demand_live_anchored_p50.txt": "858e45cb2f6933f041d89654d136849692378dc1e1fac8c9b1c94dd9378781c9",
+    "live_dayahead_demand_live_anchored_p90.txt": "d68a89d32562ab20869571f28f9000462faa3427ebb0ac02e13804fb413268ef",
+    "live_dayahead_voltage_pattern_only_p10.txt": "4e1af575419fcc8be6a965bb36a54b8ff4b0687d26c5fa6f558d843ad34c6b3e",
+    "live_dayahead_voltage_pattern_only_p50.txt": "1de53d00455bdbbbab3d5fbc6055479271f7e203cb1a6d6d8dfc48c5632e9081",
+    "live_dayahead_voltage_pattern_only_p90.txt": "dc1f3dd23c895d8077fcb2fe6f1dcb71c83c2294264f8f26079a27b7fbceefd6",
+    "live_dayahead_voltage_live_anchored_p10.txt": "c7e895800dc315e62b38aa8403d122ea52b93622717019952a412068c8ee85c0",
+    "live_dayahead_voltage_live_anchored_p50.txt": "56d917091620fba3847714b5fb21d97d4d97a4419774342c7778f354439cb4b5",
+    "live_dayahead_voltage_live_anchored_p90.txt": "e0efb578d1f607c28b6a18412a30529ef35068e9683df3a45f5c8e4e8c793ff5"
+  },
+  "widths": {
+    "demand": {
+      "pattern_only": {
+        "post_monsoon": 0.061351,
+        "winter": 0.02841,
+        "summer": 0.035806,
+        "monsoon": 0.050744
+      },
+      "live_anchored": {
+        "post_monsoon": 0.063743,
+        "winter": 0.02827,
+        "summer": 0.038079,
+        "monsoon": 0.048995
+      }
+    },
+    "voltage": {
+      "pattern_only": {
+        "post_monsoon": 2.382024,
+        "winter": 2.425229,
+        "summer": 2.305031,
+        "monsoon": 2.444078
+      },
+      "live_anchored": {
+        "post_monsoon": 2.603928,
+        "winter": 2.534851,
+        "summer": 2.35008,
+        "monsoon": 2.078291
+      }
+    }
+  },
+  "decisions": {
+    "demand": {
+      "adopted": "pattern_only",
+      "reason": "lowest MAE among candidates inside the coverage bands"
+    },
+    "voltage": {
+      "adopted": "live_anchored",
+      "reason": "lowest MAE among candidates inside the coverage bands"
+    }
+  },
+  "units": {
+    "demand": "kW per home",
+    "voltage": "V"
+  }
+}

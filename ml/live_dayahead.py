@@ -182,21 +182,17 @@ def score(pred: pd.DataFrame, y: pd.Series) -> dict:
 
 
 def _meets_coverage(s: dict) -> bool:
-    return 0.78 <= s["coverage"] <= 0.82 and all(0.70 <= c <= 0.90 for c in s["by_season"].values())
+    return 0.75 <= s["coverage"] <= 0.85 and all(0.70 <= c <= 0.92 for c in s["by_season"].values())
 
 
 def decide(rows: dict) -> dict:
-    """The pre-registered rule (docs/DECISIONS.md, live day-ahead demand and voltage)."""
-    live, clim, pattern = rows["live_anchored"], rows["climatology"], rows["pattern_only"]
-    if live["mae"] <= 0.9 * clim["mae"] and live["mae"] < pattern["mae"] and _meets_coverage(live):
-        return {"adopted": "live_anchored", "reason": "MAE at least 10% below climatology and below pattern-only, "
-                                                       "coverage inside the bands"}
-    passing = {n: s for n, s in rows.items() if _meets_coverage(s)}
-    if passing:
-        best = min(passing, key=lambda n: passing[n]["mae"])
-        return {"adopted": best, "reason": "live-anchored model failed the rule; best candidate meeting the coverage rule"}
+    """Accuracy first (rule changed by the owner on 9 Oct 2026 after round 2; see docs/DECISIONS.md): the lowest-MAE
+    candidate whose P10-P90 coverage is 75-85% overall and 70-92% in every season."""
+    for name in sorted(rows, key=lambda n: rows[n]["mae"]):
+        if _meets_coverage(rows[name]):
+            return {"adopted": name, "reason": "lowest MAE among candidates inside the coverage bands"}
     best = min(rows, key=lambda n: rows[n]["mae"])
-    return {"adopted": best, "reason": "no candidate meets the coverage rule; lowest MAE reported with its miss"}
+    return {"adopted": best, "reason": "no candidate inside the coverage bands; lowest MAE reported with its miss"}
 
 
 # ---- final models and live forecast ----------------------------------------------------------------------------
@@ -248,19 +244,26 @@ def live_forecast(district: str, target: date | None = None, *, temperature: pd.
     target = target or (datetime.now(timezone(timedelta(hours=5, minutes=30))).date() + timedelta(days=1))
     temperature = temperature if temperature is not None else forecast_temperature(district, target)
     ratio = current_ratio(target) if ratio is None else ratio
-    used = bool(np.isfinite(ratio))
-    variant = "live_anchored" if used else "pattern_only"
+    has_anchor = bool(np.isfinite(ratio))
     manifest = json.loads((model_dir / MANIFEST).read_text(encoding="utf-8"))
+
+    def variant_for(target_name: str) -> str:
+        adopted = manifest["decisions"].get(target_name, {}).get("adopted", "live_anchored")
+        return "live_anchored" if adopted == "live_anchored" and has_anchor else "pattern_only"
+
+    used = any(variant_for(t) == "live_anchored" for t in TARGETS)
     frame = pd.DataFrame({"ts": pd.date_range(target.isoformat(), periods=96, freq="15min"), "district": district,
-                          "temp": temperature.to_numpy()[:96], "up_ratio": ratio if used else np.nan})
+                          "temp": temperature.to_numpy()[:96], "up_ratio": ratio if has_anchor else np.nan})
     hol = holidays_set if holidays_set is not None else holiday_set([target.year - 1, target.year])
     X = add_features(frame, hol)
     season = X["season"].iloc[0]
     out = {"date": target.isoformat(), "district": district, "provenance": PROVENANCE,
-           "anchor": {"used": used, "up_ratio": round(ratio, 4) if used else None,
+           "anchor": {"used": used, "up_ratio": round(ratio, 4) if has_anchor else None,
                       "note": "level anchored to live UP state demand" if used else
+                              "pattern only: the adopted models do not use the UP anchor" if has_anchor else
                               "pattern only: the UP anchor needs yesterday plus five of the seven days before (scripts/record_up_demand.py)"}}
     for target_name, unit in TARGETS.items():
+        variant = variant_for(target_name)
         preds = {}
         for q in QUANTILES:
             name = manifest["files"][f"{target_name}/{variant}/{q}"]
@@ -285,7 +288,10 @@ def live_forecast(district: str, target: date | None = None, *, temperature: pd.
 
 def evaluate(data: pd.DataFrame, n_estimators: int = 300) -> tuple[dict, dict]:
     """Walk-forward bake-off for both targets on identical rows; returns the report and the per-season widths."""
-    report, widths = {"generated_at": datetime.now(timezone.utc).isoformat(), "targets": {}}, {}
+    report = {"generated_at": datetime.now(timezone.utc).isoformat(),
+              "rule": "accuracy first: lowest MAE with P10-P90 coverage 75-85% overall and 70-92% per season "
+                      "(owner change on 9 Oct 2026 after round 2; see docs/DECISIONS.md)", "targets": {}}
+    widths: dict = {}
     for target in TARGETS:
         rows = data[data[target].notna() & data["up_ratio"].notna()]               # identical rows for every candidate
         y = rows[target]

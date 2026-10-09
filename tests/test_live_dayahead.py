@@ -112,13 +112,24 @@ def test_live_forecast_falls_back_to_pattern_only_without_the_anchor(tmp_path):
     assert "pattern" in without["anchor"]["note"]
 
 
-def test_decision_rule_follows_the_pre_registration():
-    ok = {"mae": 0.90, "coverage": 0.80, "by_season": {"winter": 0.79, "summer": 0.81}}
-    rows = {"climatology": {"mae": 1.10, "coverage": 0.80, "by_season": {"winter": 0.8, "summer": 0.8}},
-            "pattern_only": {"mae": 0.95, "coverage": 0.80, "by_season": {"winter": 0.8, "summer": 0.8}},
-            "live_anchored": ok}
-    assert lda.decide(rows)["adopted"] == "live_anchored"
-    rows["live_anchored"] = {**ok, "mae": 1.05}                          # less than 10% better than climatology
-    assert lda.decide(rows)["adopted"] != "live_anchored"
-    rows["live_anchored"] = {**ok, "by_season": {"winter": 0.65, "summer": 0.81}}     # a season outside 70-90%
-    assert lda.decide(rows)["adopted"] != "live_anchored"
+def test_decision_rule_puts_accuracy_first_within_the_coverage_bands():
+    def row(mae, cov, seasons):
+        return {"mae": mae, "coverage": cov, "by_season": dict(zip(("winter", "summer"), seasons))}
+    rows = {"climatology": row(5.9, 0.784, (0.76, 0.71)),
+            "pattern_only": row(3.79, 0.822, (0.81, 0.80)),
+            "live_anchored": row(3.72, 0.830, (0.83, 0.914))}
+    assert lda.decide(rows)["adopted"] == "live_anchored"                 # most accurate; 83% and 91.4% are inside
+    rows["live_anchored"] = row(3.72, 0.86, (0.83, 0.85))                 # overall coverage above 85%
+    assert lda.decide(rows)["adopted"] == "pattern_only"
+    rows["pattern_only"] = row(3.79, 0.80, (0.60, 0.80))                  # a season below 70%
+    assert lda.decide(rows)["adopted"] == "climatology"
+
+
+def test_live_forecast_uses_the_adopted_model_per_target(tmp_path):
+    data = _data(8)
+    lda.train_final(data, model_dir=tmp_path, n_estimators=40,
+                    decisions={"demand": {"adopted": "pattern_only"}, "voltage": {"adopted": "live_anchored"}})
+    temps = pd.Series(28.0, index=pd.date_range("2019-12-15", periods=96, freq="15min"))
+    out = lda.live_forecast("mathura", date(2019, 12, 15), temperature=temps, ratio=1.03, model_dir=tmp_path,
+                            holidays_set=set())
+    assert out["demand"]["model"] == "pattern_only" and out["voltage"]["model"] == "live_anchored"
