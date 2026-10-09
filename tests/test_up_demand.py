@@ -32,13 +32,22 @@ def test_up_ratio_is_yesterday_over_the_week_before():
     r = up_demand.up_ratio(e)
     # for target day 2026-09-10: E(09-09) / mean(E(09-02 .. 09-08)) = 440 / 400
     assert r[pd.Timestamp("2026-09-10")] == pytest.approx(1.10)
-    assert np.isnan(r[pd.Timestamp("2026-09-08")])                                  # not enough history yet
+    assert np.isnan(r[pd.Timestamp("2026-09-06")])                                  # only 4 of 7 days before
     assert pd.Timestamp("2026-09-11") in r.index                                    # usable for tomorrow
 
 
-def test_up_ratio_needs_every_day_of_the_window():
+def test_up_ratio_tolerates_two_missing_days_but_not_three():
     days = pd.date_range("2026-09-01", periods=10, freq="D")
-    e = pd.Series([400.0] * 10, index=days).drop(pd.Timestamp("2026-09-05"))
+    e = pd.Series([400.0] * 9 + [440.0], index=days)                          # target day 09-11 uses E(09-10)
+    two = e.drop([pd.Timestamp("2026-09-04"), pd.Timestamp("2026-09-06")])
+    assert up_demand.up_ratio(two)[pd.Timestamp("2026-09-11")] == pytest.approx(1.10)
+    three = two.drop(pd.Timestamp("2026-09-08"))
+    assert np.isnan(up_demand.up_ratio(three)[pd.Timestamp("2026-09-11")])
+
+
+def test_up_ratio_needs_yesterday():
+    days = pd.date_range("2026-09-01", periods=10, freq="D")
+    e = pd.Series([400.0] * 10, index=days).drop(pd.Timestamp("2026-09-09"))
     assert np.isnan(up_demand.up_ratio(e)[pd.Timestamp("2026-09-10")])
 
 

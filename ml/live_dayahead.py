@@ -131,14 +131,22 @@ def walk_forward(data: pd.DataFrame, target: str, features: list[str] | None, *,
     months (both districts). `features=None` means climatology."""
     rows = data[data[target].notna() & (data[features].notna().all(axis=1) if features else True)]
     months = sorted(rows["month"].unique())
-    parts = []
-    for month in months[start_after_months:]:
-        train, test = rows[rows["month"] < month], rows[rows["month"] == month]
+
+    def fold(train: pd.DataFrame, test: pd.DataFrame) -> pd.DataFrame:
         if features is None:
             pred = climatology(train, test, target)
         else:
             pred = predict_quantiles(fit_quantiles(train[features], train[target], n_estimators), test[features])
-        parts.append(pred.assign(month=month, season=test["season"], district=test["district"]))
+        return pred.assign(month=test["month"], season=test["season"], district=test["district"])
+
+    parts = []
+    if start_after_months >= 2:
+        # Warm-up: the last training month predicted by a model that did not see it, so the first scored month's
+        # interval has earlier out-of-sample errors to learn its width from. Never scored.
+        warm = months[start_after_months - 1]
+        parts.append(fold(rows[rows["month"] < warm], rows[rows["month"] == warm]).assign(warmup=True))
+    for month in months[start_after_months:]:
+        parts.append(fold(rows[rows["month"] < month], rows[rows["month"] == month]).assign(warmup=False))
     return pd.concat(parts)
 
 
@@ -251,7 +259,7 @@ def live_forecast(district: str, target: date | None = None, *, temperature: pd.
     out = {"date": target.isoformat(), "district": district, "provenance": PROVENANCE,
            "anchor": {"used": used, "up_ratio": round(ratio, 4) if used else None,
                       "note": "level anchored to live UP state demand" if used else
-                              "pattern only: the UP anchor needs eight straight recorded days (scripts/record_up_demand.py)"}}
+                              "pattern only: the UP anchor needs yesterday plus five of the seven days before (scripts/record_up_demand.py)"}}
     for target_name, unit in TARGETS.items():
         preds = {}
         for q in QUANTILES:
@@ -285,7 +293,8 @@ def evaluate(data: pd.DataFrame, n_estimators: int = 300) -> tuple[dict, dict]:
                "pattern_only": walk_forward(rows, target, FEATURES_PATTERN, n_estimators=n_estimators),
                "live_anchored": walk_forward(rows, target, FEATURES_LIVE, n_estimators=n_estimators)}
         widened = {n: mondrian_widen(r, y) for n, r in raw.items()}
-        scores = {n: score(w, y) for n, w in widened.items()}
+        scores = {n: score(w[~w["warmup"]], y) for n, w in widened.items()}
+        raw = {n: r[~r["warmup"]] for n, r in raw.items()}
         widths[target] = {n: {s: round(float(conformal_q(raw[n][raw[n].season == s], y[raw[n][raw[n].season == s].index], ALPHA)), 6)
                               for s in raw[n]["season"].unique()} for n in ("pattern_only", "live_anchored")}
         held = {}

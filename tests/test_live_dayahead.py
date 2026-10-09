@@ -60,6 +60,17 @@ def test_walk_forward_never_sees_the_month_it_predicts():
     pd.testing.assert_frame_equal(a[a.month == month][["p10", "p50", "p90"]], b[b.month == month][["p10", "p50", "p90"]])
 
 
+def test_walk_forward_adds_a_cross_fitted_warm_up_month_for_the_first_interval():
+    data = _data(8)
+    wf = lda.walk_forward(data, "demand", lda.FEATURES_PATTERN, start_after_months=6, n_estimators=40)
+    months = sorted(data["month"].unique())
+    assert set(wf.loc[wf.warmup, "month"]) == {months[5]}                 # the last training month of the first fold
+    assert set(wf.loc[~wf.warmup, "month"]) == set(months[6:])
+    widened = lda.mondrian_widen(wf, data["demand"])
+    first = widened[(widened.month == months[6]) & ~widened.warmup]
+    assert (first["cal_pool"] != "none").all()                             # the first scored month is widened too
+
+
 def test_mondrian_widening_uses_earlier_months_of_the_same_season_only():
     idx = pd.RangeIndex(4000)
     months = np.repeat(["2019-12", "2020-01", "2020-06", "2020-12"], 1000)
