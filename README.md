@@ -137,7 +137,7 @@ The AI predicts; physics verifies. Every fix and every warning is checked by a f
 
 ## Run it
 
-Requires Python 3.11 and Node.js 20.19+ or 22.12+ (Vite 8 requirement).
+Requires Python 3.12 or 3.13 and Node.js 20.19+ or 22.12+ (Vite 8 requirement).
 
 From the repository root, create a virtual environment and install the Python dependencies. In Windows PowerShell:
 
