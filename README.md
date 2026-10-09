@@ -198,7 +198,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 ## Features
 
 <!-- FEATURES:START -->
-**21 of 25 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
+**23 of 27 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
 
 | ID | Feature | Area | Owner | Status | Pull request |
 | --- | --- | --- | --- | --- | --- |
@@ -227,6 +227,8 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 | F23 | Machine-learning shortcut model of the power flow | ML | Team | 🏁 Finale |  |
 | F24 | AI assistant that explains each recommendation | ML | Team | 🏁 Finale |  |
 | F25 | Final project document and PDF for the PPT and video | Docs | P4 | ✅ Done | [#15](https://github.com/abhay-hanchate/GridTwin/pull/15) |
+| F26 | Live warning: separate solar-caused risk from the grid's own voltage |  | Tabsirshaikh | ✅ Done | [#17](https://github.com/abhay-hanchate/GridTwin/pull/17) |
+| F27 | Docs: hosting capacity is built  not roadmap |  | abhay-hanchate | ✅ Done | [#18](https://github.com/abhay-hanchate/GridTwin/pull/18) |
 <!-- FEATURES:END -->
 
 ## Team
@@ -255,7 +257,9 @@ Every assumption and limitation — what is observed, modeled or benchmark — i
 
 ## Roadmap (finale)
 
-- Hosting capacity: how much solar each street can take, with and without fixes
+Built in Round 1 and shown in the dashboard: hosting capacity (30 kW without a fix, 297 kW with the recommended fix).
+
+
 - Feeder reconfiguration (switching) as a fix
 - Machine-learning shortcut model of the power flow to test hundreds of fixes in milliseconds
 - AI assistant that explains each recommendation in plain language
