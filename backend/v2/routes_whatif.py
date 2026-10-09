@@ -100,16 +100,22 @@ def _validated(items: list[Item], kind: str) -> list[dict]:
     return out
 
 
-@router.post("/whatif")
-def whatif(request: Request, spec: WhatIf):
-    """Same spec twice = one computation (the cache key is the normalised spec)."""
-    s, store = _settings(request), _store(request)
+def normalise(spec: WhatIf, s, store) -> tuple[dict, str]:
+    """The normalised spec (defaults filled) and its cache key; the nightly precompute uses the same function."""
     compute.check_network(spec.network)
-    norm = {"date": spec.date.isoformat() if spec.date else default_date(store, "risk"), "network": spec.network,
+    norm = {"date": spec.date.isoformat() if spec.date else default_date(store, "whatif"), "network": spec.network,
             "rule": compute.rule(spec.rule or s.rule_default).id, "adoption": spec.adoption,
             "changes": _validated(spec.changes, "change"), "fixes": _validated(spec.fixes, "fix")}
     key = cache_key("whatif", s.code_version, code="+".join(file_version(f) for f in WHATIF_CODE),
                     spec=json.dumps(norm, sort_keys=True))
+    return norm, key
+
+
+@router.post("/whatif")
+def whatif(request: Request, spec: WhatIf):
+    """Same spec twice = one computation (the cache key is the normalised spec)."""
+    s, store = _settings(request), _store(request)
+    norm, key = normalise(spec, s, store)
     if s.offline:
         result = store.cached(key)
         if result is None:

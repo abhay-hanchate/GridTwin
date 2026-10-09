@@ -187,13 +187,17 @@ def headlines(root: Path) -> dict:
         demo = []
         for e in index["entries"]:
             res = _read(root, f"data/results/v2/{e['key']}.json") or {}
-            row = {"route": e["route"], "date": e["date"], "day_type": e.get("day_type"), "rule": e["rule"]}
+            row = {"route": e["route"], "date": e["date"], "day_type": e.get("day_type"),
+                   "rule": e.get("rule") or e.get("spec", {}).get("rule")}
             if e["route"] == "risk":
                 row.update(level=res.get("level"), expected_unsafe_hours=res.get("expected_unsafe_hours"))
             elif e["route"] == "fixes":
                 v = res.get("verdict", {})
                 row.update(safe_action_found=v.get("safe_action_found"), recommended=v.get("recommended"),
                            closest=v.get("closest"))
+            elif e["route"] == "whatif":
+                row.update(label=e.get("label"), unsafe_steps_before=res.get("before", {}).get("summary", {}).get("violation_steps"),
+                           unsafe_steps_after=res.get("after", {}).get("summary", {}).get("violation_steps"))
             elif e["route"] == "hosting":
                 row.update(without_fix=res.get("without_fix", {}).get("adoption_share"),
                            with_volt_var=res.get("with_volt_var", {}).get("adoption_share"))
