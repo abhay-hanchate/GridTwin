@@ -37,8 +37,9 @@ the identical mask): passed.
 - **Coverage by season** (per-season widths): winter 79.5%, summer 82.4%, monsoon 78.5%, post-monsoon 75.8%.
   Per-season widths fixed the winter under-coverage of the earlier single 30-day width (74.9%); post-monsoon is now
   the weakest season because only November 2024 came before it. No method tried kept 78-82% in every season.
-- Chronos-2 is benchmarked separately (task P4.3); its result and adoption decision are recorded in
-  `docs/DECISIONS.md` when run.
+- Chronos-2 (a foundation model) was tested twice and not adopted: with the true past PV it is 3.3% better on WIS
+  (below the 5% bar) but that history does not exist live; with the history that does exist live (same-day weather
+  estimates) it is 68% worse. Details in `docs/DECISIONS.md`.
 
 **Limitations and failure modes.**
 - Truth is a reanalysis proxy; coverage is measured against it, not against rooftop meters.

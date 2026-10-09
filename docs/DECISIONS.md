@@ -269,3 +269,16 @@ days late, so it could not run live.
   would give.
 - **Rule (unchanged):** adopt only if WIS is at least 5% lower than the reference; deployability is now satisfied by
   construction.
+
+### Result (run 9 Oct 2026, `python -m ml.benchmark`)
+
+| | MAE | Coverage | WIS | WIS gain vs solar v2 |
+|---|---|---|---|---|
+| Solar v2 as shipped (per-season widths) | 0.0329 | 79.4% | 0.0214 | |
+| **Chronos-2, day-0 nowcast context (live-capable)** | 0.0511 | 45.2% | 0.0360 | **-68%** |
+| Chronos-2, ERA5 context (upper bound, not live) | 0.0318 | 78.6% | 0.0207 | +3.3% |
+
+**Not adopted, and closed.** Chronos-2's edge came entirely from seeing the true PV of the past days. The only
+yesterday estimate that exists live (the same-day NWP irradiance) is itself far from the truth (MAE 0.0507 against
+0.0335 for our five-model day-ahead mean; checked for a time shift: none), and Chronos-2 inherits that error. Even
+with the true history it would gain 3.3%, below the 5% bar. Solar v2 stays.
