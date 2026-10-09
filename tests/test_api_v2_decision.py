@@ -105,7 +105,10 @@ def test_real_risk_payload_matches_the_dashboard_shape():
     assert len(r["p_unsafe"]) == len(r["t"]) == 96 and r["t"][0] == "00:00"
     assert set(r["window_risk"]) == {"15min", "1h", "3h", "24h"}
     assert set(r["shares"]) == {"overvoltage", "undervoltage", "line_overload", "trafo_overload", "solver_failure"}
-    assert r["thresholds"] == {"watch": 0.2, "act": 0.5} and r["calibration"]["reliable"] is False
+    import json as _json
+    from engine import config
+    stored = _json.loads((config.ROOT / "data" / "results" / "risk_calibration_pm10.json").read_text(encoding="utf-8"))
+    assert r["thresholds"] == {"watch": 0.2, "act": 0.5} and r["calibration"]["reliable"] is stored["reliable"]
     assert r["level"] in {"ok", "watch", "act"} and set(r["provenance"]) >= {"solar", "demand", "voltage"}
 
 

@@ -78,10 +78,12 @@ def test_an_oversize_body_is_refused_before_the_route_runs(client):
     assert r.status_code == 413 and r.json()["error"]["code"] == "payload_too_large"
 
 
-def test_rate_limit_applies_only_to_the_expensive_routes():
-    c = _client(rate_limit_per_minute=3)
+def test_rate_limit_applies_only_to_the_expensive_routes(tmp_path):
+    # The real /whatif route is mounted first, so it answers (200 cached or 202 job); a temporary results directory
+    # keeps its job and cache out of data/results/v2. Only the limiter's decision is under test here.
+    c = _client(rate_limit_per_minute=3, results_dir=tmp_path)
     codes = [c.post("/whatif", json={}).status_code for _ in range(4)]
-    assert codes == [200, 200, 200, 429]
+    assert 429 not in codes[:3] and codes[3] == 429
     r = c.post("/whatif", json={})
     assert r.json()["error"]["code"] == "rate_limited" and r.headers["retry-after"] == "60"
     assert all(c.get("/health").status_code == 200 for _ in range(10))
