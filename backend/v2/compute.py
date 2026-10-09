@@ -114,9 +114,26 @@ def rule(rule_id: str):
         raise ApiError(404, str(exc).strip("'\"")) from exc
 
 
+@lru_cache(maxsize=4)
+def _live(date: str) -> dict:
+    from backend.v2.live_inputs import live_forecasts
+    return live_forecasts(date)
+
+
+def provenance(date: str) -> dict:
+    """Where the inputs for `date` come from: Person B's live forecasts for today and later, demo inputs before."""
+    from backend.v2.live_inputs import is_live
+    return {**PROVENANCE, **_live(date)["provenance"]} if is_live(date) else PROVENANCE
+
+
 def scenarios(date: str, net, n: int = N_SCENARIOS, seed: int = SEED) -> DayScenarioBatch:
+    from backend.v2.live_inputs import is_live
     generator, clim, up = _history()
     d = pd.Timestamp(date)
+    if is_live(date):
+        f = _live(date)
+        return generator.sample(d, n, f["solar"], f["demand"], 1.0, net.n_homes, np.random.default_rng(seed),
+                                upstream_fc=f["voltage_pu"])
     demand = clim.demand_forecast(int(d.dayofweek >= 5), d.month)
     return generator.sample(d, n, solar_forecast(date), demand, yesterday_upstream_mean(d, up), net.n_homes,
                             np.random.default_rng(seed))
@@ -151,7 +168,7 @@ def risk_payload(date: str, network_id: str, rule_id: str, fix: str | None = Non
         "peak_voltage_v": {k: round(v, 1) for k, v in res.peak_voltage_v.items()},
         "window_risk": {WINDOW_KEYS[k]: round(v, 3) for k, v in res.window_risk.items()},
         "shares": {SHARE_KEYS[k]: round(v, 3) for k, v in res.shares.items()},
-        "n_scenarios": res.n_scenarios, "provenance": PROVENANCE,
+        "n_scenarios": res.n_scenarios, "provenance": provenance(date),
         "calibration": calibration(r.id, p),
     }
 
@@ -231,7 +248,7 @@ def fixes_payload(date: str, network_id: str, rule_id: str, *, n: int = N_SCENAR
         outcomes.append(row)
     return {"date": date, "network": network_id, "rule": r.id, "baseline_unsafe_steps": result.verdict["baseline_unsafe_steps"],
             "verdict": result.verdict, "outcomes": outcomes, "n_scenarios": result.n_scenarios,
-            "scenarios": list(scn.labels), "provenance": PROVENANCE}
+            "scenarios": list(scn.labels), "provenance": provenance(date)}
 
 
 # ---- /simulate -------------------------------------------------------------------------------------------------
@@ -243,7 +260,7 @@ def simulate_payload(date: str, network_id: str, rule_id: str, fix: str = "none"
     solver = DaySolver(net, asymmetric=True)
     runs = {"before": solver.solve(design), "after": solver.solve(design, _controls(fix))}
     out = {"date": date, "network": network_id, "rule": r.id, "fix": fix, "t": _labels(design.t),
-           "limits_v": {"min": r.vmin_v, "max": r.vmax_v}, "provenance": PROVENANCE}
+           "limits_v": {"min": r.vmin_v, "max": r.vmax_v}, "provenance": provenance(date)}
     for key, res in runs.items():
         v = evaluate(res, r)
         out[key] = {"max_v": _peak_v(res), "min_v": [round(float(x) * NOMINAL_V, 1) for x in np.nanmin(res.u_pu[0], axis=(1, 2))],
@@ -270,7 +287,7 @@ def headroom_payload(date: str, network_id: str, rule_id: str, adoption: float =
     from engine.headroom import headroom
     net, design = planning_street(date, network_id, adoption)
     out = headroom(net, design, rule(rule_id))
-    return {"date": date, "network": network_id, "adoption": adoption, **out, "provenance": PROVENANCE}
+    return {"date": date, "network": network_id, "adoption": adoption, **out, "provenance": provenance(date)}
 
 
 def connection_payload(date: str, network_id: str, rule_id: str, node: int, kw: float, count: int,
@@ -282,7 +299,7 @@ def connection_payload(date: str, network_id: str, rule_id: str, node: int, kw: 
                                phase=None if phase is None else PHASE.index(phase))
     except ValueError as exc:
         raise ApiError(422, str(exc), details={"valid_nodes": [int(n) for n in net.lv_nodes]}) from exc
-    return {"date": date, "network": network_id, "adoption": adoption, **out, "provenance": PROVENANCE}
+    return {"date": date, "network": network_id, "adoption": adoption, **out, "provenance": provenance(date)}
 
 
 def hosting_payload(date: str, network_id: str, rule_id: str, draws: int = 30) -> dict:
@@ -294,4 +311,4 @@ def hosting_payload(date: str, network_id: str, rule_id: str, draws: int = 30) -
     return {"date": date, "network": network_id, "rule": r.id,
             "without_fix": hosting_capacity(net, design, r, draws=draws),
             "with_volt_var": hosting_capacity(net, design, r, draws=draws, controls=Controls(volt_var=_VV)),
-            "provenance": PROVENANCE}
+            "provenance": provenance(date)}

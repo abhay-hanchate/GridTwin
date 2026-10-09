@@ -39,7 +39,13 @@ def live_forecasts(date: str, district: str = "mathura") -> dict:
     target = pd.Timestamp(date).date()
     solar, solar_source = live_solar_v2.predict_live(
         live_solar_v2.frames_from_payload(live_solar_v2.fetch_payload(target), target), target)
-    dv = live_dayahead.live_forecast(district, target)
+    try:
+        ratio = live_dayahead.current_ratio(target)
+    except (OSError, ValueError, KeyError):
+        # No UP state-demand history on this machine: run the pattern-only models, the documented default when the
+        # UP recorder is not running (docs/DECISIONS.md, owner decisions 9 Oct 2026).
+        ratio = float("nan")
+    dv = live_dayahead.live_forecast(district, target, ratio=ratio)
     return {
         "solar": solar[["p10", "p50", "p90"]].astype(float).reset_index(drop=True),
         "demand": _frame(dv["demand"]["points"]),

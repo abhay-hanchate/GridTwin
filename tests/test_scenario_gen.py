@@ -106,3 +106,15 @@ def test_real_data_gives_the_physically_expected_signs():
     corr = fit_copula(day_table(load, pv, up))
     assert corr.shape == (3, 3) and np.allclose(np.diag(corr), 1)
     assert corr[1, 2] < -0.1          # heavy-demand days have lower grid voltage (measured about -0.34 on Mathura 2019-2021)
+
+
+def test_a_live_voltage_forecast_shapes_the_voltage_paths(generator):
+    import pandas as pd
+    volt = pd.DataFrame({"p10": 1.00, "p50": 1.05, "p90": 1.10}, index=range(SLOTS))
+    scn = generator.sample("2019-05-15", 400, _forecast(), _forecast(0.5), 1.04, 6, np.random.default_rng(2), upstream_fc=volt)
+    noon = scn.upstream_pu[:, 48]
+    assert abs(np.median(noon) - 1.05) < 0.01
+    lo, hi = np.quantile(noon, [0.1, 0.9])
+    assert 0.99 < lo < 1.02 and 1.08 < hi < 1.11
+    with pytest.raises(ValueError, match="96 quarter-hour"):
+        generator.sample("2019-05-15", 2, _forecast(), _forecast(), 1.04, 3, np.random.default_rng(0), upstream_fc=volt.iloc[:10])
