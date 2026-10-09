@@ -20,7 +20,7 @@ export const SCENARIO_TEXT: Record<string, { short: string; long: string }> = {
 export const ACTION_TEXT: Record<string, { name: string; how: string }> = {
   tap1_volt_var: {
     name: 'Turn the transformer down one notch + smart inverters',
-    how: 'Both cheap settings together: the street gets 2.5% lower voltage and every inverter helps pull it down at noon.',
+    how: 'Both cheap settings together: the street gets 2.5% lower voltage and the inverters help pull it down whenever it is still high.',
   },
   tap_plus2: {
     name: 'Turn the transformer down two notches',
@@ -31,8 +31,20 @@ export const ACTION_TEXT: Record<string, { name: string; how: string }> = {
     how: 'The whole street gets 2.5% lower voltage, set once for the season by the utility.',
   },
   volt_var: {
-    name: 'Switch solar inverters to smart mode',
-    how: 'Each home\'s inverter absorbs a little "reactive power", which pulls voltage down. No solar is wasted.',
+    name: 'Switch solar inverters to the standard smart mode',
+    how: 'Each home\'s inverter follows the international standard curve (IEEE 1547): it absorbs a little "reactive power" only when its own voltage is high. No solar is wasted.',
+  },
+  volt_watt: {
+    name: 'Let inverters trim output when voltage is high',
+    how: 'Above 1.06 times normal voltage each inverter caps its output, down to a fifth of its size at 1.10 times normal.',
+  },
+  volt_var_watt: {
+    name: 'Standard smart mode plus output trimming',
+    how: 'Inverters absorb reactive power first and trim output only if voltage is still too high.',
+  },
+  pf09_fixed: {
+    name: 'Fixed power factor 0.9 (earlier setting)',
+    how: 'Every inverter always absorbs the same share of reactive power, high voltage or not. Kept only for comparison; it is not a standard curve.',
   },
   export_cap_60: {
     name: 'Throw away 40% of the solar',

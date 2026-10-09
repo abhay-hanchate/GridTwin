@@ -5,6 +5,8 @@ from typing import Callable
 import numpy as np
 import pandapower as pp
 
+from engine.inverters import InverterControl, VoltVarCurve, VoltWattCurve
+
 VOLT_VAR_PF = 0.9
 TAN_VV = float(np.tan(np.arccos(VOLT_VAR_PF)))    # inverter absorbs 0.484 kvar per kW
 
@@ -40,6 +42,19 @@ def _volt_var(tap: int = 0):
         def hook(net, i):
             net.trafo["tap_pos"] = tap
             net.sgen["q_mvar"] = -net.sgen.p_mw * TAN_VV
+        return hook
+    return make
+
+
+def _inverter(tap: int = 0, volt_var: bool = True, volt_watt: bool = False):
+    """IEEE 1547 smart-inverter control; the hook carries its own fixed-point solve."""
+    def make(net, worst_bus, vmax):
+        control = InverterControl(VoltVarCurve() if volt_var else None, VoltWattCurve() if volt_watt else None)
+
+        def hook(net, i):
+            net.trafo["tap_pos"] = tap
+        hook.solve = control.solve
+        hook.control = control
         return hook
     return make
 
@@ -87,11 +102,21 @@ def _battery():
     return make
 
 
+_VV, _VW = VoltVarCurve(), VoltWattCurve()
+VV_PARAMS = {"curve": _VV.name, "points_pu": list(_VV.v_pu), "q_fraction_of_rated_va": list(_VV.q_frac)}
+VW_PARAMS = {"vw_curve": _VW.name, "vw_points_pu": list(_VW.v_pu), "p_limit_fraction_of_rated": list(_VW.p_frac)}
+
 ACTIONS = [
     Action("tap_plus1", "Transformer tap +1 (off-load, seasonal)", "tap", {"tap_pos": 1}, _tap(1)),
     Action("tap_plus2", "Transformer tap +2 (off-load, seasonal)", "tap", {"tap_pos": 2}, _tap(2)),
-    Action("volt_var", "Inverter Volt/VAR, power factor 0.9", "volt_var", {"pf": VOLT_VAR_PF}, _volt_var(0)),
-    Action("tap1_volt_var", "Tap +1 with inverter Volt/VAR", "combined", {"tap_pos": 1, "pf": VOLT_VAR_PF}, _volt_var(1)),
+    Action("volt_var", "Smart inverters: IEEE 1547 Volt/VAR", "volt_var", VV_PARAMS, _inverter()),
+    Action("volt_watt", "Smart inverters: IEEE 1547 Volt/Watt", "volt_watt", VW_PARAMS,
+           _inverter(volt_var=False, volt_watt=True)),
+    Action("volt_var_watt", "Smart inverters: Volt/VAR with Volt/Watt", "volt_var", {**VV_PARAMS, **VW_PARAMS},
+           _inverter(volt_watt=True)),
+    Action("tap1_volt_var", "Tap +1 with IEEE 1547 Volt/VAR", "combined", {"tap_pos": 1, **VV_PARAMS}, _inverter(tap=1)),
+    Action("pf09_fixed", "Fixed power factor 0.9 (Round 1 setting, not a standard curve)", "volt_var",
+           {"pf": VOLT_VAR_PF}, _volt_var(0)),
     Action("export_cap_80", "Solar export limited to 80% of output", "curtailment", {"keep": 0.8}, _export_cap(0.8)),
     Action("export_cap_60", "Solar export limited to 60% of output", "curtailment", {"keep": 0.6}, _export_cap(0.6)),
     Action("battery_50kw", "Community battery 50 kW / 200 kWh at the worst bus", "battery",

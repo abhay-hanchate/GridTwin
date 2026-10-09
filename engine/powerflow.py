@@ -44,7 +44,11 @@ Hook = Callable[[pp.pandapowerNet, int], None]
 
 def run_day(net: pp.pandapowerNet, inputs: DayInputs, band: str = "10",
             hook: Optional[Hook] = None, detail: bool = True) -> dict:
-    """Simulate 96 steps. `hook(net, step)` lets a corrective action adjust the grid each step."""
+    """Simulate 96 steps. `hook(net, step)` lets a corrective action adjust the grid each step.
+
+    A hook may carry a `.solve(net, step)` attribute that replaces the plain power flow (smart-inverter
+    control needs its own fixed-point iteration).
+    """
     rule = get_rule(band)
     vmin, vmax = rule.vmin_pu, rule.vmax_pu
     lv = lv_buses(net)
@@ -61,13 +65,18 @@ def run_day(net: pp.pandapowerNet, inputs: DayInputs, band: str = "10",
         net.ext_grid["vm_pu"] = float(inputs.upstream_vm_pu.iloc[i])
         if hook:
             hook(net, i)
-        curtailed_kwh += float((available - net.sgen.p_mw).sum()) * 1000 / 4
 
         try:
-            pp.runpp(net, numba=True, init="results" if i else "auto")
+            solve = getattr(hook, "solve", None)
+            if solve:
+                solve(net, i)
+            else:
+                pp.runpp(net, numba=True, init="results" if i else "auto")
         except pp.LoadflowNotConverged:
             steps.append({"t": t.strftime("%Y-%m-%dT%H:%M"), "solver_failed": True, "violations": []})
             continue
+        # Measured after the solve so output trimmed by smart-inverter control is counted.
+        curtailed_kwh += float((available - net.sgen.p_mw).sum()) * 1000 / 4
 
         vm = net.res_bus.loc[lv, "vm_pu"]
         line_load = net.res_line.loading_percent
