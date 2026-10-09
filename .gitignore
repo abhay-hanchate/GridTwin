@@ -32,6 +32,10 @@ ml/models/*
 !ml/models/solar_p10.txt
 !ml/models/solar_p50.txt
 !ml/models/solar_p90.txt
+!ml/models/solar_v2_manifest.json
+!ml/models/solar_v2_p10.txt
+!ml/models/solar_v2_p50.txt
+!ml/models/solar_v2_p90.txt
 
 # secrets
 .env

@@ -1,0 +1,80 @@
+{
+  "availability": [
+    {
+      "model": "gfs_global",
+      "first_valid": "2024-01-19T17:00:00.000",
+      "nonnull_since_first": 1.0,
+      "nonnull_2025": 1.0,
+      "passes": true
+    },
+    {
+      "model": "icon_global",
+      "first_valid": "2024-01-19T17:00:00.000",
+      "nonnull_since_first": 1.0,
+      "nonnull_2025": 1.0,
+      "passes": true
+    },
+    {
+      "model": "gem_global",
+      "first_valid": "2024-01-19T16:00:00.000",
+      "nonnull_since_first": 1.0,
+      "nonnull_2025": 1.0,
+      "passes": true
+    },
+    {
+      "model": "meteofrance_arpege_world",
+      "first_valid": "2024-01-19T17:00:00.000",
+      "nonnull_since_first": 1.0,
+      "nonnull_2025": 1.0,
+      "passes": true
+    },
+    {
+      "model": "ecmwf_ifs025",
+      "first_valid": "2024-03-06T22:00:00.000",
+      "nonnull_since_first": 1.0,
+      "nonnull_2025": 1.0,
+      "passes": true
+    },
+    {
+      "model": "jma_gsm",
+      "first_valid": null,
+      "nonnull_since_first": 0.0,
+      "nonnull_2025": 0.0,
+      "passes": false
+    },
+    {
+      "model": "ukmo_global_deterministic_10km",
+      "first_valid": "2025-01-03T11:00:00.000",
+      "nonnull_since_first": 0.7278,
+      "nonnull_2025": 0.7229,
+      "passes": false
+    }
+  ],
+  "nwp_models_used": [
+    "gfs_global",
+    "icon_global",
+    "gem_global",
+    "meteofrance_arpege_world",
+    "ecmwf_ifs025"
+  ],
+  "scores_2025": {
+    "n": 4414,
+    "mae_p50": 0.0329,
+    "p10_p90_coverage": 0.799,
+    "wis": 0.0213,
+    "mae_persistence": 0.0456,
+    "skill_vs_persistence": 0.279,
+    "mae_physics_only_best_match": 0.0411,
+    "skill_vs_physics_only_best_match": 0.199,
+    "mae_physics_only_ensemble": 0.0335,
+    "skill_vs_physics_only_ensemble": 0.019,
+    "gate_g3_passes": true,
+    "interval_without_conformal": 0.518
+  },
+  "model_sha256": {
+    "p10": "9b050b7623dde6a683faf2e5ae7ab9498d1f110dd8fcc18ed4ab28fa4dba0a9b",
+    "p50": "b3b9b378c84ad77612991d896c95169425658fa6d92cebdd555e90159ffab387",
+    "p90": "c0f9ceb49cffcca363b5c8ee081c4ea1a7d2e6a74abcb7f1294f91f87f5fb855"
+  },
+  "conformal_q_end_of_2025": 0.023931
+}
