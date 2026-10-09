@@ -1,0 +1,539 @@
+{
+ "date": "2019-05-15",
+ "network": "benchmark_250, round-robin single-phase homes",
+ "engine": "power-grid-model asymmetric",
+ "pm10": {
+  "seconds": 74,
+  "verdict": {
+   "safe_action_found": true,
+   "recommended": "tap2_volt_var",
+   "message": "Recommended: Tap +2 with IEEE 1547 Volt/VAR",
+   "binding_limit": null,
+   "closest": null,
+   "baseline_unsafe_steps": 31
+  },
+  "outcomes": [
+   {
+    "id": "tap2_volt_var",
+    "safe": true,
+    "unsafe_steps": 0,
+    "rank": 1,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 246.4,
+    "min_v": 212.2
+   },
+   {
+    "id": "tap1_volt_var_watt",
+    "safe": true,
+    "unsafe_steps": 0,
+    "rank": 2,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 249.7,
+    "min_v": 214.3
+   },
+   {
+    "id": "tap1_volt_var",
+    "safe": true,
+    "unsafe_steps": 0,
+    "rank": 3,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 249.7,
+    "min_v": 214.3
+   },
+   {
+    "id": "tap1_volt_var_envelope",
+    "safe": true,
+    "unsafe_steps": 0,
+    "rank": 4,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 249.7,
+    "min_v": 214.3
+   },
+   {
+    "id": "switching_tap1_volt_var",
+    "safe": true,
+    "unsafe_steps": 0,
+    "rank": 5,
+    "curtailed_kwh": 0.0,
+    "operations": 2,
+    "max_v": 249.5,
+    "min_v": 214.6
+   },
+   {
+    "id": "phase_tap1_volt_var",
+    "safe": true,
+    "unsafe_steps": 0,
+    "rank": 6,
+    "curtailed_kwh": 0.0,
+    "operations": 63,
+    "max_v": 249.3,
+    "min_v": 215.4
+   },
+   {
+    "id": "volt_var_watt",
+    "safe": true,
+    "unsafe_steps": 0,
+    "rank": 7,
+    "curtailed_kwh": 2.2,
+    "operations": 0,
+    "max_v": 251.7,
+    "min_v": 216.8
+   },
+   {
+    "id": "volt_var",
+    "safe": false,
+    "unsafe_steps": 2,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 254.4,
+    "min_v": 216.8
+   },
+   {
+    "id": "envelope",
+    "safe": false,
+    "unsafe_steps": 9,
+    "rank": null,
+    "curtailed_kwh": 393.6,
+    "operations": 0,
+    "max_v": 256.1,
+    "min_v": 210.3
+   },
+   {
+    "id": "volt_watt",
+    "safe": false,
+    "unsafe_steps": 24,
+    "rank": null,
+    "curtailed_kwh": 184.5,
+    "operations": 0,
+    "max_v": 261.1,
+    "min_v": 210.3
+   },
+   {
+    "id": "tap_plus2",
+    "safe": false,
+    "unsafe_steps": 25,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 257.5,
+    "min_v": 198.2
+   },
+   {
+    "id": "export_cap_60",
+    "safe": false,
+    "unsafe_steps": 25,
+    "rank": null,
+    "curtailed_kwh": 489.3,
+    "operations": 0,
+    "max_v": 261.5,
+    "min_v": 210.3
+   },
+   {
+    "id": "battery_100kw_4h",
+    "safe": false,
+    "unsafe_steps": 26,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 262.3,
+    "min_v": 210.3
+   },
+   {
+    "id": "battery_150kw_4h",
+    "safe": false,
+    "unsafe_steps": 26,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 262.3,
+    "min_v": 210.3
+   },
+   {
+    "id": "tap_plus1",
+    "safe": false,
+    "unsafe_steps": 28,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 263.1,
+    "min_v": 204.1
+   },
+   {
+    "id": "battery_100kw_2h",
+    "safe": false,
+    "unsafe_steps": 28,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 268.6,
+    "min_v": 210.3
+   },
+   {
+    "id": "battery_50kw_4h",
+    "safe": false,
+    "unsafe_steps": 28,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 268.6,
+    "min_v": 210.3
+   },
+   {
+    "id": "battery_150kw_2h",
+    "safe": false,
+    "unsafe_steps": 28,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 262.3,
+    "min_v": 210.3
+   },
+   {
+    "id": "battery_25kw_2h",
+    "safe": false,
+    "unsafe_steps": 29,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 268.9,
+    "min_v": 210.3
+   },
+   {
+    "id": "battery_25kw_4h",
+    "safe": false,
+    "unsafe_steps": 29,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 268.9,
+    "min_v": 210.3
+   },
+   {
+    "id": "battery_50kw_2h",
+    "safe": false,
+    "unsafe_steps": 29,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 268.9,
+    "min_v": 210.3
+   },
+   {
+    "id": "phase_rebalance_limited",
+    "safe": false,
+    "unsafe_steps": 29,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 15,
+    "max_v": 266.2,
+    "min_v": 208.7
+   },
+   {
+    "id": "export_cap_80",
+    "safe": false,
+    "unsafe_steps": 29,
+    "rank": null,
+    "curtailed_kwh": 244.6,
+    "operations": 0,
+    "max_v": 265.3,
+    "min_v": 210.3
+   },
+   {
+    "id": "phase_rebalance",
+    "safe": false,
+    "unsafe_steps": 30,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 63,
+    "max_v": 267.9,
+    "min_v": 209.3
+   },
+   {
+    "id": "switching",
+    "safe": false,
+    "unsafe_steps": 31,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 2,
+    "max_v": 268.9,
+    "min_v": 210.0
+   }
+  ]
+ },
+ "up_2005": {
+  "seconds": 98,
+  "verdict": {
+   "safe_action_found": false,
+   "recommended": null,
+   "closest": "tap1_volt_var_envelope",
+   "binding_limit": {
+    "type": "undervoltage",
+    "steps": 7,
+    "worst": {
+     "value": 0.9316,
+     "limit": 0.94
+    }
+   },
+   "message": "No safe action: every option leaves violations. Closest is 'Tap +1, Volt/VAR and per-house export limits' with 12 unsafe steps. The limit that stops it: voltage fell to 214 V against a 216 V limit in 7 steps.",
+   "still_needs": "about 2 V more voltage at the far end: a heavier conductor or a closer transformer",
+   "baseline_unsafe_steps": 69
+  },
+  "outcomes": [
+   {
+    "id": "tap1_volt_var_envelope",
+    "safe": false,
+    "unsafe_steps": 12,
+    "rank": null,
+    "curtailed_kwh": 187.2,
+    "operations": 0,
+    "max_v": 245.6,
+    "min_v": 214.3
+   },
+   {
+    "id": "tap2_volt_var",
+    "safe": false,
+    "unsafe_steps": 24,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 246.4,
+    "min_v": 212.2
+   },
+   {
+    "id": "phase_tap1_volt_var",
+    "safe": false,
+    "unsafe_steps": 25,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 63,
+    "max_v": 249.3,
+    "min_v": 215.4
+   },
+   {
+    "id": "switching_tap1_volt_var",
+    "safe": false,
+    "unsafe_steps": 30,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 2,
+    "max_v": 249.5,
+    "min_v": 214.6
+   },
+   {
+    "id": "tap1_volt_var_watt",
+    "safe": false,
+    "unsafe_steps": 32,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 249.7,
+    "min_v": 214.3
+   },
+   {
+    "id": "tap1_volt_var",
+    "safe": false,
+    "unsafe_steps": 32,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 249.7,
+    "min_v": 214.3
+   },
+   {
+    "id": "volt_var",
+    "safe": false,
+    "unsafe_steps": 38,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 254.4,
+    "min_v": 216.8
+   },
+   {
+    "id": "volt_var_watt",
+    "safe": false,
+    "unsafe_steps": 38,
+    "rank": null,
+    "curtailed_kwh": 2.2,
+    "operations": 0,
+    "max_v": 251.7,
+    "min_v": 216.8
+   },
+   {
+    "id": "tap_plus1",
+    "safe": false,
+    "unsafe_steps": 54,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 263.1,
+    "min_v": 204.1
+   },
+   {
+    "id": "phase_rebalance",
+    "safe": false,
+    "unsafe_steps": 59,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 63,
+    "max_v": 267.9,
+    "min_v": 209.3
+   },
+   {
+    "id": "tap_plus2",
+    "safe": false,
+    "unsafe_steps": 60,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 257.5,
+    "min_v": 198.2
+   },
+   {
+    "id": "phase_rebalance_limited",
+    "safe": false,
+    "unsafe_steps": 60,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 15,
+    "max_v": 266.2,
+    "min_v": 208.7
+   },
+   {
+    "id": "envelope",
+    "safe": false,
+    "unsafe_steps": 61,
+    "rank": null,
+    "curtailed_kwh": 590.4,
+    "operations": 0,
+    "max_v": 256.1,
+    "min_v": 210.3
+   },
+   {
+    "id": "battery_150kw_4h",
+    "safe": false,
+    "unsafe_steps": 62,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 267.7,
+    "min_v": 210.3
+   },
+   {
+    "id": "battery_25kw_2h",
+    "safe": false,
+    "unsafe_steps": 63,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 268.9,
+    "min_v": 210.3
+   },
+   {
+    "id": "battery_25kw_4h",
+    "safe": false,
+    "unsafe_steps": 63,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 268.9,
+    "min_v": 210.3
+   },
+   {
+    "id": "battery_50kw_2h",
+    "safe": false,
+    "unsafe_steps": 63,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 268.9,
+    "min_v": 210.3
+   },
+   {
+    "id": "battery_50kw_4h",
+    "safe": false,
+    "unsafe_steps": 63,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 268.9,
+    "min_v": 210.3
+   },
+   {
+    "id": "battery_100kw_2h",
+    "safe": false,
+    "unsafe_steps": 63,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 268.9,
+    "min_v": 210.3
+   },
+   {
+    "id": "battery_150kw_2h",
+    "safe": false,
+    "unsafe_steps": 63,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 268.9,
+    "min_v": 210.3
+   },
+   {
+    "id": "battery_100kw_4h",
+    "safe": false,
+    "unsafe_steps": 63,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 0,
+    "max_v": 268.6,
+    "min_v": 210.3
+   },
+   {
+    "id": "export_cap_60",
+    "safe": false,
+    "unsafe_steps": 64,
+    "rank": null,
+    "curtailed_kwh": 489.3,
+    "operations": 0,
+    "max_v": 261.5,
+    "min_v": 210.3
+   },
+   {
+    "id": "export_cap_80",
+    "safe": false,
+    "unsafe_steps": 66,
+    "rank": null,
+    "curtailed_kwh": 244.6,
+    "operations": 0,
+    "max_v": 265.3,
+    "min_v": 210.3
+   },
+   {
+    "id": "switching",
+    "safe": false,
+    "unsafe_steps": 69,
+    "rank": null,
+    "curtailed_kwh": 0.0,
+    "operations": 2,
+    "max_v": 268.9,
+    "min_v": 210.0
+   },
+   {
+    "id": "volt_watt",
+    "safe": false,
+    "unsafe_steps": 69,
+    "rank": null,
+    "curtailed_kwh": 184.5,
+    "operations": 0,
+    "max_v": 261.1,
+    "min_v": 210.3
+   }
+  ]
+ }
+}
