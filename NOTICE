@@ -1,0 +1,20 @@
+GridTwin
+Copyright the GridTwin authors.
+
+This product uses data and software from third parties. Details and licence links: docs/DATA_SOURCES.md.
+
+Data
+- Smart-meter data: CEEW, "High frequency smart meter data from two districts in India",
+  Harvard Dataverse, doi:10.7910/DVN/GOCHJH (CC0 1.0).
+- Weather data by Open-Meteo.com (CC BY 4.0), including ERA5 reanalysis from the Copernicus Climate Change
+  Service and numerical weather predictions from ECMWF, NOAA, DWD, ECCC and Meteo-France.
+  The free Open-Meteo API is for non-commercial use only.
+- Network topology derived from SimBench (University of Kassel, TU Dortmund, RWTH Aachen University and
+  Fraunhofer IEE). The SimBench database is made available under the Open Database License (ODbL 1.0); its
+  contents under the Database Contents License (DbCL 1.0). Network data derived from it is offered under ODbL 1.0.
+- Conductor values from Indian Standard IS 398 Part II (Bureau of Indian Standards).
+
+Software
+- power-grid-model is licensed under MPL-2.0.
+- OR-Tools, requests and pyarrow are licensed under Apache-2.0.
+- Other runtime dependencies are under BSD, MIT or similar permissive licences (see docs/DATA_SOURCES.md).
