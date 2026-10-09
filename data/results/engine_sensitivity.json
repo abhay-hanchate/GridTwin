@@ -1,0 +1,109 @@
+{
+  "date": "2019-05-15",
+  "rule": "pm10",
+  "balanced": {
+    "max_voltage_v": 263.1,
+    "unsafe_steps": 26,
+    "max_vuf_pct": 0.0,
+    "converged_share": 1.0
+  },
+  "phase_modes": {
+    "random": {
+      "max_voltage_v": 270.5,
+      "unsafe_steps": 32,
+      "max_vuf_pct": 2.93,
+      "converged_share": 1.0
+    },
+    "round_robin": {
+      "max_voltage_v": 268.9,
+      "unsafe_steps": 31,
+      "max_vuf_pct": 1.19,
+      "converged_share": 1.0
+    },
+    "all_a": {
+      "max_voltage_v": 294.1,
+      "unsafe_steps": 75,
+      "max_vuf_pct": 8.97,
+      "converged_share": 1.0
+    }
+  },
+  "zero_sequence": [
+    {
+      "r0_ratio": 2.0,
+      "x0_ratio": 2.0,
+      "max_voltage_v": 268.4,
+      "unsafe_steps": 30,
+      "max_vuf_pct": 2.83,
+      "converged_share": 1.0
+    },
+    {
+      "r0_ratio": 2.0,
+      "x0_ratio": 3.0,
+      "max_voltage_v": 268.8,
+      "unsafe_steps": 32,
+      "max_vuf_pct": 2.85,
+      "converged_share": 1.0
+    },
+    {
+      "r0_ratio": 2.0,
+      "x0_ratio": 4.0,
+      "max_voltage_v": 269.1,
+      "unsafe_steps": 36,
+      "max_vuf_pct": 2.87,
+      "converged_share": 1.0
+    },
+    {
+      "r0_ratio": 3.0,
+      "x0_ratio": 2.0,
+      "max_voltage_v": 270.1,
+      "unsafe_steps": 33,
+      "max_vuf_pct": 2.9,
+      "converged_share": 1.0
+    },
+    {
+      "r0_ratio": 3.0,
+      "x0_ratio": 3.0,
+      "max_voltage_v": 270.5,
+      "unsafe_steps": 32,
+      "max_vuf_pct": 2.93,
+      "converged_share": 1.0
+    },
+    {
+      "r0_ratio": 3.0,
+      "x0_ratio": 4.0,
+      "max_voltage_v": 270.8,
+      "unsafe_steps": 36,
+      "max_vuf_pct": 2.95,
+      "converged_share": 1.0
+    },
+    {
+      "r0_ratio": 4.0,
+      "x0_ratio": 2.0,
+      "max_voltage_v": 271.9,
+      "unsafe_steps": 41,
+      "max_vuf_pct": 2.98,
+      "converged_share": 1.0
+    },
+    {
+      "r0_ratio": 4.0,
+      "x0_ratio": 3.0,
+      "max_voltage_v": 272.2,
+      "unsafe_steps": 42,
+      "max_vuf_pct": 3.0,
+      "converged_share": 1.0
+    },
+    {
+      "r0_ratio": 4.0,
+      "x0_ratio": 4.0,
+      "max_voltage_v": 272.6,
+      "unsafe_steps": 47,
+      "max_vuf_pct": 3.03,
+      "converged_share": 1.0
+    }
+  ],
+  "zero_sequence_peak_range_v": [
+    268.4,
+    272.6
+  ],
+  "gate_g5_converged": true
+}
