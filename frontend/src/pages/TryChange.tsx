@@ -60,7 +60,7 @@ function Form({ catalog, network, rule, date }: { catalog: CatalogEntry[]; netwo
         </div>
         {groups.map(([kind, entries]) => (
           <section key={kind} className="param-group">
-            <h3>{t(`try.group_${kind}` as StringKey)}</h3>
+            <h2>{t(`try.group_${kind}` as StringKey)}</h2>
             {entries.map((e) => (
               <ParamForm key={e.id} entry={e} choice={choices[e.id]}
                 onChange={(c) => setChoices((all) => ({ ...all, [e.id]: c }))} />

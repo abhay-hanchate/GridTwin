@@ -297,7 +297,7 @@ input[type='range']:focus-visible { outline-offset: 4px; }
 /* Try a change: the form generated from /catalog */
 .whatif-form { display: grid; gap: 12px; margin: 12px 0; }
 .param-group { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
-.param-group h3 { grid-column: 1 / -1; margin: 8px 0 0; font-size: 15px; }
+.param-group h2 { grid-column: 1 / -1; margin: 8px 0 0; font-size: 15px; }
 .param-entry { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; margin: 0; background: var(--surface); }
 .param-entry.on { border-color: var(--ink-3); }
 .param-entry legend { font-weight: 600; padding: 0 4px; }

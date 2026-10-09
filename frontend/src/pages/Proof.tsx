@@ -18,7 +18,7 @@ export default function Proof() {
       <Status state={results} />
       {results.data && <ProofView r={results.data} />}
       <section className="card">
-        <h3>{t('proof.not_built_title')}</h3>
+        <h2>{t('proof.not_built_title')}</h2>
         <ul>{NOT_BUILT.map((k) => <li key={k}>{t(`proof.not_built.${k}` as StringKey)}</li>)}</ul>
       </section>
     </div>
@@ -31,7 +31,7 @@ function ProofView({ r }: { r: Results }) {
   return (
     <>
       <section className="card" aria-labelledby="proof-summary">
-        <h3 id="proof-summary">{t('proof.summary_title')}</h3>
+        <h2 id="proof-summary">{t('proof.summary_title')}</h2>
         <ul className="gate-summary">
           {STATUSES.filter((s) => r.summary[s]).map((s) => (
             <li key={s} className={`gate-${s}`}>{t(`proof.status.${s}` as StringKey)}: {r.summary[s]}</li>
@@ -41,7 +41,7 @@ function ProofView({ r }: { r: Results }) {
       </section>
 
       <section className="card">
-        <h3 id="gates-title">{t('proof.gates_title')}</h3>
+        <h2 id="gates-title">{t('proof.gates_title')}</h2>
         <div className="table-scroll">
           <table className="data-table gate-table" aria-labelledby="gates-title">
             <thead>
@@ -67,7 +67,7 @@ function ProofView({ r }: { r: Results }) {
       </section>
 
       <section className="card">
-        <h3 id="bakeoff-title">{t('proof.bakeoff_title')}</h3>
+        <h2 id="bakeoff-title">{t('proof.bakeoff_title')}</h2>
         <p className="muted">{t('proof.bakeoff_intro')}</p>
         <div className="table-scroll">
           <table className="data-table" aria-labelledby="bakeoff-title">
@@ -91,7 +91,7 @@ function ProofView({ r }: { r: Results }) {
 
       {tournament && (
         <section className="card">
-          <h3>{t('proof.tournament_title')}</h3>
+          <h2>{t('proof.tournament_title')}</h2>
           <dl className="measured">
             {Object.entries(tournament).map(([rule, text]) => <div key={rule}><dt>{rule}</dt><dd>{text}</dd></div>)}
           </dl>
