@@ -136,3 +136,13 @@ Pre-registered 9 Oct 2026, before Chronos-2 was run in the build. The rule is th
 - **Known before the run:** in this project "observed PV" is ERA5-driven, and ERA5 is published several days late,
   so yesterday's value is not available when tomorrow's forecast is made. Unless rooftop meters supply it, the
   second condition fails whatever the score; the WIS result is still recorded.
+
+### Result (run 9 Oct 2026, `python -m ml.benchmark`, RTX 4050, 35 s)
+
+| | MAE | Coverage | WIS | WIS gain vs solar v2 |
+|---|---|---|---|---|
+| Solar v2 (as shipped, 30-day window) | 0.0329 | 79.9% | 0.0213 | |
+| Chronos-2 with covariates | 0.0318 | 78.6% | 0.0207 | 2.8% |
+
+**Not adopted.** The WIS gain is 2.8%, below the 5% bar, and the second condition fails anyway (no live source of
+yesterday's PV). Chronos-2 stays a benchmark; `ml/reports/solar_benchmark.json` holds the record.
