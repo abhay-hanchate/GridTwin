@@ -36,3 +36,6 @@ ml/models/*
 # secrets
 .env
 research/.env
+
+# derived per-district profiles (about 30 MB; rebuilt by scripts/build_data.py)
+data/processed/v2/

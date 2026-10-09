@@ -1,23 +1,55 @@
 """Shared constants: location, data sources, file paths and grid limits."""
 from pathlib import Path
+from typing import NamedTuple
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "raw"
 PROCESSED_DIR = ROOT / "data" / "processed"
 CACHE_DIR = ROOT / "data" / "cache"
 
-# Mathura, Uttar Pradesh: the CEEW smart meters and the weather come from the same town.
-LATITUDE = 27.49
-LONGITUDE = 77.67
-ALTITUDE_M = 180
+class Site(NamedTuple):
+    latitude: float
+    longitude: float
+    altitude_m: float
+
+
+SITES = {
+    "mathura": Site(27.49, 77.67, 180),
+    "bareilly": Site(28.37, 79.43, 270),     # city centre; altitude approximate, used only for sun position
+}
+DISTRICTS = tuple(SITES)
+
+# Mathura is the original site; these names stay for code written before the second district.
+LATITUDE, LONGITUDE, ALTITUDE_M = SITES["mathura"]
 TIMEZONE = "Asia/Kolkata"
+
+
+class CeewFile(NamedTuple):
+    district: str
+    year: int
+    file_id: int
+    original: bool = False      # some files are stored as ingested tab files; ?format=original returns the csv
+
+    @property
+    def filename(self) -> str:
+        return f"ceew_{self.district}_{self.year}.csv"
+
+    @property
+    def url(self) -> str:
+        base = f"https://dataverse.harvard.edu/api/access/datafile/{self.file_id}"
+        return base + ("?format=original" if self.original else "")
+
 
 # CEEW "High frequency smart meter data from two districts in India" (Harvard Dataverse, CC0)
 # https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/GOCHJH
-CEEW_FILES = {
-    "mathura2019.csv": "https://dataverse.harvard.edu/api/access/datafile/5425311",
-    "mathura2021.csv": "https://dataverse.harvard.edu/api/access/datafile/5425312?format=original",
-}
+CEEW_FILES = [
+    CeewFile("mathura", 2019, 5425311),
+    CeewFile("mathura", 2020, 5425313),
+    CeewFile("mathura", 2021, 5425312, original=True),
+    CeewFile("bareilly", 2019, 5425325, original=True),
+    CeewFile("bareilly", 2020, 5425310),
+    CeewFile("bareilly", 2021, 5425314),
+]
 
 # Open-Meteo archive (ERA5 / IFS reanalysis). Radiation is the mean of the preceding hour.
 WEATHER_START = "2019-05-01"
