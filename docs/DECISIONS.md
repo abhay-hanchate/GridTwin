@@ -220,3 +220,21 @@ change made after the results were seen, and it is reported as one.
 Outcome on the round 2 numbers: **demand: pattern only** (MAE 0.0700 kW/home, +46.5% vs climatology, coverage
 83.5%); **voltage: live anchored** (MAE 3.72 V, +37.1%, coverage 83.0%; pattern-only is used live until the UP
 recorder has six days). Under the original rule the picks were pattern only and climatology.
+
+---
+
+## Solar intervals, round 2: different ranges for different kinds of day (owner: Person B)
+
+Pre-registered 9 Oct 2026, before any candidate below was run. Round 1 (above) found no method inside 78-82% in
+every season; winter under-covered (74.9%) with the shipped 30-day window.
+
+- **Median:** solar v2 (LightGBM residual), unchanged. Same split and the same 4,414-hour 2025 mask.
+- **Candidates** (all rolling, each day's width from earlier days only):
+  1. shipped: one width from the last 30 days (reference);
+  2. by sky: separate widths for forecast-clear, partly cloudy and cloudy hours, where the forecast clearness is
+     the ensemble mean irradiance over clear-sky irradiance (clear above 0.8, cloudy below 0.5), 30 and 60 days;
+  3. by season: separate widths per season from all earlier days of that season;
+  4. scaled: errors divided by the model's own P10-P90 spread, so wide-spread hours get wider intervals, 30 days.
+  A group with fewer than 50 earlier points uses the all-hours pool.
+- **Rule (unchanged from round 1):** lowest WIS among candidates inside 78-82% in every season; if none, the
+  smallest worst-season distance from 80%. A new candidate replaces the shipped one only if it wins by this rule.
