@@ -10,6 +10,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ROOT = Path(__file__).resolve().parents[2]
 RESULT_SOURCES = ("engine", "backend/v2/compute.py")
+# Presentation code: changing it never changes a computed number, so it must not invalidate the precomputed results.
+# Routes that do depend on one of these (e.g. /whatif on the registry) add that file's own hash to their cache key.
+NOT_RESULTS = {"engine/registry.py", "engine/explain.py", "engine/report.py", "engine/onboard.py"}
+NOT_RESULTS_DIRS = ("engine/explain_templates", "engine/report_templates")
 CRLF, LF = bytes([13, 10]), bytes([10])
 
 
@@ -24,10 +28,17 @@ def results_version(root: Path = ROOT) -> str:
         base = root / source
         files = sorted(base.rglob("*")) if base.is_dir() else [base]
         for f in files:
+            rel = f.relative_to(root).as_posix()
+            if rel in NOT_RESULTS or rel.startswith(NOT_RESULTS_DIRS):
+                continue
             if f.is_file() and f.suffix in (".py", ".json") and "__pycache__" not in f.parts:
-                digest.update(f.relative_to(root).as_posix().encode())
+                digest.update(rel.encode())
                 digest.update(f.read_bytes().replace(CRLF, LF))
     return digest.hexdigest()[:12]
+
+
+def file_version(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes().replace(CRLF, LF)).hexdigest()[:12]
 
 
 class Settings(BaseSettings):
