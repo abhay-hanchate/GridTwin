@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GridTwin evening report</title>
+<style>
+  :root { --ink:#1b1f24; --muted:#5b6470; --line:#d6dbe1; --act:#b42318; --watch:#b54708; --ok:#067647; --bg:#ffffff; }
+  @page { size: A4; margin: 14mm; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 16px; background: var(--bg); color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  h2 { font-size: 15px; margin: 22px 0 8px; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+  .muted { color: var(--muted); font-size: 12px; }
+  .headline { font-size: 16px; padding: 12px 14px; border-left: 5px solid var(--ok); background: #f6f8fa; }
+  .headline.act { border-color: var(--act); } .headline.watch { border-color: var(--watch); }
+  .hours { display: grid; grid-template-columns: repeat(24, 1fr); gap: 2px; align-items: end; height: 90px; }
+  .hours div { background: var(--ok); min-height: 2px; }
+  .hours div.watch { background: var(--watch); } .hours div.act { background: var(--act); }
+  .axis { display: grid; grid-template-columns: repeat(24, 1fr); font-size: 10px; color: var(--muted); }
+  table { border-collapse: collapse; width: 100%; font-size: 12px; }
+  th, td { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .tag { display: inline-block; font-size: 10px; padding: 1px 6px; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); }
+  @media print { body { padding: 0; } .noprint { display: none; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>{{ title }}</h1>
+  <div class="muted">{{ network_label }} · {{ date }} · {{ rule.label }} ({{ rule.vmin_v }}–{{ rule.vmax_v }} V)
+    <span class="tag">rule: {{ rule.verification }}</span></div>
+
+  <h2>{{ s.tomorrow }}</h2>
+  <p class="headline {{ risk.level }}">{{ risk_text }}</p>
+
+  <h2>{{ s.by_hour }}</h2>
+  <div class="hours" role="img" aria-label="{{ s.by_hour }}">
+    {% for h in hourly %}<div class="{{ h.level }}" style="height: {{ h.height }}%" title="{{ h.label }}: {{ h.pct }}%"></div>{% endfor %}
+  </div>
+  <div class="axis">{% for h in hourly %}<span>{% if loop.index0 % 3 == 0 %}{{ h.label }}{% endif %}</span>{% endfor %}</div>
+  <p class="muted">{{ s.thresholds }} <span class="tag">modeled</span></p>
+
+  <h2>{{ s.what_to_do }}</h2>
+  <p>{{ verdict_text }}</p>
+  {% if phase_moves %}
+  <table><thead><tr><th>{{ s.home }}</th><th>{{ s.from }}</th><th>{{ s.to }}</th></tr></thead><tbody>
+    {% for m in phase_moves %}<tr><td>{{ m.home }}</td><td>{{ m.from }}</td><td>{{ m.to }}</td></tr>{% endfor %}
+  </tbody></table>
+  {% endif %}
+  {% if export_limits %}
+  <table><thead><tr><th>{{ s.home }}</th><th>{{ s.limit_kw }}</th><th>{{ s.when }}</th></tr></thead><tbody>
+    {% for e in export_limits %}<tr><td>{{ e.home }}</td><td>{{ e.min_kw }}</td><td>{{ e.when }}</td></tr>{% endfor %}
+  </tbody></table>
+  {% endif %}
+
+  <h2>{{ s.assumptions }}</h2>
+  <ul class="muted">
+    {% for key, value in provenance.items() %}<li><b>{{ key }}</b>: {{ value }}</li>{% endfor %}
+    <li><b>{{ s.rule_source }}</b>: {{ rule.source }}</li>
+  </ul>
+  <p class="muted">{{ s.footer }} {{ generated }}.</p>
+</main>
+</body>
+</html>
