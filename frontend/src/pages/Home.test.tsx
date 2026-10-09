@@ -97,6 +97,18 @@ describe('Home', () => {
     expect(riskCalls().at(-1)).toContain('date=2025-08-05')
   })
 
+  it('links to the printable evening report for the same day, rule and language', async () => {
+    localStorage.setItem('gridtwin.lang', 'hi')
+    serve()
+    await show()
+    const href = screen.getByRole('link', { name: /रिपोर्ट/ }).getAttribute('href')!
+    const url = new URL(href, 'http://x')
+    expect(url.pathname).toBe('/api/v2/report')
+    expect(url.searchParams.get('rule')).toBe('up_2005')
+    expect(url.searchParams.get('date')).toBe(risk.date)
+    expect(url.searchParams.get('lang')).toBe('hi')
+  })
+
   it('the strip has one bar per 15 minutes and the watch and act lines', async () => {
     serve()
     await show()

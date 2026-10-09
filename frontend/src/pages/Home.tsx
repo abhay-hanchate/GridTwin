@@ -1,4 +1,4 @@
-import { useV2, v2Path } from '../api/v2'
+import { useV2, V2_BASE, v2Path } from '../api/v2'
 import type { Risk, Rule } from '../api/v2types'
 import { DEFAULT_NETWORK } from '../app/defaults'
 import { useView, type ViewProps } from '../app/view'
@@ -8,7 +8,7 @@ import RiskStrip from '../components/RiskStrip'
 import Status from '../components/Status'
 import Verdict from '../components/Verdict'
 import { one, stepTime, volts } from '../format'
-import { useT } from '../i18n'
+import { useLang, useT } from '../i18n'
 
 // Watch and act levels of feature D1; the API states the ones it used and these are only the fallback.
 const DEFAULT_THRESHOLDS = { watch: 0.2, act: 0.5 }
@@ -16,14 +16,18 @@ const DEFAULT_THRESHOLDS = { watch: 0.2, act: 0.5 }
 /** Tomorrow's risk. The rule and day can be owned by the caller (shared with Fixes) or by the page itself. */
 export default function Home({ network = DEFAULT_NETWORK, ...props }: ViewProps) {
   const t = useT()
+  const { lang } = useLang()
   const view = useView(props)
   const risk = useV2<Risk>(v2Path('/risk', { network, rule: view.rule, date: view.date }))
+  // The printable evening report (F2) for exactly what this page shows: same day, street, rule and language.
+  const report = risk.data && `${V2_BASE}${v2Path('/report', { date: risk.data.date, network, rule: view.rule, lang })}`
 
   return (
     <div className="v2-page">
       <Controls view={view} answered={risk.data?.date} />
       <Status state={risk} />
       {risk.data && <RiskView risk={risk.data} band={view.band} />}
+      {report && <p><a className="report-link" href={report} target="_blank" rel="noopener">{t('home.report')}</a></p>}
       {risk.data && (
         <p className="note" role="note">{t(risk.data.calibration?.reliable ? 'home.calibrated' : 'home.uncalibrated')}</p>
       )}

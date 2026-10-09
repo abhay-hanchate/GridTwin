@@ -168,5 +168,6 @@
   "proof.not_built.rl": "Reinforcement-learning control.",
   "proof.not_built.llm": "Letting a language model choose or operate fixes.",
   "proof.not_built.scada": "Live SCADA streaming.",
-  "proof.not_built.markets": "Energy trading between neighbours."
+  "proof.not_built.markets": "Energy trading between neighbours.",
+  "home.report": "Open the printable evening report"
 }
