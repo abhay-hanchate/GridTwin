@@ -1,0 +1,103 @@
+{
+ "_note": "approve and approve_with_conditions are real POST /connection-check answers; refuse is the conditions answer edited to the refusal shape of engine/headroom.check_connection (none of the demo requests was refused). Tests only.",
+ "approve": {
+  "date": "2025-05-15",
+  "network": "benchmark_250",
+  "adoption": 0.3,
+  "node": 73,
+  "kw": 3.0,
+  "count": 1,
+  "phase": "C",
+  "rule": "pm10",
+  "evidence": {
+   "baseline_unsafe_steps": 1,
+   "unsafe_steps_with_request": 1,
+   "worsened_steps": 0,
+   "per_phase_worsened_steps": {
+    "A": 0,
+    "B": 0,
+    "C": 0
+   }
+  },
+  "regulatory_status": "at or below 10 kW: reported exempt from a technical feasibility study (unverified); this physics result is advisory",
+  "decision": "approve",
+  "conditions": [],
+  "binding_limit": null,
+  "provenance": {
+   "solar": "modeled: solar v2 day-ahead forecast (five weather models, LightGBM, conformal)",
+   "demand": "modeled: CEEW 2019-2021 climatology by month and day type; homes from analog days",
+   "voltage": "modeled: upstream-voltage model; yesterday's mean from the same date of 2019 (proxy)",
+   "grid": "benchmark: SimBench topology with IS 398 conductors; homes on single phases"
+  }
+ },
+ "approve_with_conditions": {
+  "date": "2025-05-15",
+  "network": "benchmark_250",
+  "adoption": 0.3,
+  "node": 65,
+  "kw": 5.0,
+  "count": 1,
+  "phase": "A",
+  "rule": "up_2005",
+  "evidence": {
+   "baseline_unsafe_steps": 55,
+   "unsafe_steps_with_request": 62,
+   "worsened_steps": 16,
+   "per_phase_worsened_steps": {
+    "A": 16,
+    "B": 26,
+    "C": 41
+   }
+  },
+  "regulatory_status": "at or below 10 kW: reported exempt from a technical feasibility study (unverified); this physics result is advisory",
+  "decision": "approve_with_conditions",
+  "binding_limit": null,
+  "conditions": [
+   "standard IEEE 1547 Volt/VAR on the street's inverters"
+  ],
+  "provenance": {
+   "solar": "modeled: solar v2 day-ahead forecast (five weather models, LightGBM, conformal)",
+   "demand": "modeled: CEEW 2019-2021 climatology by month and day type; homes from analog days",
+   "voltage": "modeled: upstream-voltage model; yesterday's mean from the same date of 2019 (proxy)",
+   "grid": "benchmark: SimBench topology with IS 398 conductors; homes on single phases"
+  }
+ },
+ "refuse": {
+  "date": "2025-05-15",
+  "network": "benchmark_250",
+  "adoption": 0.3,
+  "node": 65,
+  "kw": 8.0,
+  "count": 1,
+  "phase": "A",
+  "rule": "up_2005",
+  "evidence": {
+   "baseline_unsafe_steps": 55,
+   "unsafe_steps_with_request": 62,
+   "worsened_steps": 16,
+   "per_phase_worsened_steps": {
+    "A": 16,
+    "B": 26,
+    "C": 41
+   }
+  },
+  "regulatory_status": "at or below 10 kW: reported exempt from a technical feasibility study (unverified); this physics result is advisory",
+  "decision": "refuse",
+  "binding_limit": {
+   "type": "overvoltage",
+   "steps": 46,
+   "worst": {
+    "value": 1.091,
+    "limit": 1.06
+   }
+  },
+  "conditions": [],
+  "provenance": {
+   "solar": "modeled: solar v2 day-ahead forecast (five weather models, LightGBM, conformal)",
+   "demand": "modeled: CEEW 2019-2021 climatology by month and day type; homes from analog days",
+   "voltage": "modeled: upstream-voltage model; yesterday's mean from the same date of 2019 (proxy)",
+   "grid": "benchmark: SimBench topology with IS 398 conductors; homes on single phases"
+  },
+  "largest_kw_that_passes": 1.4
+ }
+}

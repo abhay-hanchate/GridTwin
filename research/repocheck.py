@@ -1,0 +1,5 @@
+import json,subprocess,sys
+repos="""e2nIEE/pandapower e2nIEE/simbench PowerGridModel/power-grid-model epri-dev/OpenDER dss-extensions/OpenDSSDirect.py dss-extensions/dss_python NREL/PyDSS tomislavantic/ppOPF AlexanderHoogsteyn/PhaseIdentification LIRNEasia/lacuna Team-Nando/Tutorial-DERHostingCapacity-3-VoltWatt_LV wenbowangnrel/Hosting-Capacity-Analysis OpenSTEF/openstef pvlib/pvlib-python SolarArbiter/solarforecastarbiter-core sandialabs/pvanalytics rte-france/Grid2Op gridlab-d/gridlab-d PNNL-CIM-Tools/CIM-Graph NREL/ditto PowerSystemsModeling/PowerModelsDistribution.jl lanl-ansi/PowerModelsDistribution.jl PyPSA/PyPSA gridcal/GridCal NREL/SMART-DS-ML OpenSTEF/openstef-dbc lf-energy/gridfm FFH-Energy/VoltVarOpt microsoft/Prophet Nixtla/neuralforecast scikit-learn-contrib/MAPIE valeman/awesome-conformal-prediction""".split()
+for r in repos:
+    p=subprocess.run(["gh","api",f"repos/{r}","--jq",'[.full_name,.stargazers_count,(.license.spdx_id//"none"),.pushed_at[:10],.archived]|@tsv'],capture_output=True,text=True)
+    print(p.stdout.strip() or f"{r}\tNOT FOUND/ERR")

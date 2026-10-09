@@ -8,14 +8,23 @@ on:
 jobs:
   python:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
           cache: pip
-      - run: pip install -r requirements.txt
-      - run: pytest -q tests
+      - run: pip install -r requirements-dev.txt -c constraints.txt
+      - run: ruff check .
+      - run: pytest -q
+      - name: Dependency audit
+        run: pip-audit -r requirements.txt --progress-spinner off || echo "::warning::pip-audit reported findings"
+      - name: Secret scan
+        run: "! grep -rIE 'sk-[A-Za-z0-9]{20,}' --exclude-dir=.git --exclude-dir=node_modules --exclude=.env ."
 
   frontend:
     runs-on: ubuntu-latest
@@ -30,4 +39,7 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
+      - run: npm run lint
       - run: npm run build
+      - run: npm test --if-present
+      - run: npm audit --omit=dev --audit-level=high || echo "::warning::npm audit reported findings"

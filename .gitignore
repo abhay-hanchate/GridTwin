@@ -32,3 +32,27 @@ ml/models/*
 !ml/models/solar_p10.txt
 !ml/models/solar_p50.txt
 !ml/models/solar_p90.txt
+!ml/models/solar_v2_manifest.json
+!ml/models/solar_v2_p10.txt
+!ml/models/solar_v2_p50.txt
+!ml/models/solar_v2_p90.txt
+
+# secrets
+.env
+research/.env
+
+# derived per-district profiles (about 30 MB; rebuilt by scripts/build_data.py)
+data/processed/v2/
+
+# drift-monitor runtime state (forecast log, conformal width, WARN); written by scripts/monitor.py
+data/monitor/
+
+# utility files uploaded for onboarding (never committed; scripts/onboard.py --purge deletes them)
+data/onboarding/
+
+# live feeds recorded by scripts/record_up_demand.py
+data/live/
+!ml/models/live_dayahead_*
+
+# local browser-automation screenshots and page snapshots
+.playwright-mcp/

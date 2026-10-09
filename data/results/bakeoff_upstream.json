@@ -1,0 +1,94 @@
+{
+  "component": "upstream",
+  "rule": "keep candidates with day-maximum 10-90% coverage within 70-90% on both protocols; lowest mean CRPS of the day maximum wins, candidates within 2% count as tied and the simplest wins; if none is in the band, the smallest worst-protocol distance from 80% wins and the miss is reported",
+  "split": "(a) fit Mathura before 2021-01-01, test Mathura 2021; (b) fit all Mathura, test all Bareilly; 200 paths/day, seed 0",
+  "candidates": [
+    {
+      "name": "climatology",
+      "protocols": {
+        "time_mathura_2021": {
+          "days": 50,
+          "day_max_coverage_80": 0.18,
+          "crps_day_max": 0.01288,
+          "crps_day_mean": 0.01953,
+          "slot_coverage_80": 0.251
+        },
+        "district_bareilly": {
+          "days": 875,
+          "day_max_coverage_80": 0.442,
+          "crps_day_max": 0.0139,
+          "crps_day_mean": 0.01175,
+          "slot_coverage_80": 0.626
+        }
+      }
+    },
+    {
+      "name": "analog_days",
+      "protocols": {
+        "time_mathura_2021": {
+          "days": 50,
+          "day_max_coverage_80": 0.7,
+          "crps_day_max": 0.00796,
+          "crps_day_mean": 0.00836,
+          "slot_coverage_80": 0.598
+        },
+        "district_bareilly": {
+          "days": 875,
+          "day_max_coverage_80": 0.518,
+          "crps_day_max": 0.01085,
+          "crps_day_mean": 0.00621,
+          "slot_coverage_80": 0.713
+        }
+      }
+    },
+    {
+      "name": "ar1_shape",
+      "protocols": {
+        "time_mathura_2021": {
+          "days": 50,
+          "day_max_coverage_80": 0.7,
+          "crps_day_max": 0.00985,
+          "crps_day_mean": 0.00559,
+          "slot_coverage_80": 0.837
+        },
+        "district_bareilly": {
+          "days": 875,
+          "day_max_coverage_80": 0.653,
+          "crps_day_max": 0.0106,
+          "crps_day_mean": 0.00596,
+          "slot_coverage_80": 0.754
+        }
+      }
+    },
+    {
+      "name": "lgbm_day_quantiles",
+      "protocols": {
+        "time_mathura_2021": {
+          "days": 50,
+          "day_max_coverage_80": 0.82,
+          "crps_day_max": 0.00536,
+          "crps_day_mean": 0.00687,
+          "slot_coverage_80": 0.598
+        },
+        "district_bareilly": {
+          "days": 875,
+          "day_max_coverage_80": 0.693,
+          "crps_day_max": 0.0097,
+          "crps_day_mean": 0.00634,
+          "slot_coverage_80": 0.696
+        }
+      }
+    }
+  ],
+  "winner": "lgbm_day_quantiles",
+  "in_band": [],
+  "reason": "no candidate inside the band on both protocols: smallest worst-protocol distance from 80% (a miss)",
+  "mean_crps_day_max": {
+    "climatology": 0.01339,
+    "analog_days": 0.00941,
+    "ar1_shape": 0.01022,
+    "lgbm_day_quantiles": 0.00753
+  },
+  "git_hash": "ea0363f",
+  "timestamp": "2026-10-09T07:32:40.424939+00:00"
+}

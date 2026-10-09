@@ -1,0 +1,343 @@
+{
+  "component": "solar",
+  "rule": "simplest candidate with MAE below Round 1 = S; lowest WIS wins if >= 3% below S's WIS, else S; nothing below Round 1 keeps Round 1 | lowest WIS among candidates with 78-82% coverage in every season; else smallest worst-season distance from 80%",
+  "split": "train 2024-01..10; conformal pool from 2024-11; test 2025 daylight hours (identical mask)",
+  "district": "mathura",
+  "nwp_models_used": [
+    "gfs_global",
+    "icon_global",
+    "gem_global",
+    "meteofrance_arpege_world",
+    "ecmwf_ifs025"
+  ],
+  "mask_hours": 4414,
+  "median": {
+    "rule": "simplest candidate with MAE below Round 1 = S; lowest WIS wins if >= 3% below S's WIS, else S; nothing below Round 1 keeps Round 1",
+    "winner": "lgbm_residual",
+    "simplest_beating_reference": "physics_mean_5nwp",
+    "lowest_wis": "lgbm_residual",
+    "wis_gain_over_simplest": 0.0894,
+    "reason": "lowest-WIS gain over the simplest candidate beating round1 is 8.9% (meets the 3% margin)",
+    "candidates": [
+      {
+        "name": "persistence",
+        "n": 4414,
+        "mae_p50": 0.0456,
+        "p10_p90_coverage": 0.789,
+        "wis": 0.0353,
+        "by_season": {
+          "monsoon": {
+            "mae_p50": 0.0609,
+            "wis": 0.0449,
+            "coverage": 0.746,
+            "n": 1597
+          },
+          "post_monsoon": {
+            "mae_p50": 0.0508,
+            "wis": 0.0425,
+            "coverage": 0.827,
+            "n": 678
+          },
+          "summer": {
+            "mae_p50": 0.0241,
+            "wis": 0.0184,
+            "coverage": 0.844,
+            "n": 1173
+          },
+          "winter": {
+            "mae_p50": 0.0427,
+            "wis": 0.0351,
+            "coverage": 0.765,
+            "n": 966
+          }
+        }
+      },
+      {
+        "name": "round1",
+        "n": 4414,
+        "mae_p50": 0.0396,
+        "p10_p90_coverage": 0.823,
+        "wis": 0.029,
+        "by_season": {
+          "monsoon": {
+            "mae_p50": 0.051,
+            "wis": 0.037,
+            "coverage": 0.927,
+            "n": 1597
+          },
+          "post_monsoon": {
+            "mae_p50": 0.0489,
+            "wis": 0.0341,
+            "coverage": 0.628,
+            "n": 678
+          },
+          "summer": {
+            "mae_p50": 0.0176,
+            "wis": 0.0143,
+            "coverage": 0.914,
+            "n": 1173
+          },
+          "winter": {
+            "mae_p50": 0.0411,
+            "wis": 0.03,
+            "coverage": 0.677,
+            "n": 966
+          }
+        }
+      },
+      {
+        "name": "physics_best_match",
+        "n": 4414,
+        "mae_p50": 0.0411,
+        "p10_p90_coverage": 0.763,
+        "wis": 0.0292,
+        "by_season": {
+          "monsoon": {
+            "mae_p50": 0.0526,
+            "wis": 0.0379,
+            "coverage": 0.766,
+            "n": 1597
+          },
+          "post_monsoon": {
+            "mae_p50": 0.0427,
+            "wis": 0.0267,
+            "coverage": 0.82,
+            "n": 678
+          },
+          "summer": {
+            "mae_p50": 0.0219,
+            "wis": 0.0174,
+            "coverage": 0.807,
+            "n": 1173
+          },
+          "winter": {
+            "mae_p50": 0.044,
+            "wis": 0.0308,
+            "coverage": 0.666,
+            "n": 966
+          }
+        }
+      },
+      {
+        "name": "physics_mean_5nwp",
+        "n": 4414,
+        "mae_p50": 0.0335,
+        "p10_p90_coverage": 0.787,
+        "wis": 0.0235,
+        "by_season": {
+          "monsoon": {
+            "mae_p50": 0.0421,
+            "wis": 0.0303,
+            "coverage": 0.762,
+            "n": 1597
+          },
+          "post_monsoon": {
+            "mae_p50": 0.0279,
+            "wis": 0.02,
+            "coverage": 0.879,
+            "n": 678
+          },
+          "summer": {
+            "mae_p50": 0.0208,
+            "wis": 0.0149,
+            "coverage": 0.815,
+            "n": 1173
+          },
+          "winter": {
+            "mae_p50": 0.0386,
+            "wis": 0.0254,
+            "coverage": 0.731,
+            "n": 966
+          }
+        }
+      },
+      {
+        "name": "bias_corrected_mean",
+        "n": 4414,
+        "mae_p50": 0.0326,
+        "p10_p90_coverage": 0.781,
+        "wis": 0.0233,
+        "by_season": {
+          "monsoon": {
+            "mae_p50": 0.0428,
+            "wis": 0.0306,
+            "coverage": 0.756,
+            "n": 1597
+          },
+          "post_monsoon": {
+            "mae_p50": 0.0276,
+            "wis": 0.0202,
+            "coverage": 0.885,
+            "n": 678
+          },
+          "summer": {
+            "mae_p50": 0.0185,
+            "wis": 0.014,
+            "coverage": 0.799,
+            "n": 1173
+          },
+          "winter": {
+            "mae_p50": 0.0365,
+            "wis": 0.0246,
+            "coverage": 0.727,
+            "n": 966
+          }
+        }
+      },
+      {
+        "name": "lgbm_direct",
+        "n": 4414,
+        "mae_p50": 0.0333,
+        "p10_p90_coverage": 0.799,
+        "wis": 0.0215,
+        "by_season": {
+          "monsoon": {
+            "mae_p50": 0.0464,
+            "wis": 0.0294,
+            "coverage": 0.771,
+            "n": 1597
+          },
+          "post_monsoon": {
+            "mae_p50": 0.0273,
+            "wis": 0.0181,
+            "coverage": 0.842,
+            "n": 678
+          },
+          "summer": {
+            "mae_p50": 0.018,
+            "wis": 0.0114,
+            "coverage": 0.848,
+            "n": 1173
+          },
+          "winter": {
+            "mae_p50": 0.0347,
+            "wis": 0.023,
+            "coverage": 0.756,
+            "n": 966
+          }
+        }
+      },
+      {
+        "name": "lgbm_residual",
+        "n": 4414,
+        "mae_p50": 0.0329,
+        "p10_p90_coverage": 0.803,
+        "wis": 0.0214,
+        "by_season": {
+          "monsoon": {
+            "mae_p50": 0.047,
+            "wis": 0.0298,
+            "coverage": 0.776,
+            "n": 1597
+          },
+          "post_monsoon": {
+            "mae_p50": 0.0277,
+            "wis": 0.0187,
+            "coverage": 0.824,
+            "n": 678
+          },
+          "summer": {
+            "mae_p50": 0.0173,
+            "wis": 0.0111,
+            "coverage": 0.86,
+            "n": 1173
+          },
+          "winter": {
+            "mae_p50": 0.0321,
+            "wis": 0.022,
+            "coverage": 0.764,
+            "n": 966
+          }
+        }
+      }
+    ]
+  },
+  "interval": {
+    "rule": "lowest WIS among candidates with 78-82% coverage in every season; else smallest worst-season distance from 80%",
+    "median_model": "lgbm_residual",
+    "winner": "conformal_30d",
+    "in_band": [],
+    "reason": "no candidate inside the band in every season; smallest worst-season miss",
+    "candidates": [
+      {
+        "name": "raw_quantiles",
+        "wis": 0.0224,
+        "mae_p50": 0.0329,
+        "p10_p90_coverage": 0.518,
+        "by_season": {
+          "monsoon": 0.541,
+          "post_monsoon": 0.4,
+          "summer": 0.596,
+          "winter": 0.469
+        }
+      },
+      {
+        "name": "round1_scale_2.5",
+        "wis": 0.0226,
+        "mae_p50": 0.0329,
+        "p10_p90_coverage": 0.836,
+        "by_season": {
+          "monsoon": 0.894,
+          "post_monsoon": 0.726,
+          "summer": 0.868,
+          "winter": 0.776
+        }
+      },
+      {
+        "name": "conformal_30d",
+        "wis": 0.0213,
+        "mae_p50": 0.0329,
+        "p10_p90_coverage": 0.799,
+        "by_season": {
+          "monsoon": 0.795,
+          "post_monsoon": 0.807,
+          "summer": 0.84,
+          "winter": 0.749
+        }
+      },
+      {
+        "name": "conformal_60d",
+        "wis": 0.0214,
+        "mae_p50": 0.0329,
+        "p10_p90_coverage": 0.803,
+        "by_season": {
+          "monsoon": 0.776,
+          "post_monsoon": 0.824,
+          "summer": 0.86,
+          "winter": 0.764
+        }
+      },
+      {
+        "name": "conformal_120d",
+        "wis": 0.0215,
+        "mae_p50": 0.0329,
+        "p10_p90_coverage": 0.801,
+        "by_season": {
+          "monsoon": 0.741,
+          "post_monsoon": 0.839,
+          "summer": 0.891,
+          "winter": 0.764
+        }
+      },
+      {
+        "name": "conformal_per_hour_60d",
+        "wis": 0.0214,
+        "mae_p50": 0.0329,
+        "p10_p90_coverage": 0.78,
+        "by_season": {
+          "monsoon": 0.773,
+          "post_monsoon": 0.836,
+          "summer": 0.804,
+          "winter": 0.726
+        }
+      }
+    ]
+  },
+  "winner": {
+    "median": "lgbm_residual",
+    "interval": "conformal_30d"
+  },
+  "conformal_q_last_60d_of_2025_raw": 0.016762,
+  "git_hash": "c620817",
+  "timestamp": "2026-10-09T05:01:17.512065+00:00"
+}

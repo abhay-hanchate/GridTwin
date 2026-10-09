@@ -4,12 +4,12 @@ export interface Scenario {
   id: ScenarioId
   name: string
   pv_share: number
-  band: '10' | '6'
+  band: string            // voltage rule id (see /api/rules); Round 1 aliases '10' and '6' still work
   default_date: string
 }
 
 export interface Violation {
-  type: 'overvoltage' | 'undervoltage' | 'line_overload' | 'trafo_overload'
+  type: 'overvoltage' | 'undervoltage' | 'line_overload' | 'trafo_overload' | 'solver_failure'
   element: string
   id: number
   value: number

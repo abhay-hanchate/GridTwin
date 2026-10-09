@@ -8,6 +8,11 @@ numba
 requests
 fastapi
 uvicorn[standard]
-pytest
-httpx
 scikit-learn
+power-grid-model
+ortools
+holidays
+jinja2
+pydantic-settings
+prometheus-client
+networkx

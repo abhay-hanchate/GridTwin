@@ -2,6 +2,7 @@ from datetime import date, datetime, timedelta, timezone
 
 import numpy as np
 import pandas as pd
+import pytest
 from fastapi.testclient import TestClient
 
 import backend.main as api
@@ -107,6 +108,7 @@ def _solar_frame(target: date, midday_kw_per_kwp: float) -> pd.DataFrame:
     return pd.DataFrame({"p10": shape * 0.8, "p50": shape, "p90": shape * 1.1}, index=index)
 
 
+@pytest.mark.slow
 def test_live_warning_separates_solar_caused_time_from_the_grid_baseline():
     result = live_warning("2026-09-30", _solar_frame(date(2026, 9, 30), 0.7))
     predicted, baseline, solar = result["predicted"], result["without_solar"], result["solar_caused"]
@@ -117,6 +119,7 @@ def test_live_warning_separates_solar_caused_time_from_the_grid_baseline():
     assert solar["first_unsafe"] == (solar["unsafe_times"][0] if solar["unsafe_times"] else None)
 
 
+@pytest.mark.slow
 def test_live_warning_without_sun_attributes_nothing_to_solar():
     result = live_warning("2026-09-30", _solar_frame(date(2026, 9, 30), 0.0))
     assert result["solar_caused"]["violation_steps"] == 0

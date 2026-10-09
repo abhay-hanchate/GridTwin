@@ -1,0 +1,221 @@
+{
+  "generated_at": "2026-10-09T05:24:45.370078+00:00",
+  "target": "mean kW per home, 15 min",
+  "protocols": {
+    "strict": {
+      "base": "mean_1d_7d",
+      "time_mathura_2021": {
+        "n": 4896,
+        "mae_p50": 0.0372,
+        "coverage": 0.833,
+        "wis": 0.0241,
+        "mae_lag1d": 0.047,
+        "skill_vs_lag1d": 0.208,
+        "mae_lag7d": 0.047,
+        "skill_vs_lag7d": 0.209,
+        "mae_mean_1d_7d": 0.0406,
+        "skill_vs_mean_1d_7d": 0.084,
+        "best_baseline": "mean_1d_7d",
+        "skill_vs_best_baseline": 0.084,
+        "by_season": {
+          "DJF": {
+            "n": 4896,
+            "mae_p50": 0.0372,
+            "coverage": 0.833,
+            "wis": 0.0241,
+            "mae_lag1d": 0.047,
+            "skill_vs_lag1d": 0.208,
+            "mae_lag7d": 0.047,
+            "skill_vs_lag7d": 0.209,
+            "mae_mean_1d_7d": 0.0406,
+            "skill_vs_mean_1d_7d": 0.084,
+            "best_baseline": "mean_1d_7d",
+            "skill_vs_best_baseline": 0.084
+          }
+        }
+      },
+      "district_bareilly": {
+        "n": 78116,
+        "mae_p50": 0.057,
+        "coverage": 0.766,
+        "wis": 0.0366,
+        "mae_lag1d": 0.0656,
+        "skill_vs_lag1d": 0.13,
+        "mae_lag7d": 0.0864,
+        "skill_vs_lag7d": 0.34,
+        "mae_mean_1d_7d": 0.0645,
+        "skill_vs_mean_1d_7d": 0.116,
+        "best_baseline": "mean_1d_7d",
+        "skill_vs_best_baseline": 0.116,
+        "by_season": {
+          "DJF": {
+            "n": 17376,
+            "mae_p50": 0.0483,
+            "coverage": 0.78,
+            "wis": 0.031,
+            "mae_lag1d": 0.0563,
+            "skill_vs_lag1d": 0.142,
+            "mae_lag7d": 0.069,
+            "skill_vs_lag7d": 0.299,
+            "mae_mean_1d_7d": 0.0528,
+            "skill_vs_mean_1d_7d": 0.085,
+            "best_baseline": "mean_1d_7d",
+            "skill_vs_best_baseline": 0.085
+          },
+          "JJA": {
+            "n": 21636,
+            "mae_p50": 0.0801,
+            "coverage": 0.73,
+            "wis": 0.0515,
+            "mae_lag1d": 0.0896,
+            "skill_vs_lag1d": 0.105,
+            "mae_lag7d": 0.1235,
+            "skill_vs_lag7d": 0.351,
+            "mae_mean_1d_7d": 0.0896,
+            "skill_vs_mean_1d_7d": 0.106,
+            "best_baseline": "lag1d",
+            "skill_vs_best_baseline": 0.105
+          },
+          "MAM": {
+            "n": 17188,
+            "mae_p50": 0.0471,
+            "coverage": 0.771,
+            "wis": 0.03,
+            "mae_lag1d": 0.0547,
+            "skill_vs_lag1d": 0.138,
+            "mae_lag7d": 0.0706,
+            "skill_vs_lag7d": 0.332,
+            "mae_mean_1d_7d": 0.0537,
+            "skill_vs_mean_1d_7d": 0.122,
+            "best_baseline": "mean_1d_7d",
+            "skill_vs_best_baseline": 0.122
+          },
+          "SON": {
+            "n": 21916,
+            "mae_p50": 0.0489,
+            "coverage": 0.787,
+            "wis": 0.0317,
+            "mae_lag1d": 0.0578,
+            "skill_vs_lag1d": 0.153,
+            "mae_lag7d": 0.0761,
+            "skill_vs_lag7d": 0.357,
+            "mae_mean_1d_7d": 0.0575,
+            "skill_vs_mean_1d_7d": 0.149,
+            "best_baseline": "mean_1d_7d",
+            "skill_vs_best_baseline": 0.149
+          }
+        }
+      }
+    },
+    "oracle_weather": {
+      "base": "mean_1d_7d",
+      "time_mathura_2021": {
+        "n": 4896,
+        "mae_p50": 0.0373,
+        "coverage": 0.83,
+        "wis": 0.0241,
+        "mae_lag1d": 0.047,
+        "skill_vs_lag1d": 0.207,
+        "mae_lag7d": 0.047,
+        "skill_vs_lag7d": 0.207,
+        "mae_mean_1d_7d": 0.0406,
+        "skill_vs_mean_1d_7d": 0.082,
+        "best_baseline": "mean_1d_7d",
+        "skill_vs_best_baseline": 0.082,
+        "by_season": {
+          "DJF": {
+            "n": 4896,
+            "mae_p50": 0.0373,
+            "coverage": 0.83,
+            "wis": 0.0241,
+            "mae_lag1d": 0.047,
+            "skill_vs_lag1d": 0.207,
+            "mae_lag7d": 0.047,
+            "skill_vs_lag7d": 0.207,
+            "mae_mean_1d_7d": 0.0406,
+            "skill_vs_mean_1d_7d": 0.082,
+            "best_baseline": "mean_1d_7d",
+            "skill_vs_best_baseline": 0.082
+          }
+        }
+      },
+      "district_bareilly": {
+        "n": 78116,
+        "mae_p50": 0.0562,
+        "coverage": 0.768,
+        "wis": 0.036,
+        "mae_lag1d": 0.0656,
+        "skill_vs_lag1d": 0.143,
+        "mae_lag7d": 0.0864,
+        "skill_vs_lag7d": 0.35,
+        "mae_mean_1d_7d": 0.0645,
+        "skill_vs_mean_1d_7d": 0.129,
+        "best_baseline": "mean_1d_7d",
+        "skill_vs_best_baseline": 0.129,
+        "by_season": {
+          "DJF": {
+            "n": 17376,
+            "mae_p50": 0.0483,
+            "coverage": 0.785,
+            "wis": 0.0308,
+            "mae_lag1d": 0.0563,
+            "skill_vs_lag1d": 0.143,
+            "mae_lag7d": 0.069,
+            "skill_vs_lag7d": 0.3,
+            "mae_mean_1d_7d": 0.0528,
+            "skill_vs_mean_1d_7d": 0.086,
+            "best_baseline": "mean_1d_7d",
+            "skill_vs_best_baseline": 0.086
+          },
+          "JJA": {
+            "n": 21636,
+            "mae_p50": 0.0777,
+            "coverage": 0.739,
+            "wis": 0.0498,
+            "mae_lag1d": 0.0896,
+            "skill_vs_lag1d": 0.132,
+            "mae_lag7d": 0.1235,
+            "skill_vs_lag7d": 0.371,
+            "mae_mean_1d_7d": 0.0896,
+            "skill_vs_mean_1d_7d": 0.133,
+            "best_baseline": "lag1d",
+            "skill_vs_best_baseline": 0.132
+          },
+          "MAM": {
+            "n": 17188,
+            "mae_p50": 0.0468,
+            "coverage": 0.763,
+            "wis": 0.0298,
+            "mae_lag1d": 0.0547,
+            "skill_vs_lag1d": 0.145,
+            "mae_lag7d": 0.0706,
+            "skill_vs_lag7d": 0.337,
+            "mae_mean_1d_7d": 0.0537,
+            "skill_vs_mean_1d_7d": 0.128,
+            "best_baseline": "mean_1d_7d",
+            "skill_vs_best_baseline": 0.128
+          },
+          "SON": {
+            "n": 21916,
+            "mae_p50": 0.0486,
+            "coverage": 0.787,
+            "wis": 0.0315,
+            "mae_lag1d": 0.0578,
+            "skill_vs_lag1d": 0.158,
+            "mae_lag7d": 0.0761,
+            "skill_vs_lag7d": 0.361,
+            "mae_mean_1d_7d": 0.0575,
+            "skill_vs_mean_1d_7d": 0.154,
+            "best_baseline": "mean_1d_7d",
+            "skill_vs_best_baseline": 0.154
+          }
+        }
+      }
+    }
+  },
+  "gate_g4": {
+    "skill_vs_best_baseline": 0.084,
+    "coverage": 0.833,
+    "passed": false
+  }
+}

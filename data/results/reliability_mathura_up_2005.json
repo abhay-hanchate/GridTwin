@@ -1,0 +1,48 @@
+{
+  "days": 40,
+  "scenarios_per_day": 40,
+  "split": "2021-01-01",
+  "rule": "up_2005",
+  "observed_unsafe_share_of_steps": 0.9974,
+  "brier": 0.0076,
+  "brier_climatology": 0.0026,
+  "brier_skill": -1.928,
+  "reliability": [
+    {
+      "bin": "0.0-0.2",
+      "n": 0,
+      "mean_predicted": null,
+      "observed_frequency": null
+    },
+    {
+      "bin": "0.2-0.4",
+      "n": 2,
+      "mean_predicted": 0.35,
+      "observed_frequency": 1.0
+    },
+    {
+      "bin": "0.4-0.6",
+      "n": 36,
+      "mean_predicted": 0.541,
+      "observed_frequency": 0.917
+    },
+    {
+      "bin": "0.6-0.8",
+      "n": 117,
+      "mean_predicted": 0.706,
+      "observed_frequency": 0.966
+    },
+    {
+      "bin": "0.8-1.0",
+      "n": 3685,
+      "mean_predicted": 0.986,
+      "observed_frequency": 0.999
+    }
+  ],
+  "unsafe_hours": {
+    "predicted_mean": 23.35,
+    "observed_mean": 23.94,
+    "correlation": 0.2
+  },
+  "limitation": "Generator conditioned on coarse weather class, month, day type and yesterday's voltage; not live forecasts."
+}

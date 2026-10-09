@@ -48,8 +48,18 @@ def test_hosting_capacity_rejects_unsupported_voltage_band():
 
 
 def test_strict_band_has_no_safe_action():
+    # Measured 9 Oct 2026: the closest fix (tap +1 with IEEE 1547 Volt/VAR) still peaks at 246 V against 244 V.
     r = client.get("/api/actions", params={"scenario": "S5"}).json()
     assert r["verdict"]["safe_action_found"] is False
+    assert r["verdict"]["binding_limit"]["type"] == "overvoltage"
+    assert "244 V limit" in r["verdict"]["message"]
+
+
+def test_standard_volt_var_alone_is_now_a_safe_fix():
+    # The IEEE 1547 curve acts only where voltage is high; the Round 1 fixed power factor left 2 h 45 min unsafe.
+    actions = {a["action_id"]: a for a in client.get("/api/actions", params={"scenario": "S4"}).json()["actions"]}
+    assert actions["volt_var"]["acceptable"] and actions["volt_var"]["cost"]["curtailed_kwh"] == 0
+    assert not actions["pf09_fixed"]["acceptable"]
 
 
 def test_forecast_bands_are_ordered():
@@ -116,3 +126,22 @@ def test_forecast_simulation_predicts_the_real_day():
     predicted = r["before"]["summary"]["violation_steps"]
     actual = r["after"]["summary"]["violation_steps"]
     assert abs(predicted - actual) <= 4
+
+
+def test_rules_endpoint_lists_sources_and_verification():
+    rules = client.get("/api/rules").json()
+    ids = [r["id"] for r in rules]
+    assert {"pm10", "up_2005"} <= set(ids)
+    up = next(r for r in rules if r["id"] == "up_2005")
+    assert up["vmin_v"] == 216.2 and up["vmax_v"] == 243.8
+    assert up["verification"] == "secondary" and "UPERC" in up["source"]
+
+
+def test_scenario_s5_names_the_rule():
+    scenarios = {s["id"]: s for s in client.get("/api/scenarios").json()}
+    assert "UP Supply Code" in scenarios["S5"]["name"] and scenarios["S5"]["band"] == "up_2005"
+
+
+def test_hosting_capacity_rejects_an_unknown_rule_with_the_valid_ids():
+    response = client.get("/api/hosting-capacity", params={"band": "nope"})
+    assert response.status_code == 422 and "up_2005" in response.json()["detail"]

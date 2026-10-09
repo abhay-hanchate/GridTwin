@@ -1,0 +1,201 @@
+{
+ "generated_at": "2026-10-09T16:18:10.693826+00:00",
+ "code_version": "fcd030a4e165",
+ "demo_dates": {
+  "sunny": "2025-05-15",
+  "mixed": "2025-11-19",
+  "cloudy": "2025-08-05"
+ },
+ "entries": [
+  {
+   "route": "risk",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "risk_aacd7f000a19f71a9c3e",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "fixes_8bc4b33bf017a5245192",
+   "network": "benchmark_250",
+   "rule": "pm10"
+  },
+  {
+   "route": "headroom",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "headroom_6491d25f0040e010e4aa",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "adoption": 0.3
+  },
+  {
+   "route": "hosting",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "hosting_c93841252fb8242a9fbc",
+   "network": "benchmark_250",
+   "rule": "pm10"
+  },
+  {
+   "route": "risk",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "risk_4ae1a12143303897f447",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "fixes_d0925ff986ff2093cf93",
+   "network": "benchmark_250",
+   "rule": "up_2005"
+  },
+  {
+   "route": "headroom",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "headroom_bbc87dc275234c434c74",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "adoption": 0.3
+  },
+  {
+   "route": "hosting",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "hosting_8cfe277b2d32edfbae78",
+   "network": "benchmark_250",
+   "rule": "up_2005"
+  },
+  {
+   "route": "risk",
+   "date": "2025-11-19",
+   "day_type": "mixed",
+   "key": "risk_b9895bf524b562982442",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-11-19",
+   "day_type": "mixed",
+   "key": "fixes_bb824675891f5325d6ca",
+   "network": "benchmark_250",
+   "rule": "pm10"
+  },
+  {
+   "route": "risk",
+   "date": "2025-11-19",
+   "day_type": "mixed",
+   "key": "risk_d37f08364e4c503851f7",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-11-19",
+   "day_type": "mixed",
+   "key": "fixes_6b1dbcead8674dc04ddd",
+   "network": "benchmark_250",
+   "rule": "up_2005"
+  },
+  {
+   "route": "risk",
+   "date": "2025-08-05",
+   "day_type": "cloudy",
+   "key": "risk_45c5ca228719b4b51f36",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-08-05",
+   "day_type": "cloudy",
+   "key": "fixes_748f9847791d7fc08223",
+   "network": "benchmark_250",
+   "rule": "pm10"
+  },
+  {
+   "route": "risk",
+   "date": "2025-08-05",
+   "day_type": "cloudy",
+   "key": "risk_1d9846f338bae027e277",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-08-05",
+   "day_type": "cloudy",
+   "key": "fixes_2da8eb1880ace81ba36b",
+   "network": "benchmark_250",
+   "rule": "up_2005"
+  },
+  {
+   "route": "whatif",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "whatif_1f67d1133882dc1da0c5",
+   "label": "Standard smart inverters (IEEE 1547 Volt/VAR)",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "spec": {
+    "network": "benchmark_250",
+    "rule": "pm10",
+    "adoption": 1.0,
+    "changes": [],
+    "fixes": [
+     {
+      "id": "fix.volt_var",
+      "params": {}
+     }
+    ]
+   }
+  },
+  {
+   "route": "whatif",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "whatif_ae7c31d0684e994611d3",
+   "label": "Evening EV charging at 20% of homes, with transformer tap +1",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "spec": {
+    "network": "benchmark_250",
+    "rule": "pm10",
+    "adoption": 1.0,
+    "changes": [
+     {
+      "id": "change.ev_charging",
+      "params": {
+       "share_of_homes": 0.2,
+       "kw": 3.3,
+       "start_hour": 19,
+       "hours": 4
+      }
+     }
+    ],
+    "fixes": [
+     {
+      "id": "fix.tap",
+      "params": {
+       "tap_pos": 1
+      }
+     }
+    ]
+   }
+  }
+ ]
+}

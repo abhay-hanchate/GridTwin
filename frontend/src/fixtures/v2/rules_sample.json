@@ -1,0 +1,23 @@
+{
+  "_note": "Hand-made test input in the /api/v2 shape (plan P8.3), covering cases the precomputed demo lacks; not a forecast. Tests only.",
+  "rules": [
+    {
+      "id": "up_2005",
+      "label": "Uttar Pradesh Supply Code 2005, ±6%",
+      "vmin_v": 216.2,
+      "vmax_v": 243.8,
+      "region": "UP",
+      "source": "UP Electricity Supply Code 2005 (sample text)",
+      "verification": "secondary"
+    },
+    {
+      "id": "pm10",
+      "label": "Plus or minus 10% of 230 V",
+      "vmin_v": 207,
+      "vmax_v": 253,
+      "region": "India",
+      "source": "CEA (sample text)",
+      "verification": "secondary"
+    }
+  ]
+}
