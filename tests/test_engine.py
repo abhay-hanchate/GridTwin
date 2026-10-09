@@ -37,3 +37,48 @@ def test_solar_causes_violations(s4):
     # Regression reference from the 28 Sep 2026 run: 26 steps, 21 caused by solar.
     assert s4["summary"]["violation_steps_from_solar"] > 0
     assert s4["summary"]["violation_steps"] > s4["summary"]["violation_steps_without_solar"]
+
+
+import pandapower as pp  # noqa: E402
+
+from engine.powerflow import day_inputs, run_day  # noqa: E402
+
+
+@pytest.fixture(scope="module")
+def s1():
+    return run_scenario("S1", detail=False)
+
+
+def test_solver_failure_counts_as_unsafe(monkeypatch):
+    real = pp.runpp
+    calls = {"n": 0}
+
+    def flaky(net, *args, **kwargs):
+        calls["n"] += 1
+        if calls["n"] == 4:
+            raise pp.LoadflowNotConverged("forced")
+        return real(net, *args, **kwargs)
+
+    monkeypatch.setattr(pp, "runpp", flaky)
+    r = run_day(build_grid(0.0), day_inputs("2019-05-15"), detail=False)
+    assert r["summary"]["solver_failed_steps"] == 1
+    failed = [s for s in r["steps"] if s.get("solver_failed")]
+    assert failed[0]["violations"][0]["type"] == "solver_failure"
+    assert r["summary"]["violation_steps"] >= 1
+
+
+def test_reverse_flow_appears_only_with_solar(s4, s1):
+    assert s4["summary"]["reverse_flow_steps"] > 0
+    assert s1["summary"]["reverse_flow_steps"] == 0
+
+
+def test_cost_accounting_fields_are_present_and_sane(s4):
+    sm = s4["summary"]
+    assert 40 < sm["max_trafo_loading_pct"] < 50
+    assert sm["reactive_loss_kvarh"] > 0
+    assert sm["inverter_kvarh"] == 0                        # no inverter control in a plain scenario run
+
+
+def test_binding_limit_is_named_for_the_every_home_day(s4):
+    limit = s4["summary"]["binding_limit"]
+    assert limit["type"] == "overvoltage" and limit["steps"] == s4["summary"]["violation_steps"]
