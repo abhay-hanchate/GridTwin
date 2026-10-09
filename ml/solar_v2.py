@@ -125,6 +125,71 @@ def rolling_conformal(pred: pd.DataFrame, y: pd.Series, daylight: pd.Series, day
     return out
 
 
+def sky_class(X: pd.DataFrame) -> pd.Series:
+    """Forecast sky per hour from the NWP ensemble: clear (clearness above 0.8), partly, cloudy (below 0.5), night."""
+    k = X["ghi_mean"] / X["clearsky_ghi"].where(X["clearsky_ghi"] > 0)
+    out = np.select([X["clearsky_ghi"] <= 0, k > 0.8, k < 0.5], ["night", "clear", "cloudy"], "partly")
+    return pd.Series(out, index=X.index, name="sky")
+
+
+def _conformal_from_scores(scores: np.ndarray, alpha: float) -> float:
+    n = len(scores)
+    k = min(n, int(np.ceil((n + 1) * (1 - alpha))))
+    return float(np.sort(scores)[k - 1])
+
+
+def _pool_window(pred: pd.DataFrame, y: pd.Series, daylight: pd.Series, calibration_start: str | None):
+    dates = pd.Series(pred.index.normalize(), index=pred.index)
+    pool = daylight & y.notna() & pred["p50"].notna()
+    if calibration_start is not None:
+        pool &= pred.index >= calibration_start
+    return dates, pool
+
+
+def rolling_conformal_groups(pred: pd.DataFrame, y: pd.Series, daylight: pd.Series, days: pd.DatetimeIndex,
+                             groups: pd.Series, *, window: int | None = 30, min_points: int = 50, alpha: float = 0.2,
+                             calibration_start: str | None = None) -> pd.DataFrame:
+    """Like `rolling_conformal`, but each group (sky class, season...) gets its own width from its own earlier hours.
+    `window=None` uses every earlier day. A group with fewer than `min_points` earlier hours uses the all-hours pool."""
+    out = pred.copy()
+    dates, pool = _pool_window(pred, y, daylight, calibration_start)
+    for d in days:
+        today = (dates == d) & daylight & pred["p50"].notna()
+        if not today.any():
+            continue
+        earlier = pool & (dates < d) & ((dates >= d - pd.Timedelta(days=window)) if window else True)
+        for g in groups[today].unique():
+            rows = today & (groups == g)
+            sel = earlier & (groups == g)
+            if sel.sum() < min_points:
+                sel = earlier
+            if sel.sum() < min_points:
+                continue
+            q = conformal_q(pred[sel], y[sel], alpha)
+            out.loc[rows, "p10"] = (pred.loc[rows, "p10"] - q).clip(lower=0)
+            out.loc[rows, "p90"] = pred.loc[rows, "p90"] + q
+    return out
+
+
+def rolling_conformal_scaled(pred: pd.DataFrame, y: pd.Series, daylight: pd.Series, days: pd.DatetimeIndex, *,
+                             window: int = 30, min_points: int = 50, alpha: float = 0.2,
+                             calibration_start: str | None = None) -> pd.DataFrame:
+    """Errors measured in units of the model's own P10-P90 spread, so hours the model is unsure about widen more."""
+    out = pred.copy()
+    dates, pool = _pool_window(pred, y, daylight, calibration_start)
+    spread = (pred["p90"] - pred["p10"]).clip(lower=1e-3)
+    scores = np.maximum(pred["p10"] - y, y - pred["p90"]) / spread
+    for d in days:
+        today = (dates == d) & daylight & pred["p50"].notna()
+        sel = pool & (dates < d) & (dates >= d - pd.Timedelta(days=window))
+        if not today.any() or sel.sum() < min_points:
+            continue
+        q = _conformal_from_scores(scores[sel].to_numpy(), alpha)
+        out.loc[today, "p10"] = (pred.loc[today, "p10"] - q * spread[today]).clip(lower=0)
+        out.loc[today, "p90"] = pred.loc[today, "p90"] + q * spread[today]
+    return out
+
+
 def evaluate(pred: pd.DataFrame, y: pd.Series, mask: pd.Series, baselines: dict[str, pd.Series]) -> dict:
     from ml import metrics
     t = mask & pred["p50"].notna()

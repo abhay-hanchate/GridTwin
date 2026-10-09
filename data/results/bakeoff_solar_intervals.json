@@ -1,0 +1,86 @@
+{
+  "component": "solar_intervals",
+  "rule": "lowest WIS among candidates with 78-82% coverage in every season; else smallest worst-season distance from 80%",
+  "split": "train 2024-01..10; conformal pool from 2024-11; test 2025 daylight hours (identical mask)",
+  "district": "mathura",
+  "nwp_models_used": [
+    "gfs_global",
+    "icon_global",
+    "gem_global",
+    "meteofrance_arpege_world",
+    "ecmwf_ifs025"
+  ],
+  "mask_hours": 4414,
+  "sky_hours_2025": {
+    "clear": 2489,
+    "partly": 1129,
+    "cloudy": 796
+  },
+  "winner": "by_season_all_earlier",
+  "in_band": [],
+  "reason": "no candidate inside the band in every season; smallest worst-season miss",
+  "candidates": [
+    {
+      "name": "shipped_one_width_30d",
+      "wis": 0.0213,
+      "mae_p50": 0.0329,
+      "p10_p90_coverage": 0.799,
+      "by_season": {
+        "monsoon": 0.795,
+        "post_monsoon": 0.807,
+        "summer": 0.84,
+        "winter": 0.749
+      }
+    },
+    {
+      "name": "by_sky_30d",
+      "wis": 0.0214,
+      "mae_p50": 0.0329,
+      "p10_p90_coverage": 0.796,
+      "by_season": {
+        "monsoon": 0.792,
+        "post_monsoon": 0.801,
+        "summer": 0.845,
+        "winter": 0.74
+      }
+    },
+    {
+      "name": "by_sky_60d",
+      "wis": 0.0214,
+      "mae_p50": 0.0329,
+      "p10_p90_coverage": 0.791,
+      "by_season": {
+        "monsoon": 0.764,
+        "post_monsoon": 0.81,
+        "summer": 0.849,
+        "winter": 0.754
+      }
+    },
+    {
+      "name": "by_season_all_earlier",
+      "wis": 0.0214,
+      "mae_p50": 0.0329,
+      "p10_p90_coverage": 0.794,
+      "by_season": {
+        "monsoon": 0.785,
+        "post_monsoon": 0.758,
+        "summer": 0.824,
+        "winter": 0.795
+      }
+    },
+    {
+      "name": "scaled_by_spread_30d",
+      "wis": 0.0218,
+      "mae_p50": 0.0329,
+      "p10_p90_coverage": 0.796,
+      "by_season": {
+        "monsoon": 0.791,
+        "post_monsoon": 0.748,
+        "summer": 0.812,
+        "winter": 0.82
+      }
+    }
+  ],
+  "git_hash": "e86ffce",
+  "timestamp": "2026-10-09T06:47:00.329178+00:00"
+}

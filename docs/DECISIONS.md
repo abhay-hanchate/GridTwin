@@ -238,3 +238,18 @@ every season; winter under-covered (74.9%) with the shipped 30-day window.
   A group with fewer than 50 earlier points uses the all-hours pool.
 - **Rule (unchanged from round 1):** lowest WIS among candidates inside 78-82% in every season; if none, the
   smallest worst-season distance from 80%. A new candidate replaces the shipped one only if it wins by this rule.
+
+### Result (run 9 Oct 2026, `python -m scripts.bakeoff solar_intervals`)
+
+| Candidate | WIS | Overall | Winter | Summer | Monsoon | Post-monsoon |
+|---|---|---|---|---|---|---|
+| shipped, one width, 30 days | 0.0213 | 79.9% | 74.9% | 84.0% | 79.5% | 80.7% |
+| by sky, 30 days | 0.0214 | 79.6% | 74.0% | 84.5% | 79.2% | 80.1% |
+| by sky, 60 days | 0.0214 | 79.1% | 75.4% | 84.9% | 76.4% | 81.0% |
+| **by season, all earlier days** | 0.0214 | 79.4% | 79.5% | 82.4% | 78.5% | 75.8% |
+| scaled by spread, 30 days | 0.0218 | 79.6% | 82.0% | 81.2% | 79.1% | 74.8% |
+
+Still no candidate inside 78-82% in every season. By the fallback, **by season** wins (worst season 4.2 points from
+80% against 5.1 for the shipped width): winter is fixed (74.9% to 79.5%) and post-monsoon drops to 75.8%, because
+post-monsoon 2025 has only November 2024 to learn from. WIS is unchanged. Sky classes did not help winter, so the
+winter miss is seasonal (haze and fog), not about clouds. Solar v2 switches to per-season widths.
