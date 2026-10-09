@@ -73,7 +73,7 @@ def build() -> str:
         f"{_hours(sun_up)} unsafe.",
         f"- Switch to +/-10% for a moment to show the shape: the chance of unsafe voltage is highest around "
         f"**{peak_time(sun_10)}** ({max(sun_10['p_unsafe']):.0%}), against {sun_10['p_unsafe'][48]:.0%} at 12:00.",
-        f"- Point at the calibration note: the chances are *{'better than the historical average' if sun_up['calibration']['reliable'] else 'not yet calibrated'}* under this rule.",
+        f"- Point at the calibration note: the chances are *{'slightly better than the historical average' if sun_up['calibration']['reliable'] else 'not reliable as odds'}* under this rule.",
         "",
         "## 2. Switch the rule to +/-10% (30 s)",
         "",

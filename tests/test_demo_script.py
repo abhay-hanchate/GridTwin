@@ -39,5 +39,5 @@ def test_script_reads_every_number_from_the_results(tmp_path, monkeypatch):
     text = demo_script.build()
     assert "Tap +1 with IEEE 1547 Volt/VAR" in text and "**No safe action**" in text and "heavier conductor" in text
     assert "about 16.7 hours" in text and "0.001 V" in text and "813 times" in text and "-5.46" in text
-    assert "G8 fail" in text and "not yet calibrated" in text
+    assert "G8 fail" in text and "not reliable as odds" in text
     assert "around **09:00** (90%), against 10% at 12:00" in text            # computed from the curve, not asserted

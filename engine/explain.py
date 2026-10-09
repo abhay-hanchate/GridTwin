@@ -41,8 +41,9 @@ def explain_risk(risk: dict, limit_v: float, lang: str = "en") -> str:
               "peak_v": _fmt(risk["peak_voltage_v"]["p50"]), "limit_v": _fmt(limit_v),
               "watch_pct": _fmt(risk.get("thresholds", {}).get("watch", 0.2) * 100)}
     text = t[f"risk_{risk['level']}"].format(**values)
-    if not risk.get("calibration", {}).get("reliable", False) and risk["level"] != "ok":
-        text += " " + t["risk_uncalibrated"]
+    if risk["level"] != "ok":
+        reliable = risk.get("calibration", {}).get("reliable", False)
+        text += " " + t["risk_calibrated" if reliable else "risk_uncalibrated"]
     return text
 
 

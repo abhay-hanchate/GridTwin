@@ -17,7 +17,9 @@ def test_risk_text_uses_only_numbers_from_the_result():
     assert "ACT" in text and "08:15" in text and "8.6 hours" in text and "264.5 V" in text and "253 V" in text
     allowed = {"08", "15", "8.6", "6.5", "10.8", "264.5", "253", "8", "10"}       # values plus "8 of 10 cases"
     assert set(NUMBER.findall(text)) <= allowed
-    assert "not yet calibrated" in text
+    assert "not reliable as odds" in text
+    calibrated = explain_risk({**RISK, "calibration": {"reliable": True}}, limit_v=253.0)
+    assert "slightly better than the historical average" in calibrated and "not reliable" not in calibrated
 
 
 def test_no_safe_action_names_the_limit_and_what_is_still_needed():
