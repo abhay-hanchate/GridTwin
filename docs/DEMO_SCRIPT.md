@@ -6,13 +6,13 @@ Before the demo: `python -m scripts.nightly`, then start the API with `GRIDTWIN_
 
 ## 1. Home: tomorrow's risk (60 s)
 
-- Rule selector on **UP Supply Code (+/-6%)**. Level **ACT** from 00:00; about 17.5 hours (between 15.0 and 20.2 in 8 of 10 scenarios) unsafe.
+- Rule selector on **UP Supply Code (+/-6%)**. Level **ACT** from 00:00; about 17.5 hours (between 15 and 20.3 in 8 of 10 scenarios) unsafe.
 - Switch to +/-10% for a moment to show the shape: the chance of unsafe voltage is highest around **10:15** (99%), against 98% at 12:00.
 - Point at the calibration note: the chances are *not reliable as odds* under this rule.
 
 ## 2. Switch the rule to +/-10% (30 s)
 
-- Same day, same street: **ACT** from 06:15, about 9.0 hours (between 7.0 and 11.8 in 8 of 10 scenarios).
+- Same day, same street: **ACT** from 06:15, about 9 hours (between 7 and 11.8 in 8 of 10 scenarios).
 - Say: the rule a state chooses changes the answer; every rule shows its source and how well it is verified.
 - Contrast the cloudy day (2025-08-05): level **OK**.
 
@@ -24,15 +24,16 @@ Before the demo: `python -m scripts.nightly`, then start the API with `GRIDTWIN_
 
 ## 4. Planning: can we approve this connection? (60 s)
 
+- Open **Planning** and **switch the rule selector to +/-10%** (it is still on UP +/-6% from step 3). The numbers below are the +/-10% results; under UP +/-6% the street has almost no room left, which is the point of step 3.
 - Extra rooftop solar the street can take with 30% of homes already on solar (no step made worse): far end A 7 kW, B 6.6 kW, C 4.2 kW; next to the transformer A at least 60 kW, B at least 60 kW, C at least 60 kW.
 - Say: the place **and the phase** decide; a flat state cap cannot see either.
 - Hosting capacity (share of homes that can add solar, P10-P90): without a fix 20%-50%; with standard Volt/VAR 80%-100%.
-- Live: `POST /api/v2/connection-check` for 5 kW at the far end - show the decision, the phase and the reason.
+- In the **Connection check** form on the same page: pick the far end of the street, 5 kW, one system, best phase, then **Check this request** - read out the decision, the phase it chose and the reason on screen.
 
 ## 5. Proof: how much to trust it (60 s)
 
-- Engine checked against pandapower: 0.001 V apart, about 647 times faster (G1).
-- Risk calibration (G8): +/-10% calibrated skill +0.023; UP +/-6% -5.46 - shown as failed, not hidden.
+- Engine checked against pandapower: 0.001 V apart, 647.1 times faster (G1).
+- Risk calibration (G8): +/-10% calibrated skill 0.023; UP +/-6% -5.46 - shown as failed, not hidden.
 - Gates: G1 pass, G2 pass, G3 pass, G4 fail, G5 pass, G6 conditional, G7 not_run, G8 fail.
 - Say: a failed gate is a result, not a bug to hide.
 
