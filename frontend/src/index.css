@@ -324,3 +324,19 @@ input[type='range']:focus-visible { outline-offset: 4px; }
 .decision-approve .decision-line { color: var(--safe-text); }
 .decision-refuse { border-color: var(--unsafe); }
 .decision-refuse .decision-line { color: var(--unsafe-text); }
+
+/* Proof: gate verdicts and measured values */
+.gate-summary { display: flex; flex-wrap: wrap; gap: 8px 16px; list-style: none; padding: 0; margin: 0 0 6px; font-weight: 600; }
+.gate-badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12.5px; font-weight: 600; border: 1px solid var(--line); white-space: nowrap; }
+.gate-pass.gate-badge, .gate-summary .gate-pass { color: var(--safe-text); }
+.gate-fail.gate-badge, .gate-summary .gate-fail { color: var(--unsafe-text); }
+.gate-badge.gate-pass { border-color: var(--safe); }
+.gate-badge.gate-fail { border-color: var(--unsafe); }
+.gate-table td { vertical-align: top; }
+.gate-note { margin: 6px 0 0; font-size: 12.5px; color: var(--ink-2); }
+.measured { margin: 0; display: grid; gap: 2px; font-size: 12.5px; }
+.measured > div { display: flex; flex-wrap: wrap; gap: 0 6px; }
+.measured dt { color: var(--ink-3); }
+.measured dd { margin: 0; }
+.measured .measured { padding-left: 10px; }
+.gate-table code { font-size: 11.5px; overflow-wrap: anywhere; }
