@@ -139,7 +139,7 @@
   "plan.rx_corner": "Resistance \\ reactance",
   "plan.rx_x": "Reactance × {x}",
   "plan.rx_r": "Resistance × {r}",
-  "plan.rx_note": "The wires' reactance is an estimate, so this table is also the sensitivity to that estimate.",
+  "plan.rx_note": "The wires' reactance is an estimate, so this table is also the sensitivity to that estimate. A plus sign means Volt/VAR raised the peak: on wires with a very high resistance and low reactance, absorbing reactive power adds current and loss and no longer helps.",
   "plan.trafo_title": "Which transformers to check first",
   "plan.trafo_intro": "The {count} street types as a sample portfolio, each with the same share of homes on solar. First: the transformer whose connected solar uses the most of its safe room.",
   "plan.col_street": "Street",
