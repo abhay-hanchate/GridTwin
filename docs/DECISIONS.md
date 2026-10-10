@@ -508,3 +508,20 @@ telling the districts apart; Bareilly alone, a single district with every season
   guarded unsafe-as-safe count on tune is not higher than round 1's for the same model; otherwise round 1 ships.
 - **Reporting:** round 1 and round 2 are both scored once on the test, boundary and out-of-range splits and both are
   reported. Validity holds within each bin under exchangeability; it is still not a certificate.
+
+### Addition 2, round 3: solar layouts as part of the support (pre-registered 10 Oct 2026, before the fresh test set was generated)
+
+- **What the test split showed (rural_weak_63, rounds 1-2, scored once):** the screen failed. Node-voltage MAE was
+  1.9 V (target 0.5) and the guarded screen called 585 of 7,152 unsafe test states safe under +-6%. The error sat almost
+  entirely in the unseen 75% adoption layout (3.7 V MAE) while the trained 100% layout in the same unseen months stayed at
+  0.15 V (tune: 0.145 V). Every home's kWp was inside its trained range, so the per-feature box let a new combination
+  through. These results stay in the report as the pre-registered outcome.
+- **Change (support only; the models and the round 2 margins are unchanged):** the solar layout, which homes have panels
+  and their sizes, must equal one of the layouts in the train split, as the phase map and the line layout already must.
+  Any other layout is `unsupported` and goes to the solver.
+- **Fresh test set:** the original test split has been looked at, so round 3 is scored on new families generated
+  after this entry: the same test months (Mar, Jun, Sep, Dec) on days 3 and 27 (never used), with the same adoption
+  levels (75%, which must now be refused, and 100%), held-out tap/mode combinations, boundary share and seeds derived
+  from the new dates. The end-to-end runs use the 27th of each test month.
+- **Reporting:** rounds 1-2 on the original test split with the per-feature box (as pre-registered); round 3 on the
+  fresh split with the shipped support. A missed target or a slower pipeline is reported as such.
