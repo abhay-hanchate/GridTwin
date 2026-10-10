@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react'
 import { useV2, v2Path } from '../api/v2'
-import type { Fixes, Results, Risk } from '../api/v2types'
+import type { Fixes, Risk } from '../api/v2types'
 import type { Area } from '../app/areas'
 import { DEFAULT_NETWORK } from '../app/defaults'
 import { useView, type ViewProps } from '../app/view'
@@ -14,7 +14,7 @@ import { causeSplit } from '../risk'
 
 type Props = ViewProps & { go?: (area: Area) => void }
 
-const JOURNEY: Area[] = ['forecast', 'fixes', 'planning', 'try', 'proof']
+const JOURNEY: Area[] = ['forecast', 'fixes', 'planning', 'try']
 
 const ICONS: Record<'sun' | 'act' | 'ok', ReactElement> = {
   sun: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>,
@@ -32,7 +32,6 @@ export default function Overview({ network = DEFAULT_NETWORK, go, ...props }: Pr
   const query = { network, rule: view.rule, date: view.date }
   const risk = useV2<Risk>(view.ready && view.date ? v2Path('/risk', query) : null)
   const fixes = useV2<Fixes>(view.ready && view.date ? v2Path('/fixes', query) : null)
-  const results = useV2<Results>('/results')
   const open = (area: Area) => () => { go?.(area); scrollTop() }
 
   return (
@@ -79,8 +78,6 @@ export default function Overview({ network = DEFAULT_NETWORK, go, ...props }: Pr
           ))}
         </ol>
       </section>
-
-      {results.data && <Trust results={results.data} onOpen={open('proof')} />}
 
       <Explainer groups={['levels', 'cause', 'phases', 'voltage', 'prov']} />
       <NextStep to="forecast" go={go} />
@@ -134,21 +131,6 @@ function Summary({ risk, fixes, rule, vmax }: { risk: Risk; fixes: Fixes | null;
           <p>{v ? (v.safe_action_found ? t('overview.f_fix_note') : t('overview.f_nofix_note')) : ''}</p>
         </div>
       </div>
-    </section>
-  )
-}
-
-function Trust({ results, onOpen }: { results: Results; onOpen: () => void }) {
-  const t = useT()
-  const passed = results.gates.filter((g) => g.status === 'pass').length
-  return (
-    <section className="trust" aria-labelledby="trust-title">
-      <span className="score">{passed}<small>/{results.gates.length}</small></span>
-      <div>
-        <h3 id="trust-title" className="trust-title">{t('overview.trust_title')}</h3>
-        <p>{t('overview.trust_text')}</p>
-      </div>
-      <button className="btn" onClick={onOpen}>{t('overview.trust_cta')} <span className="arrow" aria-hidden="true">→</span></button>
     </section>
   )
 }

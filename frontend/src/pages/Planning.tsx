@@ -5,12 +5,11 @@ import type { Area } from '../app/areas'
 import { DEFAULT_NETWORK } from '../app/defaults'
 import { useView, type ViewProps } from '../app/view'
 import ConnectionPanel from '../components/ConnectionPanel'
-import Controls from '../components/Controls'
+import DayContext from '../components/DayContext'
 import { NextStep } from '../components/Explainer'
 import Prov from '../components/Prov'
 import Status from '../components/Status'
-import type { HomeView, Marker } from '../components/street/geometry'
-import StreetMap from '../components/street/StreetMap'
+import { StreetPlayback, type NodeMarker } from '../components/street/StreetPlayer'
 import { bindingText } from '../fixes'
 import { change, one, pct } from '../format'
 import { useT, type StringKey } from '../i18n'
@@ -38,7 +37,7 @@ export default function Planning({ network = DEFAULT_NETWORK, go, ...props }: Vi
         <h2>{t('plan.page_title')}</h2>
         <p>{t('plan.page_intro')}</p>
       </header>
-      <Controls view={view} />
+      <DayContext view={view} />
 
       <Question n={1} title={t('plan.q1_title')} intro={t('plan.q1_intro')}>
         <Status state={hosting} />
@@ -107,20 +106,21 @@ function MapCard({ street, headroom, meters, network, rule, date }: MapProps) {
   const t = useT()
   const [layer, setLayer] = useState<Layer>('headroom')
   const [node, setNode] = useState<number | null>(null)
-  const homes: HomeView[] = useMemo(() => street.homes.map((h, i) => ({
-    node: h.node, phase: street.before.home_phase[i], kwp: h.kwp, cls: `ph-${street.before.home_phase[i].toLowerCase()}`,
-    title: t('plan.map_home', { home: i + 1, phase: street.before.home_phase[i] }),
-  })), [street, t])
-  const markers: Marker[] = []
-  if (layer === 'headroom' && headroom) {
-    for (const [where, loc] of Object.entries(headroom.locations)) {
-      const p = loc.phases
-      markers.push({ node: loc.node, kind: 'probe', text: t(`plan.probe_${where}` as StringKey, {
-        a: one(p.A?.no_worse_kw ?? 0), b: one(p.B?.no_worse_kw ?? 0), c: one(p.C?.no_worse_kw ?? 0) }) })
+  // Planning pins sit on the moving street: each probe reading on its own phase, meter sites numbered, the picked home.
+  const markers = useMemo(() => {
+    const out: NodeMarker[] = []
+    if (layer === 'headroom' && headroom) {
+      for (const [where, loc] of Object.entries(headroom.locations)) {
+        for (const [ph, h] of Object.entries(loc.phases)) {
+          out.push({ node: loc.node, phase: ph as NodeMarker['phase'], kind: 'probe',
+            text: t(`plan.pin_${where}` as StringKey, { phase: ph, kw: one(h.no_worse_kw) }) })
+        }
+      }
     }
-  }
-  if (layer === 'meters' && meters) meters.sites.slice(0, METERS_SHOWN).forEach((m, i) => markers.push({ node: m.node, text: String(i + 1) }))
-  if (layer === 'connect' && node !== null) markers.push({ node, text: '+' })
+    if (layer === 'meters' && meters) meters.sites.slice(0, METERS_SHOWN).forEach((m, i) => out.push({ node: m.node, text: String(i + 1), kind: 'site' }))
+    if (layer === 'connect' && node !== null) out.push({ node, text: '+', kind: 'pick' })
+    return out
+  }, [layer, headroom, meters, node, t])
   return (
     <div className="q-block">
       <div className="segmented" role="tablist" aria-label={t('plan.layers')}>
@@ -131,11 +131,7 @@ function MapCard({ street, headroom, meters, network, rule, date }: MapProps) {
         ))}
       </div>
       <p className="muted">{t(`plan.layer_${layer}_intro` as StringKey)}</p>
-      <div className="street-scroll">
-        <StreetMap layout={street.layout} homes={homes} markers={markers} onNode={layer === 'connect' ? setNode : undefined}
-          selectedNode={node} trafoLabel={t('player.trafo', { kva: Math.round(street.trafo_kva) })} trafoSub={t('player.trafo_sub')}
-          label={t('plan.map_label', { homes: street.homes.length })} />
-      </div>
+      <StreetPlayback s={street} compact markers={markers} onPick={layer === 'connect' ? (_h, n) => setNode(n) : undefined} />
       {layer === 'headroom' && headroom && <HeadroomCells headroom={headroom} />}
       {layer === 'connect' && <ConnectionPanel node={node} network={network} rule={rule} date={date} />}
       {layer === 'meters' && meters && <MeterList data={meters} />}

@@ -1,16 +1,14 @@
 import { useMemo, useState, type CSSProperties, type ReactElement } from 'react'
-import { useV2, v2Path } from '../api/v2'
+import { useV2 } from '../api/v2'
 import type { CatalogEntry, DaySummary, ParamSchema, Street, WhatIfResult } from '../api/v2types'
 import type { Area } from '../app/areas'
 import { DEFAULT_NETWORK } from '../app/defaults'
 import { useView, type ViewProps } from '../app/view'
-import Controls from '../components/Controls'
+import DayContext from '../components/DayContext'
 import { NextStep } from '../components/Explainer'
 import Prov from '../components/Prov'
 import Status from '../components/Status'
-import type { HomeView } from '../components/street/geometry'
-import StreetMap from '../components/street/StreetMap'
-import { homeClass } from '../components/street/voltage'
+import { StreetPlayback } from '../components/street/StreetPlayer'
 import VoltageCompare from '../components/VoltageCompare'
 import { one, pct, volts } from '../format'
 import { useT, type StringKey } from '../i18n'
@@ -60,11 +58,11 @@ export default function TryChange({ network = DEFAULT_NETWORK, go, ...props }: V
           <div key={k}><b>{t(`try.use_${k}_title` as StringKey)}</b>{t(`try.use_${k}` as StringKey)}</div>
         ))}
       </div>
-      <Controls view={view} />
+      <DayContext view={view} />
       <Status state={catalog} />
       {offline && <p className="note" role="note">{t('try.offline', { setting: 'GRIDTWIN_OFFLINE=0' })}</p>}
       {catalog.data && view.ready && <Builder catalog={catalog.data} network={network} rule={view.rule} date={view.date} offline={offline} />}
-      <NextStep to="proof" go={go} />
+      <NextStep to="home" go={go} />
     </div>
   )
 }
@@ -125,7 +123,7 @@ function Builder({ catalog, network, rule, date, offline }: BuilderProps) {
       </div>
 
       {current && <Status state={result} />}
-      {result.data && <Outcome result={result.data} network={network} rule={rule} date={date} />}
+      {result.data && <Outcome result={result.data} network={network} />}
     </>
   )
 }
@@ -171,27 +169,16 @@ const ROWS: Row[] = [
   { key: 'try.row_failed', value: (s) => s.solver_failed_steps, fmt: String, lowerIsBetter: true },
 ]
 
-function Outcome({ result, network, rule, date }: { result: WhatIfResult; network: string; rule: string; date: string | null }) {
+function Outcome({ result, network }: { result: WhatIfResult; network: string }) {
   const t = useT()
-  const [side, setSide] = useState<'before' | 'after'>('after')
   // The baseline is the street as it is today; `before` (the changes without any fix) is shown when fixes were added.
   const base = result.today ?? result.before
   const withFixes = result.fixes.length > 0 && result.today !== undefined
-  const street = useV2<Street>(date ? v2Path('/street', { network, rule, date, fix: 'none' }) : null)
-  const peakAt = useMemo(() => {
-    const run = side === 'after' ? result.after : base
-    const idx = new Map(result.nodes.map((n, j) => [n, j]))
-    return (node: number) => {
-      const j = idx.get(node)
-      const vs = j === undefined ? [] : run.node_max_v.map((row) => row[j]).filter((v): v is number => v !== null && Number.isFinite(v))
-      return vs.length ? Math.max(...vs) : NaN
-    }
-  }, [result, side, base])
-  const homes: HomeView[] = street.data ? street.data.homes.map((h, i) => {
-    const v = peakAt(h.node)
-    return { node: h.node, phase: street.data!.before.home_phase[i], kwp: h.kwp, cls: Number.isFinite(v) ? homeClass(v, result.limits_v) : 'v-none',
-      title: t('try.map_home', { home: i + 1, v: Number.isFinite(v) ? one(v) : '' }) }
-  }) : []
+  // The what-if's own runs, played on the street: today against the street after the changes (and fixes).
+  const street: Street | null = useMemo(() => result.street ? {
+    date: result.date, network, rule: result.rule, fix: [...result.changes, ...result.fixes].join('+'), t: result.t,
+    limits_v: result.limits_v, provenance: result.provenance, ...result.street,
+  } : null, [result, network])
   return (
     <>
       <section className="card q-block" data-numbers="before and after" aria-labelledby="whatif-title">
@@ -219,17 +206,14 @@ function Outcome({ result, network, rule, date }: { result: WhatIfResult; networ
       )}
       <VoltageCompare voltage={{ t: result.t, before_max_v: base.max_v, after_max_v: result.after.max_v }}
         label={t('try.chart_name')} vmax={result.limits_v.max} />
-      {street.data && (
+      {street && (
         <section className="card q-block" aria-labelledby="whatif-map-title">
           <h3 id="whatif-map-title">{t('try.map_title')} <Prov kind="modeled" /></h3>
-          <div className="segmented" role="group">
-            <button className="seg" aria-pressed={side === 'before'} onClick={() => setSide('before')}>{t('try.map_before')}</button>
-            <button className="seg" aria-pressed={side === 'after'} onClick={() => setSide('after')}>{t('try.map_after')}</button>
-          </div>
-          <div className="street-scroll">
-            <StreetMap layout={street.data.layout} homes={homes} trafoLabel={t('player.trafo', { kva: Math.round(street.data.trafo_kva) })}
-              trafoSub={t('player.trafo_sub')} label={t('try.map_label')} />
-          </div>
+          <p className="card-sub">{t('try.map_intro')}</p>
+          <StreetPlayback s={street} modeLabels={{
+            before: t('try.map_before', { steps: street.before.unsafe.filter(Boolean).length }),
+            after: t('try.map_after', { steps: street.after!.unsafe.filter(Boolean).length }),
+          }} />
         </section>
       )}
     </>

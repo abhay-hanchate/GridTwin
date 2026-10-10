@@ -37,15 +37,15 @@ describe('Shell', () => {
     expect(screen.getByRole('tab', { name: en['area.forecast'] }).getAttribute('aria-selected')).toBe('true')
     expect(screen.getByText('page forecast')).toBeTruthy()
     fireEvent.keyDown(screen.getByRole('tab', { name: en['area.forecast'] }), { key: 'End' })
-    expect(screen.getByText('page proof')).toBeTruthy()
+    expect(screen.getByText('page try')).toBeTruthy()
   })
 
   it('opens the area named in the URL hash and keeps the hash in step', () => {
     window.location.hash = '#fixes'
     ui()
     expect(screen.getByText('page fixes')).toBeTruthy()
-    fireEvent.click(screen.getByRole('tab', { name: en['area.proof'] }))
-    expect(window.location.hash).toBe('#proof')
+    fireEvent.click(screen.getByRole('tab', { name: en['area.try'] }))
+    expect(window.location.hash).toBe('#try')
     window.location.hash = ''
   })
 

@@ -3,13 +3,16 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import catalog from '../fixtures/v2/catalog.json'
 import whatif from '../fixtures/v2/whatif_sample.json'
 import { LangProvider } from '../i18n'
-import { serve as serveBase, settle } from '../test/server'
+import { calls, makeStreet, serve as serveBase, settle } from '../test/server'
 import TryChange from './TryChange'
 
 const AFTER = { ...whatif.after, summary: { ...whatif.after.summary, violation_steps: 12, max_vm_pu: 1.05 } }
+// the player's view of the runs: the test street today, and the same street after the change (inside the limit)
+const { layout, homes, trafo_kva, flow_method, before, after } = makeStreet('whatif')
+const STREET = { layout, homes, trafo_kva, flow_method, before, after: after! }
 const serve = (offline = false) => serveBase({
   '/catalog': catalog,
-  '/whatif': (_: URL, init?: RequestInit) => (init?.method === 'POST' ? { ...whatif, after: AFTER } : {}),
+  '/whatif': (_: URL, init?: RequestInit) => (init?.method === 'POST' ? { ...whatif, after: AFTER, street: STREET } : {}),
 }, { offline })
 const posts = (m: ReturnType<typeof serve>) => m.mock.calls.filter((c) => c[1]?.method === 'POST')
 const show = async (rule = 'up_2005') => { render(<LangProvider><TryChange rule={rule} onRule={() => {}} /></LangProvider>); await settle() }
@@ -72,7 +75,12 @@ describe('What if', () => {
     expect(result).toContain(String(whatif.before.summary.violation_steps))
     expect(result).toContain('12')
     expect(result).toContain(String(Math.round(1.05 * 230)))
-    expect(screen.getByRole('img', { name: /highest voltage of the day/i })).toBeTruthy()
+    // the what-if's own runs play on the street, today against the street with the change; nothing else is fetched
+    const player = screen.getByRole('region', { name: /watch the street/i })
+    const modes = within(within(player).getByRole('group', { name: /without or with/i })).getAllByRole('button')
+    expect(modes.map((b) => b.textContent)).toEqual(["Today's street · 16 unsafe quarter hours", 'With the changes · 0 unsafe quarter hours'])
+    expect(player.querySelectorAll('.sv-house').length).toBe(homes.length)
+    expect(calls(m, '/street').length).toBe(0)
   })
 
   it('a result is never shown under a rule it was not computed for', async () => {

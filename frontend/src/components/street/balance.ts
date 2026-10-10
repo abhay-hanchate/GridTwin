@@ -88,3 +88,20 @@ export function depth(s: Street): Map<number, number> {
   }
   return out
 }
+
+/** The home nearest to `node` along the wires (on `phase` if given): the home a point of the network is shown at. */
+export function nearestHome(s: Street, phases: readonly string[], node: number, phase?: string): number | null {
+  const next = new Map<number, number[]>()
+  s.layout.lines.forEach((l) => {
+    next.set(l.from, [...(next.get(l.from) ?? []), l.to])
+    next.set(l.to, [...(next.get(l.to) ?? []), l.from])
+  })
+  const seen = new Set([node])
+  let ring = [node]
+  while (ring.length) {
+    const here = s.homes.findIndex((h, i) => ring.includes(h.node) && (!phase || phases[i] === phase))
+    if (here >= 0) return here
+    ring = ring.flatMap((n) => next.get(n) ?? []).filter((n) => !seen.has(n) && seen.add(n))
+  }
+  return null
+}

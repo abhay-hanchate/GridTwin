@@ -94,11 +94,28 @@ describe('Fixes, safe action found', () => {
     expect(rows[0].textContent).toContain(moves[0].to)
   })
 
-  it('the compare table lists every option tried', async () => {
+  it('describes the best six as cards and lists every other option tried', async () => {
     serve(safe)
     await show('pm10')
-    const table = screen.getByRole('table', { name: /every option/i })
-    expect(within(table).getAllByRole('row').length).toBe(safe.outcomes.length + 1)
+    const cards = document.querySelectorAll('.best-card')
+    expect(cards.length).toBe(Math.min(6, safe.outcomes.length))
+    cards.forEach((c) => expect(c.querySelector('.desc')?.textContent).toBeTruthy())
+    const rest = safe.outcomes.length - cards.length
+    if (rest > 0) {
+      const table = screen.getByRole('table', { name: /other .* options/i })
+      expect(within(table).getAllByRole('row').length).toBe(rest + 1)
+    }
+  })
+
+  it('opens on the day chosen on Tomorrow, with the pickers one click away', async () => {
+    const m = serve(safe)
+    render(<LangProvider><Fixes rule="pm10" onRule={() => {}} date="2025-08-05" onDate={() => {}} /></LangProvider>)
+    await settle()
+    expect(calls(m, '/fixes').at(-1)).toContain('date=2025-08-05')
+    expect(document.querySelector('[data-day="2025-08-05"]')).toBeTruthy()
+    expect(document.querySelector('#day-input')).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: /change day or rule/i }))
+    expect(document.querySelector('#day-input')).toBeTruthy()
   })
 })
 

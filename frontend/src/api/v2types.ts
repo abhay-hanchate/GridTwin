@@ -170,6 +170,8 @@ export interface WhatIfResult {
   today?: WhatIfRun                 // the street as it is (absent in results cached before it was added)
   before: WhatIfRun                 // with the changes, no fix
   after: WhatIfRun                  // with the changes and the fixes
+  /** the street player's view: `before` is the street today, `after` with the changes and fixes */
+  street?: Pick<Street, 'layout' | 'homes' | 'trafo_kva' | 'flow_method'> & { before: StreetRun; after: StreetRun }
 }
 
 export interface Quantiles { p10: number; p50: number; p90: number }

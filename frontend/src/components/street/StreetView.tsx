@@ -23,6 +23,13 @@ export interface HomeNow {
   net: number                     // + drawing, - sending back
 }
 
+/** A pin on one home: a probe reading, a numbered site or the place picked for a new connection. */
+export interface HomeMarker {
+  home: number
+  text: string
+  kind: 'probe' | 'site' | 'pick'
+}
+
 type Props = {
   phase: Phase[]                  // each home's phase
   dist: number[]                  // each home's hops from the transformer
@@ -37,6 +44,7 @@ type Props = {
   selected: number | null
   onHome: (h: number | null) => void
   label: string
+  markers?: HomeMarker[]
 }
 
 function House({ s, kwp, now, limits, sel, onHome, panelGlow }: {
@@ -67,7 +75,7 @@ function House({ s, kwp, now, limits, sel, onHome, panelGlow }: {
 }
 const MemoHouse = memo(House)
 
-function StreetView({ phase, dist, kwp, now, phaseKw, grid, scale, limits, trafoKva, loadingPct, selected, onHome, label }: Props) {
+function StreetView({ phase, dist, kwp, now, phaseKw, grid, scale, limits, trafoKva, loadingPct, selected, onHome, label, markers = [] }: Props) {
   const t = useT()
   const root = useRef<SVGSVGElement>(null)
   const wrap = useRef<HTMLDivElement>(null)
@@ -214,6 +222,22 @@ function StreetView({ phase, dist, kwp, now, phaseKw, grid, scale, limits, trafo
             <MemoHouse key={s.h} s={s} kwp={kwp[s.h]} now={now[s.h]} limits={limits} sel={selected === s.h} onHome={onHome}
               panelGlow={kwp[s.h] > 0 ? Math.min(1, now[s.h].solar / kwp[s.h] / 0.75) : 0} />
           ))}
+          {/* pins: above a house that stands above its wire, below one that hangs under it */}
+          {markers.map((m) => {
+            const s = slots[m.home]
+            if (!s) return null
+            const above = s.tipAbove
+            const w = Math.max(24, m.text.length * 6.6 + 18)
+            const y = above ? s.top - 26 : s.top + 50
+            return (
+              <g key={`m${m.kind}${m.home}${m.text}`} className={`sv-pin ${m.kind}`} data-pin={m.kind} pointerEvents="none">
+                <circle className="sv-pin-ring" cx={s.x} cy={s.top + 20} r={23} />
+                <line className="sv-pin-stem" x1={s.x} x2={s.x} y1={above ? y + 9 : y - 9} y2={above ? s.top - 4 : s.top + 40} />
+                <rect className="sv-pin-box" x={s.x - w / 2} y={y - 10} width={w} height={20} rx={10} />
+                <text className="sv-pin-text" x={s.x} y={y + 4} textAnchor="middle">{m.text}</text>
+              </g>
+            )
+          })}
           {/* hover targets on top so the tooltip follows the pointer house by house */}
           {slots.map((s) => (
             <rect key={`h${s.h}`} className="sv-hover" x={s.x - 22} y={s.top - 6} width={44} height={48}

@@ -64,6 +64,10 @@ def whatif_payload(date: str, network: str, rule: str, changes: list[dict], fixe
         out[key] = {"summary": summarise(res, v), "unsafe": [bool(x) for x in v.unsafe[0]],
                     "max_v": compute._peak_v(res),
                     "node_max_v": [[round(float(x) * compute.NOMINAL_V, 1) for x in row] for row in np.nanmax(res.u_pu[0], axis=2)]}
+    # The street player's view of the same runs: the street as it is today against the street after the change.
+    out["street"] = {**compute.street_frame(net), "flow_method": compute.FLOW_METHOD,
+                     "before": compute.street_run(today_net, today_design, Controls(), today, r),
+                     "after": compute.street_run(net, design, controls, after, r)}
     return out
 
 

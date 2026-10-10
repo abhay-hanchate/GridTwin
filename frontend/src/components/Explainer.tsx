@@ -4,7 +4,7 @@ import { useT, type StringKey } from '../i18n'
 
 /** Every label a page uses, explained in one place at the end of the page. Groups are shared between pages so the
  *  same word always gets the same explanation. */
-export type Group = 'levels' | 'cause' | 'voltage' | 'phases' | 'prov' | 'range' | 'fix' | 'decision' | 'gate' | 'whatif'
+export type Group = 'levels' | 'cause' | 'voltage' | 'phases' | 'prov' | 'range' | 'fix' | 'decision' | 'whatif'
 
 const dot = (color: string, square = false): ReactNode => (
   <span className="dot" style={{ background: color, borderRadius: square ? 3 : undefined }} />
@@ -27,8 +27,6 @@ const GROUPS: Record<Group, { key: string; mark: ReactNode }[]> = {
     { key: 'no_safe', mark: dot('var(--act)', true) }, { key: 'binding', mark: <span aria-hidden="true">⛔</span> }],
   decision: [{ key: 'approve', mark: dot('var(--ok)') }, { key: 'conditions', mark: dot('var(--watch)') }, { key: 'refuse', mark: dot('var(--act)') },
     { key: 'headroom', mark: <span aria-hidden="true">▤</span> }],
-  gate: [{ key: 'pass', mark: dot('var(--ok)') }, { key: 'fail', mark: dot('var(--act)') }, { key: 'conditional', mark: dot('var(--watch)') },
-    { key: 'not_run', mark: dot('var(--ink-3)') }],
   whatif: [{ key: 'before_after', mark: <span aria-hidden="true">⇄</span> }, { key: 'better_worse', mark: <span className="delta better">↓</span> }],
 }
 

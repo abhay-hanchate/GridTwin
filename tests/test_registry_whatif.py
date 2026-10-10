@@ -106,3 +106,9 @@ def test_a_change_is_compared_with_todays_street():
     today, changed = out["today"]["summary"], out["before"]["summary"]
     assert changed["max_trafo_loading_pct"] > today["max_trafo_loading_pct"]
     assert changed["min_vm_pu"] < today["min_vm_pu"]
+    # the street player gets the same two runs: today's street, then the street with the change
+    street = out["street"]
+    assert len(street["homes"]) == len(street["before"]["home_v"][0]) == len(street["after"]["home_v"][0])
+    assert street["before"]["summary"] == out["today"]["summary"]
+    assert street["after"]["summary"] == out["after"]["summary"]
+    assert len(street["after"]["line_phase_kw"]) == 96 and len(street["after"]["line_phase_kw"][0]) == len(street["layout"]["lines"])

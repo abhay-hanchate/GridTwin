@@ -4,7 +4,7 @@ import fixesSafe from '../fixtures/v2/fixes_safe_sample.json'
 import risk from '../fixtures/v2/risk_sample.json'
 import { LangProvider } from '../i18n'
 import { causeSplit } from '../risk'
-import { CALENDAR, calls, makeStreet, results, serve as serveBase, settle } from '../test/server'
+import { CALENDAR, calls, makeStreet, serve as serveBase, settle } from '../test/server'
 import StreetPlayer from '../components/street/StreetPlayer'
 import Overview from './Overview'
 
@@ -48,15 +48,16 @@ describe('Overview', () => {
     expect(screen.getByRole('region', { name: /in plain words/i }).textContent).toMatch(/grid's own voltage/i)
   })
 
-  it('every journey card opens its page, and the checks count comes from results.json', async () => {
+  it('every journey card opens its page, and there is no checks panel', async () => {
     serve(nightRisk)
     const go = vi.fn()
     render(<LangProvider><Overview go={go} /></LangProvider>)
     await settle()
     fireEvent.click(document.querySelector('[data-area="planning"]')!)
     expect(go).toHaveBeenCalledWith('planning')
-    const passed = results.gates.filter((g) => g.status === 'pass').length
-    expect(screen.getByRole('region', { name: /checks passed/i }).textContent).toContain(`${passed}/${results.gates.length}`)
+    expect(document.querySelectorAll('[data-area]').length).toBe(4)
+    expect(document.querySelector('[data-area="proof"]')).toBeNull()
+    expect(screen.queryByRole('region', { name: /checks passed/i })).toBeNull()
   })
 })
 

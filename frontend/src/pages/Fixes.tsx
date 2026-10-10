@@ -4,7 +4,7 @@ import type { Fixes as FixesResult, Outcome, Verdict } from '../api/v2types'
 import type { Area } from '../app/areas'
 import { DEFAULT_NETWORK } from '../app/defaults'
 import { useView, type ViewProps } from '../app/view'
-import Controls from '../components/Controls'
+import DayContext from '../components/DayContext'
 import Envelope from '../components/Envelope'
 import { NextStep } from '../components/Explainer'
 import PhasePlan from '../components/PhasePlan'
@@ -18,6 +18,7 @@ import { useT, type StringKey } from '../i18n'
 
 const KINDS = ['tap', 'inverter', 'combined', 'curtailment', 'envelope', 'phase', 'battery', 'switching'] as const
 type Kind = (typeof KINDS)[number]
+const BEST = 6                     // options shown as cards with a description; the rest are a list
 const kindOf = (k: string): Kind => ((KINDS as readonly string[]).includes(k) ? (k as Kind) : 'combined')
 
 const s = { fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
@@ -44,7 +45,7 @@ export default function Fixes({ network = DEFAULT_NETWORK, go, ...props }: ViewP
         <h2>{t('fixes.page_title')}</h2>
         <p>{t('fixes.page_intro')}</p>
       </header>
-      <Controls view={view} />
+      <DayContext view={view} />
       <Status state={fixes} />
       {fixes.data && <FixesView key={`${fixes.data.date}-${fixes.data.rule}`} result={fixes.data} vmax={view.band?.vmax_v}
         network={network} rule={view.rule} date={view.date} />}
@@ -67,30 +68,21 @@ function FixesView({ result, vmax, network, rule, date }: { result: FixesResult;
   const pick = (id: string) => { setChosen(id); setTimeout(() => detailRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'start' }), 0) }
   const selected = chosen ? byId.get(chosen) : undefined
   const baseline = v.baseline_unsafe_steps ?? result.baseline_unsafe_steps
+  const all = ordered(result.outcomes)
+  const best = all.slice(0, BEST)
+  const rest = all.slice(BEST)
   return (
     <>
       {v.safe_action_found && focusId ? <Recommended outcome={byId.get(focusId)!} baseline={baseline} onOpen={() => pick(focusId)} />
         : <NoSafeAction verdict={v} closest={focusId ? byId.get(focusId) : undefined} />}
 
       <section className="card" aria-labelledby="tested-title">
-        <h3 id="tested-title">{t('fixes.tested_title', { n: result.outcomes.length })} <Prov kind="modeled" /></h3>
-        <p className="card-sub">{t('fixes.tested_intro', { steps: baseline })}</p>
-        <div className="fix-grid">
-          {ordered(result.outcomes).map((o) => (
-            <button key={o.id} className="fix-tile" aria-pressed={chosen === o.id} onClick={() => pick(o.id)} data-fix={o.id}>
-              <span className="top">
-                <span className="kind">{ICON[kindOf(o.kind)]}{t(`fixguide.${kindOf(o.kind)}.name` as StringKey)}</span>
-                {o.rank !== null && o.safe ? <span className="rank">{t('fixes.rank', { rank: o.rank })}</span> : null}
-              </span>
-              <h4>{o.label}</h4>
-              <span className="meta">
-                <span className={`chip ${o.safe ? 'ok' : 'act'}`}>{t(o.safe ? 'fixes.tile_safe' : 'fixes.tile_unsafe', { steps: o.unsafe_steps })}</span>
-                {o.cost.curtailed_kwh > 0 && <span className="chip sun">{t('fixes.tile_curtailed', { kwh: one(o.cost.curtailed_kwh) })}</span>}
-                {o.cost.operations > 0 && <span className="chip">{t('fixes.tile_ops', { n: o.cost.operations })}</span>}
-              </span>
-            </button>
-          ))}
+        <h3 id="tested-title">{t('fixes.best_title', { n: Math.min(BEST, all.length) })} <Prov kind="modeled" /></h3>
+        <p className="card-sub">{t('fixes.tested_intro', { steps: baseline, n: all.length })}</p>
+        <div className="best-grid">
+          {best.map((o, i) => <BestCard key={o.id} outcome={o} pos={i + 1} baseline={baseline} chosen={chosen === o.id} onPick={() => pick(o.id)} />)}
         </div>
+        {rest.length > 0 && <OtherList outcomes={rest} chosen={chosen} onPick={pick} />}
       </section>
 
       {selected && (
@@ -102,10 +94,6 @@ function FixesView({ result, vmax, network, rule, date }: { result: FixesResult;
         </section>
       )}
 
-      <details className="more">
-        <summary>{t('fixes.compare_title')}</summary>
-        <CompareTable outcomes={result.outcomes} />
-      </details>
     </>
   )
 }
@@ -182,33 +170,64 @@ function FixDetail({ outcome, baseline, network, rule, date }: { outcome: Outcom
   )
 }
 
-function CompareTable({ outcomes }: { outcomes: Outcome[] }) {
+/** One of the best options: what it is in a sentence, how much of the problem it removes, and what it costs. */
+function BestCard({ outcome: o, pos, baseline, chosen, onPick }: { outcome: Outcome; pos: number; baseline: number; chosen: boolean; onPick: () => void }) {
   const t = useT()
+  const kind = kindOf(o.kind)
+  const removed = Math.max(0, baseline - o.unsafe_steps)
+  const share = baseline > 0 ? removed / baseline : 1
   return (
-    <div className="table-scroll" data-numbers="all options">
-      <table className="data-table" aria-label={t('fixes.compare_title')}>
-        <thead>
-          <tr>
-            {(['col_option', 'col_safe', 'col_unsafe', 'col_curtailed', 'col_operations', 'col_margin', 'col_limit'] as const)
-              .map((k) => <th key={k} scope="col">{t(`fixes.${k}`)}</th>)}
-          </tr>
-        </thead>
-        <tbody>
-          {outcomes.map((o) => (
-            <tr key={o.id} className={o.safe ? 'row-safe' : 'row-unsafe'}>
-              <th scope="row">{o.label}</th>
-              <td>{t(o.safe ? 'fixes.yes' : 'fixes.no')}</td>
-              <td>{o.unsafe_steps}</td>
-              <td>{one(o.cost.curtailed_kwh)}</td>
-              <td>{o.cost.operations}</td>
-              <td>{one(o.cost.margin_v)}</td>
-              <td>{o.binding_limit ? t(`limit.${o.binding_limit.type}` as StringKey) : ''}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <Prov kind="modeled" />
-    </div>
+    <button className={`best-card ${o.safe ? 'safe' : 'unsafe'}`} aria-pressed={chosen} onClick={onPick} data-fix={o.id}>
+      <span className="top">
+        <span className="pos">{pos}</span>
+        <span className="kind">{ICON[kind]}{t(`fixguide.${kind}.name` as StringKey)}</span>
+      </span>
+      <h4>{o.label}</h4>
+      <p className="desc">{t(`fixguide.${kind}.what` as StringKey)}</p>
+      <span className="removed">
+        <span className="bar" aria-hidden="true"><i style={{ width: `${share * 100}%` }} /></span>
+        <span className="muted">{t('fixes.best_removed', { n: removed, of: baseline })}</span>
+      </span>
+      <span className="meta">
+        <span className={`chip ${o.safe ? 'ok' : 'act'}`}>{t(o.safe ? 'fixes.tile_safe' : 'fixes.tile_unsafe', { steps: o.unsafe_steps })}</span>
+        <span className="chip">{t('fixes.best_margin', { v: one(o.cost.margin_v) })}</span>
+        {o.cost.curtailed_kwh > 0 && <span className="chip sun">{t('fixes.tile_curtailed', { kwh: one(o.cost.curtailed_kwh) })}</span>}
+        {o.cost.operations > 0 && <span className="chip">{t('fixes.tile_ops', { n: o.cost.operations })}</span>}
+      </span>
+    </button>
   )
 }
 
+/** Every other option tried, one line each; a click opens it like a card. */
+function OtherList({ outcomes, chosen, onPick }: { outcomes: Outcome[]; chosen: string | null; onPick: (id: string) => void }) {
+  const t = useT()
+  return (
+    <div className="other-fixes">
+      <h4>{t('fixes.others_title', { n: outcomes.length })}</h4>
+      <div className="table-scroll" data-numbers="other options">
+        <table className="data-table" aria-label={t('fixes.others_title', { n: outcomes.length })}>
+          <thead>
+            <tr>
+              {(['col_option', 'col_kind', 'col_unsafe', 'col_curtailed', 'col_operations', 'col_margin'] as const)
+                .map((k) => <th key={k} scope="col">{t(`fixes.${k}`)}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {outcomes.map((o) => (
+              <tr key={o.id} className={chosen === o.id ? 'row-chosen' : undefined}>
+                <th scope="row">
+                  <button className="link-btn" aria-pressed={chosen === o.id} onClick={() => onPick(o.id)} data-fix={o.id}>{o.label}</button>
+                </th>
+                <td className="wrap">{t(`fixguide.${kindOf(o.kind)}.name` as StringKey)}</td>
+                <td className={o.safe ? 'ok' : 'act'}>{o.unsafe_steps}</td>
+                <td>{one(o.cost.curtailed_kwh)}</td>
+                <td>{o.cost.operations}</td>
+                <td>{one(o.cost.margin_v)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}

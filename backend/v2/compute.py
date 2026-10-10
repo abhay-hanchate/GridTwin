@@ -426,11 +426,15 @@ def _candidate(fix: str, net, scn, r):
 
 
 def _street_run(candidate, design, r) -> dict:
+    return street_run(candidate.network, design, candidate.controls, _solve(candidate, design, r), r)
+
+
+def street_run(net, design, controls, res, r) -> dict:
+    """One solved day of `net` as the street player draws it: each home's voltage, the flows on every wire, the
+    transformer and the quarter hours that break the rule."""
     from engine.street import home_net_kw, line_ends, line_flows
-    res = _solve(candidate, design, r)
     v = evaluate(res, r)
-    net = candidate.network
-    flows = line_flows(net, home_net_kw(net, design, candidate.controls))
+    flows = line_flows(net, home_net_kw(net, design, controls))
     lv = list(net.lv_nodes)
     home_v = res.u_pu[0][:, [lv.index(int(n)) for n in net.house_node], net.house_phase] * NOMINAL_V   # (T, H)
     return {
@@ -449,22 +453,28 @@ def _street_run(candidate, design, r) -> dict:
     }
 
 
+FLOW_METHOD = ("estimated from each home's net power (demand minus delivered solar); leaves out wire and transformer "
+               "losses, battery charging and discharging, Volt/Watt's extra reduction and reactive power")
+
+
+def street_frame(net) -> dict:
+    """What does not change through the day: the drawing of the street, its homes and the transformer size."""
+    from engine.street import layout
+    return {"layout": layout(net),
+            "homes": [{"node": int(nd), "kwp": round(float(k), 2)} for nd, k in zip(net.house_node, net.house_kwp)],
+            "trafo_kva": round(net.trafo.sn_va / 1000, 1)}
+
+
 def street_payload(date: str, network_id: str, rule_id: str, fix: str = "none", *, n: int = N_SCENARIOS) -> dict:
     """The design day (highest-sun case of tomorrow's scenarios) on a schematic of the street, without and with a fix."""
-    from engine.street import layout
     from engine.fixes.base import Candidate
     net, r = network(network_id), rule(rule_id)
     scn = robust_set(scenarios(date, net, n))
     design = _design(scn)
     base = Candidate("none", "none", "none", net)
     out = {"date": date, "network": network_id, "rule": r.id, "fix": fix, "t": _labels(design.t),
-           "limits_v": {"min": r.vmin_v, "max": r.vmax_v}, "layout": layout(net),
-           "homes": [{"node": int(nd), "kwp": round(float(k), 2)} for nd, k in zip(net.house_node, net.house_kwp)],
-           "trafo_kva": round(net.trafo.sn_va / 1000, 1), "before": _street_run(base, design, r),
-           "flow_method": "estimated from each home's net power (demand minus delivered solar); leaves out wire and "
-                          "transformer losses, battery charging and discharging, Volt/Watt's extra reduction and "
-                          "reactive power",
-           "provenance": provenance(date)}
+           "limits_v": {"min": r.vmin_v, "max": r.vmax_v}, **street_frame(net),
+           "before": _street_run(base, design, r), "flow_method": FLOW_METHOD, "provenance": provenance(date)}
     if fix != "none":
         c = _candidate(fix, net, scn, r)
         out["fix_label"] = c.label

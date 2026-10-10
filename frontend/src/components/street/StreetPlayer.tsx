@@ -5,24 +5,40 @@ import { one, volts } from '../../format'
 import { useT, type StringKey } from '../../i18n'
 import Prov from '../Prov'
 import Status from '../Status'
-import { PHASES, balance, depth, homeFlows, phaseKw } from './balance'
+import { PHASES, balance, depth, homeFlows, nearestHome, phaseKw } from './balance'
 import DayStrip from './DayStrip'
 import HomeCard from './HomeCard'
 import Num from './Num'
-import StreetView, { type HomeNow } from './StreetView'
+import StreetView, { type HomeMarker, type HomeNow } from './StreetView'
 
 const SPEEDS = [0.5, 1, 2] as const
 const STEPS_PER_SECOND = 4                       // at 1x a day plays in 24 seconds
 
-type Props = { network: string; rule: string; date: string | null; fix?: string; fixLabel?: string; startStep?: number; compact?: boolean }
+/** A pin on a point of the network; it is drawn on the nearest home (on `phase` if given). */
+export interface NodeMarker { node: number; phase?: 'A' | 'B' | 'C'; text: string; kind: HomeMarker['kind'] }
+
+type Extra = {
+  startStep?: number
+  compact?: boolean
+  markers?: NodeMarker[]
+  /** a home was clicked: planning uses its connection point */
+  onPick?: (home: number, node: number) => void
+  /** names for the two runs when they are not "without" and "with the fix" */
+  modeLabels?: { before: string; after: string }
+}
+type Props = { network: string; rule: string; date: string | null; fix?: string; fixLabel?: string } & Extra
 
 /** The street through the design day: the transformer, its three phases and every home on them, quarter hour by
  *  quarter hour, with which way the power flows and what it does to each home's voltage. Loads /street. */
-export default function StreetPlayer({ network, rule, date, fix = 'none', fixLabel, startStep, compact }: Props) {
+export default function StreetPlayer({ network, rule, date, fix = 'none', fixLabel, ...extra }: Props) {
   const street = useV2<Street>(date ? v2Path('/street', { network, rule, date, fix }) : null)
   if (!street.data) return <Status state={street} />
-  return <Player key={`${street.data.date}-${street.data.rule}-${street.data.fix}`} s={fixLabel ? { ...street.data, fix_label: fixLabel } : street.data}
-    startStep={startStep} compact={compact} />
+  return <StreetPlayback s={fixLabel ? { ...street.data, fix_label: fixLabel } : street.data} {...extra} />
+}
+
+/** The same player for a street the caller already has (planning, a what-if run). */
+export function StreetPlayback({ s, ...extra }: { s: Street } & Extra) {
+  return <Player key={`${s.date}-${s.rule}-${s.fix}`} s={s} {...extra} />
 }
 
 function dayPart(time: string): StringKey {
@@ -35,7 +51,7 @@ function dayPart(time: string): StringKey {
 
 const finite = (v: number | null): v is number => v !== null && Number.isFinite(v)
 
-function Player({ s, startStep, compact }: { s: Street; startStep?: number; compact?: boolean }) {
+function Player({ s, startStep, compact, markers, onPick, modeLabels }: { s: Street } & Extra) {
   const t = useT()
   const n = s.t.length
   const [step, setStep] = useState(() => startStep ?? Math.max(0, s.before.solar_kw.indexOf(Math.max(...s.before.solar_kw))))
@@ -62,6 +78,22 @@ function Player({ s, startStep, compact }: { s: Street; startStep?: number; comp
   }, [s, flows])
   const dist = useMemo(() => { const d = depth(s); return s.homes.map((h) => d.get(h.node) ?? 0) }, [s])
   const kwp = useMemo(() => s.homes.map((h) => h.kwp), [s])
+
+  const pins = useMemo(() => {
+    const out = new Map<string, HomeMarker>()
+    for (const m of markers ?? []) {
+      const h = nearestHome(s, run.home_phase, m.node, m.phase)
+      if (h === null) continue
+      const key = `${m.kind}${h}`
+      const had = out.get(key)                // two sites at one home share its pin
+      out.set(key, { home: h, kind: m.kind, text: had ? `${had.text} · ${m.text}` : m.text })
+    }
+    return [...out.values()]
+  }, [markers, s, run])
+  const pickHome = (h: number | null) => {
+    setHome(h)
+    if (h !== null) onPick?.(h, s.homes[h].node)
+  }
 
   const b = balance(s, run, step)
   const ph = phaseKw(s, run, step)
@@ -109,17 +141,17 @@ function Player({ s, startStep, compact }: { s: Street; startStep?: number; comp
       {s.after && (
         <div className="mode-toggle segmented" role="group" aria-label={t('player.compare')}>
           <button className="seg" aria-pressed={mode === 'before'} onClick={() => setMode('before')}>
-            {t('player.without', { steps: s.before.unsafe.filter(Boolean).length })}
+            {modeLabels?.before ?? t('player.without', { steps: s.before.unsafe.filter(Boolean).length })}
           </button>
           <button className="seg" aria-pressed={mode === 'after'} onClick={() => setMode('after')}>
-            {t('player.with', { fix: s.fix_label ?? s.fix, steps: s.after.unsafe.filter(Boolean).length })}
+            {modeLabels?.after ?? t('player.with', { fix: s.fix_label ?? s.fix, steps: s.after.unsafe.filter(Boolean).length })}
           </button>
         </div>
       )}
 
       <StreetView phase={run.home_phase} dist={dist} kwp={kwp} now={now} phaseKw={ph} grid={b.grid}
         scale={scale} limits={s.limits_v} trafoKva={s.trafo_kva} loadingPct={run.trafo_loading_pct[step]}
-        selected={home} onHome={setHome}
+        selected={home} onHome={pickHome} markers={pins}
         label={t('player.map_label', { time, over, total: s.homes.length, vmax: Number.isFinite(vmax) ? one(vmax) : '—' })} />
 
       <ul className="legend sv-legend">

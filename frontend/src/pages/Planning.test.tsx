@@ -12,11 +12,21 @@ import Planning from './Planning'
 
 type Decision = 'approve' | 'approve_with_conditions' | 'refuse'
 
-// The test street, with the probe points and meter sites of the fixtures added as nodes so their markers have a place.
+// The test street, with the probe points and meter sites of the fixtures wired on beyond its last node, so each pin
+// lands on the nearest home along the wires.
 const extra = [...new Set([headroom.locations.near.node, headroom.locations.far.node, ...meterSites.sites.map((m) => m.node)])].filter((n) => n > 2)
 const street = () => {
   const s = makeStreet()
-  return { ...s, layout: { ...s.layout, rows: 2, nodes: [...s.layout.nodes, ...extra.map((id, i) => ({ id, x: i, y: 1 }))] } }
+  const none = extra.map(() => 0)
+  return {
+    ...s,
+    layout: { ...s.layout, rows: 2, nodes: [...s.layout.nodes, ...extra.map((id, i) => ({ id, x: i, y: 1 }))],
+      lines: [...s.layout.lines, ...extra.map((id, i) => ({ line: s.layout.lines.length + i, from: i ? extra[i - 1] : 2, to: id }))] },
+    // no homes beyond node 2, so nothing flows on the added wires
+    before: { ...s.before, line_phase_kw: s.before.line_phase_kw.map((row) => [...row, ...extra.map(() => [0, 0, 0])]),
+      line_neutral_a: s.before.line_neutral_a.map((row) => [...row, ...none]),
+      line_loading_pct: s.before.line_loading_pct.map((row) => [...row, ...none]) },
+  }
 }
 
 function serve(decision: Decision = 'approve') {
@@ -28,8 +38,9 @@ function serve(decision: Decision = 'approve') {
 }
 const show = async () => { render(<LangProvider><Planning rule="up_2005" onRule={() => {}} /></LangProvider>); await settle() }
 const layer = (name: RegExp) => { fireEvent.click(screen.getByRole('tab', { name })); return settle() }
-const pickNode = async (node: number) => {
-  fireEvent.click([...document.querySelectorAll('.node-pick')].find((c) => c.querySelector('title')?.textContent === String(node))!)
+// Click a home on the street map; the connection is checked at its node (home 0 sits at node 1, home 1 at node 2).
+const pickHome = async (home: number) => {
+  fireEvent.click(document.querySelectorAll('.sv-hover')[home])
   await settle()
 }
 const check = async () => { fireEvent.click(screen.getByRole('button', { name: /check this request/i })); await settle() }
@@ -59,10 +70,12 @@ describe('Planning: the four questions', () => {
   it('the map shows the room per phase at both probe points', async () => {
     serve()
     await show()
-    const map = screen.getByRole('img', { name: /schematic of the street/i })
-    const labels = [...map.querySelectorAll('.probe-label')].map((t) => t.textContent ?? '')
-    expect(labels.length).toBe(2)
-    expect(labels.join(' ')).toContain(String(headroom.locations.near.phases.B.no_worse_kw))
+    // a reading per probe point and phase, on the nearest home of that phase. The test street has one home on A and one
+    // on B, both short of the probe points, so near and far share a pin on each home and C has none.
+    const pins = [...document.querySelectorAll('[data-pin="probe"]')].map((t) => t.textContent ?? '')
+    expect(pins.length).toBe(2)
+    const { near, far } = headroom.locations
+    expect(pins[1]).toBe(`Near B: ${near.phases.B.no_worse_kw} kW · Far B: ${far.phases.B.no_worse_kw} kW`)
     const cells = document.querySelectorAll('.phase-cell')
     expect(cells.length).toBe(6)
   })
@@ -82,7 +95,7 @@ describe('Planning: connection check on the map', () => {
     await show()
     await layer(/check a connection/i)
     expect((screen.getByRole('button', { name: /check this request/i }) as HTMLButtonElement).disabled).toBe(true)
-    await pickNode(2)
+    await pickHome(1)
     fireEvent.change(screen.getByLabelText(/size of each system/i), { target: { value: '5' } })
     fireEvent.click(screen.getByRole('button', { name: 'B' }))
     await check()
@@ -96,7 +109,7 @@ describe('Planning: connection check on the map', () => {
       serve(d)
       await show()
       await layer(/check a connection/i)
-      await pickNode(1)
+      await pickHome(0)
       await check()
       texts.push(decisionText())
       cleanup()
@@ -110,7 +123,7 @@ describe('Planning: connection check on the map', () => {
     serve('refuse')
     await show()
     await layer(/check a connection/i)
-    await pickNode(1)
+    await pickHome(0)
     await check()
     const text = decisionText()
     expect(text).toContain('over-voltage')
@@ -127,6 +140,7 @@ describe('Planning: meters, transformers, Volt/VAR', () => {
     const items = within(screen.getByRole('list', { name: /smart meter/i })).getAllByRole('listitem').filter((li) => li.querySelector('.pos'))
     expect(items.length).toBe(Math.min(5, meterSites.sites.length))
     expect(items[0].textContent).toContain(String(meterSites.sites[0].node))
+    expect(document.querySelectorAll('[data-pin="site"]').length).toBeGreaterThan(0)
   })
 
   it('ranks the transformers and marks headroom found at the search limit as "at least"', async () => {
