@@ -492,3 +492,19 @@ telling the districts apart; Bareilly alone, a single district with every season
   candidates the screen calls clearly unsafe; skipped candidates are verified offline to count false rejections.
   Battery-droop, switching and phase-move candidates are unsupported and always solved.
 - **What counts as failure:** a missed target or a slower pipeline is reported as failed, not tuned away on test data.
+
+### Addition 2, round 2: guard bands by predicted value (pre-registered 10 Oct 2026, after round 1 on development data, before any test state was scored)
+
+- **What round 1 showed (benchmark street, development data only):** with one margin per extreme, no candidate let an
+  unsafe tune state through, but the margins were set by a tail far from any limit. The MLP's lowest-voltage margin was
+  14.2 V because deep under-voltage states (mostly battery charging, predicted below 0.93 pu) have errors up to 70 V,
+  while near the limits (predicted 0.93-1.10 pu) the 99th-percentile error was 1-2 V. The screen called 37% (+-10%)
+  and 87% (+-6%) of safe tune states risky; ridge and LightGBM called nearly all of them risky.
+- **Change:** Mondrian split-conformal margins. For each extreme, the calibrate split is cut into 8 bins at the
+  quantiles of the *predicted* value (edges saved in the manifest; the outer bins are open-ended); each bin gets its
+  own one-sided margin at the same level 1 - 0.005/4, danger and optimistic sides as before; a bin too small for the
+  level gets an infinite margin (always risky). The fitted models are not changed or refitted.
+- **Selection:** the same rule on tune, over the three candidates with round 2 margins. Round 2 ships only if its
+  guarded unsafe-as-safe count on tune is not higher than round 1's for the same model; otherwise round 1 ships.
+- **Reporting:** round 1 and round 2 are both scored once on the test, boundary and out-of-range splits and both are
+  reported. Validity holds within each bin under exchangeability; it is still not a certificate.
