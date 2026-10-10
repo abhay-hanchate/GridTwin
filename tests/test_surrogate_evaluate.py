@@ -42,3 +42,15 @@ def test_end_to_end_summary_counts_speed_and_quality():
     s = ev._summary_e1([row, row])
     assert s["speedup_vs_solve_all"] == 4.0 and s["speedup_vs_cost_order"] == 2.0 and s["false_rejections"] == 2
     assert s["runs_with_a_safe_action"] == 2 and s["battery_node_untrained_runs"] == 2
+
+
+def test_parallel_reports_merge_by_street(tmp_path):
+    import json
+    a, b = tmp_path / "surrogate_evaluation_a.json", tmp_path / "surrogate_evaluation_b.json"
+    a.write_text(json.dumps({"round": 4, "streets": {"s1": {"heldout": 1}}}))
+    b.write_text(json.dumps({"round": 4, "streets": {"s1": {"latency": 2}, "s2": {"heldout": 3}}}))
+    (tmp_path / "surrogate_disagreements_a.json").write_text(json.dumps({"examples": [{"source": "x", "type": "y"}]}))
+    ev.merge([a, b], tmp_path / "out.json", tmp_path / "dis.json")
+    out = json.loads((tmp_path / "out.json").read_text())
+    assert out["streets"] == {"s1": {"heldout": 1, "latency": 2}, "s2": {"heldout": 3}}
+    assert len(json.loads((tmp_path / "dis.json").read_text())["examples"]) == 1

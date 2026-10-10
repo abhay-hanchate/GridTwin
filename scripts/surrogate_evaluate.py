@@ -388,6 +388,7 @@ def write_sample(street: str, data_root: Path, n: int = 200) -> None:
 
 
 def main(argv=None) -> None:
+    global REPORT, DISAGREEMENTS
     warnings.filterwarnings("ignore")
     p = argparse.ArgumentParser()
     p.add_argument("--street", action="append", choices=schema.STREETS)
@@ -396,7 +397,10 @@ def main(argv=None) -> None:
     p.add_argument("--workers", type=int, default=6)
     p.add_argument("--quick", action="store_true")
     p.add_argument("--skip", action="append", default=[], choices=("heldout", "ood", "latency", "e1", "e2"))
+    p.add_argument("--report", default=str(REPORT), help="a separate file lets several streets be evaluated in parallel")
+    p.add_argument("--disagreements", default=str(DISAGREEMENTS))
     args = p.parse_args(argv)
+    REPORT, DISAGREEMENTS = Path(args.report), Path(args.disagreements)
     data_root, models_root = Path(args.root), Path(args.models)
     screener = load_screener(models_root)
     if screener is None:
@@ -491,3 +495,20 @@ def _json(o):
 
 if __name__ == "__main__":
     main()
+
+
+def merge(parts: list[Path], report: Path = REPORT, disagreements: Path = DISAGREEMENTS) -> None:
+    """Combine reports written by parallel runs (separate --report files): streets are merged, examples concatenated."""
+    out, examples = {}, []
+    for part in parts:
+        r = json.loads(part.read_text(encoding="utf-8"))
+        streets = out.get("streets", {})
+        for sid, rec in r.get("streets", {}).items():
+            streets.setdefault(sid, {}).update(rec)
+        out.update({k: v for k, v in r.items() if k != "streets"}, streets=streets)
+        d = part.with_name(part.stem.replace("evaluation", "disagreements") + part.suffix)
+        if d.exists():
+            examples += json.loads(d.read_text(encoding="utf-8"))["examples"]
+    global REPORT, DISAGREEMENTS
+    REPORT, DISAGREEMENTS = report, disagreements
+    _save(out, examples)
