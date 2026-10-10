@@ -39,19 +39,9 @@ def test_script_reads_every_number_from_the_results(tmp_path, monkeypatch):
     text = demo_script.build()
     assert "Tap +1 with IEEE 1547 Volt/VAR" in text and "**No safe action**" in text and "heavier conductor" in text
     assert "about 16.7 hours" in text and "0.001 V" in text and "813.1 times" in text and "-5.46" in text
-    assert "switch the rule picker to +/-10%" in text and "click a point at the far end" in text and "POST" not in text
-    assert "Home tab" not in text and "sunny demo day" not in text and "**Tomorrow**" in text and "**Try a change**" in text
+    assert "switch the rule selector to +/-10%" in text and "Connection check** form" in text and "POST" not in text
     assert "G8 fail" in text and "not reliable as odds" in text
-    assert "2025-05-15" in text                                               # the day to pick in offline mode
     assert "around **09:00** (90%), against 10% at 12:00" in text            # computed from the curve, not asserted
-
-
-def test_calibrated_hours_have_no_range_and_say_so():
-    risk = {"expected_unsafe_hours": {"mean": 7.28, "p10": None, "p90": None},
-            "calibration": {"reliable": True, "applied": True}}
-    assert demo_script._hours(risk) == "about 7.3 hours"
-    assert demo_script._chances(risk).startswith("recalibrated")
-    assert demo_script._chances({"calibration": {"reliable": True, "applied": False}}).startswith("raw")
 
 
 def test_numbers_round_like_the_dashboard():

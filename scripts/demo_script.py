@@ -50,17 +50,7 @@ def raw(x) -> str:
 
 def _hours(risk: dict) -> str:
     h = risk["expected_unsafe_hours"]
-    if h.get("p10") is None or h.get("p90") is None:           # calibrated chances carry no scenario range
-        return f"about {one(h['mean'])} hours"
     return f"about {one(h['mean'])} hours (between {one(h['p10'])} and {one(h['p90'])} in 8 of 10 scenarios)"
-
-
-def _chances(risk: dict) -> str:
-    """The note under the chart (frontend Forecast.tsx): calibrated, raw because not applied here, or not reliable."""
-    cal = risk.get("calibration", {})
-    if cal.get("applied"):
-        return "recalibrated, and on held-out days slightly better than the historical average"
-    return "raw (the recalibration does not apply here)" if cal.get("reliable") else "not reliable as odds"
 
 
 def _verdict(fixes: dict) -> str:
@@ -96,24 +86,22 @@ def build() -> str:
         "Every number below is read from a results file; regenerate after each nightly run. Draft for A and B to rehearse.",
         "",
         "Before the demo: `python -m scripts.nightly`, then start the API with `GRIDTWIN_OFFLINE=1` so a dead network "
-        "cannot stop the demo. Every page has the rule picker and the day picker at the top; in offline mode use the "
-        f"day picker to choose **{d['sunny']}** (the precomputed sunny day), not the Tomorrow button.",
+        "cannot stop the demo. Open the dashboard on the sunny demo day "
+        f"({d['sunny']}).",
         "",
-        "## 1. Overview and Tomorrow: the risk (60 s)",
+        "## 1. Home: tomorrow's risk (60 s)",
         "",
-        "- Open **Overview**: the animated street plays the design day; homes change colour as their voltage crosses the "
-        "limit. Then open **Tomorrow**.",
-        f"- Rule picker on **UP Supply Code (+/-6%)**. Level **{sun_up['level'].upper()}** from {sun_up['first_act']}; "
+        f"- Rule selector on **UP Supply Code (+/-6%)**. Level **{sun_up['level'].upper()}** from {sun_up['first_act']}; "
         f"{_hours(sun_up)} unsafe.",
         f"- Switch to +/-10% for a moment to show the shape: the chance of unsafe voltage is highest around "
         f"**{peak_time(sun_10)}** ({pct(max(sun_10['p_unsafe']))}), against {pct(sun_10['p_unsafe'][48])} at 12:00.",
-        f"- Point at the note under the chart: under UP +/-6% the chances are *{_chances(sun_up)}*.",
+        f"- Point at the calibration note: the chances are *{'slightly better than the historical average' if sun_up['calibration']['reliable'] else 'not reliable as odds'}* under this rule.",
         "",
-        "## 2. The rule changes the answer (30 s)",
+        "## 2. Switch the rule to +/-10% (30 s)",
         "",
-        f"- Same day, same street, +/-10%: **{sun_10['level'].upper()}** from {sun_10['first_act']}, {_hours(sun_10)}.",
+        f"- Same day, same street: **{sun_10['level'].upper()}** from {sun_10['first_act']}, {_hours(sun_10)}.",
         "- Say: the rule a state chooses changes the answer; every rule shows its source and how well it is verified.",
-        f"- Contrast the cloudy day ({d['cloudy']}, day picker): level **{cloudy_10['level'].upper()}**.",
+        f"- Contrast the cloudy day ({d['cloudy']}): level **{cloudy_10['level'].upper()}**.",
         "",
         "## 3. Fixes: the tournament and the honest verdict (90 s)",
         "",
@@ -121,11 +109,10 @@ def build() -> str:
         f"- UP +/-6%: {_verdict(fix_up)}",
         "- Say: every option (transformer tap, IEEE 1547 smart inverters, export limits, phase moves, switching, "
         "batteries) was replayed through the full power flow on every scenario; only fixes safe at every step count.",
-        "- Play the street with and without the recommended fix (the toggle above the street).",
         "",
         "## 4. Planning: can we approve this connection? (60 s)",
         "",
-        "- Open **Planning** and **switch the rule picker to +/-10%** (it is still on UP +/-6% from step 3). The numbers "
+        "- Open **Planning** and **switch the rule selector to +/-10%** (it is still on UP +/-6% from step 3). The numbers "
         "below are the +/-10% results; under UP +/-6% the street has almost no room left, which is the point of step 3.",
     ]
     if room:
@@ -141,14 +128,12 @@ def build() -> str:
         lines += [f"- Hosting capacity (share of homes that can add solar, P10-P90): without a fix {pct(a['p10'])}-{pct(a['p90'])}; "
                   f"with standard Volt/VAR {pct(b['p10'])}-{pct(b['p90'])}."]
     lines += [
-        "- Connection check: **click a point at the far end of the street on the map**, then 5 kW, one system, best "
-        "phase, and **Check this request** - read out the decision, the phase it chose and the reason on screen.",
+        "- In the **Connection check** form on the same page: pick the far end of the street, 5 kW, one system, best "
+        "phase, then **Check this request** - read out the decision, the phase it chose and the reason on screen.",
         "",
-        "## 5. Try a change, then Proof (60 s)",
+        "## 5. Proof: how much to trust it (60 s)",
         "",
-        "- **Try a change**: pick one of the ready-made changes and show the street before and after.",
-        f"- **Proof**: engine checked against pandapower: {raw(g1['max_voltage_diff_v'])} V apart, "
-        f"{raw(g1['speedup'])} times faster (G1).",
+        f"- Engine checked against pandapower: {raw(g1['max_voltage_diff_v'])} V apart, {raw(g1['speedup'])} times faster (G1).",
         f"- Risk calibration (G8): +/-10% calibrated skill {raw(g8['pm10']['brier_skill_calibrated'])}; "
         f"UP +/-6% {raw(g8['up_2005']['brier_skill_calibrated'])}, on held-out days of both districts - "
         + ("passed." if gates["G8"]["status"] == "pass" else "shown as failed, not hidden."),
