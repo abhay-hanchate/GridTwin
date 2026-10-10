@@ -544,3 +544,39 @@ telling the districts apart; Bareilly alone, a single district with every season
   - Fix tournament: 1.02-1.04x, with no false rejections and the same best fix in all 16 runs.
 - **Added during the run (a safety correction, not a tuning):** when nothing solved is safe, the candidates the screen
   skipped are solved too, so a "no safe action" verdict never rests on the screen.
+
+### Addition 2, round 4: fixing the stated limitations (pre-registered 10 Oct 2026, before any round 4 state was generated)
+
+Asked by the owner after the round 3 report. Every change below is decided now; the round 4 result is scored once on a
+**new test set** (test months, days 7 and 17, never used), because the earlier test sets have been looked at.
+
+1. **All five streets.** One model per street. Battery nodes per street: every node that was the street's
+   highest-voltage node (catalog.worst_node) on any of 24 sampled days of 2025 (the 5th and 20th of each month):
+   benchmark_250 {21, 26, 54, 65}, urban_short_160 {13, 21, 26, 58, 62, 65}, suburban_100 {25, 26, 31, 58, 65, 69},
+   rural_long_100 {26, 58, 62, 65, 91}, rural_weak_63 {26, 31, 41, 58, 65, 69}. Battery power is an input per node.
+2. **Solar layouts.** Every family draws a random layout: adoption uniform in 0.2-1.0, homes chosen at random, each
+   panel 1.5-5 kWp. A quarter of families use the planning layouts (25/50/75/100%, spread as planning_street does).
+   The exact-layout rule is replaced by a **novelty check**: the Mahalanobis distance of the standardised features in
+   the principal components that hold 99% of the train variance; states farther than the 99.9th percentile of the
+   calibrate split's distances are unsupported. The per-feature box stays.
+3. **Fewer safe states sent to the solver.** Boundary share 0.4 (was 0.3). MLP 512/256/256, up to 400 epochs,
+   patience 20 (round 1 hit the cap of 200).
+4. **Margins centred on the limits.** Mondrian margins with bin edges at every decision limit +-1.5% (voltage: 0.90,
+   0.94, 1.06, 1.10 pu) and +-10 points (100% loading), adjacent bins merged until each holds at least 1,000
+   calibrate states.
+5. **End-to-end.** No new mechanism: tighter margins should let more clearly unsafe candidates be skipped. The
+   profile (10 Oct 2026) shows the tournament's largest costs are the phase optimiser (about 40 s, not a power flow)
+   and Volt/VAR candidates (about 9 s each), so a large speed-up is not expected. A "no safe action" verdict still
+   needs the solver.
+6. **Cheapest options always verified.** In the controller-style search, the three cheapest actions are solved first
+   whatever the screen says, then the screened-safe ones by cost, then the rest.
+7. **Miss bound.** Every unsafe-as-safe count also gets a one-sided 95% Clopper-Pearson upper bound on the miss rate.
+   States are correlated within a day, so the bound is optimistic; it is still not a guarantee, and every state is
+   simulated.
+8. **More outputs and layouts.** New outputs: voltage unbalance (VUF %), neutral current (A) and transformer power
+   (reverse flow when negative), each with margins. The screen can apply a VUF limit when given one. Switched layouts:
+   the first three switching candidates of each street (the ones the controller permits) are trained, as a layout
+   input. Moved phase maps stay unsupported.
+
+Candidates, selection rule (tune only), metrics and targets are otherwise as pre-registered for round 1. Rounds 1-3
+stay in the record.
