@@ -282,16 +282,16 @@ main:focus, main:focus-visible, [role='tabpanel']:focus-visible { outline: none;
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } }
 
 /* ---- Explainer (end of every page) and next step ------------------------------------------------------------ */
-.explainer { display: grid; gap: 16px; padding: 24px; border-radius: var(--r-l); background: var(--surface-2); }
-.explainer h2 { margin: 0; font-size: var(--fs-xl); }
-.explainer > p { margin: -6px 0 0; color: var(--ink-2); }
-.explain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 10px; margin: 0; }
-.explain-grid > div { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 2px 10px; align-items: start; padding: 14px 16px; border-radius: var(--r-m); background: var(--surface); }
-.explain-grid dt { grid-column: 2; font-weight: 700; }
-.explain-grid dd { grid-column: 2; margin: 0; color: var(--ink-2); font-size: var(--fs-s); }
-.explain-grid .mark { grid-row: 1 / span 2; margin-top: 4px; display: grid; place-items: center; }
-.explain-group { display: grid; gap: 8px; }
-.explain-group h3 { margin: 4px 0 0 !important; font-size: var(--fs-m) !important; color: var(--ink-2); }
+.explainer { display: grid; gap: 10px; padding: 16px 18px; border-radius: var(--r-l); background: var(--surface-2); }
+.explainer h2 { margin: 0; font-size: var(--fs-l); }
+.explainer > p { margin: -4px 0 0; color: var(--ink-2); font-size: var(--fs-s); }
+.explain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 6px; margin: 0; }
+.explain-grid > div { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 0 8px; align-items: start; padding: 8px 10px; border-radius: var(--r-s); background: var(--surface); }
+.explain-grid dt { grid-column: 2; font-weight: 700; font-size: var(--fs-s); line-height: 1.3; }
+.explain-grid dd { grid-column: 2; margin: 0; color: var(--ink-2); font-size: var(--fs-xs); line-height: 1.4; }
+.explain-grid .mark { grid-row: 1 / span 2; margin-top: 2px; display: grid; place-items: center; }
+.explain-group { display: grid; gap: 5px; }
+.explain-group h3 { margin: 2px 0 0 !important; font-size: var(--fs-s) !important; color: var(--ink-2); }
 .next-step { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 20px 24px; border-radius: var(--r-l); background: var(--brand-soft); }
 .next-step p { margin: 0; font: 650 var(--fs-l) var(--head); }
 .next-step span { display: block; font: 500 var(--fs-s) var(--text); color: var(--ink-2); }
@@ -737,7 +737,8 @@ details.more[open] summary { margin-bottom: 12px; }
   .app { padding: 0px 16px 40px; }
   .header { margin: 0 -16px; padding: 10px 16px; }
   .areas { order: 4; flex-basis: 100%; }
-  .card, .explainer { padding: 18px; }
+  .card { padding: 18px; }
+  .explainer { padding: 14px; }
   .journey { grid-template-columns: 1fr; }
   .phase-cells { grid-template-columns: 1fr; }
   .controls { padding: 14px; }
