@@ -82,6 +82,17 @@ def record(payload: dict, path: Path = LIVE_PATH) -> pd.Series:
     return new
 
 
+def recorded_days(path: Path = LIVE_PATH) -> int:
+    """Complete days in the live record (0 when nothing has been recorded)."""
+    return len(daily_energy(pd.read_parquet(path)["demand_mw"])) if path.exists() else 0
+
+
+def recorded_note(path: Path = LIVE_PATH) -> str:
+    """How far the live record is from what the anchor needs: yesterday plus MIN_WINDOW_DAYS of the week before."""
+    return (f"{recorded_days(path)} complete days of UP state demand recorded; the anchor needs the day before the "
+            f"forecast day plus {MIN_WINDOW_DAYS} of the seven days before it ({MIN_WINDOW_DAYS + 1} days at least)")
+
+
 def combined_energy(history: pd.Series, live: pd.Series) -> pd.Series:
     """One daily series: the live record where it exists, the Grid-India history elsewhere."""
     return live.combine_first(history).sort_index().rename("energy_mu")

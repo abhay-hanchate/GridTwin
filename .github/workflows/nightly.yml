@@ -43,6 +43,29 @@ jobs:
           path: data/monitor
           key: monitor-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: monitor-
+      - name: Restore the UP demand record
+        # The live demand anchor needs at least five recorded days (ml/up_demand.py MIN_WINDOW_DAYS). The UPSLDC feed
+        # holds only yesterday and today, so the record must be kept between runs. The Actions cache is not durable
+        # storage (it is evicted after 7 days unused), so each run also uploads the record as an artifact.
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            data/live
+            data/raw/zenodo_state_demand
+          key: up-demand-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: up-demand-
+      - name: Record the UP state demand (yesterday and today)
+        # a feed outage must not stop the precompute; the anchor then falls back to "pattern only"
+        continue-on-error: true
+        run: python -m scripts.record_up_demand
+      - name: Save the UP demand record
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            data/live
+            data/raw/zenodo_state_demand
+          key: up-demand-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Is the committed offline demo current?
         # GRIDTWIN_OFFLINE=1 serves only results whose cache key matches the current engine code.
         run: |
@@ -88,5 +111,6 @@ jobs:
           path: |
             data/results/v2
             data/monitor
+            data/live
           if-no-files-found: ignore
           retention-days: 14
