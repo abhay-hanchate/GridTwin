@@ -90,3 +90,12 @@ def test_out_of_range_kinds_leave_the_trained_box():
     assert ood["layout"]["network"].line_to.tolist() != net.line_to.tolist()
     for kind, item in ood.items():
         assert len(item["states"]) == 4 and item["labels"].u_pu.shape[0] == 4, kind
+
+
+def test_the_fresh_test_set_uses_new_days_in_the_test_months():
+    old = {f.date for f in g.families(STREET) if f.split == "test"}
+    fresh = g.fresh_test_families(STREET)
+    assert {f.split for f in fresh} == {"test_fresh"} and not old & {f.date for f in fresh}
+    assert {int(f.date[5:7]) for f in fresh} == set(g.TEST_MONTHS) and {int(f.date[8:]) for f in fresh} == set(g.FRESH_TEST_DAYS)
+    assert {f.adoption for f in fresh} == set(g.ADOPTION_TEST) and {(f.tap, f.mode) for f in fresh} & g.HELD_OUT
+    assert not {f.id for f in fresh} & {f.id for f in g.families(STREET)}

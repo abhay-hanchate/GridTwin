@@ -71,6 +71,7 @@ class StreetModel:
         self.house_phase = tuple(int(p) for p in manifest["house_phase"])
         self.default_kwp = np.asarray(manifest["default_pv_kwp"], float)
         self.box_min, self.box_max = np.asarray(manifest["box"]["min"]), np.asarray(manifest["box"]["max"])
+        self.layouts = np.asarray(manifest.get("solar_layouts", []), float).reshape(-1, self.n_homes)
         self.names = manifest["feature_names"]
         self.guard = manifest["guard"]
         self._street_ok: bool | None = None
@@ -82,8 +83,9 @@ class StreetModel:
                 log.warning("surrogate for %s disabled: the street definition changed since training", self.street)
         return self._street_ok
 
-    def check(self, s: OperatingState) -> tuple[str, np.ndarray | None]:
-        """('', features) when supported, else (reason, None)."""
+    def check(self, s: OperatingState, layouts: bool = True) -> tuple[str, np.ndarray | None]:
+        """('', features) when supported, else (reason, None). `layouts=False` applies the per-feature box alone
+        (round 2's support, kept for the evaluation of the original test split)."""
         m = self.manifest
         if tuple(tuple(int(v) for v in e) for e in s.line_ends) != self.line_ends:
             return "the layout differs from the trained street (switching changes it)", None
@@ -107,6 +109,8 @@ class StreetModel:
             return "inputs must be finite", None
         if np.any(pv > kwp + 1e-6):
             return "delivered solar exceeds the installed kWp", None
+        if layouts and len(self.layouts) and not np.any(np.all(np.abs(self.layouts - kwp[None, :]) <= 1e-6, axis=1)):
+            return "this solar layout (which homes have panels, and their sizes) was not trained", None
         bad = np.flatnonzero((x < self.box_min - 1e-9) | (x > self.box_max + 1e-9))
         if len(bad):
             k = bad[0]

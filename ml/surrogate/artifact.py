@@ -33,6 +33,8 @@ def write(root: Path, street: str, model, failure, guard: dict, train: Data, net
         "taps": sorted({int(t) for t in train.x[:, names.index("tap_pos")]}),
         "modes": [m for k, m in enumerate(schema.MODES) if (mode_cols[:, k] > 0.5).any()],
         "box": {"min": train.x.min(axis=0).tolist(), "max": train.x.max(axis=0).tolist()},
+        # Round 3 (docs/DECISIONS.md): which homes have panels, and their sizes, must be a trained layout.
+        "solar_layouts": np.unique(train.x[:, names.index("pv_kwp_0"):names.index("pv_kwp_0") + net.n_homes], axis=0).tolist(),
         "guard": guard, "failure_model": failure is not None, "failure_threshold": calibrate.FAILURE_THRESHOLD,
         "outputs": {"n_voltages": train.n_v, "n_lines": train.n_lines, "extremes": list(schema.EXTREMES)},
         "not_screened": ["voltage unbalance (VUF)", "neutral current", "reverse flow"],

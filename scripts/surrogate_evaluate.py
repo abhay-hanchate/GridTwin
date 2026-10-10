@@ -27,7 +27,7 @@ from ml.surrogate.teacher import StateArrays, solve_states
 REPORT = schema.ROOT / "ml" / "reports" / "surrogate_evaluation.json"
 DISAGREEMENTS = schema.ROOT / "ml" / "reports" / "surrogate_disagreements.json"
 RULES = ("up_2005", "pm10")
-TEST_DATES = ("2025-03-10", "2025-06-10", "2025-09-10", "2025-12-10")
+TEST_DATES = ("2025-03-27", "2025-06-27", "2025-09-27", "2025-12-27")   # round 3: days of the fresh test set
 E1_WINDOWS = {"midday": 40, "evening": 72}           # first quarter hour of each 16-step window
 E1_STEPS, E1_SCENARIOS, E1_SEED = 16, 10, 101
 E1_BATTERY = tuple(np.linspace(-60, 60, 9))
@@ -50,7 +50,7 @@ def to_operating_states(street: str, s: StateArrays, line_ends, house_phase=None
 
 # ---- held-out scoring ---------------------------------------------------------------------------------------------
 
-def _score(model, failure, guard, x, labels, rules=RULES) -> dict:
+def _score(model, failure, guard, x, labels, rules=RULES, supported=None) -> dict:
     from engine.rules import get_rule
     pred = model.extremes(x)
     el = model.elements(x) if hasattr(model, "elements") else None
@@ -61,6 +61,10 @@ def _score(model, failure, guard, x, labels, rules=RULES) -> dict:
         d = calibrate.decide(pred, guard, r.vmin_pu, r.vmax_pu, p_fail)
         unsafe = metrics.truly_unsafe(labels, r.vmin_pu, r.vmax_pu)
         out["rules"][rid] = {"guarded": metrics.screening(d["risky"], unsafe), "point": metrics.screening(d["point_unsafe"], unsafe)}
+        if supported is not None:                      # as deployed: an unsupported state is risky and goes to the solver
+            out["rules"][rid]["deployed"] = metrics.screening(d["risky"] | ~supported, unsafe)
+    if supported is not None:
+        out["supported_states"] = int(supported.sum())
     return out
 
 
@@ -80,13 +84,22 @@ def gates(reg: dict) -> dict:
     return {k: {"value": val, "target": tgt, "passed": val is not None and val <= tgt} for k, (val, tgt) in checks.items()}
 
 
-def score_heldout(street: str, models_root: Path, data_root: Path, selected: str, shipped_round: int) -> tuple[dict, list]:
-    """Every candidate, with the round 1 margins and (if run) the round 2 margins, scored once on the test split."""
-    test = dataset.load_split(street, "test", data_root)
+def score_heldout(street: str, models_root: Path, data_root: Path, selected: str, shipped_round: int, *,
+                  split: str = "test", layouts: bool = True) -> tuple[dict, list]:
+    """Every candidate, with the round 1 margins and (if run) the round 2 margins, scored once on `split`. With
+    layouts=False the support is the per-feature box alone (rounds 1-2 as pre-registered); with True, the shipped one."""
+    from backend.v2 import compute
+    test = dataset.load_split(street, split, data_root)
     data = train.prepare(test)
     subsets = _subsets(test)
     cand_dir = models_root / "candidates" / street
-    out, examples = {"states": {k: int(v.sum()) for k, v in subsets.items()}, "rounds": {}, "shipped_round": shipped_round}, []
+    sm = load_screener(models_root).models[street]          # the shipped support box (the same train split for all)
+    ends = schema.line_ends(compute.network(street))
+    supported = np.array([not sm.check(s, layouts=layouts)[0] for s in to_operating_states(street, test.states, ends)])
+    out, examples = {"split": split, "support": "shipped (with solar layouts)" if layouts else "per-feature box (rounds 1-2)",
+                     "states": {k: int(v.sum()) for k, v in subsets.items()},
+                     "supported": {k: int((v & supported).sum()) for k, v in subsets.items()},
+                     "rounds": {}, "shipped_round": shipped_round}, []
     for rnd, suffix in ((1, "_guard.json"), (2, "_guard_round2.json")):
         for kind in ("ridge", "lgbm", "mlp"):
             gpath = cand_dir / f"{kind}{suffix}"
@@ -94,12 +107,13 @@ def score_heldout(street: str, models_root: Path, data_root: Path, selected: str
                 continue
             model, failure = predict.load(cand_dir / f"{kind}.npz")
             guard = json.loads(gpath.read_text(encoding="utf-8"))
-            res = {name: _score(model, failure, guard, data.x[m], _take(test.labels, m)) for name, m in subsets.items() if m.any()}
+            res = {name: _score(model, failure, guard, data.x[m], _take(test.labels, m), supported=supported[m])
+                   for name, m in subsets.items() if m.any()}
             res["gates_on_base"] = gates(res["base"]["regression"])
             res["margins_at_limits"] = calibrate.limit_margins(guard)
             out["rounds"].setdefault(str(rnd), {})[kind] = res
             if kind == selected and rnd == shipped_round:
-                examples = _heldout_examples(street, model, failure, guard, data, test)
+                examples = _heldout_examples(street, model, failure, guard, data, test, supported)
     out["candidates"] = out["rounds"][str(shipped_round)]
     return out, examples
 
@@ -109,7 +123,7 @@ def _take(lab, m):
     return Labels(lab.u_pu[m], lab.line_loading_pct[m], lab.trafo_loading_pct[m], lab.converged[m], lab.passes[m])
 
 
-def _heldout_examples(street, model, failure, guard, data, test) -> list:
+def _heldout_examples(street, model, failure, guard, data, test, supported) -> list:
     """Natural disagreements on held-out states: the point prediction (and, if any, the guarded screen) called a state
     safe that the solver found unsafe. The solver's answer is what the system acts on."""
     from engine.rules import get_rule
@@ -121,7 +135,8 @@ def _heldout_examples(street, model, failure, guard, data, test) -> list:
         r = get_rule(rid)
         d = calibrate.decide(pred, guard, r.vmin_pu, r.vmax_pu, p_fail)
         unsafe = metrics.truly_unsafe(test.labels, r.vmin_pu, r.vmax_pu)
-        for kind, mask in (("guarded screen said safe", unsafe & ~d["risky"]), ("point prediction said safe", unsafe & ~d["point_unsafe"])):
+        for kind, mask in (("guarded screen said safe", supported & unsafe & ~d["risky"]),
+                           ("point prediction said safe", supported & unsafe & ~d["point_unsafe"])):
             idx = np.flatnonzero(mask)
             order = idx[np.argsort(-test.boundary[idx].astype(int), kind="stable")][:MAX_EXAMPLES]
             for i in order:
@@ -185,15 +200,19 @@ def _median_time(fn, reps) -> float:
 def latency(street: str, screener, data_root: Path, reps: int) -> dict:
     from backend.v2 import compute
     net = compute.network(street)
-    test = dataset.load_split(street, "test", data_root)
+    test = dataset.load_split(street, "test_fresh", data_root)
     out = {}
     for mode in ("fixed_pf", "volt_var"):
-        rows = np.flatnonzero(~test.boundary & (test.states.mode == schema.MODES.index(mode)) & (test.states.battery_kw == 0))
+        rows = np.flatnonzero(~test.boundary & (test.states.mode == schema.MODES.index(mode)) & (test.states.battery_kw == 0)
+                              & (test.states.pv_kwp > 0).all(axis=1))
+        sm = screener.models[street]
+        ends = schema.line_ends(net)
+        rows = np.array([i for i in rows[:4 * max(BATCHES)]
+                         if not sm.check(to_operating_states(street, test.states.take([i]), ends)[0])[0]])
         res = {}
         for b in BATCHES:
             pick = test.states.take(rows[:b])
             states = to_operating_states(street, pick, schema.line_ends(net))
-            sm = screener.models[street]
             x = np.stack([sm.check(s)[1] for s in states])
             n_rep = reps if b <= 128 else max(2, reps // 4)
             t_screen = _median_time(lambda: screener.screen(states), n_rep)
@@ -223,6 +242,9 @@ def e1_job(street: str, date: str, window: str, rule_id: str, models_root: str) 
     from engine.rules import get_rule
     net, r = compute.network(street), get_rule(rule_id)
     screener = load_screener(Path(models_root))
+    t0 = time.perf_counter()
+    screener.models[street].street_ok()            # one-time check that the street is the trained one (builds it)
+    t_once = time.perf_counter() - t0
     node = schema.battery_node(street)
     scn = compute.scenarios(date, net, n=E1_SCENARIOS, seed=E1_SEED)
     steps = slice(E1_WINDOWS[window], E1_WINDOWS[window] + E1_STEPS)
@@ -291,7 +313,7 @@ def e1_job(street: str, date: str, window: str, rule_id: str, models_root: str) 
             "same_choice_as_solve_all": choice_a == choice_c, "cost_gap": None if choice_a is None or choice_c is None else
             round(cost(choice_c) - cost(choice_a), 2),
             "seconds": {"solve_all": round(t_a, 3), "solver_in_cost_order": round(t_b, 3), "screen_then_verify": round(t_c, 3),
-                        "of_which_screening": round(t_screen, 3)},
+                        "of_which_screening": round(t_screen, 3), "one_time_street_check_not_counted": round(t_once, 3)},
             "solver_states": {"solve_all": len(acts) * m, "solver_in_cost_order": solved_b, "screen_then_verify": solved_c},
             "overrules": overrules}
 
@@ -306,6 +328,7 @@ def e2_job(street: str, date: str, rule_id: str, models_root: str) -> dict:
     net, r = compute.network(street), get_rule(rule_id)
     rs = compute.robust_set(compute.scenarios(date, net))
     screener = load_screener(Path(models_root))
+    screener.models[street].street_ok()            # one-time street check, outside the timed runs
     plain = fixes.assisted_tournament(net, rs, r, None, street=street)
     assisted = fixes.assisted_tournament(net, rs, r, screener, street=street)
     truth = {c["id"]: c["verified"] for c in plain["candidates"]}
@@ -346,7 +369,7 @@ def _summary_e2(rows: list) -> dict:
 
 
 def write_sample(street: str, data_root: Path, n: int = 200) -> None:
-    test = dataset.load_split(street, "test", data_root)
+    test = dataset.load_split(street, "test_fresh", data_root)
     idx = np.random.default_rng(0).choice(len(test), size=n, replace=False)
     part = test.take(np.sort(idx))
     np.savez_compressed(dataset.street_dir(street, data_root) / "sample.npz", family=part.family, boundary=part.boundary,
@@ -395,7 +418,10 @@ def main(argv=None) -> None:
         rec["guard"] = {"at_limits": calibrate.limit_margins(manifest["guard"]), "round": manifest.get("guard_round", 1)}
         if "heldout" not in args.skip:
             print(f"{street}: held-out scoring", flush=True)
-            rec["heldout"], ex = score_heldout(street, models_root, data_root, selected, manifest.get("guard_round", 1))
+            rec["heldout"], _ = score_heldout(street, models_root, data_root, selected, manifest.get("guard_round", 1),
+                                              split="test", layouts=False)
+            rec["heldout_fresh"], ex = score_heldout(street, models_root, data_root, selected, manifest.get("guard_round", 1),
+                                                     split="test_fresh", layouts=True)
             examples = [e for e in examples if not (e["street"] == street and e["source"] == "held-out test split")] + ex
             write_sample(street, data_root)
         if "ood" not in args.skip:

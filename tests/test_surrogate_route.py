@@ -38,6 +38,8 @@ def _write_reports(tmp_path, *, e2=True):
         "heldout": {"states": {"all": 100, "base": 80, "boundary": 20, "held_out_tap_mode": 10}, "shipped_round": 2,
                     "rounds": {"1": {"mlp": _cand()}, "2": {"ridge": _cand(), "lgbm": _cand(), "mlp": _cand()}},
                     "candidates": {"ridge": _cand(), "lgbm": _cand(), "mlp": _cand()}},
+        "heldout_fresh": {"states": {"all": 50, "base": 40, "boundary": 10}, "supported": {"all": 30},
+                          "candidates": {"ridge": _cand(), "lgbm": _cand(), "mlp": _cand()}},
         "out_of_range": {"tap_negative": {"states": 250, "unsupported": 250, "risky": 250, "reasons": {"tap -1": 125}}},
         "latency": {"fixed_pf": {"1": {"screen_ms_per_state": 0.5, "solver_ms_per_state": 2.4, "states": 1}}},
         "e1_controller_style": {"summary": {"runs": 4, "speedup_vs_solve_all": 3.0, "speedup_vs_cost_order": 1.2,
@@ -77,9 +79,10 @@ def test_summary_has_every_section_and_says_the_screener_is_off_without_an_artif
     assert st["out_of_range"] == [{"kind": "tap_negative", "states": 250, "unsupported": 250}]
     assert st["latency"][0]["solver_ms_per_state"] == 2.4
     assert st["e1"]["speedup_vs_solve_all"] == 3.0 and st["e2"]["skipped_candidates"] == 3
-    assert st["states"]["train"] == 10 and st["states"]["boundary_test"] == 20
-    assert st["guard_v"] == [1.4, 1.1] and st["guard_loading_pts"] == [1.5, 1.2] and st["shipped_round"] == 2
-    assert {(r["round"], r["rule"]) for r in st["rounds"]} == {(1, "up_2005"), (1, "pm10"), (2, "up_2005"), (2, "pm10")}
+    assert st["states"]["train"] == 10 and st["states"]["boundary_test"] == 10
+    assert st["guard_v"] == [1.4, 1.1] and st["guard_loading_pts"] == [1.5, 1.2] and st["shipped_round"] == 3
+    assert {(r["round"], r["rule"]) for r in st["rounds"]} == {(n, r) for n in (1, 2, 3) for r in ("up_2005", "pm10")}
+    assert st["states"]["test"] == 50 and st["states"]["test_supported"] == 30          # the fresh set is the final word
     assert len(body["disagreements"]["examples"]) <= 12 and body["disagreements"]["counts"][0]["rows"] == 30
     assert "simulated" in body["provenance"]
 

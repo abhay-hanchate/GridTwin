@@ -24,6 +24,7 @@ SPLITS = ("train", "tune", "calibrate", "test")
 DEV_MONTHS, DEV_DAYS = (1, 2, 4, 5, 7, 8, 10, 11), (5, 15, 25)
 TUNE_MONTHS, CALIBRATE_MONTHS = (1, 4, 7, 10), (2, 5, 8, 11)
 TEST_MONTHS, TEST_DAYS = (3, 6, 9, 12), (10, 20)
+FRESH_TEST_DAYS = (3, 27)                   # round 3 (docs/DECISIONS.md): a test set generated after round 2 was scored
 YEAR = 2025
 ADOPTION_DEV, ADOPTION_TEST = (0.25, 0.5, 1.0), (0.75, 1.0)
 TAPS = (0, 1, 2)
@@ -87,6 +88,23 @@ def families(street: str) -> list[Family]:
                     out.append(Family(f"{street}_{date}_{j}", street, _split_of(month, day), date,
                                       adoption[k % len(adoption)], tap, mode, _seed(street, date, j)))
                     k += 1
+    return out
+
+
+def fresh_test_families(street: str) -> list[Family]:
+    """Round 3's fresh test families: the test months on days never used before, dealt like the original test set."""
+    combos = [(t, m) for t in TAPS for m in schema.MODES]
+    rng = np.random.default_rng(_seed(street, "test_fresh"))
+    combos = [combos[i] for i in rng.permutation(len(combos))]
+    out, k = [], 0
+    for month in TEST_MONTHS:
+        for day in FRESH_TEST_DAYS:
+            date = f"{YEAR}-{month:02d}-{day:02d}"
+            for j in range(FAMILIES_PER_DATE):
+                tap, mode = combos[k % len(combos)]
+                out.append(Family(f"{street}_{date}_{j}", street, "test_fresh", date, ADOPTION_TEST[k % len(ADOPTION_TEST)],
+                                  tap, mode, _seed(street, date, j)))
+                k += 1
     return out
 
 

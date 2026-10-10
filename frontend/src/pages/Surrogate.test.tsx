@@ -9,10 +9,11 @@ import Surrogate, { type SurrogatePayload, type SurrogateStreet } from './Surrog
 // Test input in the GET /surrogate shape, not a result.
 const scr = (fs: number, unsafe: number, fr: number, safe: number) => ({ unsafe_as_safe: fs, truly_unsafe: unsafe, false_rejections: fr, truly_safe: safe })
 const street = (id: string, selected: string, e2 = true): SurrogateStreet => ({
-  id, selected, selection_reason: 'lowest', states: { train: 44958, test: 22447, boundary_test: 4015, out_of_range: 2000 },
-  guard_v: [0.87, 0.65], guard_loading_pts: [1.25, 0.75], shipped_round: 2,
+  id, selected, selection_reason: 'lowest', states: { train: 44958, test: 22447, boundary_test: 4015, out_of_range: 2000, test_supported: 11201 },
+  guard_v: [0.87, 0.65], guard_loading_pts: [1.25, 0.75], shipped_round: 3,
   rounds: [{ round: 1, rule: 'pm10', unsafe_as_safe: 0, truly_unsafe: 1500, false_rejections: 9100, truly_safe: 14900 },
-    { round: 2, rule: 'pm10', unsafe_as_safe: 2, truly_unsafe: 1500, false_rejections: 840, truly_safe: 14900 }],
+    { round: 2, rule: 'pm10', unsafe_as_safe: 2, truly_unsafe: 1500, false_rejections: 840, truly_safe: 14900 },
+    { round: 3, rule: 'pm10', unsafe_as_safe: 1, truly_unsafe: 1400, false_rejections: 6200, truly_safe: 15100 }],
   support: { taps: [0, 1, 2], modes: ['fixed_pf', 'volt_var'], battery_node: 65, battery_kw: [-99.9, 99.8], upstream_pu: [0.85, 1.2] },
   candidates: [
     { kind: 'ridge', selected: selected === 'ridge', node_level: true, voltage_mae_v: 0.71, voltage_p99_v: 3.4, loading_mae_pts: 0.52,
@@ -94,10 +95,12 @@ describe('Surrogate', () => {
   it('compares one margin for every state with margins by predicted value, and marks the one in use', async () => {
     serve({ '/surrogate': PAYLOAD })
     await show()
-    const rounds = screen.getByRole('table', { name: /margin by predicted value/i })
-    expect(rounds.querySelectorAll('tbody tr').length).toBe(2)
-    expect(rounds.querySelector('tr[data-in-use="true"]')?.textContent).toContain('840 of 14900')
-    expect(rounds.querySelector('tr[data-in-use="false"]')?.textContent).toContain('9100 of 14900')
+    const rounds = screen.getByRole('table', { name: /round by round/i })
+    expect(rounds.querySelectorAll('tbody tr').length).toBe(3)
+    expect(rounds.querySelectorAll('tr[data-in-use="true"]').length).toBe(1)
+    expect(rounds.querySelector('tr[data-in-use="true"]')?.textContent).toContain('6200 of 15100')
+    expect(rounds.textContent).toContain('fresh test set')
+    expect(screen.getByRole('region', { name: /chosen model/i }).textContent).toContain('11201')
   })
 
   it('a missing evaluation is an error, not an empty page', async () => {

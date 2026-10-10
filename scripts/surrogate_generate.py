@@ -54,6 +54,7 @@ def main(argv=None) -> None:
     p.add_argument("--street", action="append", choices=STREETS)
     p.add_argument("--workers", type=int, default=6)
     p.add_argument("--pilot", action="store_true")
+    p.add_argument("--fresh-test", action="store_true", help="round 3: add the fresh test families to an existing street")
     p.add_argument("--root", default=str(dataset.DATA_DIR))
     args = p.parse_args(argv)
     from pathlib import Path
@@ -66,6 +67,10 @@ def main(argv=None) -> None:
         "held_out_tap_mode": sorted(generate.HELD_OUT), "families_per_date": generate.FAMILIES_PER_DATE,
         "scenarios_per_family": n_scn, "boundary_share": generate.BOUNDARY_SHARE, "ood_kinds": generate.OOD_KINDS,
         "rule": "split by family (date, adoption, tap, mode), never by row or seed"}, "streets": {}}
+    if args.fresh_test:
+        for street in args.street or STREETS:
+            _fresh(street, root, args.workers)
+        return
     for street in args.street or STREETS:
         fams = generate.families(street)
         if args.pilot:
@@ -96,6 +101,27 @@ def main(argv=None) -> None:
         print(f"{street}: done in {time.perf_counter() - t0:.0f} s", flush=True)
         del test
     (root / ("splits_pilot.json" if args.pilot else "splits.json")).write_text(json.dumps(splits_doc, indent=1), encoding="utf-8")
+
+
+def _fresh(street: str, root, workers: int) -> None:
+    fams = generate.fresh_test_families(street)
+    t0 = time.perf_counter()
+    with ProcessPoolExecutor(max_workers=workers) as pool:
+        rows = [j.result() for j in [pool.submit(_run, asdict(f), generate.N_SCENARIOS, generate.BOUNDARY_SHARE, str(root)) for f in fams]]
+    path = dataset.street_dir(street, root) / "manifest.json"
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    manifest["families"] = [f for f in manifest["families"] if f["split"] != "test_fresh"] + rows
+    manifest["totals"]["test_fresh"] = {k: sum(r[k] for r in rows) for k in ("states", "boundary_states", "solver_failures")}
+    manifest["fresh_test"] = {"created_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                              "days": generate.FRESH_TEST_DAYS, "seconds": round(time.perf_counter() - t0, 1),
+                              "why": "round 3 in docs/DECISIONS.md: the original test split had been looked at"}
+    path.write_text(json.dumps(manifest, indent=1), encoding="utf-8")
+    splits = root / "splits.json"
+    doc = json.loads(splits.read_text(encoding="utf-8"))
+    doc["streets"][street]["test_fresh"] = [r["id"] for r in rows]
+    doc["definition"]["fresh_test_days"] = generate.FRESH_TEST_DAYS
+    splits.write_text(json.dumps(doc, indent=1), encoding="utf-8")
+    print(f"{street}: fresh test set, {len(rows)} families in {time.perf_counter() - t0:.0f} s", flush=True)
 
 
 def _write_manifest(root, street, rows, net, n_scn, seconds, pilot) -> None:

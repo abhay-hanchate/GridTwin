@@ -18,7 +18,7 @@ type E1 = { runs: number; speedup_vs_solve_all: number; speedup_vs_cost_order: n
 type E2 = { runs: number; speedup: number; skipped_candidates: number; candidates: number; false_rejections: number; same_best: number }
 export type SurrogateStreet = {
   id: string; selected: string; selection_reason: string | null
-  states: { train: number | null; test: number | null; boundary_test: number | null; out_of_range: number | null }
+  states: { train: number | null; test: number | null; boundary_test: number | null; out_of_range: number | null; test_supported?: number | null }
   guard_v: (number | null)[]; guard_loading_pts: (number | null)[]; shipped_round: number
   rounds: { round: number; rule: string; unsafe_as_safe: number; truly_unsafe: number; false_rejections: number; truly_safe: number }[]
   support: { taps: number[]; modes: string[]; battery_node: number; battery_kw: number[]; upstream_pu: number[] } | null
@@ -108,6 +108,9 @@ function StreetView({ s }: { s: SurrogateStreet }) {
         <div className="stat"><p>{t('surrogate.chosen')}</p><span className="value text">{kind(s.selected)}</span><p>{t('surrogate.chosen_why')}</p></div>
         <div className="stat"><p>{t('surrogate.states_train')}</p><span className="value">{num(s.states.train, 0)}</span></div>
         <div className="stat"><p>{t('surrogate.states_test')}</p><span className="value">{num(s.states.test, 0)}</span></div>
+        {s.states.test_supported !== undefined && (
+          <div className="stat"><p>{t('surrogate.states_supported')}</p><span className="value">{num(s.states.test_supported ?? null, 0)}</span></div>
+        )}
         <div className="stat"><p>{t('surrogate.states_boundary')}</p><span className="value">{num(s.states.boundary_test, 0)}</span></div>
         <div className="stat"><p>{t('surrogate.states_ood')}</p><span className="value">{num(s.states.out_of_range, 0)}</span></div>
         <div className="stat"><p>{t('surrogate.guard')}</p>
@@ -177,7 +180,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
               <tbody>
                 {s.rounds.map((r) => (
                   <tr key={`${r.round}-${r.rule}`} data-in-use={r.round === s.shipped_round}>
-                    <th scope="row">{t(`surrogate.round.${r.round === 1 ? 'one' : 'two'}` as StringKey)}
+                    <th scope="row">{t(`surrogate.round.${['one', 'two', 'three'][r.round - 1]}` as StringKey)}
                       {r.round === s.shipped_round && <span className="badge">{t('surrogate.in_use')}</span>}</th>
                     <td>{ruleLabel(r.rule)}</td>
                     <td>{t('surrogate.of', { n: r.unsafe_as_safe, total: r.truly_unsafe })}</td>

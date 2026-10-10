@@ -111,7 +111,7 @@ def test_the_rule_decides_what_risky_means(built):
 @pytest.mark.parametrize("change, reason", [
     ("street", "no surrogate"), ("layout", "layout"), ("phases", "phase map"), ("ambient", "ambient"),
     ("mode", "inverter mode"), ("battery_node", "battery"), ("tap", "tap"), ("load", "outside the trained range"),
-    ("pv_over_kwp", "installed"), ("shape", "homes"), ("nan", "finite")])
+    ("pv_over_kwp", "installed"), ("shape", "homes"), ("nan", "finite"), ("layout_solar", "solar layout")])
 def test_anything_outside_the_support_goes_to_the_solver(built, change, reason):
     root, net, tr = built
     screener = load_screener(root)
@@ -129,6 +129,7 @@ def test_anything_outside_the_support_goes_to_the_solver(built, change, reason):
         "pv_over_kwp": dict(pv_kw=s.pv_kwp + 1.0),
         "shape": dict(load_kw=s.load_kw[:-1]),
         "nan": dict(upstream_pu=float("nan")),
+        "layout_solar": dict(pv_kwp=np.where(np.arange(net.n_homes) % 2 == 0, s.pv_kwp, 0.0), pv_kw=np.zeros(net.n_homes)),
     }[change]
     out = screener.screen([replace(s, **changed)])[0]
     assert out.status == "unsupported" and reason in out.reason and out.risky
@@ -162,3 +163,10 @@ def test_default_solar_sizes_are_the_street_as_built(built):
     a = screener.screen([_state(net, tr, i)])[0]
     b = screener.screen([_state(net, tr, i, pv_kwp=None)])[0]
     assert a.status == b.status == "supported" and a.v_max_pu == pytest.approx(b.v_max_pu)
+
+
+def test_the_per_feature_box_alone_can_be_asked_for(built):
+    root, net, tr = built
+    sm = load_screener(root).models[STREET]
+    s = _state(net, tr, 0, pv_kwp=np.where(np.arange(net.n_homes) % 2 == 0, tr.states.pv_kwp[0], 0.0), pv_kw=np.zeros(net.n_homes))
+    assert "solar layout" in sm.check(s)[0] and "solar layout" not in sm.check(s, layouts=False)[0]

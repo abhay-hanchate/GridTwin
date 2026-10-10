@@ -636,7 +636,7 @@
   "surrogate.passed": "Met",
   "surrogate.failed": "Not met",
   "surrogate.q_misses": "Does it let unsafe states through?",
-  "surrogate.q_misses_intro": "The screen adds a safety margin before it calls a state safe. These counts compare its call with the solver's on held-out states.",
+  "surrogate.q_misses_intro": "The screen adds a safety margin before it calls a state safe, and a state it does not accept counts as risky. These counts compare its call with the solver's on the fresh test set.",
   "surrogate.col_rule": "Voltage rule",
   "surrogate.col_split": "Test set",
   "surrogate.col_missed": "Unsafe called safe",
@@ -693,10 +693,12 @@
   "surrogate.not_built.physics": "Physics-informed refinement: it adds time to get close to what the solver gives directly.",
   "surrogate.not_built.gpu": "Graphics-card inference: the models run on the processor; a graphics card was not needed.",
   "surrogate.provenance": "From the evaluation run of {at}. The method was fixed in advance in the decisions record.",
-  "surrogate.rounds_title": "One margin for every state, or a margin by predicted value",
-  "surrogate.rounds_intro": "The first round used one margin, set by the largest errors far from any limit. The second round, written down before the test was scored, sizes the margin by the predicted value. Unseen months and solar levels.",
+  "surrogate.rounds_title": "How the screen changed, round by round",
+  "surrogate.rounds_intro": "Each change was written down before it was scored. The first test set showed that a new pattern of which homes have panels misled the model, so the third round sends such layouts to the solver and is scored on a fresh test set. Unseen months; a state the screen does not accept counts as risky.",
   "surrogate.col_round": "Margin",
-  "surrogate.round.one": "One margin for every state",
-  "surrogate.round.two": "Margin by predicted value",
-  "surrogate.in_use": "in use"
+  "surrogate.round.one": "One margin for every state (first test set)",
+  "surrogate.round.two": "Margin by predicted value (first test set)",
+  "surrogate.in_use": "in use",
+  "surrogate.round.three": "Margin by predicted value, trained solar layouts only (fresh test set)",
+  "surrogate.states_supported": "Test states the screen accepts"
 }

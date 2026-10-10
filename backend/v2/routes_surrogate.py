@@ -55,44 +55,55 @@ def _candidate(kind: str, res: dict, selected: str) -> dict:
             "gates_passed": sum(bool(g["passed"]) for g in gates.values()), "gates_total": len(gates)}
 
 
+KEEP = ("unsafe_as_safe", "truly_unsafe", "false_rejections", "truly_safe", "false_rejection_rate", "recall", "precision")
+
+
 def _screening(res: dict) -> list[dict]:
+    """Per rule and test set: the screen as deployed (an unsupported state is risky and goes to the solver), and the
+    bare prediction without the margin."""
     rows = []
     for split in SPLITS:
         for rule in RULES:
             part = res.get(split, {}).get("rules", {}).get(rule)
             if part:
-                keep = ("unsafe_as_safe", "truly_unsafe", "false_rejections", "truly_safe", "false_rejection_rate", "recall", "precision")
-                rows.append({"rule": rule, "split": split, "guarded": {k: part["guarded"].get(k) for k in keep},
-                             "point": {k: part["point"].get(k) for k in keep}})
+                used = part.get("deployed") or part["guarded"]
+                rows.append({"rule": rule, "split": split, "guarded": {k: used.get(k) for k in KEEP},
+                             "point": {k: part["point"].get(k) for k in KEEP}})
     return rows
 
 
-def _rounds(held: dict, selected: str) -> list[dict]:
-    """The chosen model with one margin for every state (round 1) and with margins by predicted value (round 2)."""
+def _rounds(ev: dict, selected: str) -> list[dict]:
+    """The chosen model as deployed, round by round: one margin for every state (1) and margins by predicted value (2) on
+    the first test set, then trained solar layouts only (3) on the fresh test set (docs/DECISIONS.md, Addition 2)."""
+    sets = [(int(r), c) for r, c in sorted(ev.get("heldout", {}).get("rounds", {}).items())]
+    fresh = ev.get("heldout_fresh", {}).get("candidates")
+    if fresh:
+        sets.append((3, fresh))
     rows = []
-    for rnd, cands in sorted(held.get("rounds", {}).items()):
+    for rnd, cands in sets:
         for rule in RULES:
-            g = cands.get(selected, {}).get("base", {}).get("rules", {}).get(rule, {}).get("guarded")
+            part = cands.get(selected, {}).get("base", {}).get("rules", {}).get(rule, {})
+            g = part.get("deployed") or part.get("guarded")
             if g:
-                rows.append({"round": int(rnd), "rule": rule, "unsafe_as_safe": g["unsafe_as_safe"], "truly_unsafe": g["truly_unsafe"],
-                             "false_rejections": g["false_rejections"], "truly_safe": g["truly_safe"]})
+                rows.append({"round": rnd, "rule": rule, **{k: g[k] for k in ("unsafe_as_safe", "truly_unsafe", "false_rejections", "truly_safe")}})
     return rows
 
 
 def _street(sid: str, ev: dict, bake: dict) -> dict:
     selected = ev.get("selected") or bake.get("selected")
-    held = ev.get("heldout", {})
+    held = ev.get("heldout_fresh") or ev.get("heldout", {})        # the final word is the fresh test set when it exists
     cands = held.get("candidates", {})
     states = {s: bake.get("states", {}).get(s, {}).get("total") for s in ("train", "tune", "calibrate")}
     states.update(test=held.get("states", {}).get("all"), boundary_test=held.get("states", {}).get("boundary"),
+                  test_supported=held.get("supported", {}).get("all"),
                   out_of_range=sum(v["states"] for v in ev.get("out_of_range", {}).values()) or None)
     at = ev.get("guard", {}).get("at_limits", {})
     return {
         "id": sid, "selected": selected, "selection_reason": bake.get("reason"), "selected_at": bake.get("selected_at_utc"),
-        "states": states, "support": ev.get("support"), "shipped_round": held.get("shipped_round", 1),
+        "states": states, "support": ev.get("support"), "shipped_round": 3 if "heldout_fresh" in ev else held.get("shipped_round", 1),
         "guard_v": [at.get("up_2005", {}).get("v_max_v"), at.get("up_2005", {}).get("v_min_v")],
         "guard_loading_pts": [at.get("line_pts"), at.get("trafo_pts")],
-        "rounds": _rounds(held, selected),
+        "rounds": _rounds(ev, selected),
         "candidates": [_candidate(k, cands[k], selected) for k in ("ridge", "lgbm", "mlp") if k in cands],
         "gates": [{"name": k, **v} for k, v in cands.get(selected, {}).get("gates_on_base", {}).items()],
         "screening": _screening(cands.get(selected, {})),
