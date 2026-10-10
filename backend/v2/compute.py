@@ -461,7 +461,9 @@ def street_payload(date: str, network_id: str, rule_id: str, fix: str = "none", 
            "limits_v": {"min": r.vmin_v, "max": r.vmax_v}, "layout": layout(net),
            "homes": [{"node": int(nd), "kwp": round(float(k), 2)} for nd, k in zip(net.house_node, net.house_kwp)],
            "trafo_kva": round(net.trafo.sn_va / 1000, 1), "before": _street_run(base, design, r),
-           "flow_method": "estimated from each home's net power (demand minus delivered solar); losses ignored",
+           "flow_method": "estimated from each home's net power (demand minus delivered solar); leaves out wire and "
+                          "transformer losses, battery charging and discharging, Volt/Watt's extra reduction and "
+                          "reactive power",
            "provenance": provenance(date)}
     if fix != "none":
         c = _candidate(fix, net, scn, r)
