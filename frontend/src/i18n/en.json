@@ -676,7 +676,7 @@
   "surrogate.not_run": "Not run yet.",
   "surrogate.q_disagree": "When the screen and the solver disagree",
   "surrogate.q_disagree_intro": "Every disagreement is logged with the solver's answer. The solver's verdict always stands.",
-  "surrogate.dis_count": "{rows} cases: {type}, {source}",
+  "surrogate.dis_count": "{rows} logged examples: {type}, {source}",
   "surrogate.dis.source.heldout": "held-out test state",
   "surrogate.dis.source.e1": "battery and curtailment search",
   "surrogate.dis.source.e2": "fix tournament",

@@ -525,3 +525,22 @@ telling the districts apart; Bareilly alone, a single district with every season
   from the new dates. The end-to-end runs use the 27th of each test month.
 - **Reporting:** rounds 1-2 on the original test split with the per-feature box (as pre-registered); round 3 on the
   fresh split with the shipped support. A missed target or a slower pipeline is reported as such.
+
+### Addition 2, result (run 10 Oct 2026, `python -m scripts.surrogate_evaluate`)
+
+- **Selected (tune, both streets):** the MLP in rounds 1 and 2. Round 2 shipped by its rule on both streets; on the weak
+  feeder it did not lower tune false rejections (21% vs 20%).
+- **First test set (rounds 1-2, per-feature box):** the shipped round 2 MLP called unsafe states safe on the weak
+  feeder (585 of 7,152 under +-6%, 437 of 3,109 under +-10%) and 38 of 9,462 on the benchmark (+-6%). It failed, almost
+  entirely on the unseen 75% solar layout.
+- **Fresh test set (round 3, shipped support):** 0 unsafe states called safe on either street under either rule,
+  including near-limit states and the benchmark's unseen tap/mode combinations (none of the weak feeder's were
+  accepted). The screen accepted about half the test states. On those, all four accuracy targets were met (MAE
+  0.31/0.17 V, 99th percentile 1.89/1.00 V); over all states, 1 of 4. Out-of-range sets were refused in full except
+  demand x4 (169 and 164 of 250).
+- **Speed:** about 10x the solver per state at fixed power factor and about 180-240x under Volt/VAR (batch 1,024).
+  - Controller-style search: 0.9x the solver in cost order, because no action was safe in 30 of 32 runs. There was one
+    false rejection of the cheapest safe action, and zero unsafe actions passed.
+  - Fix tournament: 1.02-1.04x, with no false rejections and the same best fix in all 16 runs.
+- **Added during the run (a safety correction, not a tuning):** when nothing solved is safe, the candidates the screen
+  skipped are solved too, so a "no safe action" verdict never rests on the screen.

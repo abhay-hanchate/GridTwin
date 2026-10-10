@@ -180,6 +180,27 @@ python -m scripts.demo_script        # docs/DEMO_SCRIPT.md from the saved result
 
 For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn backend.main:app --reload`.
 
+## Fast power-flow screen (Addition 2)
+
+A small neural network trained on solver-labelled, **simulated** states predicts each street's highest and lowest
+voltage and worst loadings about 10 times faster than the solver per state, and about 200 times faster under Volt/VAR.
+It adds a calibrated margin. It only sorts candidates: anything called safe is still solved, a "no safe action" verdict
+never rests on it, and anything it was not trained on goes straight to the solver. That includes another street,
+switching, moved phases, an untrained solar layout, a battery elsewhere and out-of-range inputs.
+
+- **Results on a fresh test set (unseen months):** zero unsafe states called safe on either street. It accepts about
+  half the test states and sends many safe ones to the solver anyway.
+- **Accuracy:** on the states it accepts it meets all four targets (0.17–0.31 V average voltage error); over every
+  test state it meets 1 of 4.
+- **What failed:**
+  - an earlier round, which a new solar layout misled;
+  - end-to-end speed in the controller-style search, where almost no action was safe, so everything was solved anyway;
+  - the whole-day fix tournament gained only 2–4%.
+
+How it was built and scored: [model card](ml/models/surrogate/README.md), pre-registration in
+[DECISIONS](docs/DECISIONS.md) ("Addition 2"), contract for the controller in `ml/surrogate/api.py`, and the
+dashboard's **Fast screen** page and `GET /api/v2/surrogate`.
+
 ## Limits
 
 - **No real-life check.** No public live household meters exist, so tomorrow's forecasts cannot be scored day by day;

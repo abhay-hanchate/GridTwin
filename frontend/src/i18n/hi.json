@@ -676,7 +676,7 @@
   "surrogate.not_run": "अभी नहीं चलाया गया।",
   "surrogate.q_disagree": "जब जाँच और सॉल्वर असहमत हों",
   "surrogate.q_disagree_intro": "हर असहमति सॉल्वर के जवाब के साथ दर्ज होती है। सॉल्वर का फ़ैसला ही माना जाता है।",
-  "surrogate.dis_count": "{rows} मामले: {type}, {source}",
+  "surrogate.dis_count": "{rows} दर्ज उदाहरण: {type}, {source}",
   "surrogate.dis.source.heldout": "अलग रखी परीक्षण स्थिति",
   "surrogate.dis.source.e1": "बैटरी और कटौती की खोज",
   "surrogate.dis.source.e2": "समाधान टूर्नामेंट",

@@ -466,8 +466,9 @@ def _save(report: dict, examples: list) -> None:
     by = {}
     for e in examples:
         by[(e["source"], e["type"])] = by.get((e["source"], e["type"]), 0) + 1
-    DISAGREEMENTS.write_text(json.dumps({"note": "Each row is a state or action the surrogate judged differently from the "
-                                         "solver, and what the system did. The solver's verdict always stands.",
+    DISAGREEMENTS.write_text(json.dumps({"note": "Examples of states or actions the surrogate judged differently from the "
+                                         f"solver, and what the system did (at most {MAX_EXAMPLES} per street, rule and type; "
+                                         "the full counts are in surrogate_evaluation.json). The solver's verdict always stands.",
                                          "counts": [{"source": k[0], "type": k[1], "rows": v} for k, v in sorted(by.items())],
                                          "examples": examples}, indent=1, default=_json), encoding="utf-8")
 
