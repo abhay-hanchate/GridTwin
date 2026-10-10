@@ -248,7 +248,7 @@ the dashboard's **Fast screen** page and `GET /api/v2/surrogate`.
 ## Features
 
 <!-- FEATURES:START -->
-**23 of 29 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
+**24 of 30 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
 
 | ID | Feature | Area | Owner | Status | Pull request |
 | --- | --- | --- | --- | --- | --- |
@@ -281,6 +281,7 @@ the dashboard's **Fast screen** page and `GET /api/v2/surrogate`.
 | F27 | Keep labels explainer on Overview only |  | ieafraazzz | ✅ Done | [#28](https://github.com/abhay-hanchate/GridTwin/pull/28) |
 | F28 | Fix brief 10 Oct 2026: F1-F10  results regenerated on the fixed code |  | Tabsirshaikh | ✅ Done | [#29](https://github.com/abhay-hanchate/GridTwin/pull/29) |
 | F29 | Addition 2: power-flow surrogate screen with solver verification | ML | Tabsirshaikh | 🔄 In progress |  |
+| F30 | Final-round additions 1 and 2: multi-step control and power-flow surrogate |  | Tabsirshaikh | ✅ Done | [#30](https://github.com/abhay-hanchate/GridTwin/pull/30) |
 <!-- FEATURES:END -->
 
 ## Team
