@@ -1,7 +1,8 @@
 """GET /surrogate and /surrogate/disagreements: the power-flow surrogate's evidence (Addition 2).
 
-Read from the files the evaluation wrote (ml/reports/surrogate_*.json); a request never trains, generates or solves.
-Every state behind these numbers is simulated, and every verdict in them is the solver's.
+Read from the files the evaluation wrote (ml/reports/surrogate_*.json, and the archived rounds 1-3 under
+ml/reports/surrogate_rounds1-3/); a request never trains, generates or solves. Every state behind these numbers is
+simulated, and every verdict in them is the solver's.
 """
 from __future__ import annotations
 
@@ -14,8 +15,11 @@ from backend.v2.errors import ApiError
 
 router = APIRouter()
 RULES = ("up_2005", "pm10")
-SPLITS = ("base", "boundary", "held_out_tap_mode")
+SPLITS = ("base", "boundary", "held_out_tap_mode", "switched_layout", "random_solar_layout")
+KEEP = ("unsafe_as_safe", "truly_unsafe", "miss_rate_upper95", "false_rejections", "truly_safe", "false_rejection_rate",
+        "recall", "precision")
 MAX_EXAMPLES = 12
+ARCHIVE = "surrogate_rounds1-3"
 MISSING = "the surrogate evaluation is missing; run python -m scripts.surrogate_train then python -m scripts.surrogate_evaluate"
 
 
@@ -28,6 +32,13 @@ def _read(path: Path) -> dict:
         return json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError) as exc:
         raise ApiError(503, MISSING) from exc
+
+
+def _read_optional(path: Path) -> dict:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
 
 
 def _screener_status(model_dir: Path) -> dict:
@@ -52,12 +63,8 @@ def _candidate(kind: str, res: dict, selected: str) -> dict:
     return {"kind": kind, "selected": kind == selected, "node_level": "node_voltage_v" in base,
             "voltage_mae_v": v.get("mae"), "voltage_p99_v": v.get("p99"), "loading_mae_pts": ld.get("mae"),
             "loading_p99_pts": ld.get("p99"), "boundary_voltage_p99_v": bv.get("p99"),
-            "unsafe_as_safe": {r: res.get("base", {}).get("rules", {}).get(r, {}).get("guarded", {}).get("unsafe_as_safe")
-                               for r in RULES},
+            "vuf_mae_pts": (base.get("vuf_pts") or {}).get("mae"),
             "gates_passed": sum(bool(g["passed"]) for g in gates.values()), "gates_total": len(gates)}
-
-
-KEEP = ("unsafe_as_safe", "truly_unsafe", "false_rejections", "truly_safe", "false_rejection_rate", "recall", "precision")
 
 
 def _screening(res: dict) -> list[dict]:
@@ -74,26 +81,33 @@ def _screening(res: dict) -> list[dict]:
     return rows
 
 
-def _rounds(ev: dict, selected: str) -> list[dict]:
-    """The chosen model as deployed, round by round: one margin for every state (1) and margins by predicted value (2) on
-    the first test set, then trained solar layouts only (3) on the fresh test set (docs/DECISIONS.md, Addition 2)."""
-    sets = [(int(r), c) for r, c in sorted(ev.get("heldout", {}).get("rounds", {}).items())]
-    fresh = ev.get("heldout_fresh", {}).get("candidates")
-    if fresh:
-        sets.append((3, fresh))
+def _round_rows(rnd: int, cands: dict, selected: str) -> list[dict]:
     rows = []
-    for rnd, cands in sets:
-        for rule in RULES:
-            part = cands.get(selected, {}).get("base", {}).get("rules", {}).get(rule, {})
-            g = part.get("deployed") or part.get("guarded")
-            if g:
-                rows.append({"round": rnd, "rule": rule, **{k: g[k] for k in ("unsafe_as_safe", "truly_unsafe", "false_rejections", "truly_safe")}})
+    for rule in RULES:
+        part = cands.get(selected, {}).get("base", {}).get("rules", {}).get(rule, {})
+        g = part.get("deployed") or part.get("guarded")
+        if g:
+            rows.append({"round": rnd, "rule": rule,
+                         **{k: g[k] for k in ("unsafe_as_safe", "truly_unsafe", "false_rejections", "truly_safe")}})
     return rows
 
 
-def _street(sid: str, ev: dict, bake: dict) -> dict:
+def _rounds(ev: dict, old: dict) -> list[dict]:
+    """The chosen model as deployed, round by round (docs/DECISIONS.md, Addition 2): rounds 1-2 on the first test set,
+    round 3 on the second, round 4 (shipped) on the third. Earlier rounds exist for the two original streets only."""
+    rows = []
+    if old:
+        sel = old.get("selected", "mlp")
+        for rnd, cands in sorted(old.get("heldout", {}).get("rounds", {}).items()):
+            rows += _round_rows(int(rnd), cands, sel)
+        rows += _round_rows(3, old.get("heldout_fresh", {}).get("candidates", {}), sel)
+    rows += _round_rows(4, ev.get("heldout", {}).get("candidates", {}), ev.get("selected"))
+    return rows
+
+
+def _street(sid: str, ev: dict, bake: dict, old: dict) -> dict:
     selected = ev.get("selected") or bake.get("selected")
-    held = ev.get("heldout_fresh") or ev.get("heldout", {})        # the final word is the fresh test set when it exists
+    held = ev.get("heldout", {})
     cands = held.get("candidates", {})
     states = {s: bake.get("states", {}).get(s, {}).get("total") for s in ("train", "tune", "calibrate")}
     states.update(test=held.get("states", {}).get("all"), boundary_test=held.get("states", {}).get("boundary"),
@@ -102,10 +116,10 @@ def _street(sid: str, ev: dict, bake: dict) -> dict:
     at = ev.get("guard", {}).get("at_limits", {})
     return {
         "id": sid, "selected": selected, "selection_reason": bake.get("reason"), "selected_at": bake.get("selected_at_utc"),
-        "states": states, "support": ev.get("support"), "shipped_round": 3 if "heldout_fresh" in ev else held.get("shipped_round", 1),
+        "states": states, "support": ev.get("support"), "shipped_round": 4,
         "guard_v": [at.get("up_2005", {}).get("v_max_v"), at.get("up_2005", {}).get("v_min_v")],
         "guard_loading_pts": [at.get("line_pts"), at.get("trafo_pts")],
-        "rounds": _rounds(ev, selected),
+        "rounds": _rounds(ev, old),
         "candidates": [_candidate(k, cands[k], selected) for k in ("ridge", "lgbm", "mlp") if k in cands],
         "gates": [{"name": k, **v} for k, v in (cands.get(selected, {}).get("gates_on_supported")
                                                  or cands.get(selected, {}).get("gates_on_base", {})).items()],
@@ -124,11 +138,13 @@ def surrogate(request: Request) -> dict:
     reports = _reports(request)
     ev, bake = _read(reports / "surrogate_evaluation.json"), _read(reports / "surrogate_bakeoff.json")
     dis = _read(reports / "surrogate_disagreements.json")
+    old = _read_optional(reports / ARCHIVE / "surrogate_evaluation.json").get("streets", {})
     return {
         "provenance": ev.get("provenance", "simulated"), "generated_at": ev.get("created_utc"),
-        "pre_registration": "docs/DECISIONS.md, Addition 2: power-flow surrogate",
+        "pre_registration": "docs/DECISIONS.md, Addition 2: power-flow surrogate (round 4)",
         "screener": _screener_status(Path(request.app.state.settings.model_dir)),
-        "streets": [_street(sid, s, bake.get("streets", {}).get(sid, {})) for sid, s in ev.get("streets", {}).items()],
+        "streets": [_street(sid, s, bake.get("streets", {}).get(sid, {}), old.get(sid, {}))
+                    for sid, s in ev.get("streets", {}).items()],
         "disagreements": {"note": dis.get("note"), "counts": dis.get("counts", []), "examples": dis.get("examples", [])[:MAX_EXAMPLES]},
     }
 
