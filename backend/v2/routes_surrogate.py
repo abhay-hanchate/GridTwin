@@ -76,8 +76,10 @@ def _screening(res: dict) -> list[dict]:
             part = res.get(split, {}).get("rules", {}).get(rule)
             if part:
                 used = part.get("deployed") or part["guarded"]
-                rows.append({"rule": rule, "split": split, "guarded": {k: used.get(k) for k in KEEP},
-                             "point": {k: part["point"].get(k) for k in KEEP}})
+                guarded = {k: used.get(k) for k in KEEP}
+                bound = guarded["miss_rate_upper95"]
+                guarded["miss_upper95_per_10k"] = None if bound is None else round(bound * 10_000, 2)   # as shown
+                rows.append({"rule": rule, "split": split, "guarded": guarded, "point": {k: part["point"].get(k) for k in KEEP}})
     return rows
 
 

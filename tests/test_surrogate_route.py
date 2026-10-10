@@ -83,6 +83,7 @@ def test_summary_has_every_section_and_says_the_screener_is_off_without_an_artif
     assert {(s["rule"], s["split"]) for s in st["screening"]} >= {("up_2005", "boundary"), ("pm10", "switched_layout"),
                                                                   ("pm10", "random_solar_layout")}
     assert st["screening"][0]["guarded"]["miss_rate_upper95"] == 0.26
+    assert st["screening"][0]["guarded"]["miss_upper95_per_10k"] == 2600.0      # shown on the page as-is
     assert st["out_of_range"] == [{"kind": "tap_negative", "states": 250, "unsupported": 250}]
     assert st["latency"][0]["solver_ms_per_state"] == 2.4
     assert st["e1"]["speedup_vs_solve_all"] == 3.0 and st["e2"]["skipped_candidates"] == 3

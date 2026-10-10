@@ -7,21 +7,23 @@ import Status from '../components/Status'
 import { useT, type StringKey } from '../i18n'
 
 /** GET /surrogate (backend/v2/routes_surrogate.py). Every number comes from the evaluation files. */
-type Screening = { unsafe_as_safe: number | null; truly_unsafe: number | null; false_rejections: number | null; truly_safe: number | null }
+type Screening = { unsafe_as_safe: number | null; truly_unsafe: number | null; false_rejections: number | null; truly_safe: number | null
+  miss_upper95_per_10k?: number | null }
 type Candidate = {
   kind: string; selected: boolean; node_level: boolean; voltage_mae_v: number | null; voltage_p99_v: number | null
+  vuf_mae_pts?: number | null
   loading_mae_pts: number | null; loading_p99_pts: number | null; boundary_voltage_p99_v: number | null
   gates_passed: number; gates_total: number
 }
 type E1 = { runs: number; speedup_vs_solve_all: number; speedup_vs_cost_order: number; same_choice_as_solve_all: number
-  false_rejections: number; overrules: number }
+  false_rejections: number; overrules: number; runs_with_a_safe_action?: number }
 type E2 = { runs: number; speedup: number; skipped_candidates: number; candidates: number; false_rejections: number; same_best: number }
 export type SurrogateStreet = {
   id: string; selected: string; selection_reason: string | null
   states: { train: number | null; test: number | null; boundary_test: number | null; out_of_range: number | null; test_supported?: number | null }
   guard_v: (number | null)[]; guard_loading_pts: (number | null)[]; shipped_round: number
   rounds: { round: number; rule: string; unsafe_as_safe: number; truly_unsafe: number; false_rejections: number; truly_safe: number }[]
-  support: { taps: number[]; modes: string[]; battery_node: number; battery_kw: number[]; upstream_pu: number[] } | null
+  support: { taps: number[]; modes: string[]; battery_nodes: number[]; battery_kw: number[]; upstream_pu: number[]; line_layouts?: number } | null
   candidates: Candidate[]
   gates: { name: string; value: number | null; target: number; passed: boolean }[]
   screening: { rule: string; split: string; guarded: Screening; point: Screening }[]
@@ -122,7 +124,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
         <p className="card-sub">{t('surrogate.q_accuracy_intro')}</p>
         <div className="table-scroll">
           <table className="data-table" aria-label={t('surrogate.q_accuracy')}>
-            <thead><tr>{(['col_model', 'col_v_mae', 'col_v_p99', 'col_l_mae', 'col_l_p99', 'col_boundary', 'col_gates'] as const)
+            <thead><tr>{(['col_model', 'col_v_mae', 'col_v_p99', 'col_l_mae', 'col_l_p99', 'col_boundary', 'col_vuf', 'col_gates'] as const)
               .map((k) => <th key={k} scope="col">{t(`surrogate.${k}`)}</th>)}</tr></thead>
             <tbody>
               {s.candidates.map((c) => (
@@ -130,7 +132,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
                   <th scope="row">{kind(c.kind)} {c.selected && <span className="badge">{t('surrogate.selected')}</span>}
                     {!c.node_level && <span className="muted"> · {t('surrogate.extremes_only')}</span>}</th>
                   <td>{num(c.voltage_mae_v)}</td><td>{num(c.voltage_p99_v)}</td><td>{num(c.loading_mae_pts)}</td>
-                  <td>{num(c.loading_p99_pts)}</td><td>{num(c.boundary_voltage_p99_v)}</td>
+                  <td>{num(c.loading_p99_pts)}</td><td>{num(c.boundary_voltage_p99_v)}</td><td>{num(c.vuf_mae_pts ?? null, 3)}</td>
                   <td>{t('surrogate.of', { n: c.gates_passed, total: c.gates_total })}</td>
                 </tr>
               ))}
@@ -153,7 +155,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
         <p className="card-sub">{t('surrogate.q_misses_intro')}</p>
         <div className="table-scroll">
           <table className="data-table" aria-label={t('surrogate.q_misses')}>
-            <thead><tr>{(['col_rule', 'col_split', 'col_missed', 'col_missed_point', 'col_false_rej'] as const)
+            <thead><tr>{(['col_rule', 'col_split', 'col_missed', 'col_bound', 'col_missed_point', 'col_false_rej'] as const)
               .map((k) => <th key={k} scope="col">{t(`surrogate.${k}`)}</th>)}</tr></thead>
             <tbody>
               {s.screening.map((r) => (
@@ -161,6 +163,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
                   <th scope="row">{ruleLabel(r.rule)}</th>
                   <td className="wrap">{t(`surrogate.split.${r.split}` as StringKey)}</td>
                   <td>{t('surrogate.of', { n: num(r.guarded.unsafe_as_safe, 0), total: num(r.guarded.truly_unsafe, 0) })}</td>
+                  <td>{num(r.guarded.miss_upper95_per_10k ?? null)}</td>
                   <td>{t('surrogate.of', { n: num(r.point.unsafe_as_safe, 0), total: num(r.point.truly_unsafe, 0) })}</td>
                   <td>{t('surrogate.of', { n: num(r.guarded.false_rejections, 0), total: num(r.guarded.truly_safe, 0) })}</td>
                 </tr>
@@ -180,7 +183,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
               <tbody>
                 {s.rounds.map((r) => (
                   <tr key={`${r.round}-${r.rule}`} data-in-use={r.round === s.shipped_round}>
-                    <th scope="row">{t(`surrogate.round.${['one', 'two', 'three'][r.round - 1]}` as StringKey)}
+                    <th scope="row">{t(`surrogate.round.${['one', 'two', 'three', 'four'][r.round - 1]}` as StringKey)}
                       {r.round === s.shipped_round && <span className="badge">{t('surrogate.in_use')}</span>}</th>
                     <td>{ruleLabel(r.rule)}</td>
                     <td>{t('surrogate.of', { n: r.unsafe_as_safe, total: r.truly_unsafe })}</td>
@@ -197,7 +200,8 @@ function StreetView({ s }: { s: SurrogateStreet }) {
         <h3 id="sg-limits">{t('surrogate.q_limits')}</h3>
         <p className="card-sub">{t('surrogate.q_limits_intro')}</p>
         {s.support && <p>{t('surrogate.support', { taps: s.support.taps.join(', '), modes: s.support.modes.map(mode).join(', '),
-          bmin: num(s.support.battery_kw[0], 1), bmax: num(s.support.battery_kw[1], 1), node: s.support.battery_node,
+          bmin: num(s.support.battery_kw[0], 1), bmax: num(s.support.battery_kw[1], 1), nodes: s.support.battery_nodes.join(', '),
+          layouts: s.support.line_layouts ?? '—',
           umin: num(s.support.upstream_pu[0], 3), umax: num(s.support.upstream_pu[1], 3) })}</p>}
         <div className="table-scroll">
           <table className="data-table" aria-label={t('surrogate.q_limits')}>
@@ -220,7 +224,8 @@ function StreetView({ s }: { s: SurrogateStreet }) {
         <p className="card-sub">{t('surrogate.q_speed_intro')}</p>
         <h3>{t('surrogate.e1_title')}</h3>
         <p data-section="e1">{s.e1 ? t('surrogate.e1_text', { runs: s.e1.runs, vs_all: num(s.e1.speedup_vs_solve_all), vs_order: num(s.e1.speedup_vs_cost_order),
-          same: s.e1.same_choice_as_solve_all, fr: s.e1.false_rejections, over: s.e1.overrules }) : t('surrogate.not_run')}</p>
+          same: s.e1.same_choice_as_solve_all, fr: s.e1.false_rejections, over: s.e1.overrules,
+          safe: s.e1.runs_with_a_safe_action ?? '—' }) : t('surrogate.not_run')}</p>
         <h3>{t('surrogate.e2_title')}</h3>
         <p data-section="e2">{s.e2 ? t('surrogate.e2_text', { runs: s.e2.runs, candidates: s.e2.candidates, skipped: s.e2.skipped_candidates,
           fr: s.e2.false_rejections, same: s.e2.same_best, speedup: num(s.e2.speedup) }) : t('surrogate.not_run')}</p>
