@@ -80,6 +80,8 @@ describe('Fixes, safe action found', () => {
     expect(calls(m, '/street').at(-1)).toContain(`fix=${other.id}`)
     const toggle = within(detail).getByRole('group', { name: /without or with/i })
     expect(within(toggle).getAllByRole('button').length).toBe(2)
+    expect(within(detail).getAllByRole('img', { name: /the street at/i }).length).toBe(2)
+    expect(within(detail).getByRole('img', { name: /before and after/i }).querySelector('.playhead-line')).toBeTruthy()
   })
 
   it('the phase list of the recommended fix shows each home with its from and to phase', async () => {

@@ -2,12 +2,12 @@ import type { OutcomeDetails } from '../api/v2types'
 import { useT } from '../i18n'
 import Prov from './Prov'
 
-type Props = { voltage: NonNullable<OutcomeDetails['voltage']>; label: string; vmax?: number }
+type Props = { voltage: NonNullable<OutcomeDetails['voltage']>; label: string; vmax?: number; step?: number }
 const W = 96
 const H = 100
 
 /** Highest street voltage per quarter hour before and after a fix, with the rule's upper limit. */
-export default function VoltageCompare({ voltage, label, vmax }: Props) {
+export default function VoltageCompare({ voltage, label, vmax, step }: Props) {
   const t = useT()
   // A step the power flow could not solve arrives as null: it has no point (and no part in the scale).
   const all = [...voltage.before_max_v, ...voltage.after_max_v, ...(vmax ? [vmax] : [])].filter((v): v is number => Number.isFinite(v))
@@ -23,6 +23,8 @@ export default function VoltageCompare({ voltage, label, vmax }: Props) {
         {vmax !== undefined && <line className="rule-line" x1={0} x2={W} y1={y(vmax)} y2={y(vmax)} vectorEffect="non-scaling-stroke" />}
         <polyline data-series="before" className="series-before" points={points(voltage.before_max_v)} vectorEffect="non-scaling-stroke" />
         <polyline data-series="after" className="series-after" points={points(voltage.after_max_v)} vectorEffect="non-scaling-stroke" />
+        {step !== undefined && <line className="playhead-line" x1={((step + 0.5) * W) / voltage.t.length} x2={((step + 0.5) * W) / voltage.t.length}
+          y1={0} y2={H} vectorEffect="non-scaling-stroke" />}
       </svg>
       <div className="strip-axis" aria-hidden="true">
         <span>{voltage.t[0]}</span><span>{voltage.t[48]}</span><span>{voltage.t[voltage.t.length - 1]}</span>

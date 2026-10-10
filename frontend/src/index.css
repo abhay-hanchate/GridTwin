@@ -348,11 +348,55 @@ main:focus, main:focus-visible, [role='tabpanel']:focus-visible { outline: none;
 .volt-compare .series-before { stroke: var(--act); }
 .volt-compare .series-after { stroke: var(--ok); }
 .volt-compare .rule-line { stroke: var(--ink-2); stroke-width: 1; stroke-dasharray: 4 3; }
+.volt-compare .playhead-line { stroke: var(--ink); stroke-width: 1.25; opacity: 0.75; }
 .legend-row { display: flex; gap: 16px; flex-wrap: wrap; margin: 8px 0 0; }
 .key { display: inline-block; width: 16px; height: 3px; margin-right: 6px; vertical-align: middle; border-radius: 2px; }
 .key-before { background: var(--act); }
 .key-after { background: var(--ok); }
 .key-rule { border-top: 2px dashed var(--ink-2); height: 0; }
+
+/* ---- Synchronized simulation workbenches ------------------------------------------------------------------- */
+.sim-compare-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.sim-pane { display: grid; gap: 9px; min-width: 0; }
+.sim-pane > header { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 4px; font-size: var(--fs-s); font-weight: 700; }
+.sim-pane > header strong { font-size: var(--fs-xs); }
+.sim-pane > header .act, .sim-result.act { color: var(--act-text); }
+.sim-pane > header .ok, .sim-result.ok { color: var(--ok-text); }
+.sim-before .sv-wrap { border-top: 4px solid color-mix(in srgb, var(--act) 78%, #fff); }
+.sim-after .sv-wrap { border-top: 4px solid color-mix(in srgb, var(--ok) 78%, #fff); }
+.sim-result { display: flex; justify-content: space-between; gap: 10px; padding: 9px 12px; border-radius: 10px; background: var(--surface-2); font-size: var(--fs-xs); }
+.sim-result b { font-family: var(--mono); font-size: var(--fs-s); }
+.compare-player > .card { box-shadow: none; }
+
+.forecast-sim-grid { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(330px, 0.92fr); gap: 16px; align-items: stretch; }
+.forecast-map { display: grid; align-content: start; min-width: 0; }
+.forecast-map > .sim-pane > header { display: none; }
+.street-day-charts { display: grid; grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 14px; min-width: 0; }
+.day-chart { display: grid; gap: 7px; align-content: start; min-width: 0; padding: 15px; border: 1px solid var(--line); border-radius: var(--r-m); background: var(--surface); }
+.day-chart-head { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+.day-chart-head h3 { margin: 0 0 3px !important; font-size: var(--fs-m) !important; }
+.day-chart-head p { margin: 0; color: var(--ink-3); font-size: var(--fs-xs); line-height: 1.35; }
+.day-chart-head strong { flex: none; padding: 5px 8px; border-radius: 8px; background: var(--surface-2); font: 600 var(--fs-xs) var(--mono); color: var(--ink-2); }
+.day-chart-svg { display: block; width: 100%; height: 150px; border-radius: 10px; overflow: hidden; }
+.day-chart-svg .chart-bg { fill: var(--surface-2); }
+.day-chart-svg .chart-grid { stroke: var(--line); stroke-width: 1; }
+.day-chart-svg .chart-rule { stroke: var(--act); stroke-width: 1; stroke-dasharray: 4 3; opacity: 0.65; }
+.day-chart-svg .chart-series { fill: none; stroke-width: 2.25; stroke-linejoin: round; stroke-linecap: round; }
+.day-chart-svg .tone-act { stroke: var(--act); fill: var(--act); }
+.day-chart-svg .tone-under { stroke: var(--under); fill: var(--under); }
+.day-chart-svg .tone-sun { stroke: var(--sun); fill: var(--sun); }
+.day-chart-svg .tone-grid { stroke: var(--brand); fill: var(--brand); }
+.day-chart-svg .chart-playhead { stroke: var(--ink); stroke-width: 1.4; opacity: 0.75; }
+.day-chart-svg .chart-dot { stroke: #fff; stroke-width: 1.5; }
+.day-chart-axis { display: flex; justify-content: space-between; font: 500 0.68rem var(--mono); color: var(--ink-3); }
+.day-chart-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0; color: var(--ink-2); font-size: var(--fs-xs); }
+.day-chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.day-chart-legend i { width: 15px; height: 3px; border-radius: 2px; }
+.day-chart-legend i.tone-act { background: var(--act); }
+.day-chart-legend i.tone-under { background: var(--under); }
+.day-chart-legend i.tone-sun { background: var(--sun); }
+.day-chart-legend i.tone-grid { background: var(--brand); }
+.day-chart-legend i.rule { height: 0; border-top: 2px dashed var(--act); }
 
 /* ---- Sliders ------------------------------------------------------------------------------------------------ */
 input[type='range'] { -webkit-appearance: none; appearance: none; width: 100%; height: 22px; background: transparent; }
@@ -476,9 +520,12 @@ details.more[open] summary { margin-bottom: 12px; }
 @media (max-width: 1020px) {
   .hero { grid-template-columns: 1fr; gap: 24px; }
   .journey { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  }
+  .forecast-sim-grid { grid-template-columns: 1fr; }
+  .street-day-charts { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; }
+}
 @media (max-width: 760px) {
   .split-2 { grid-template-columns: 1fr; }
+  .sim-compare-grid, .street-day-charts { grid-template-columns: 1fr; }
   .rank-item { grid-template-columns: 34px minmax(0, 1fr) auto; }
   .rank-item .bar { grid-column: 2 / -1; }
   .gauge-row { grid-template-columns: 1fr auto; }
@@ -494,6 +541,7 @@ details.more[open] summary { margin-bottom: 12px; }
   .phase-cells { grid-template-columns: 1fr; }
   .controls { padding: 14px; }
   .player-top { gap: 10px; }
+  .day-chart-head { display: grid; }
 }
 .btn-light { background: #fff; color: var(--ink); }
 .data-table td.wrap { white-space: normal; font-family: var(--text); }
