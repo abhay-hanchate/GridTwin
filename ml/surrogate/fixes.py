@@ -92,19 +92,36 @@ def assisted_tournament(network: Network, scn: DayScenarioBatch, rule: VoltageRu
             row["skipped"] = row["screen"]["clearly_unsafe_states"] > 0
         rows.append(row)
     t_solver, outcomes = 0.0, {}
-    for c, row in zip(cands, rows):
-        if row["skipped"]:
-            row.update(verified=None, unsafe_steps=None)
-            continue
+
+    def solve(c, row):
+        nonlocal t_solver
         t1 = time.perf_counter()
         o = evaluate_candidate(c, scn, rule)
         t_solver += time.perf_counter() - t1
         outcomes[c.id] = o
         row.update(verified=bool(o.acceptable), unsafe_steps=int(o.unsafe_steps))
+
+    for c, row in zip(cands, rows):
+        if row["skipped"]:
+            row.update(verified=None, unsafe_steps=None)
+        else:
+            solve(c, row)
+    # A "no safe action" verdict never rests on the screen: if nothing solved is safe, the skipped candidates are
+    # solved too (the screen may only reorder or skip work when a verified safe action exists).
+    fallback = 0
+    if not any(o.acceptable for o in outcomes.values()):
+        for c, row in zip(cands, rows):
+            if row["skipped"]:
+                solve(c, row)
+                row["skipped"], row["solved_as_fallback"] = False, True
+                fallback += 1
     safe = sorted((o for o in outcomes.values() if o.acceptable), key=lambda o: o.cost)
-    results = [{"action_id": o.candidate.id, "label": o.candidate.label, "remaining_violation_steps": o.unsafe_steps,
-                "cost": {"curtailed_kwh": o.summary["curtailed_kwh"]}, "binding_limit": o.binding_limit} for o in safe]
-    verdict = build_verdict(results, results)
+    rest = sorted((o for o in outcomes.values() if not o.acceptable), key=lambda o: (o.unsafe_steps, o.cost))
+    as_result = lambda o: {"action_id": o.candidate.id, "label": o.candidate.label,  # noqa: E731
+                           "remaining_violation_steps": o.unsafe_steps, "cost": {"curtailed_kwh": o.summary["curtailed_kwh"]},
+                           "binding_limit": o.binding_limit}
+    results = [as_result(o) for o in safe + rest]
+    verdict = build_verdict(results, results[:len(safe)])
     disagreements = [{"candidate": r["id"], "screen": "safe at every step", "solver": f"unsafe at {r['unsafe_steps']} steps",
                       "response": "the solver's verdict stands; the candidate is not recommended"}
                      for r in rows if r["screen"] and r["screen"].get("screened_safe") and r["verified"] is False]
@@ -113,4 +130,5 @@ def assisted_tournament(network: Network, scn: DayScenarioBatch, rule: VoltageRu
             "safe_action_found": verdict["safe_action_found"], "disagreements": disagreements,
             "timing": {"build_s": round(t_build, 3), "screen_s": round(t_screen, 3), "solver_s": round(t_solver, 3),
                        "total_s": round(t_build + t_screen + t_solver, 3)},
-            "solved_candidates": len(outcomes), "skipped_candidates": sum(r["skipped"] for r in rows)}
+            "solved_candidates": len(outcomes), "skipped_candidates": sum(r["skipped"] for r in rows),
+            "fallback_solved": fallback, "closest": verdict.get("closest")}

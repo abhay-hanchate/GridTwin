@@ -80,3 +80,27 @@ def test_assisted_tournament_only_skips_clearly_unsafe_and_verifies_the_rest(bui
             assert r["verified"] in (True, False)                  # the solver's verdict, not the screen's
     assert all(rows[i]["verified"] for i in out["safe_ranked"])
     assert out["timing"]["screen_s"] >= 0 and out["timing"]["solver_s"] >= 0
+
+
+def test_no_safe_action_is_never_declared_on_the_screen_alone(built, scn):  # noqa: F811
+    """Fault injection (not the trained model's behaviour): a screen that calls everything clearly unsafe. When nothing
+    verified is safe, the skipped candidates are solved too, so the verdict rests on the solver alone."""
+    root, net, _ = built
+    screener = load_screener(root)
+    real = screener.screen_detail
+
+    def everything_clearly_unsafe(states, rule="up_2005"):
+        d = real(states, rule)
+        d["clearly_unsafe"][:] = True
+        d["risky"][:] = True
+        return d
+
+    screener.screen_detail = everything_clearly_unsafe
+    strict = compute.rule("up_2005")
+    cands = catalog.build(net, scn, strict, include_battery=False, include_switching=False)[:4]
+    out = fixes.assisted_tournament(net, scn, strict, screener, candidates=cands)
+    plain = fixes.assisted_tournament(net, scn, strict, None, candidates=cands)
+    assert all(r["verified"] is not None for r in out["candidates"])          # every candidate ended up solved
+    assert out["safe_ranked"] == plain["safe_ranked"] and out["safe_action_found"] == plain["safe_action_found"]
+    if not out["safe_action_found"]:
+        assert out["fallback_solved"] == len(cands)

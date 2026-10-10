@@ -339,7 +339,8 @@ def e2_job(street: str, date: str, rule_id: str, models_root: str) -> dict:
         d.update(street=street, date=date, rule=rule_id, source="fix tournament")
     return {"street": street, "date": date, "rule": rule_id, "candidates": len(plain["candidates"]),
             "skipped": skipped, "false_rejections": [c for c in skipped if truth.get(c)],
-            "same_best": plain["best"] == assisted["best"], "best": {"solver_only": plain["best"], "assisted": assisted["best"]},
+            "same_best": plain["best"] == assisted["best"], "fallback_solved": assisted["fallback_solved"],
+            "safe_action_found": {"solver_only": plain["safe_action_found"], "assisted": assisted["safe_action_found"]}, "best": {"solver_only": plain["best"], "assisted": assisted["best"]},
             "safe_ranked": {"solver_only": plain["safe_ranked"], "assisted": assisted["safe_ranked"]},
             "timing": {"solver_only": plain["timing"], "assisted": assisted["timing"]},
             "screen_status": {c["id"]: c["screen"]["status"] + (f": {c['screen']['reason']}" if c["screen"]["reason"] else "")
@@ -367,7 +368,9 @@ def _summary_e2(rows: list) -> dict:
     return {"runs": len(rows), "total_seconds": {"solver_only": round(plain, 1), "assisted": round(assisted, 1)},
             "speedup": round(plain / assisted, 3), "skipped_candidates": sum(len(r["skipped"]) for r in rows),
             "candidates": sum(r["candidates"] for r in rows), "false_rejections": sum(len(r["false_rejections"]) for r in rows),
-            "same_best": sum(r["same_best"] for r in rows), "disagreements": sum(len(r["disagreements"]) for r in rows)}
+            "same_best": sum(r["same_best"] for r in rows), "disagreements": sum(len(r["disagreements"]) for r in rows),
+            "fallback_solved": sum(r["fallback_solved"] for r in rows),
+            "runs_with_a_safe_fix": sum(r["safe_action_found"]["solver_only"] for r in rows)}
 
 
 def write_sample(street: str, data_root: Path, n: int = 200) -> None:
