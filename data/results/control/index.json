@@ -53,11 +53,11 @@
    "worst_after_severity": 8.44
   },
   "timing": {
-   "total_s": 56.67,
-   "step_p50_s": 1.609,
-   "step_p95_s": 2.134,
-   "plan_p50_s": 1.604,
-   "baseline_s": 0.076
+   "total_s": 54.38,
+   "step_p50_s": 1.537,
+   "step_p95_s": 2.054,
+   "plan_p50_s": 1.533,
+   "baseline_s": 0.07
   }
  },
  "battery_saturation": {
@@ -91,11 +91,11 @@
    "worst_after_severity": 0.0
   },
   "timing": {
-   "total_s": 57.32,
-   "step_p50_s": 2.224,
-   "step_p95_s": 5.154,
-   "plan_p50_s": 2.22,
-   "baseline_s": 0.057
+   "total_s": 54.91,
+   "step_p50_s": 2.087,
+   "step_p95_s": 4.859,
+   "plan_p50_s": 2.083,
+   "baseline_s": 0.052
   }
  },
  "depletion_infeasible": {
@@ -152,11 +152,11 @@
    "worst_after_severity": 6.969
   },
   "timing": {
-   "total_s": 56.45,
-   "step_p50_s": 1.796,
-   "step_p95_s": 6.147,
-   "plan_p50_s": 1.606,
-   "baseline_s": 0.047
+   "total_s": 51.62,
+   "step_p50_s": 1.685,
+   "step_p95_s": 5.6,
+   "plan_p50_s": 1.469,
+   "baseline_s": 0.046
   }
  },
  "forecast_error": {
@@ -191,10 +191,10 @@
   },
   "timing": {
    "total_s": 61.6,
-   "step_p50_s": 1.516,
-   "step_p95_s": 3.997,
-   "plan_p50_s": 1.512,
-   "baseline_s": 0.07
+   "step_p50_s": 1.421,
+   "step_p95_s": 4.155,
+   "plan_p50_s": 1.417,
+   "baseline_s": 0.071
   }
  }
 }

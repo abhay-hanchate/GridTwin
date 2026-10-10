@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+- **Addition 1: control across multiple time steps.** A new `control/` package plans the community battery, solar
+  curtailment per phase group and permitted switching **16 quarter hours ahead**, executes the first step, observes
+  (simulated), corrects the forecast and plans again, every quarter hour. The planner is sequential linear
+  programming: voltages and loadings linearised with the real three-phase solver, a HiGHS MILP with a
+  charge/discharge binary and a trust region, then a replay in the solver; only steps that pass every declared check
+  at the observed state are called safe, otherwise a permitted fallback or a least-violation action labelled unsafe.
+  Every transition is logged (`data/results/control/<run>/`: SoC trace, action log, per-step verification, summary).
+  API `/control/runs`, `/control/replay`; page **Control the day**. Results against the reactive battery rule on
+  identical observations:
+
+  | Demonstration (`data/results/control/`) | Receding-horizon controller | Reactive battery rule, same observations | No control |
+  | --- | --- | --- | --- |
+  | Forecast error: an unforecast cloud (benchmark street, 09:00 to 18:00) | **0** of 36 unsafe | 10 | 13 |
+  | Battery only, like for like with the reactive rule (same day) | **9** of 36 | 10 | 13 |
+  | Battery saturation: 85% charge before the solar peak (09:00 to 15:00) | **0** of 24 | 21 | 21 |
+  | Depletion and an infeasible evening: weak street, grid sag and 50% more demand, permitted switching (16:00 to 22:00) | **6** of 24, all labelled unsafe | 8 | 8 |
+
 - **New dashboard.** A light design with new type (Bricolage Grotesque, Figtree, JetBrains Mono) and colours that
   each mean one thing: phases A, B, C and the neutral; fine, close to the limit, too high, too low; solar and the
   grid's own voltage. An overview and five numbered steps (Tomorrow, Fixes, Planning, Try a change, Proof), each

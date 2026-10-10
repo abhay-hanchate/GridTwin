@@ -16,6 +16,6 @@ Statuses: verified_safe 24. Curtailed 145.672 kWh; battery throughput 34.835 kWh
 
 No infeasible period.
 
-Timing: total 57.32 s; per step p50 2.224 s, p95 5.154 s.
+Timing: total 54.91 s; per step p50 2.087 s, p95 4.859 s.
 
 Only steps marked verified_safe passed every declared check in the real three-phase solver at the observed step. Observations are simulated; this is not a field test.

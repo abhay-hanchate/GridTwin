@@ -209,7 +209,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.72,
+    "seconds": 1.639,
     "horizon": 16,
     "switching_options": []
    },
@@ -564,7 +564,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.72,
+    "seconds": 1.647,
     "horizon": 16,
     "switching_options": []
    },
@@ -921,7 +921,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.696,
+    "seconds": 1.628,
     "horizon": 16,
     "switching_options": []
    },
@@ -1278,7 +1278,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.779,
+    "seconds": 1.698,
     "horizon": 16,
     "switching_options": []
    },
@@ -1637,7 +1637,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.768,
+    "seconds": 1.719,
     "horizon": 16,
     "switching_options": []
    },
@@ -1995,7 +1995,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.803,
+    "seconds": 1.748,
     "horizon": 16,
     "switching_options": []
    },
@@ -2353,7 +2353,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 2.116,
+    "seconds": 2.019,
     "horizon": 16,
     "switching_options": []
    },
@@ -2711,7 +2711,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 2.796,
+    "seconds": 2.763,
     "horizon": 16,
     "switching_options": []
    },
@@ -3069,7 +3069,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.695,
+    "seconds": 1.668,
     "horizon": 16,
     "switching_options": []
    },
@@ -3427,7 +3427,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 2.162,
+    "seconds": 2.132,
     "horizon": 16,
     "switching_options": []
    },
@@ -3761,7 +3761,7 @@
      11
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.602,
+    "seconds": 1.549,
     "horizon": 16,
     "switching_options": []
    },
@@ -4068,7 +4068,7 @@
      9
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.446,
+    "seconds": 1.384,
     "horizon": 16,
     "switching_options": []
    },
@@ -4316,7 +4316,7 @@
     ],
     "predicted_infeasible_steps": [],
     "curtailed_kwh": 0.0,
-    "seconds": 0.692,
+    "seconds": 0.661,
     "horizon": 16,
     "switching_options": []
    },
@@ -4574,7 +4574,7 @@
      7
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 0.71,
+    "seconds": 0.671,
     "horizon": 16,
     "switching_options": []
    },
@@ -4826,7 +4826,7 @@
     ],
     "predicted_infeasible_steps": [],
     "curtailed_kwh": 0.0,
-    "seconds": 0.677,
+    "seconds": 0.655,
     "horizon": 16,
     "switching_options": []
    },
@@ -5111,7 +5111,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.361,
+    "seconds": 1.314,
     "horizon": 16,
     "switching_options": []
    },
@@ -5423,7 +5423,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.48,
+    "seconds": 1.396,
     "horizon": 16,
     "switching_options": []
    },
@@ -5714,7 +5714,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.438,
+    "seconds": 1.335,
     "horizon": 16,
     "switching_options": []
    },
@@ -6066,7 +6066,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.606,
+    "seconds": 1.518,
     "horizon": 16,
     "switching_options": []
    },
@@ -6423,7 +6423,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.827,
+    "seconds": 1.704,
     "horizon": 16,
     "switching_options": []
    },
@@ -6781,7 +6781,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.766,
+    "seconds": 1.663,
     "horizon": 16,
     "switching_options": []
    },
@@ -7130,7 +7130,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.735,
+    "seconds": 1.66,
     "horizon": 16,
     "switching_options": []
    },
@@ -7465,7 +7465,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.789,
+    "seconds": 1.698,
     "horizon": 16,
     "switching_options": []
    },
@@ -7805,7 +7805,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.807,
+    "seconds": 1.724,
     "horizon": 16,
     "switching_options": []
    },
@@ -8154,7 +8154,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.872,
+    "seconds": 1.799,
     "horizon": 16,
     "switching_options": []
    },
@@ -8486,7 +8486,7 @@
      14
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.672,
+    "seconds": 1.572,
     "horizon": 16,
     "switching_options": []
    },
@@ -8791,7 +8791,7 @@
      13
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.525,
+    "seconds": 1.468,
     "horizon": 16,
     "switching_options": []
    },
@@ -9096,7 +9096,7 @@
      12
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.469,
+    "seconds": 1.431,
     "horizon": 16,
     "switching_options": []
    },
@@ -9396,7 +9396,7 @@
      10
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.432,
+    "seconds": 1.395,
     "horizon": 16,
     "switching_options": []
    },
@@ -9701,7 +9701,7 @@
      10
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.405,
+    "seconds": 1.355,
     "horizon": 16,
     "switching_options": []
    },
@@ -10001,7 +10001,7 @@
      8
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.325,
+    "seconds": 1.307,
     "horizon": 16,
     "switching_options": []
    },
@@ -10292,7 +10292,7 @@
      6
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.306,
+    "seconds": 1.236,
     "horizon": 16,
     "switching_options": []
    },
@@ -10576,7 +10576,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.269,
+    "seconds": 1.191,
     "horizon": 16,
     "switching_options": []
    },
@@ -10865,7 +10865,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.274,
+    "seconds": 1.225,
     "horizon": 16,
     "switching_options": []
    },
@@ -11165,7 +11165,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.297,
+    "seconds": 1.233,
     "horizon": 16,
     "switching_options": []
    },
@@ -11484,7 +11484,7 @@
      15
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.281,
+    "seconds": 1.25,
     "horizon": 16,
     "switching_options": []
    },
@@ -11909,7 +11909,7 @@
   "unsafe_steps": 10,
   "curtailed_kwh": 0.0,
   "throughput_kwh": 25.263,
-  "seconds": 0.076
+  "seconds": 0.07
  },
  "summary": {
   "steps": 36,
@@ -11961,11 +11961,11 @@
   "worst_after_severity": 8.44
  },
  "timing": {
-  "total_s": 56.67,
-  "step_p50_s": 1.609,
-  "step_p95_s": 2.134,
-  "plan_p50_s": 1.604,
-  "baseline_s": 0.076
+  "total_s": 54.38,
+  "step_p50_s": 1.537,
+  "step_p95_s": 2.054,
+  "plan_p50_s": 1.533,
+  "baseline_s": 0.07
  },
  "issued_forecast": {
   "pv_per_kwp": [
@@ -12654,5 +12654,9 @@
    "23:30",
    "23:45"
   ]
+ },
+ "limits_v": {
+  "min": 207.0,
+  "max": 253.0
  }
 }

@@ -468,3 +468,23 @@ every 16-step horizon of the day).** Mean absolute error of the horizon's later 
 0.0113 kW/kWp, demand 24.1% of the mean, grid voltage 4.63 V. Best of rho {0.3, 0.5, 0.7, 0.9} x decay {0.8, 0.9,
 0.95} by the mean of the three relative errors: **rho 0.3, decay 0.95**: solar 0.0085, demand 10.5%, grid 3.65 V
 (0.66 of the uncorrected error). These are the defaults; the fixture days were not used to choose them.
+
+**Result: Addition 1 demonstrations (run 10 Oct 2026, `python -m scripts.control_replay --near-limit`).**
+
+| Demonstration (`data/results/control/`) | Receding-horizon controller | Reactive battery rule, same observations | No control |
+| --- | --- | --- | --- |
+| Forecast error: an unforecast cloud (benchmark street, 09:00 to 18:00) | **0** of 36 unsafe | 10 | 13 |
+| Battery only, like for like with the reactive rule (same day) | **9** of 36 | 10 | 13 |
+| Battery saturation: 85% charge before the solar peak (09:00 to 15:00) | **0** of 24 | 21 | 21 |
+| Depletion and an infeasible evening: weak street, grid sag and 50% more demand, permitted switching (16:00 to 22:00) | **6** of 24, all labelled unsafe | 8 | 8 |
+
+Per quarter hour the loop took 1.4 to 2.1 s typical and up to 5.6 s (p95) on the development laptop, about 1 minute per
+demonstration; the reactive rule takes under 0.1 s for the same window. The near-limit sweep (09:15 of
+forecast_error, the executed action held) stays inside 253 V up to 5% more sun (252.6 V) and crosses it at 10% more
+(253.2 V). Battery only, the look-ahead controller beats the reactive rule by one quarter hour (9 against 10); the
+larger gains come from coordinating curtailment with the battery, so the two effects are reported separately. On the
+weak street the battery empties (10%) holding the evening voltage up, one permitted reconfiguration is used at 18:00
+when the sag starts (budget 2 operations, then refused for the rest of the day), and 6 quarter hours remain below
+207 V with no permitted action safe: they are labelled unsafe_fallback with the reason, not hidden. The existing
+battery fix in the tournament inherits the homes' 0.95 power factor; that is left unchanged here (it is in the cached
+results) and noted as a known modelling issue.

@@ -18,6 +18,6 @@ Infeasible periods (no permitted action verified safe):
 - 19:45 to 19:45 (1 steps, unsafe_fallback): planned action unsafe at the observed step: under-voltage 204.4 V < 207.0 V; search exhausted: none of 25 permitted actions was safe; least violation 1.82 V-equivalent
 - 20:15 to 21:15 (5 steps, unsafe_fallback): planned action unsafe at the observed step: under-voltage 203.3 V < 207.0 V; search exhausted: none of 25 permitted actions was safe; least violation 0.32 V-equivalent
 
-Timing: total 56.45 s; per step p50 1.796 s, p95 6.147 s.
+Timing: total 51.62 s; per step p50 1.685 s, p95 5.6 s.
 
 Only steps marked verified_safe passed every declared check in the real three-phase solver at the observed step. Observations are simulated; this is not a field test.
