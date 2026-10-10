@@ -423,3 +423,42 @@ telling the districts apart; Bareilly alone, a single district with every season
   2021, then the month's mean, then the record's mean: never missing. Readiness requires the three files.
 - **Open:** the generator still trains on Mathura only, because the benchmark street and the solar forecast are
   Mathura's. Adding Bareilly is a separate decision.
+
+## Addition 1: control across multiple time steps (pre-registered 10 Oct 2026, before any run)
+
+Starting point: `GridTwin_Final_Round_Feature_Research.md` (research blueprint, W1 to W4 and W8). Checked against the
+code before building; where the check disagreed with the blueprint, the check wins.
+
+- **Checked facts.** The battery is three pseudo-homes that inherit the homes' 0.95 power factor; at 20 kW of charge
+  that shifts voltages by 2.2 V on the benchmark street and 4.3 to 5.0 V on the weak street, so the controller gives
+  the battery explicit unity power factor (a per-home power-factor array; no engine change). A single linearisation of
+  the voltages in battery power is accurate to 0.2 to 0.3 V at +/-15 kW on the benchmark street but off by 8 to 12 V
+  at +/-30 kW on the weak street (15 May 2025, noon and 20:00, central differences, real solver as truth).
+- **Planner (changed from the blueprint):** sequential linear programming, not one linearisation. Each round
+  linearises every monitored phase voltage, line and transformer loading around the current planned trajectory by
+  finite differences with the real three-phase solver, solves a MILP with a trust region on the actuators, and
+  replays the horizon in the real solver; at most four rounds, the trust region halves when the prediction misses.
+  Decision variables per step: charge and discharge power with a charge/discharge binary (no simultaneous charging and
+  discharging) and three curtailment fractions, one per phase group. Horizon 16 quarter hours (at least 8 required),
+  the same plan across three retained forecast scenarios. Objective, in order: hard limits, then least curtailed
+  energy, then least battery throughput, then a soft end-of-horizon reserve.
+- **Optimiser:** SciPy's HiGHS MILP (matrix form fits the sensitivity matrices) unless OR-Tools is faster on the same
+  problems; both are already dependencies; the comparison is recorded below.
+- **Re-planning:** every quarter hour, receding horizon, the first action executed; the battery's energy carries over.
+  Forecasts are corrected causally with an exponentially weighted residual (solar, demand, grid voltage) whose
+  coefficients are set on a development day, not on the fixture days; solar is never corrected at night. Extra
+  trigger reasons (forecast residual, margin) are logged. Observations are **simulated** (a scenario not among the
+  retained forecast ones, plus declared perturbations) and labelled so; they are not meter data.
+- **Switching:** only an explicit allowlist of tie switches, all marked **hypothetical** (inferred from feeder-end
+  geometry, not installed equipment); each device operation counts against a daily budget with a minimum dwell; at
+  most one reconfiguration schedule per horizon is enumerated outside the MILP. The transformer tap stays fixed for
+  the day (off-load tap changer).
+- **Verification and statuses:** every executed action is solved in the real solver at the observed step and checked
+  against every declared limit (voltage band, line and transformer loading, solver convergence, voltage unbalance
+  only when declared). Statuses: verified_safe, optimiser_infeasible, search_exhausted, solver_failed,
+  unsafe_fallback, invalid_action. Fallback order: the planned action if verified safe; else the first safe action in
+  a finite permitted set checked with the solver; else the least-violation action, labelled unsafe_fallback; never
+  called safe without the solver.
+- **Comparison:** the existing reactive battery controller on the identical observations, starting energy and battery.
+- **Code location:** a new top-level `control/` package that uses `engine/` as a library, so the results cache key
+  (and the precomputed demo) is unchanged.
