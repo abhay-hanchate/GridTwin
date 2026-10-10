@@ -186,8 +186,7 @@ def run(cfg: ReplayConfig) -> Replay:
                     switch_log.append({"id": tid, "considered": False, "reason": "; ".join(errs_sw)})
                     continue
                 alt = plan(ex, fc_h, replace(state, topology_id=tid), bat, rule, pcfg)
-                better = (not alt.verified, alt.curtailed_kwh + 0.5 * operations_for(state.topology_id, tid)) < \
-                    (not best[0].verified, best[0].curtailed_kwh)
+                better = _rank(alt, 0.5 * operations_for(state.topology_id, tid)) < _rank(best[0], 0.0)
                 switch_log.append({"id": tid, "considered": True, "verified": alt.verified,
                                    "curtailed_kwh": _r(alt.curtailed_kwh, 3), "chosen": bool(better),
                                    "reason": "fewer unsafe steps or less curtailment after the operation cost"
@@ -288,6 +287,14 @@ def run(cfg: ReplayConfig) -> Replay:
               "observed_upstream_v": [_r(x * 230, 2) for x in world.observed.upstream_pu[0]],
               "t": [x.strftime("%H:%M") for x in world.all.t]}
     return Replay(cfg.to_dict(), provenance, descs, records, base, summary, timing, issued)
+
+
+def _rank(p: PlanResult, operation_cost: float) -> tuple:
+    """Compare plans: verified first, then the least total violation over the horizon (a failed solve counts as
+    worst), then curtailment plus the cost of the switching operations."""
+    sev = p.check.severity
+    total = float(np.where(np.isfinite(sev), sev, 1e6).sum())
+    return (not p.verified, round(total, 3), p.curtailed_kwh + operation_cost)
 
 
 def _periods(rows: list[dict]) -> list[dict]:

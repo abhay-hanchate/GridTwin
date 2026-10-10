@@ -152,10 +152,10 @@
    "worst_after_severity": 6.969
   },
   "timing": {
-   "total_s": 48.73,
-   "step_p50_s": 1.715,
-   "step_p95_s": 5.807,
-   "plan_p50_s": 1.574,
+   "total_s": 56.45,
+   "step_p50_s": 1.796,
+   "step_p95_s": 6.147,
+   "plan_p50_s": 1.606,
    "baseline_s": 0.047
   }
  },

@@ -199,7 +199,7 @@
      9
     ],
     "curtailed_kwh": 12.782,
-    "seconds": 1.461,
+    "seconds": 1.523,
     "horizon": 16,
     "switching_options": [
      {
@@ -519,7 +519,7 @@
      8
     ],
     "curtailed_kwh": 13.308,
-    "seconds": 1.576,
+    "seconds": 1.615,
     "horizon": 16,
     "switching_options": [
      {
@@ -748,7 +748,7 @@
      1.0,
      1.0
     ],
-    "topology_id": "tie_26_31_open_91_26",
+    "topology_id": "base",
     "source": "plan",
     "curtailed_kwh": 0.0
    },
@@ -756,13 +756,12 @@
    "reason": "planned action verified at the observed step",
    "replan_triggers": [
     "every quarter hour",
-    "grid voltage residual -3.7 V",
-    "switching considered: tie_26_31_open_91_26"
+    "grid voltage residual -3.7 V"
    ],
    "topology_before": "base",
-   "topology_after": "tie_26_31_open_91_26",
-   "operations_used": 2,
-   "operations_left": 0,
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
    "planner": {
     "status": "horizon_unsafe",
     "verified": false,
@@ -771,15 +770,12 @@
       "round": 0,
       "trust_kw": 15.0,
       "trust_keep": 0.5,
-      "rows": 4520,
-      "objective": 1225.9812,
-      "prediction_miss_v": 1.843,
-      "worst_severity": 1.491,
+      "rows": 3632,
+      "objective": 398.498,
+      "prediction_miss_v": 1.49,
+      "worst_severity": 0.707,
       "predicted_infeasible_steps": [
-       4,
-       5,
-       6,
-       7
+       5
       ],
       "safe": false
      },
@@ -787,10 +783,10 @@
       "round": 1,
       "trust_kw": 7.5,
       "trust_keep": 0.25,
-      "rows": 2232,
-      "objective": 480.1088,
-      "prediction_miss_v": 0.721,
-      "worst_severity": 0.862,
+      "rows": 2013,
+      "objective": 397.1972,
+      "prediction_miss_v": 0.07,
+      "worst_severity": 0.707,
       "predicted_infeasible_steps": [
        5
       ],
@@ -800,10 +796,10 @@
       "round": 2,
       "trust_kw": 7.5,
       "trust_keep": 0.25,
-      "rows": 2055,
-      "objective": 397.4645,
-      "prediction_miss_v": 0.115,
-      "worst_severity": 0.708,
+      "rows": 2074,
+      "objective": 396.1162,
+      "prediction_miss_v": 0.215,
+      "worst_severity": 0.707,
       "predicted_infeasible_steps": [
        5
       ],
@@ -813,10 +809,10 @@
       "round": 3,
       "trust_kw": 7.5,
       "trust_keep": 0.25,
-      "rows": 2082,
-      "objective": 396.6175,
-      "prediction_miss_v": 0.258,
-      "worst_severity": 0.708,
+      "rows": 2111,
+      "objective": 396.1147,
+      "prediction_miss_v": 0.001,
+      "worst_severity": 0.707,
       "predicted_infeasible_steps": [
        5
       ],
@@ -826,8 +822,8 @@
     "predicted_infeasible_steps": [
      5
     ],
-    "curtailed_kwh": 6.434,
-    "seconds": 1.409,
+    "curtailed_kwh": 8.43,
+    "seconds": 1.411,
     "horizon": 16,
     "switching_options": [
      {
@@ -835,8 +831,8 @@
       "considered": true,
       "verified": false,
       "curtailed_kwh": 6.434,
-      "chosen": true,
-      "reason": "fewer unsafe steps or less curtailment after the operation cost"
+      "chosen": false,
+      "reason": "no better than the current topology after the operation cost"
      },
      {
       "id": "tie_26_31_open_14_91",
@@ -870,7 +866,7 @@
    "after": {
     "safe": true,
     "v_max_v": 243.1,
-    "v_min_v": 239.27,
+    "v_min_v": 239.26,
     "line_max_pct": 16.6,
     "trafo_pct": 44.3,
     "vuf_pct": 0.25,
@@ -933,13 +929,13 @@
      "energy_kwh": 23.724
     },
     {
-     "battery_kw": 23.309,
+     "battery_kw": 23.249,
      "keep": [
-      0.609,
-      0.693,
-      0.466
+      0.599,
+      0.669,
+      0.46
      ],
-     "energy_kwh": 29.26
+     "energy_kwh": 29.245
     },
     {
      "battery_kw": 20.131,
@@ -948,34 +944,34 @@
       0.0,
       0.0
      ],
-     "energy_kwh": 34.041
+     "energy_kwh": 34.026
     },
     {
-     "battery_kw": 24.582,
+     "battery_kw": 22.505,
      "keep": [
-      0.759,
-      0.934,
-      0.933
+      0.5,
+      0.503,
+      0.5
      ],
-     "energy_kwh": 39.879
+     "energy_kwh": 39.371
     },
     {
-     "battery_kw": 22.691,
+     "battery_kw": 17.724,
+     "keep": [
+      0.507,
+      0.911,
+      0.5
+     ],
+     "energy_kwh": 43.581
+    },
+    {
+     "battery_kw": 11.019,
      "keep": [
       1.0,
       1.0,
       1.0
      ],
-     "energy_kwh": 45.268
-    },
-    {
-     "battery_kw": 8.996,
-     "keep": [
-      1.0,
-      1.0,
-      1.0
-     ],
-     "energy_kwh": 47.404
+     "energy_kwh": 46.198
     },
     {
      "battery_kw": 0.0,
@@ -984,7 +980,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 47.404
+     "energy_kwh": 46.198
     },
     {
      "battery_kw": 0.0,
@@ -993,7 +989,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 47.404
+     "energy_kwh": 46.198
     },
     {
      "battery_kw": 0.0,
@@ -1002,7 +998,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 47.404
+     "energy_kwh": 46.198
     },
     {
      "battery_kw": 0.0,
@@ -1011,7 +1007,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 47.404
+     "energy_kwh": 46.198
     },
     {
      "battery_kw": 0.0,
@@ -1020,16 +1016,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 47.404
-    },
-    {
-     "battery_kw": 0.0,
-     "keep": [
-      0.0,
-      0.0,
-      0.0
-     ],
-     "energy_kwh": 47.404
+     "energy_kwh": 46.198
     },
     {
      "battery_kw": 0.0,
@@ -1038,7 +1025,16 @@
       0.0,
       0.0
      ],
-     "energy_kwh": 47.404
+     "energy_kwh": 46.198
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      0.5,
+      0.5,
+      0.5
+     ],
+     "energy_kwh": 46.198
     }
    ]
   },
@@ -1056,7 +1052,7 @@
      1.0,
      1.0
     ],
-    "topology_id": "tie_26_31_open_91_26",
+    "topology_id": "base",
     "source": "plan",
     "curtailed_kwh": 0.0
    },
@@ -1066,10 +1062,10 @@
     "every quarter hour",
     "grid voltage residual -6.5 V"
    ],
-   "topology_before": "tie_26_31_open_91_26",
-   "topology_after": "tie_26_31_open_91_26",
-   "operations_used": 2,
-   "operations_left": 0,
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
    "planner": {
     "status": "verified_safe",
     "verified": true,
@@ -1078,33 +1074,42 @@
       "round": 0,
       "trust_kw": 15.0,
       "trust_keep": 0.5,
-      "rows": 1864,
-      "objective": -38.0526,
-      "prediction_miss_v": 2.948,
+      "rows": 1790,
+      "objective": -38.0799,
+      "prediction_miss_v": 2.707,
       "worst_severity": 0.0,
       "predicted_infeasible_steps": [],
       "safe": true
      }
     ],
     "predicted_infeasible_steps": [],
-    "curtailed_kwh": 1.945,
-    "seconds": 0.334,
+    "curtailed_kwh": 1.955,
+    "seconds": 0.333,
     "horizon": 16,
     "switching_options": [
      {
-      "id": "base",
-      "considered": false,
-      "reason": "switching needs 2 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
+      "id": "tie_26_31_open_91_26",
+      "considered": true,
+      "verified": true,
+      "curtailed_kwh": 1.893,
+      "chosen": false,
+      "reason": "no better than the current topology after the operation cost"
      },
      {
       "id": "tie_26_31_open_14_91",
-      "considered": false,
-      "reason": "switching needs 4 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
+      "considered": true,
+      "verified": true,
+      "curtailed_kwh": 1.893,
+      "chosen": false,
+      "reason": "no better than the current topology after the operation cost"
      },
      {
       "id": "tie_26_31_open_88_14",
-      "considered": false,
-      "reason": "switching needs 4 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
+      "considered": true,
+      "verified": true,
+      "curtailed_kwh": 1.893,
+      "chosen": false,
+      "reason": "no better than the current topology after the operation cost"
      }
     ]
    },
@@ -1176,49 +1181,40 @@
      "energy_kwh": 23.724
     },
     {
-     "battery_kw": 12.222,
+     "battery_kw": 11.894,
      "keep": [
       1.0,
       1.0,
-      0.966
+      0.96
      ],
-     "energy_kwh": 26.626
+     "energy_kwh": 26.549
     },
     {
-     "battery_kw": 19.488,
+     "battery_kw": 19.487,
      "keep": [
-      0.645,
+      0.646,
       0.5,
       0.5
      ],
-     "energy_kwh": 31.255
+     "energy_kwh": 31.177
     },
     {
-     "battery_kw": 9.582,
+     "battery_kw": 7.505,
      "keep": [
       1.0,
       1.0,
       1.0
      ],
-     "energy_kwh": 33.531
+     "energy_kwh": 32.959
     },
     {
-     "battery_kw": 7.691,
+     "battery_kw": 2.724,
      "keep": [
       1.0,
       1.0,
       1.0
      ],
-     "energy_kwh": 35.357
-    },
-    {
-     "battery_kw": 0.0,
-     "keep": [
-      1.0,
-      1.0,
-      1.0
-     ],
-     "energy_kwh": 35.357
+     "energy_kwh": 33.606
     },
     {
      "battery_kw": 0.0,
@@ -1227,7 +1223,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 35.357
+     "energy_kwh": 33.606
     },
     {
      "battery_kw": 0.0,
@@ -1236,7 +1232,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 35.357
+     "energy_kwh": 33.606
     },
     {
      "battery_kw": 0.0,
@@ -1245,7 +1241,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 35.357
+     "energy_kwh": 33.606
     },
     {
      "battery_kw": 0.0,
@@ -1254,7 +1250,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 35.357
+     "energy_kwh": 33.606
     },
     {
      "battery_kw": 0.0,
@@ -1263,7 +1259,16 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 35.357
+     "energy_kwh": 33.606
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 33.606
     },
     {
      "battery_kw": 0.0,
@@ -1272,7 +1277,7 @@
       0.0,
       0.0
      ],
-     "energy_kwh": 35.357
+     "energy_kwh": 33.606
     },
     {
      "battery_kw": 0.0,
@@ -1281,7 +1286,7 @@
       0.0,
       0.0
      ],
-     "energy_kwh": 35.357
+     "energy_kwh": 33.606
     },
     {
      "battery_kw": 0.0,
@@ -1290,7 +1295,7 @@
       0.5,
       0.5
      ],
-     "energy_kwh": 35.357
+     "energy_kwh": 33.606
     }
    ]
   },
@@ -1308,7 +1313,7 @@
      1.0,
      1.0
     ],
-    "topology_id": "tie_26_31_open_91_26",
+    "topology_id": "base",
     "source": "plan",
     "curtailed_kwh": 0.0
    },
@@ -1318,10 +1323,10 @@
     "every quarter hour",
     "grid voltage residual -6.9 V"
    ],
-   "topology_before": "tie_26_31_open_91_26",
-   "topology_after": "tie_26_31_open_91_26",
-   "operations_used": 2,
-   "operations_left": 0,
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
    "planner": {
     "status": "verified_safe",
     "verified": true,
@@ -1330,9 +1335,9 @@
       "round": 0,
       "trust_kw": 15.0,
       "trust_keep": 0.5,
-      "rows": 2265,
-      "objective": -31.5468,
-      "prediction_miss_v": 1.193,
+      "rows": 2346,
+      "objective": -31.5472,
+      "prediction_miss_v": 1.13,
       "worst_severity": 0.0,
       "predicted_infeasible_steps": [],
       "safe": true
@@ -1340,14 +1345,14 @@
     ],
     "predicted_infeasible_steps": [],
     "curtailed_kwh": 0.0,
-    "seconds": 0.37,
+    "seconds": 0.357,
     "horizon": 16,
     "switching_options": []
    },
    "before": {
     "safe": true,
     "v_max_v": 243.41,
-    "v_min_v": 240.51,
+    "v_min_v": 240.5,
     "line_max_pct": 11.6,
     "trafo_pct": 30.0,
     "vuf_pct": 0.2,
@@ -1358,7 +1363,7 @@
    "after": {
     "safe": true,
     "v_max_v": 243.41,
-    "v_min_v": 240.51,
+    "v_min_v": 240.5,
     "line_max_pct": 11.6,
     "trafo_pct": 30.0,
     "vuf_pct": 0.2,
@@ -1403,31 +1408,22 @@
      "energy_kwh": 23.724
     },
     {
-     "battery_kw": 0.351,
+     "battery_kw": 0.303,
      "keep": [
       1.0,
       1.0,
       1.0
      ],
-     "energy_kwh": 23.807
+     "energy_kwh": 23.796
     },
     {
-     "battery_kw": 18.767,
+     "battery_kw": 18.732,
      "keep": [
       1.0,
       1.0,
       1.0
      ],
-     "energy_kwh": 28.264
-    },
-    {
-     "battery_kw": 0.0,
-     "keep": [
-      1.0,
-      1.0,
-      1.0
-     ],
-     "energy_kwh": 28.264
+     "energy_kwh": 28.244
     },
     {
      "battery_kw": 0.0,
@@ -1436,7 +1432,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 28.264
+     "energy_kwh": 28.244
     },
     {
      "battery_kw": 0.0,
@@ -1445,7 +1441,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 28.264
+     "energy_kwh": 28.244
     },
     {
      "battery_kw": 0.0,
@@ -1454,7 +1450,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 28.264
+     "energy_kwh": 28.244
     },
     {
      "battery_kw": 0.0,
@@ -1463,7 +1459,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 28.264
+     "energy_kwh": 28.244
     },
     {
      "battery_kw": 0.0,
@@ -1472,7 +1468,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 28.264
+     "energy_kwh": 28.244
     },
     {
      "battery_kw": 0.0,
@@ -1481,7 +1477,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 28.264
+     "energy_kwh": 28.244
     },
     {
      "battery_kw": 0.0,
@@ -1490,7 +1486,16 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 28.264
+     "energy_kwh": 28.244
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.244
     },
     {
      "battery_kw": 0.0,
@@ -1499,7 +1504,7 @@
       0.0,
       0.0
      ],
-     "energy_kwh": 28.264
+     "energy_kwh": 28.244
     },
     {
      "battery_kw": 0.0,
@@ -1508,7 +1513,7 @@
       0.0,
       0.0
      ],
-     "energy_kwh": 28.264
+     "energy_kwh": 28.244
     },
     {
      "battery_kw": 0.0,
@@ -1517,7 +1522,7 @@
       0.0,
       0.0
      ],
-     "energy_kwh": 28.264
+     "energy_kwh": 28.244
     },
     {
      "battery_kw": 0.0,
@@ -1526,7 +1531,7 @@
       0.5,
       0.5
      ],
-     "energy_kwh": 28.264
+     "energy_kwh": 28.244
     }
    ]
   },
@@ -1544,7 +1549,7 @@
      1.0,
      1.0
     ],
-    "topology_id": "tie_26_31_open_91_26",
+    "topology_id": "base",
     "source": "plan",
     "curtailed_kwh": 0.0
    },
@@ -1555,10 +1560,10 @@
     "demand residual -18%",
     "grid voltage residual -10.0 V"
    ],
-   "topology_before": "tie_26_31_open_91_26",
-   "topology_after": "tie_26_31_open_91_26",
-   "operations_used": 2,
-   "operations_left": 0,
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
    "planner": {
     "status": "verified_safe",
     "verified": true,
@@ -1568,8 +1573,8 @@
       "trust_kw": 15.0,
       "trust_keep": 0.5,
       "rows": 1545,
-      "objective": -24.7553,
-      "prediction_miss_v": 2.68,
+      "objective": -24.7554,
+      "prediction_miss_v": 2.676,
       "worst_severity": 0.0,
       "predicted_infeasible_steps": [],
       "safe": true
@@ -1577,7 +1582,7 @@
     ],
     "predicted_infeasible_steps": [],
     "curtailed_kwh": 0.0,
-    "seconds": 0.321,
+    "seconds": 0.319,
     "horizon": 16,
     "switching_options": []
    },
@@ -1640,13 +1645,13 @@
      "energy_kwh": 23.724
     },
     {
-     "battery_kw": 3.767,
+     "battery_kw": 3.732,
      "keep": [
       1.0,
       1.0,
       1.0
      ],
-     "energy_kwh": 24.618
+     "energy_kwh": 24.61
     },
     {
      "battery_kw": 0.0,
@@ -1655,7 +1660,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 24.618
+     "energy_kwh": 24.61
     },
     {
      "battery_kw": 0.0,
@@ -1664,7 +1669,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 24.618
+     "energy_kwh": 24.61
     },
     {
      "battery_kw": 0.0,
@@ -1673,7 +1678,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 24.618
+     "energy_kwh": 24.61
     },
     {
      "battery_kw": 0.0,
@@ -1682,7 +1687,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 24.618
+     "energy_kwh": 24.61
     },
     {
      "battery_kw": 0.0,
@@ -1691,7 +1696,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 24.618
+     "energy_kwh": 24.61
     },
     {
      "battery_kw": 0.0,
@@ -1700,7 +1705,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 24.618
+     "energy_kwh": 24.61
     },
     {
      "battery_kw": 0.0,
@@ -1709,7 +1714,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 24.618
+     "energy_kwh": 24.61
     },
     {
      "battery_kw": 0.0,
@@ -1718,7 +1723,7 @@
       1.0,
       1.0
      ],
-     "energy_kwh": 24.618
+     "energy_kwh": 24.61
     },
     {
      "battery_kw": 0.0,
@@ -1727,7 +1732,7 @@
       0.0,
       0.0
      ],
-     "energy_kwh": 24.618
+     "energy_kwh": 24.61
     },
     {
      "battery_kw": 0.0,
@@ -1736,7 +1741,7 @@
       0.0,
       0.0
      ],
-     "energy_kwh": 24.618
+     "energy_kwh": 24.61
     },
     {
      "battery_kw": 0.0,
@@ -1745,7 +1750,7 @@
       0.0,
       0.0
      ],
-     "energy_kwh": 24.618
+     "energy_kwh": 24.61
     },
     {
      "battery_kw": 0.0,
@@ -1754,7 +1759,7 @@
       0.0,
       0.0
      ],
-     "energy_kwh": 24.618
+     "energy_kwh": 24.61
     },
     {
      "battery_kw": 0.0,
@@ -1763,7 +1768,7 @@
       0.5,
       0.5
      ],
-     "energy_kwh": 24.618
+     "energy_kwh": 24.61
     }
    ]
   },
@@ -1781,7 +1786,7 @@
      1.0,
      1.0
     ],
-    "topology_id": "tie_26_31_open_91_26",
+    "topology_id": "base",
     "source": "plan",
     "curtailed_kwh": 0.0
    },
@@ -1791,10 +1796,10 @@
     "every quarter hour",
     "grid voltage residual -12.0 V"
    ],
-   "topology_before": "tie_26_31_open_91_26",
-   "topology_after": "tie_26_31_open_91_26",
-   "operations_used": 2,
-   "operations_left": 0,
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
    "planner": {
     "status": "verified_safe",
     "verified": true,
@@ -1803,9 +1808,9 @@
       "round": 0,
       "trust_kw": 15.0,
       "trust_keep": 0.5,
-      "rows": 1419,
+      "rows": 1420,
       "objective": -18.1555,
-      "prediction_miss_v": 0.11,
+      "prediction_miss_v": 0.107,
       "worst_severity": 0.0,
       "predicted_infeasible_steps": [],
       "safe": true
@@ -1814,7 +1819,7 @@
       "round": 1,
       "trust_kw": 30.0,
       "trust_keep": 1.0,
-      "rows": 4572,
+      "rows": 4573,
       "objective": -18.1555,
       "prediction_miss_v": 0.0,
       "worst_severity": 0.0,
@@ -1824,7 +1829,7 @@
     ],
     "predicted_infeasible_steps": [],
     "curtailed_kwh": 0.0,
-    "seconds": 0.675,
+    "seconds": 0.712,
     "horizon": 16,
     "switching_options": []
    },
@@ -2028,7 +2033,7 @@
      1.0,
      1.0
     ],
-    "topology_id": "tie_26_31_open_91_26",
+    "topology_id": "base",
     "source": "plan",
     "curtailed_kwh": 0.0
    },
@@ -2038,10 +2043,10 @@
     "every quarter hour",
     "grid voltage residual -11.2 V"
    ],
-   "topology_before": "tie_26_31_open_91_26",
-   "topology_after": "tie_26_31_open_91_26",
-   "operations_used": 2,
-   "operations_left": 0,
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
    "planner": {
     "status": "verified_safe",
     "verified": true,
@@ -2071,7 +2076,7 @@
     ],
     "predicted_infeasible_steps": [],
     "curtailed_kwh": 0.0,
-    "seconds": 0.672,
+    "seconds": 0.741,
     "horizon": 16,
     "switching_options": []
    },
@@ -2285,9 +2290,10 @@
     "every quarter hour",
     "demand residual +34%",
     "grid voltage residual -27.6 V",
+    "switching considered: tie_26_31_open_91_26",
     "near a voltage limit in the next half hour"
    ],
-   "topology_before": "tie_26_31_open_91_26",
+   "topology_before": "base",
    "topology_after": "tie_26_31_open_91_26",
    "operations_used": 2,
    "operations_left": 0,
@@ -2367,23 +2373,32 @@
      11
     ],
     "curtailed_kwh": 1.764,
-    "seconds": 1.571,
+    "seconds": 1.614,
     "horizon": 16,
     "switching_options": [
      {
-      "id": "base",
-      "considered": false,
-      "reason": "switching needs 2 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
+      "id": "tie_26_31_open_91_26",
+      "considered": true,
+      "verified": false,
+      "curtailed_kwh": 1.764,
+      "chosen": true,
+      "reason": "fewer unsafe steps or less curtailment after the operation cost"
      },
      {
       "id": "tie_26_31_open_14_91",
-      "considered": false,
-      "reason": "switching needs 4 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
+      "considered": true,
+      "verified": false,
+      "curtailed_kwh": 1.764,
+      "chosen": false,
+      "reason": "no better than the current topology after the operation cost"
      },
      {
       "id": "tie_26_31_open_88_14",
-      "considered": false,
-      "reason": "switching needs 4 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
+      "considered": true,
+      "verified": false,
+      "curtailed_kwh": 1.764,
+      "chosen": false,
+      "reason": "no better than the current topology after the operation cost"
      }
     ]
    },
@@ -2718,7 +2733,7 @@
      15
     ],
     "curtailed_kwh": 3.525,
-    "seconds": 1.58,
+    "seconds": 1.598,
     "horizon": 16,
     "switching_options": [
      {
@@ -3075,23 +3090,23 @@
      15
     ],
     "curtailed_kwh": 2.008,
-    "seconds": 1.488,
+    "seconds": 1.523,
     "horizon": 16,
     "switching_options": [
      {
       "id": "base",
       "considered": false,
-      "reason": "switching needs 2 operations; the daily budget has 0 left"
+      "reason": "switching needs 2 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      },
      {
       "id": "tie_26_31_open_14_91",
       "considered": false,
-      "reason": "switching needs 4 operations; the daily budget has 0 left"
+      "reason": "switching needs 4 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      },
      {
       "id": "tie_26_31_open_88_14",
       "considered": false,
-      "reason": "switching needs 4 operations; the daily budget has 0 left"
+      "reason": "switching needs 4 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      }
     ]
    },
@@ -3438,23 +3453,23 @@
      15
     ],
     "curtailed_kwh": 0.895,
-    "seconds": 1.923,
+    "seconds": 1.927,
     "horizon": 16,
     "switching_options": [
      {
       "id": "base",
       "considered": false,
-      "reason": "switching needs 2 operations; the daily budget has 0 left"
+      "reason": "switching needs 2 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      },
      {
       "id": "tie_26_31_open_14_91",
       "considered": false,
-      "reason": "switching needs 4 operations; the daily budget has 0 left"
+      "reason": "switching needs 4 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      },
      {
       "id": "tie_26_31_open_88_14",
       "considered": false,
-      "reason": "switching needs 4 operations; the daily budget has 0 left"
+      "reason": "switching needs 4 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      }
     ]
    },
@@ -3806,23 +3821,23 @@
      15
     ],
     "curtailed_kwh": 0.32,
-    "seconds": 1.908,
+    "seconds": 1.93,
     "horizon": 16,
     "switching_options": [
      {
       "id": "base",
       "considered": false,
-      "reason": "switching needs 2 operations; the daily budget has 0 left"
+      "reason": "switching needs 2 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      },
      {
       "id": "tie_26_31_open_14_91",
       "considered": false,
-      "reason": "switching needs 4 operations; the daily budget has 0 left"
+      "reason": "switching needs 4 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      },
      {
       "id": "tie_26_31_open_88_14",
       "considered": false,
-      "reason": "switching needs 4 operations; the daily budget has 0 left"
+      "reason": "switching needs 4 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      }
     ]
    },
@@ -4174,23 +4189,23 @@
      15
     ],
     "curtailed_kwh": 0.167,
-    "seconds": 1.816,
+    "seconds": 1.885,
     "horizon": 16,
     "switching_options": [
      {
       "id": "base",
       "considered": false,
-      "reason": "switching needs 2 operations; the daily budget has 0 left"
+      "reason": "switching needs 2 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      },
      {
       "id": "tie_26_31_open_14_91",
       "considered": false,
-      "reason": "switching needs 4 operations; the daily budget has 0 left"
+      "reason": "switching needs 4 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      },
      {
       "id": "tie_26_31_open_88_14",
       "considered": false,
-      "reason": "switching needs 4 operations; the daily budget has 0 left"
+      "reason": "switching needs 4 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      }
     ]
    },
@@ -4547,23 +4562,23 @@
      15
     ],
     "curtailed_kwh": 0.1,
-    "seconds": 1.721,
+    "seconds": 1.734,
     "horizon": 16,
     "switching_options": [
      {
       "id": "base",
       "considered": false,
-      "reason": "switching needs 2 operations; the daily budget has 0 left"
+      "reason": "switching needs 2 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      },
      {
       "id": "tie_26_31_open_14_91",
       "considered": false,
-      "reason": "switching needs 4 operations; the daily budget has 0 left"
+      "reason": "switching needs 4 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      },
      {
       "id": "tie_26_31_open_88_14",
       "considered": false,
-      "reason": "switching needs 4 operations; the daily budget has 0 left"
+      "reason": "switching needs 4 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      }
     ]
    },
@@ -4922,23 +4937,23 @@
      15
     ],
     "curtailed_kwh": 0.041,
-    "seconds": 1.761,
+    "seconds": 1.784,
     "horizon": 16,
     "switching_options": [
      {
       "id": "base",
       "considered": false,
-      "reason": "switching needs 2 operations; the daily budget has 0 left"
+      "reason": "switching needs 2 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      },
      {
       "id": "tie_26_31_open_14_91",
       "considered": false,
-      "reason": "switching needs 4 operations; the daily budget has 0 left"
+      "reason": "switching needs 4 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      },
      {
       "id": "tie_26_31_open_88_14",
       "considered": false,
-      "reason": "switching needs 4 operations; the daily budget has 0 left"
+      "reason": "switching needs 4 operations; the daily budget has 0 left; minimum dwell of 8 quarter hours since the last switching not reached"
      }
     ]
    },
@@ -5294,7 +5309,7 @@
      14
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.953,
+    "seconds": 2.016,
     "horizon": 16,
     "switching_options": [
      {
@@ -5659,7 +5674,7 @@
      13
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.918,
+    "seconds": 1.888,
     "horizon": 15,
     "switching_options": [
      {
@@ -6017,7 +6032,7 @@
      13
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.969,
+    "seconds": 2.022,
     "horizon": 14,
     "switching_options": [
      {
@@ -6361,7 +6376,7 @@
      12
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.807,
+    "seconds": 1.817,
     "horizon": 13,
     "switching_options": [
      {
@@ -6691,7 +6706,7 @@
      11
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.668,
+    "seconds": 1.679,
     "horizon": 12,
     "switching_options": [
      {
@@ -7007,7 +7022,7 @@
      10
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 1.518,
+    "seconds": 1.536,
     "horizon": 11,
     "switching_options": [
      {
@@ -7304,7 +7319,7 @@
      9
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 0.88,
+    "seconds": 0.894,
     "horizon": 10,
     "switching_options": [
      {
@@ -7579,7 +7594,7 @@
      8
     ],
     "curtailed_kwh": 0.0,
-    "seconds": 0.756,
+    "seconds": 0.751,
     "horizon": 9,
     "switching_options": [
      {
@@ -7937,10 +7952,10 @@
   "worst_after_severity": 6.969
  },
  "timing": {
-  "total_s": 48.73,
-  "step_p50_s": 1.715,
-  "step_p95_s": 5.807,
-  "plan_p50_s": 1.574,
+  "total_s": 56.45,
+  "step_p50_s": 1.796,
+  "step_p95_s": 6.147,
+  "plan_p50_s": 1.606,
   "baseline_s": 0.047
  },
  "issued_forecast": {
