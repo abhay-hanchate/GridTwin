@@ -7,7 +7,7 @@ import { LangProvider } from '../i18n'
 import { serve, settle } from '../test/server'
 import Fixes from './Fixes'
 import Forecast from './Forecast'
-import Overview from './Overview'
+import StreetPlayer from '../components/street/StreetPlayer'
 
 // The precomputed results the API serves (the nightly run, data/results/v2). Rendering every one of them is the
 // contract test between the engine's output and the pages: a renamed or missing field fails here.
@@ -46,11 +46,8 @@ describe('every precomputed result renders', () => {
 
   it.each(entries('street'))('Street: %s', async (_, key) => {
     const street: Street = read(`${key}.json`)
-    // the overview also draws that day's risk, so serve the precomputed one for the same day and rule
-    const risk = index.entries.find((e) => e.route === 'risk' && e.date === street.date && e.rule === street.rule)
-    expect(risk).toBeDefined()
-    serve({ '/street': street, '/risk': read(`${risk!.key}.json`), '/fixes': {} })
-    render(<LangProvider><Overview rule={street.rule} onRule={() => {}} date={street.date} /></LangProvider>)
+    serve({ '/street': street })
+    render(<LangProvider><StreetPlayer network={street.network} rule={street.rule} date={street.date} fix={street.fix} /></LangProvider>)
     await settle()
     const map = screen.getByRole('img', { name: /the street at/i })
     expect(map.querySelectorAll('[data-home]').length).toBe(street.homes.length)

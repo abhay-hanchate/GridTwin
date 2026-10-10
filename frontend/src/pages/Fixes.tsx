@@ -6,7 +6,7 @@ import { DEFAULT_NETWORK } from '../app/defaults'
 import { useView, type ViewProps } from '../app/view'
 import Controls from '../components/Controls'
 import Envelope from '../components/Envelope'
-import Explainer, { NextStep } from '../components/Explainer'
+import { NextStep } from '../components/Explainer'
 import PhasePlan from '../components/PhasePlan'
 import Prov from '../components/Prov'
 import Status from '../components/Status'
@@ -48,7 +48,6 @@ export default function Fixes({ network = DEFAULT_NETWORK, go, ...props }: ViewP
       <Status state={fixes} />
       {fixes.data && <FixesView key={`${fixes.data.date}-${fixes.data.rule}`} result={fixes.data} vmax={view.band?.vmax_v}
         network={network} rule={view.rule} date={view.date} />}
-      <Explainer groups={['fix', 'voltage', 'phases']} />
       <NextStep to="planning" go={go} />
     </div>
   )

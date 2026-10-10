@@ -209,7 +209,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 ## Features
 
 <!-- FEATURES:START -->
-**21 of 26 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
+**22 of 27 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
 
 | ID | Feature | Area | Owner | Status | Pull request |
 | --- | --- | --- | --- | --- | --- |
@@ -239,6 +239,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 | F24 | Risk reliability on both districts (gate G8) | Risk | Team | 🔄 In progress |  |
 | F25 | Solar yield checked against a measured plant (gate G7: needs data access) | ML | Team | ⏳ Planned |  |
 | F26 | Live deployment with a public link | DevOps | Team | ⏳ Planned |  |
+| F27 | Keep labels explainer on Overview only |  | ieafraazzz | ✅ Done | [#28](https://github.com/abhay-hanchate/GridTwin/pull/28) |
 <!-- FEATURES:END -->
 
 ## Team

@@ -138,12 +138,11 @@ describe('Tomorrow', () => {
     expect(within(days).getByRole('button', { pressed: true }).textContent).toBe(CALENDAR.ready.at(-1))
   })
 
-  it('ends by explaining every level and pointing to the fixes', async () => {
+  it('ends by pointing to the fixes (the labels are explained on the overview only)', async () => {
     serve()
     render(<LangProvider><Forecast go={vi.fn()} /></LangProvider>)
     await settle()
-    const explainer = screen.getByRole('region', { name: /what the labels mean/i })
-    for (const level of ['OK', 'WATCH', 'ACT']) expect(within(explainer).getByText(level)).toBeTruthy()
+    expect(screen.queryByRole('region', { name: /what the labels mean/i })).toBeNull()
     expect(screen.getByRole('button', { name: /^fixes/i })).toBeTruthy()
   })
 

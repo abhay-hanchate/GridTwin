@@ -1,7 +1,7 @@
 import { useV2 } from '../api/v2'
 import type { Gate, GateStatus, Results } from '../api/v2types'
 import type { Area } from '../app/areas'
-import Explainer, { NextStep } from '../components/Explainer'
+import { NextStep } from '../components/Explainer'
 import Measured from '../components/Measured'
 import Status from '../components/Status'
 import { useT, type StringKey } from '../i18n'
@@ -36,7 +36,6 @@ export default function Proof({ go }: { go?: (area: Area) => void }) {
         <ul>{NOT_BUILT.map((k) => <li key={k}>{t(`proof.not_built.${k}` as StringKey)}</li>)}</ul>
       </details>
       <p className="note" role="note">{t('proof.flow_estimate')}</p>
-      <Explainer groups={['gate', 'prov']} />
       <NextStep to="home" go={go} />
     </div>
   )
