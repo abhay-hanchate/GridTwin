@@ -120,3 +120,21 @@ def test_truly_unsafe_counts_solver_failures():
     lab = Labels(u, np.full((3, 2), 10.0), np.full(3, 10.0), np.array([True, True, False]), np.ones(3))
     lab.u_pu[2] = np.nan
     assert metrics.truly_unsafe(lab, 0.94, 1.06).tolist() == [False, True, True]
+
+
+def test_selection_rule_is_the_pre_registered_one():
+    m = lambda fs, fr, lat: {"false_safe": fs, "false_rejection_rate": fr, "latency_s": lat}  # noqa: E731
+    # fewest unsafe-as-safe first, even if slower and with more false rejections
+    assert train.select({"ridge": m(3, 0.1, 1e-6), "lgbm": m(1, 0.3, 1e-4), "mlp": m(2, 0.05, 1e-5)})[0] == "lgbm"
+    # then the lowest false-rejection rate
+    assert train.select({"ridge": m(0, 0.2, 1e-6), "lgbm": m(0, 0.3, 1e-4), "mlp": m(0, 0.1, 1e-5)})[0] == "mlp"
+    # then latency
+    assert train.select({"ridge": m(0, 0.1, 1e-6), "lgbm": m(0, 0.1, 1e-4), "mlp": m(0, 0.1, 1e-5)})[0] == "ridge"
+    # the MLP ships only if it beats ridge on the first two
+    kind, why = train.select({"ridge": m(0, 0.1, 1e-4), "lgbm": m(5, 0.0, 1e-6), "mlp": m(0, 0.1, 1e-5)})
+    assert kind == "ridge" and "does not beat ridge" in why
+
+
+def test_a_column_constant_in_training_is_centred_not_blown_up():
+    s = predict.Scaler.fit(np.array([[1.0, 0.0], [3.0, 0.0]]))
+    assert s.apply(np.array([[2.0, 1.0]]))[0, 1] == 1.0

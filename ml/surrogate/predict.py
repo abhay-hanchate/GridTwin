@@ -27,7 +27,9 @@ class Scaler:
 
     @classmethod
     def fit(cls, x: np.ndarray) -> "Scaler":
-        return cls(x.mean(axis=0), x.std(axis=0))
+        """A column that never varies in training is centred only, so an unseen value cannot blow up by 1/std."""
+        std = x.std(axis=0)
+        return cls(x.mean(axis=0), np.where(std < 1e-9, 1.0, std))
 
     def apply(self, x):
         return (x - self.mean) / self.std

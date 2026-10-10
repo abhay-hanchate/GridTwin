@@ -123,3 +123,13 @@ def fit_failure(train: Data, tune: Data) -> tuple[FailureModel | None, dict]:
                        valid_sets=[lightgbm.Dataset(tune.x, (~tune.converged).astype(int))],
                        callbacks=[lightgbm.early_stopping(LGBM_EARLY, verbose=False)])
     return FailureModel(b), {"train_failures": n_fail, "model": "lightgbm"}
+
+
+def select(scores: dict[str, dict]) -> tuple[str, str]:
+    """The pre-registered rule on development (tune) data: fewest guarded unsafe-as-safe, then the lowest
+    false-rejection rate, then the lowest latency; the MLP ships only if it beats ridge on the first two."""
+    key = lambda k: (scores[k]["false_safe"], scores[k]["false_rejection_rate"], scores[k]["latency_s"])  # noqa: E731
+    best = min(scores, key=key)
+    if best == "mlp" and "ridge" in scores and key("mlp")[:2] >= key("ridge")[:2]:
+        return "ridge", "the MLP ranked first only on latency and does not beat ridge on the first two criteria"
+    return best, "lowest (unsafe-as-safe, false-rejection rate, latency) on tune"
