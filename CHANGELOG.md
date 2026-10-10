@@ -32,6 +32,28 @@
   window, chosen on 2020 validation before 2021 was scored. Gate G4 is still not met: skill 9.0% (needs 10%),
   coverage 78.8% (now inside 78 to 82%). On the held-out district: 15.3% and 79.8%.
 - The benchmark street's label and the G3 gate name no longer refer to the first release.
+- **Grid-voltage history fixed (F-0).** The app read an older Mathura file that missed all of 2020, so March and
+  April had no "yesterday's voltage" at all (a missing value reached the model) and March came out 8.1 V off the
+  record. The app now reads the full record (three small files are committed), and the proxy is never missing. Every
+  precomputed number changed with it.
+- **Switching fix drawn on the right wires (F1).** A switching fix re-numbers the street's wires; the animation drew
+  the switched flows on the original wire numbers. Each run now carries its own wire ends, the opened wire is drawn
+  grey and still and the closed tie dashed.
+- **The pages show the recalibrated risk chances (F2).** Gate G8 passes on the recalibrated chances, but the pages
+  drew the raw ones. Where the map was fitted (benchmark street, no fix) the chart, the level, the first watch and
+  act times and the expected hours now all use the recalibrated chances; elsewhere the raw ones, with a note saying
+  so. Decision in `docs/DECISIONS.md`.
+- **Days with no forecast are refused at once (F6).** A date outside the 2025 archive and outside today to seven days
+  ahead is a 404 with the valid ranges, instead of a job that fails later; a live-forecast outage is a 503.
+- **One error shape everywhere (F7).** The removed `/api/...` routes answer in the v2 error shape.
+- **Hindi has its own font (F9).** Noto Sans Devanagari is bundled; English pages never download it.
+- **Solar gates re-run (F3).** G2 and G3 were re-run from the downloaded weather files with identical scores, and the
+  first model's 0.0396 is now recomputed from its committed table instead of typed.
+- **UP demand recorded every evening (F5).** The evening workflow runs the recorder and keeps its record between
+  runs; the Tomorrow page says how many days are recorded while the forecast runs pattern only.
+- **Wire-flow estimate explained (F8).** The player and the Proof page list what the estimated flows leave out.
+- Housekeeping (F10): the `charts` chunk is now `vendor`; 43 unused translation keys are gone; `nightly --prune`
+  removes cached results the index no longer names. Two stale test fixtures left by the merge are fixed.
 
 ## Since v2.0.0: Round 1 removed (plan task P10.12)
 

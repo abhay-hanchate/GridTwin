@@ -411,3 +411,15 @@ telling the districts apart; Bareilly alone, a single district with every season
   grid and solar shares; where the raw chance is 0 the whole calibrated bar counts as grid.
 - **Why not apply it everywhere:** the map was fitted with no fix on the benchmark street; applying it to a replay with
   a fix or to another street type would be an extrapolation that was never tested.
+
+## The grid-voltage history the app reads (recorded 10 Oct 2026, fix brief F-0)
+
+- **Problem:** `backend/v2/compute.py` read the older committed Mathura files (`data/processed/load_kw.parquet`,
+  `pv_kw_per_kwp.parquet`, `upstream_vm_pu.parquet`), built from 2019 and early 2021 only. All of 2020 was missing
+  (the voltage file 55.7% empty), so March and April had no "yesterday's voltage" and a missing value reached the
+  voltage model silently; March was 8.1 V off the real record and April's daily shape correlated at 0.48.
+- **Decision:** the app prefers the full record in `data/processed/v2` (`*_mathura.parquet`, about 4 MB, committed)
+  and falls back to the old files. "Yesterday" for a 2025 date is the same calendar day of 2019, else 2020, else
+  2021, then the month's mean, then the record's mean: never missing. Readiness requires the three files.
+- **Open:** the generator still trains on Mathura only, because the benchmark street and the solar forecast are
+  Mathura's. Adding Bareilly is a separate decision.
