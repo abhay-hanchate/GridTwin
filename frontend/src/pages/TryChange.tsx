@@ -5,7 +5,7 @@ import type { Area } from '../app/areas'
 import { DEFAULT_NETWORK } from '../app/defaults'
 import { useView, type ViewProps } from '../app/view'
 import Controls from '../components/Controls'
-import Explainer, { NextStep } from '../components/Explainer'
+import { NextStep } from '../components/Explainer'
 import Prov from '../components/Prov'
 import Status from '../components/Status'
 import type { HomeView } from '../components/street/geometry'
@@ -64,7 +64,6 @@ export default function TryChange({ network = DEFAULT_NETWORK, go, ...props }: V
       <Status state={catalog} />
       {offline && <p className="note" role="note">{t('try.offline', { setting: 'GRIDTWIN_OFFLINE=0' })}</p>}
       {catalog.data && view.ready && <Builder catalog={catalog.data} network={network} rule={view.rule} date={view.date} offline={offline} />}
-      <Explainer groups={['whatif', 'voltage', 'prov']} />
       <NextStep to="proof" go={go} />
     </div>
   )

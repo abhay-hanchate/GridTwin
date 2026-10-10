@@ -4,11 +4,9 @@ import type { Fixes, Results, Risk } from '../api/v2types'
 import type { Area } from '../app/areas'
 import { DEFAULT_NETWORK } from '../app/defaults'
 import { useView, type ViewProps } from '../app/view'
-import Controls from '../components/Controls'
 import Explainer, { NextStep } from '../components/Explainer'
 import Prov from '../components/Prov'
 import Status from '../components/Status'
-import StreetPlayer from '../components/street/StreetPlayer'
 import { dayName } from '../day'
 import { one, volts } from '../format'
 import { useLang, useT, type StringKey } from '../i18n'
@@ -26,8 +24,8 @@ const ICONS: Record<'sun' | 'act' | 'ok', ReactElement> = {
 
 const scrollTop = () => { if (typeof window.scrollTo === 'function') try { window.scrollTo({ top: 0 }) } catch { /* jsdom */ } }
 
-/** The overview: what GridTwin does, the street playing out the day, the answer in plain words, and the way through
- *  the project. Every number comes from /risk, /fixes, /street or /results for the chosen day and rule. */
+/** The overview: what GridTwin does, the answer in plain words, and the way through the project.
+ *  Every number comes from /risk, /fixes or /results for the chosen day and rule. */
 export default function Overview({ network = DEFAULT_NETWORK, go, ...props }: Props) {
   const t = useT()
   const view = useView(props)
@@ -45,7 +43,6 @@ export default function Overview({ network = DEFAULT_NETWORK, go, ...props }: Pr
           <h2>{t('overview.title_a')} <em>{t('overview.title_em')}</em> {t('overview.title_b')}</h2>
           <p className="lede">{t('overview.lede')}</p>
           <div className="cta-row">
-            <a className="btn btn-primary" href="#watch">{t('overview.cta_watch')} <span className="arrow" aria-hidden="true">▶</span></a>
             <button className="btn btn-ghost" onClick={open('forecast')}>{t('overview.cta_forecast')} <span className="arrow" aria-hidden="true">→</span></button>
           </div>
         </div>
@@ -57,16 +54,6 @@ export default function Overview({ network = DEFAULT_NETWORK, go, ...props }: Pr
             </div>
           ))}
         </div>
-      </section>
-
-      <section className="section" id="watch" aria-labelledby="watch-title">
-        <header>
-          <span className="eyebrow">{t('overview.watch_eyebrow')}</span>
-          <h2 id="watch-title">{t('overview.watch_title')}</h2>
-          <p>{t('overview.watch_intro')}</p>
-        </header>
-        <Controls view={view} />
-        <div className="card">{view.ready && <StreetPlayer network={network} rule={view.rule} date={view.date} />}</div>
       </section>
 
       <Status state={risk} />
