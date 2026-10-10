@@ -57,3 +57,11 @@ def test_a_full_battery_cannot_be_planned_to_charge(world):
     out = plan(ex, fc, ControlState(energy_kwh=BAT.e_max), BAT, rule, PlannerConfig())
     assert out.charge_kw[0] == pytest.approx(0.0, abs=1e-6)
     assert _ok_storage(out.battery_kw, BAT, BAT.e_max)
+
+
+def test_a_warm_start_longer_than_a_shortened_end_of_day_horizon_is_trimmed(world):
+    ex, fc, rule = world
+    short = fc.take(list(range(10)))
+    warm = (np.zeros(16), np.ones((16, 3)))
+    out = plan(ex, short, ControlState(energy_kwh=30.0), BAT, rule, PlannerConfig(), warm=warm)
+    assert out.horizon == 10
