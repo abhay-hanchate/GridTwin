@@ -186,7 +186,7 @@ function ForecastPlayer({ s, startStep }: { s: Street; startStep?: number }) {
           <p className="card-sub">{t('charts.sim_intro')}</p>
           <SimMap s={s} run={s.before} flows={flows[0]} scale={scale} step={state.step} heading={t('charts.now', { time: s.t[state.step] })} tone="before" />
         </div>
-        <StreetDayCharts street={s} run={s.before} step={state.step} />
+        <StreetDayCharts street={s} run={s.before} step={state.step} onStep={state.setStep} />
       </div>
     </div>
   )
