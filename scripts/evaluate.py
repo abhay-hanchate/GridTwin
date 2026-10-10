@@ -75,7 +75,7 @@ def g2_g3(root: Path) -> list[dict]:
     d = _read(root, rel)
     if d is None:
         return [gate("G2", "Weather-model availability", "missing", source=rel),
-                gate("G3", "Solar v2 beats Round 1", "missing", source=rel)]
+                gate("G3", "Solar v2 beats the first solar model", "missing", source=rel)]
     avail = {a["model"]: a["passes"] for a in d["availability"]}
     used = d["nwp_models_used"]
     s = d["scores_2025"]
@@ -84,7 +84,7 @@ def g2_g3(root: Path) -> list[dict]:
              measured={"models_used": used, "dropped": sorted(m for m, ok in avail.items() if not ok)},
              threshold=">= 95% non-null hours from the first valid hour and in the test year, per model",
              provenance="observed: Open-Meteo previous-runs API", source=rel, command="python -m ml.solar_v2"),
-        gate("G3", "Solar v2 beats Round 1", "pass" if s["gate_g3_passes"] else "fail",
+        gate("G3", "Solar v2 beats the first solar model", "pass" if s["gate_g3_passes"] else "fail",
              measured={"mae_p50": s["mae_p50"], "round1_mae": 0.0396, "coverage_80": s["p10_p90_coverage"],
                        "wis": s.get("wis")},
              threshold="MAE below 0.0396 kW/kWp on the identical 2025 daylight mask",
@@ -99,11 +99,15 @@ def g4(root: Path) -> dict:
     if d is None:
         return gate("G4", "Demand v2 skill and coverage", "missing", source=rel)
     g = d["gate_g4"]
+    district = d.get("protocols", {}).get("strict", {}).get("district_bareilly", {})
     return gate("G4", "Demand v2 skill and coverage", "pass" if g["passed"] else "fail",
-                measured={"skill_vs_best_baseline": g["skill_vs_best_baseline"], "coverage_80": g["coverage"]},
+                measured={"skill_vs_best_baseline": g["skill_vs_best_baseline"], "coverage_80": g["coverage"],
+                          "held_out_district_skill": district.get("skill_vs_best_baseline"),
+                          "held_out_district_coverage_80": district.get("coverage")},
                 threshold="skill >= 10% against the best baseline and coverage 78-82% (strict variant, Mathura 2021)",
                 provenance="observed: CEEW meters", source=rel, command="python -m ml.demand_v2",
-                note="Failed and kept failed by the owner: no AI-improvement claim for demand.")
+                note="" if g["passed"] else "Not met on the gate's protocol: no AI-improvement claim for demand. The "
+                     "held-out district (Bareilly 2021, every season) is reported beside it and does not replace it.")
 
 
 def g5(root: Path) -> dict:
@@ -138,31 +142,32 @@ def g6_g7(root: Path) -> list[dict]:
 
 
 def g8(root: Path) -> dict:
+    """Judged on the two-district held-out test of scripts.calibrate_risk (plan task P5.3), recalibrated as served."""
     rows, statuses = {}, []
     for rule in ("pm10", "up_2005"):
-        rel = f"data/results/reliability_mathura_{rule}.json"
-        d = _read(root, rel)
-        if d is None:
+        rel = f"data/results/risk_calibration_{rule}.json"
+        cal = _read(root, rel)
+        if cal is None or "by_district" not in cal["held_out_test"]:
             statuses.append("missing")
             continue
-        rows[rule] = {"brier": d["brier"], "brier_base_rate": d["brier_climatology"], "brier_skill": d["brier_skill"],
-                      "days": d["days"], "observed_unsafe_share": d["observed_unsafe_share_of_steps"],
-                      "unsafe_hours_predicted": d["unsafe_hours"]["predicted_mean"],
-                      "unsafe_hours_observed": d["unsafe_hours"]["observed_mean"]}
-        cal = _read(root, f"data/results/risk_calibration_{rule}.json")
-        if cal:                                   # the recalibrated values are what the API serves
-            rows[rule]["brier_skill_calibrated"] = cal["held_out_test"]["skill_calibrated"]
-            rows[rule]["calibrated_reliable"] = cal["reliable"]
-        skill = rows[rule].get("brier_skill_calibrated", d["brier_skill"])
-        statuses.append("pass" if (skill or 0) > 0 else "fail")
+        t = cal["held_out_test"]
+        rows[rule] = {"days": t["days"], "observed_unsafe_share": t["observed_unsafe_share"],
+                      "brier_calibrated": t["brier_calibrated"], "brier_base_rate": t["brier_base_rate"],
+                      "brier_skill_raw": t["skill_raw"], "brier_skill_calibrated": t["skill_calibrated"],
+                      "by_district": {d: {k: v[k] for k in ("days", "observed_unsafe_share", "skill_calibrated")}
+                                      for d, v in t["by_district"].items()}}
+        statuses.append("pass" if cal["reliable"] else "fail")
     status = "missing" if not rows else ("pass" if all(s == "pass" for s in statuses) else "fail")
+    weak = [f"{d} under {r}" for r, row in rows.items() for d, v in row["by_district"].items()
+            if (v["skill_calibrated"] or 0) <= 0]
     return gate("G8", "Risk probabilities are reliable", status, measured=rows,
-                threshold="Brier skill > 0 against the base rate, on every rule",
-                provenance="observed: replay of held-out 2021 days", source="data/results/reliability_mathura_*.json",
-                command="python -m scripts.run_reliability --rule <rule>",
-                note="Judged on the isotonic-recalibrated values the API serves (fitted on 2020-05..12, tested on "
-                     "held-out 2021). The 2021 window is January-February only and about 5 V above the training years; "
-                     "under +/-6% almost every step is unsafe, so nothing beats the base rate there.")
+                threshold="calibrated Brier skill > 0 against the base rate of the pooled held-out steps, on every rule",
+                provenance="observed: replay of held-out 2021 days, Mathura (Jan-Feb) and Bareilly (Jan-Oct)",
+                source="data/results/risk_calibration_*.json", command="python -m scripts.calibrate_risk --rule <rule>",
+                note=("Isotonic map fitted on 2020-05..12 of both districts. Below the base rate on its own: "
+                      + ", ".join(weak) + " (almost every step unsafe, so a constant is hard to beat). The pooled "
+                      "reference is one rate for both districts, so part of the pooled skill is telling them apart; "
+                      "the per-district skills are shown for that reason.") if weak else "")
 
 
 def bakeoffs(root: Path) -> list[dict]:

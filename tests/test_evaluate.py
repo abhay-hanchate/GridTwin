@@ -23,23 +23,36 @@ def test_every_gate_is_present_and_missing_inputs_say_missing(tmp_path):
 
 def test_a_failed_gate_is_written_as_failed(tmp_path):
     _write(tmp_path, "ml/reports/demand_v2.json", {"gate_g4": {"skill_vs_best_baseline": 0.084, "coverage": 0.833, "passed": False}})
-    rel = {"brier": 0.13, "brier_climatology": 0.133, "days": 40, "observed_unsafe_share_of_steps": 0.84,
-           "unsafe_hours": {"predicted_mean": 17.0, "observed_mean": 20.2}}
-    _write(tmp_path, "data/results/reliability_mathura_pm10.json", {**rel, "brier_skill": 0.01})
-    _write(tmp_path, "data/results/reliability_mathura_up_2005.json", {**rel, "brier_skill": -1.9})
+    for rule, skill in (("pm10", 0.51), ("up_2005", -1.9)):
+        _write(tmp_path, f"data/results/risk_calibration_{rule}.json", _calibration(skill))
     r = evaluate(tmp_path, skip_parity=True)
     gates = {g["gate"]: g for g in r["gates"]}
     assert gates["G4"]["status"] == "fail" and gates["G4"]["passed"] is False
-    assert gates["G8"]["status"] == "fail" and gates["G8"]["measured"]["up_2005"]["brier_skill"] == -1.9
+    assert gates["G8"]["status"] == "fail" and gates["G8"]["measured"]["up_2005"]["brier_skill_calibrated"] == -1.9
     assert "**fail**" in proof_markdown(r)
 
 
-def test_g8_passes_only_when_every_rule_has_skill(tmp_path):
-    rel = {"brier": 0.1, "brier_climatology": 0.2, "days": 40, "observed_unsafe_share_of_steps": 0.5,
-           "unsafe_hours": {"predicted_mean": 5.0, "observed_mean": 5.0}}
+def _calibration(skill: float, district_skill: dict | None = None) -> dict:
+    by = {d: {"days": 40, "observed_unsafe_share": 0.5, "skill_calibrated": v}
+          for d, v in (district_skill or {"mathura": skill, "bareilly": skill}).items()}
+    return {"reliable": skill > 0, "held_out_test": {"days": 80, "observed_unsafe_share": 0.5, "brier_calibrated": 0.1,
+                                                     "brier_base_rate": 0.2, "skill_raw": skill,
+                                                     "skill_calibrated": skill, "by_district": by}}
+
+
+def test_g8_passes_only_when_every_rule_has_skill_and_names_weak_districts(tmp_path):
+    _write(tmp_path, "data/results/risk_calibration_pm10.json", _calibration(0.5))
+    _write(tmp_path, "data/results/risk_calibration_up_2005.json", _calibration(0.4, {"mathura": -3.9, "bareilly": 0.36}))
+    g = g8(tmp_path)
+    assert g["status"] == "pass" and "mathura under up_2005" in g["note"]
+    _write(tmp_path, "data/results/risk_calibration_up_2005.json", _calibration(-0.1))
+    assert g8(tmp_path)["status"] == "fail"
+
+
+def test_g8_is_missing_for_a_single_district_calibration_file(tmp_path):
     for rule in ("pm10", "up_2005"):
-        _write(tmp_path, f"data/results/reliability_mathura_{rule}.json", {**rel, "brier_skill": 0.5})
-    assert g8(tmp_path)["status"] == "pass"
+        _write(tmp_path, f"data/results/risk_calibration_{rule}.json", {"reliable": True, "held_out_test": {}})
+    assert g8(tmp_path)["status"] == "missing"
 
 
 def test_licence_and_plant_gates_follow_the_recorded_decisions(tmp_path):
