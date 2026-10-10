@@ -1,9 +1,9 @@
 {
- "generated_at": "2026-10-09T19:57:02.350154+00:00",
- "git_hash": "d465a7a",
+ "generated_at": "2026-10-10T08:43:04.821798+00:00",
+ "git_hash": "a2f6bbf",
  "summary": {
-  "pass": 4,
-  "fail": 2,
+  "pass": 5,
+  "fail": 1,
   "conditional": 1,
   "not_run": 1,
   "missing": 0
@@ -18,9 +18,9 @@
     "max_voltage_diff_pct": 0.0005,
     "max_voltage_diff_v": 0.001,
     "max_trafo_loading_diff_pts": 0.0,
-    "day_seconds_pgm": 0.026,
-    "day_seconds_pandapower": 10.49,
-    "speedup": 403.6
+    "day_seconds_pgm": 0.016,
+    "day_seconds_pandapower": 8.59,
+    "speedup": 538.3
    },
    "threshold": "max voltage difference <= 0.1% and at least 10x faster",
    "provenance": "benchmark: SimBench street, 15 May 2019",
@@ -54,7 +54,7 @@
   },
   {
    "gate": "G3",
-   "name": "Solar v2 beats Round 1",
+   "name": "Solar v2 beats the first solar model",
    "status": "pass",
    "passed": true,
    "measured": {
@@ -75,14 +75,16 @@
    "status": "fail",
    "passed": false,
    "measured": {
-    "skill_vs_best_baseline": 0.084,
-    "coverage_80": 0.833
+    "skill_vs_best_baseline": 0.09,
+    "coverage_80": 0.788,
+    "held_out_district_skill": 0.153,
+    "held_out_district_coverage_80": 0.798
    },
    "threshold": "skill >= 10% against the best baseline and coverage 78-82% (strict variant, Mathura 2021)",
    "provenance": "observed: CEEW meters",
    "source": "ml/reports/demand_v2.json",
    "command": "python -m ml.demand_v2",
-   "note": "Failed and kept failed by the owner: no AI-improvement claim for demand."
+   "note": "Not met on the gate's protocol: no AI-improvement claim for demand. The held-out district (Bareilly 2021, every season) is reported beside it and does not replace it."
   },
   {
    "gate": "G5",
@@ -134,37 +136,55 @@
   {
    "gate": "G8",
    "name": "Risk probabilities are reliable",
-   "status": "fail",
-   "passed": false,
+   "status": "pass",
+   "passed": true,
    "measured": {
     "pm10": {
-     "brier": 0.1317,
-     "brier_base_rate": 0.1331,
-     "brier_skill": 0.01,
-     "days": 40,
-     "observed_unsafe_share": 0.8419,
-     "unsafe_hours_predicted": 16.95,
-     "unsafe_hours_observed": 20.21,
-     "brier_skill_calibrated": 0.023,
-     "calibrated_reliable": true
+     "days": 100,
+     "observed_unsafe_share": 0.4989,
+     "brier_calibrated": 0.1224,
+     "brier_base_rate": 0.25,
+     "brier_skill_raw": 0.498,
+     "brier_skill_calibrated": 0.51,
+     "by_district": {
+      "mathura": {
+       "days": 40,
+       "observed_unsafe_share": 0.8419,
+       "skill_calibrated": 0.009
+      },
+      "bareilly": {
+       "days": 60,
+       "observed_unsafe_share": 0.2701,
+       "skill_calibrated": 0.412
+      }
+     }
     },
     "up_2005": {
-     "brier": 0.0076,
-     "brier_base_rate": 0.0026,
-     "brier_skill": -1.928,
-     "days": 40,
-     "observed_unsafe_share": 0.9974,
-     "unsafe_hours_predicted": 23.35,
-     "unsafe_hours_observed": 23.94,
-     "brier_skill_calibrated": -5.46,
-     "calibrated_reliable": false
+     "days": 100,
+     "observed_unsafe_share": 0.7871,
+     "brier_calibrated": 0.0927,
+     "brier_base_rate": 0.1676,
+     "brier_skill_raw": 0.442,
+     "brier_skill_calibrated": 0.447,
+     "by_district": {
+      "mathura": {
+       "days": 40,
+       "observed_unsafe_share": 0.9974,
+       "skill_calibrated": -3.901
+      },
+      "bareilly": {
+       "days": 60,
+       "observed_unsafe_share": 0.6469,
+       "skill_calibrated": 0.361
+      }
+     }
     }
    },
-   "threshold": "Brier skill > 0 against the base rate, on every rule",
-   "provenance": "observed: replay of held-out 2021 days",
-   "source": "data/results/reliability_mathura_*.json",
-   "command": "python -m scripts.run_reliability --rule <rule>",
-   "note": "Judged on the isotonic-recalibrated values the API serves (fitted on 2020-05..12, tested on held-out 2021). The 2021 window is January-February only and about 5 V above the training years; under +/-6% almost every step is unsafe, so nothing beats the base rate there."
+   "threshold": "calibrated Brier skill > 0 against the base rate of the pooled held-out steps, on every rule",
+   "provenance": "observed: replay of held-out 2021 days, Mathura (Jan-Feb) and Bareilly (Jan-Oct)",
+   "source": "data/results/risk_calibration_*.json",
+   "command": "python -m scripts.calibrate_risk --rule <rule>",
+   "note": "Isotonic map fitted on 2020-05..12 of both districts. Below the base rate on its own: mathura under up_2005 (almost every step unsafe, so a constant is hard to beat). The pooled reference is one rate for both districts, so part of the pooled skill is telling them apart; the per-district skills are shown for that reason."
   }
  ],
  "bakeoffs": [
@@ -202,7 +222,7 @@
    "up_2005": "No safe action: every option leaves violations. Closest is 'Tap +1, Volt/VAR and per-house export limits' with 12 unsafe steps. The limit that stops it: voltage fell to 214 V against a 216 V limit in 7 steps."
   },
   "demo": {
-   "code_version": "cdc278fc9b87",
+   "code_version": "bcbc6d62e99c",
    "results": [
     {
      "route": "risk",
@@ -211,9 +231,9 @@
      "rule": "pm10",
      "level": "act",
      "expected_unsafe_hours": {
-      "mean": 9.03,
-      "p10": 7.0,
-      "p90": 11.75
+      "mean": 7.82,
+      "p10": 5.25,
+      "p90": 10.03
      }
     },
     {
@@ -221,31 +241,21 @@
      "date": "2025-05-15",
      "day_type": "sunny",
      "rule": "pm10",
-     "safe_action_found": true,
-     "recommended": "tap1_volt_var",
-     "closest": null
+     "safe_action_found": false,
+     "recommended": null,
+     "closest": "volt_var"
     },
     {
-     "route": "headroom",
+     "route": "street",
      "date": "2025-05-15",
      "day_type": "sunny",
      "rule": "pm10"
     },
     {
-     "route": "hosting",
+     "route": "street",
      "date": "2025-05-15",
      "day_type": "sunny",
-     "rule": "pm10",
-     "without_fix": {
-      "p10": 0.2,
-      "p50": 0.3,
-      "p90": 0.5
-     },
-     "with_volt_var": {
-      "p10": 0.8,
-      "p50": 1.0,
-      "p90": 1.0
-     }
+     "rule": "pm10"
     },
     {
      "route": "risk",
@@ -254,9 +264,9 @@
      "rule": "up_2005",
      "level": "act",
      "expected_unsafe_hours": {
-      "mean": 17.52,
-      "p10": 14.97,
-      "p90": 20.25
+      "mean": 16.63,
+      "p10": 14.22,
+      "p90": 19.28
      }
     },
     {
@@ -266,29 +276,19 @@
      "rule": "up_2005",
      "safe_action_found": false,
      "recommended": null,
-     "closest": "tap2_volt_var"
+     "closest": "tap1_volt_var_envelope"
     },
     {
-     "route": "headroom",
+     "route": "street",
      "date": "2025-05-15",
      "day_type": "sunny",
      "rule": "up_2005"
     },
     {
-     "route": "hosting",
+     "route": "street",
      "date": "2025-05-15",
      "day_type": "sunny",
-     "rule": "up_2005",
-     "without_fix": {
-      "p10": 0.0,
-      "p50": 0.0,
-      "p90": 0.0
-     },
-     "with_volt_var": {
-      "p10": 0.0,
-      "p50": 0.0,
-      "p90": 0.11
-     }
+     "rule": "up_2005"
     },
     {
      "route": "risk",
@@ -297,9 +297,9 @@
      "rule": "pm10",
      "level": "act",
      "expected_unsafe_hours": {
-      "mean": 17.61,
-      "p10": 16.48,
-      "p90": 19.5
+      "mean": 16.34,
+      "p10": 13.45,
+      "p90": 19.28
      }
     },
     {
@@ -310,6 +310,18 @@
      "safe_action_found": true,
      "recommended": "tap2_volt_var",
      "closest": null
+    },
+    {
+     "route": "street",
+     "date": "2025-11-19",
+     "day_type": "mixed",
+     "rule": "pm10"
+    },
+    {
+     "route": "street",
+     "date": "2025-11-19",
+     "day_type": "mixed",
+     "rule": "pm10"
     },
     {
      "route": "risk",
@@ -333,15 +345,27 @@
      "closest": "tap2_volt_var"
     },
     {
+     "route": "street",
+     "date": "2025-11-19",
+     "day_type": "mixed",
+     "rule": "up_2005"
+    },
+    {
+     "route": "street",
+     "date": "2025-11-19",
+     "day_type": "mixed",
+     "rule": "up_2005"
+    },
+    {
      "route": "risk",
      "date": "2025-08-05",
      "day_type": "cloudy",
      "rule": "pm10",
-     "level": "ok",
+     "level": "watch",
      "expected_unsafe_hours": {
-      "mean": 1.3,
+      "mean": 0.88,
       "p10": 0.0,
-      "p90": 3.78
+      "p90": 2.28
      }
     },
     {
@@ -350,8 +374,20 @@
      "day_type": "cloudy",
      "rule": "pm10",
      "safe_action_found": true,
-     "recommended": "volt_var",
+     "recommended": "tap1_volt_var",
      "closest": null
+    },
+    {
+     "route": "street",
+     "date": "2025-08-05",
+     "day_type": "cloudy",
+     "rule": "pm10"
+    },
+    {
+     "route": "street",
+     "date": "2025-08-05",
+     "day_type": "cloudy",
+     "rule": "pm10"
     },
     {
      "route": "risk",
@@ -360,9 +396,9 @@
      "rule": "up_2005",
      "level": "act",
      "expected_unsafe_hours": {
-      "mean": 11.64,
-      "p10": 7.22,
-      "p90": 16.03
+      "mean": 10.29,
+      "p10": 6.25,
+      "p90": 14.3
      }
     },
     {
@@ -372,7 +408,371 @@
      "rule": "up_2005",
      "safe_action_found": false,
      "recommended": null,
-     "closest": "tap1_volt_var"
+     "closest": "phase_tap1_volt_var"
+    },
+    {
+     "route": "street",
+     "date": "2025-08-05",
+     "day_type": "cloudy",
+     "rule": "up_2005"
+    },
+    {
+     "route": "street",
+     "date": "2025-08-05",
+     "day_type": "cloudy",
+     "rule": "up_2005"
+    },
+    {
+     "route": "headroom",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10"
+    },
+    {
+     "route": "hosting",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10",
+     "without_fix": {
+      "p10": 0.0,
+      "p50": 0.1,
+      "p90": 0.2
+     },
+     "with_volt_var": {
+      "p10": 0.76,
+      "p50": 1.0,
+      "p90": 1.0
+     }
+    },
+    {
+     "route": "meter-sites",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10"
+    },
+    {
+     "route": "rx-map",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10"
+    },
+    {
+     "route": "headroom",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005"
+    },
+    {
+     "route": "hosting",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005",
+     "without_fix": {
+      "p10": 0.0,
+      "p50": 0.0,
+      "p90": 0.0
+     },
+     "with_volt_var": {
+      "p10": 0.0,
+      "p50": 0.0,
+      "p90": 0.1
+     }
+    },
+    {
+     "route": "meter-sites",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005"
+    },
+    {
+     "route": "rx-map",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005"
+    },
+    {
+     "route": "headroom",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10"
+    },
+    {
+     "route": "hosting",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10",
+     "without_fix": {
+      "p10": 0.3,
+      "p50": 0.7,
+      "p90": 1.0
+     },
+     "with_volt_var": {
+      "p10": 0.8,
+      "p50": 0.9,
+      "p90": 1.0
+     }
+    },
+    {
+     "route": "meter-sites",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10"
+    },
+    {
+     "route": "rx-map",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10"
+    },
+    {
+     "route": "headroom",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005"
+    },
+    {
+     "route": "hosting",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005",
+     "without_fix": {
+      "p10": 0.0,
+      "p50": 0.0,
+      "p90": 0.1
+     },
+     "with_volt_var": {
+      "p10": 0.8,
+      "p50": 0.9,
+      "p90": 1.0
+     }
+    },
+    {
+     "route": "meter-sites",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005"
+    },
+    {
+     "route": "rx-map",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005"
+    },
+    {
+     "route": "headroom",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10"
+    },
+    {
+     "route": "hosting",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10",
+     "without_fix": {
+      "p10": 0.0,
+      "p50": 0.1,
+      "p90": 0.2
+     },
+     "with_volt_var": {
+      "p10": 0.6,
+      "p50": 0.7,
+      "p90": 0.8
+     }
+    },
+    {
+     "route": "meter-sites",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10"
+    },
+    {
+     "route": "rx-map",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10"
+    },
+    {
+     "route": "headroom",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005"
+    },
+    {
+     "route": "hosting",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005",
+     "without_fix": {
+      "p10": 0.0,
+      "p50": 0.0,
+      "p90": 0.0
+     },
+     "with_volt_var": {
+      "p10": 0.5,
+      "p50": 0.65,
+      "p90": 0.71
+     }
+    },
+    {
+     "route": "meter-sites",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005"
+    },
+    {
+     "route": "rx-map",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005"
+    },
+    {
+     "route": "headroom",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10"
+    },
+    {
+     "route": "hosting",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10",
+     "without_fix": {
+      "p10": 0.1,
+      "p50": 0.4,
+      "p90": 0.6
+     },
+     "with_volt_var": {
+      "p10": 0.6,
+      "p50": 0.8,
+      "p90": 1.0
+     }
+    },
+    {
+     "route": "meter-sites",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10"
+    },
+    {
+     "route": "rx-map",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10"
+    },
+    {
+     "route": "headroom",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005"
+    },
+    {
+     "route": "hosting",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005",
+     "without_fix": {
+      "p10": 0.0,
+      "p50": 0.0,
+      "p90": 0.0
+     },
+     "with_volt_var": {
+      "p10": 0.0,
+      "p50": 0.0,
+      "p90": 0.41
+     }
+    },
+    {
+     "route": "meter-sites",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005"
+    },
+    {
+     "route": "rx-map",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005"
+    },
+    {
+     "route": "headroom",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10"
+    },
+    {
+     "route": "hosting",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10",
+     "without_fix": {
+      "p10": 0.0,
+      "p50": 0.1,
+      "p90": 0.31
+     },
+     "with_volt_var": {
+      "p10": 0.6,
+      "p50": 0.8,
+      "p90": 0.91
+     }
+    },
+    {
+     "route": "meter-sites",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10"
+    },
+    {
+     "route": "rx-map",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10"
+    },
+    {
+     "route": "headroom",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005"
+    },
+    {
+     "route": "hosting",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005",
+     "without_fix": {
+      "p10": 0.0,
+      "p50": 0.0,
+      "p90": 0.11
+     },
+     "with_volt_var": {
+      "p10": 0.49,
+      "p50": 0.7,
+      "p90": 0.91
+     }
+    },
+    {
+     "route": "meter-sites",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005"
+    },
+    {
+     "route": "rx-map",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005"
+    },
+    {
+     "route": "transformers",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "pm10"
+    },
+    {
+     "route": "transformers",
+     "date": "2025-05-15",
+     "day_type": "sunny",
+     "rule": "up_2005"
     },
     {
      "route": "whatif",
@@ -380,7 +780,7 @@
      "day_type": "sunny",
      "rule": "pm10",
      "label": "Standard smart inverters (IEEE 1547 Volt/VAR)",
-     "unsafe_steps_before": 30,
+     "unsafe_steps_before": 35,
      "unsafe_steps_after": 0
     },
     {
@@ -389,8 +789,8 @@
      "day_type": "sunny",
      "rule": "pm10",
      "label": "Evening EV charging at 20% of homes, with transformer tap +1",
-     "unsafe_steps_before": 43,
-     "unsafe_steps_after": 31
+     "unsafe_steps_before": 44,
+     "unsafe_steps_after": 22
     }
    ]
   }

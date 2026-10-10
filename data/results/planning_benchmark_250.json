@@ -1,0 +1,61 @@
+{
+ "network": "benchmark_250",
+ "label": "Benchmark street: 99 homes, 250 kVA, Rabbit",
+ "date": "2025-05-15",
+ "rules": {
+  "pm10": {
+   "baseline_unsafe_steps": 6,
+   "headroom_kw": {
+    "near": {
+     "A": 60.0,
+     "B": 60.0,
+     "C": 50.6
+    },
+    "far": {
+     "A": 5.6,
+     "B": 8.0,
+     "C": 1.4
+    }
+   },
+   "hosting_share": {
+    "without_fix": {
+     "p10": 0.0,
+     "p50": 0.1,
+     "p90": 0.2
+    },
+    "with_volt_var": {
+     "p10": 0.76,
+     "p50": 1.0,
+     "p90": 1.0
+    }
+   }
+  },
+  "up_2005": {
+   "baseline_unsafe_steps": 50,
+   "headroom_kw": {
+    "near": {
+     "A": 13.6,
+     "B": 43.6,
+     "C": 14.1
+    },
+    "far": {
+     "A": 0.5,
+     "B": 5.2,
+     "C": 0.0
+    }
+   },
+   "hosting_share": {
+    "without_fix": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 0.0
+    },
+    "with_volt_var": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 0.1
+    }
+   }
+  }
+ }
+}

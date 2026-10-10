@@ -1,5 +1,38 @@
 # Changelog
 
+## Unreleased
+
+- **New dashboard.** A light design with new type (Bricolage Grotesque, Figtree, JetBrains Mono) and colours that
+  each mean one thing: phases A, B, C and the neutral; fine, close to the limit, too high, too low; solar and the
+  grid's own voltage. An overview and five numbered steps (Tomorrow, Fixes, Planning, Try a change, Proof), each
+  ending with its labels explained and the next step.
+- **The street, animated.** `GET /street` returns the street as a schematic with each home on its phase and the
+  design day quarter hour by quarter hour. The dashboard plays it: power flows along A, B, C and the neutral (the
+  wire flows are estimated from each home's net power; the voltages are the solver's), homes change colour with
+  their voltage, and any fix can be watched with and without.
+- **What causes the risk.** `/risk` also runs the day with every panel switched off. What stays unsafe is the grid's
+  own voltage; the rest is rooftop solar. This is why a November night can be unsafe with no sun at all.
+- **Real days instead of demo days.** The dashboard opens on the real tomorrow (live forecast) and a calendar gives
+  any day of 2025 (`GET /calendar`). The evening run also computes tomorrow, so it opens instantly.
+- **Fixes explained.** Every fix type says what it is, how it helps, who does it and what it costs.
+- **Planning on the map.** Room per phase, a connection check by clicking the street, and meter sites, on the street
+  schematic.
+- **What-if compares with today's street.** The result used to compare the changed street with the changed street
+  (identical when no fix was chosen); it now returns `today` as the baseline and shows the changes alone when fixes
+  are added.
+- **A quarter hour the power flow cannot solve is `null`, not an error.** Overloads that make the power flow fail
+  (for example many evening EV chargers) used to break the response; the API now writes `null`, the dashboard shows
+  those homes grey, and the engine keeps counting them as unsafe.
+- **Planning:** three tools that were built but not shown are now in the API and on the Planning page: where to
+  put a smart meter first (`/meter-sites`), how much standard Volt/VAR lowers the peak if the wires' resistance or
+  reactance differ (`/rx-map`), and the five street types ranked by how much of their safe room connected solar
+  already uses (`/transformers`). The evening precompute now covers headroom and hosting capacity for every street
+  type and writes `data/results/planning_<street>.json`.
+- **Demand v2, second run:** extra lag features, both districts' training rows, and a rolling 14-day conformal
+  window, chosen on 2020 validation before 2021 was scored. Gate G4 is still not met: skill 9.0% (needs 10%),
+  coverage 78.8% (now inside 78 to 82%). On the held-out district: 15.3% and 79.8%.
+- The benchmark street's label and the G3 gate name no longer refer to the first release.
+
 ## Since v2.0.0: Round 1 removed (plan task P10.12)
 
 - The dashboard is v2 only; no build switch (`VITE_DASHBOARD` is gone). The Round 1 screens and the chart library

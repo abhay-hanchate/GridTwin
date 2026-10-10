@@ -1,0 +1,61 @@
+{
+ "network": "urban_short_160",
+ "label": "Urban short feeder: 80 homes, 160 kVA, Dog",
+ "date": "2025-05-15",
+ "rules": {
+  "pm10": {
+   "baseline_unsafe_steps": 4,
+   "headroom_kw": {
+    "near": {
+     "A": 60.0,
+     "B": 60.0,
+     "C": 25.3
+    },
+    "far": {
+     "A": 12.7,
+     "B": 18.8,
+     "C": 3.8
+    }
+   },
+   "hosting_share": {
+    "without_fix": {
+     "p10": 0.3,
+     "p50": 0.7,
+     "p90": 1.0
+    },
+    "with_volt_var": {
+     "p10": 0.8,
+     "p50": 0.9,
+     "p90": 1.0
+    }
+   }
+  },
+  "up_2005": {
+   "baseline_unsafe_steps": 35,
+   "headroom_kw": {
+    "near": {
+     "A": 6.6,
+     "B": 12.7,
+     "C": 24.4
+    },
+    "far": {
+     "A": 0.9,
+     "B": 7.5,
+     "C": 3.8
+    }
+   },
+   "hosting_share": {
+    "without_fix": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 0.1
+    },
+    "with_volt_var": {
+     "p10": 0.8,
+     "p50": 0.9,
+     "p90": 1.0
+    }
+   }
+  }
+ }
+}
