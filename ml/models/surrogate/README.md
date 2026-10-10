@@ -1,141 +1,121 @@
-# Power-flow surrogate: model card (Addition 2)
+# Power-flow surrogate: model card (Addition 2, round 4)
 
 Every number below comes from `ml/reports/surrogate_bakeoff.json` and `ml/reports/surrogate_evaluation.json`.
-All states are **simulated**: inputs from the app's own scenario generator (modelled forecasts, CEEW-based demand
-analogs), labels from the power-grid-model solver. The method and its three rounds were pre-registered in
-`docs/DECISIONS.md` ("Addition 2").
+Rounds 1-3 are kept in `ml/reports/surrogate_rounds1-3/`. All states are **simulated**: inputs from the app's own
+scenario generator (modelled forecasts, CEEW-based demand analogs), labels from the power-grid-model solver. Every
+method change was pre-registered in `docs/DECISIONS.md` ("Addition 2") before it was scored, each round on a test set
+never used before.
 
 ## What it is
 
-One model per street (`benchmark_250/`, `rural_weak_63/`): a scikit-learn MLP (256/128, ReLU), exported to NumPy
-(`model.npz`), that predicts every LV node-phase voltage (96 × 3), every line loading (95) and the transformer
-loading for one quarter hour. The screen uses the highest and lowest voltage and the worst line and transformer
-loading, plus a calibrated margin. The benchmark artifact also carries a LightGBM solver-failure classifier (125
-failures in its train split). The weak feeder has none (11 failures, under the pre-registered 20).
+One model per street, for all five streets. The model kind was chosen on tune data by the pre-registered rule:
+
+| Street | Model |
+| --- | --- |
+| benchmark_250, rural_long_100, rural_weak_63 | MLP 512/256/256, scikit-learn, run in NumPy |
+| urban_short_160, suburban_100 | Ridge: there the MLP and LightGBM let unsafe tune states through |
+
+Each model predicts every LV node-phase voltage, every line loading and the transformer loading. It also predicts
+voltage unbalance (VUF %), neutral current (A) and transformer power (kW; negative means reverse flow). Each output
+gets a calibrated margin.
 
 **It is a screen, not a verdict.** `ml/surrogate/api.py` returns predictions only. Every action called safe anywhere in
-GridTwin is solved by the real solver, and a "no safe action" verdict is never based on the screen.
+GridTwin is solved by the real solver, and a "no safe action" verdict never rests on the screen.
 
-## Inputs and supported range (`manifest.json`)
+## Supported range (`manifest.json`)
 
-- **Inputs:** each home's demand kW, delivered solar kW (before any Volt/Watt cut) and installed kWp; grid voltage
-  (pu); tap; battery kW (+ charging, three-phase, unity power factor, at the street's worst node); inverter mode
-  (unity power factor, Volt/VAR, Volt/Watt, or both).
-- **Supported:** the trained street (street hash and solver hash checked), its line layout and phase map, taps 0–2,
-  the four modes, the battery at the trained node, each input inside its trained min–max, and one of the three trained
-  solar layouts (25/50/100% adoption, spread as `planning_street` does).
-- **Everything else:** `unsupported`, risky, sent to the solver. This covers another street, switching, moved
-  phases, an ambient correction, a non-unity fixed power factor or changed inverter rating, a battery elsewhere or
-  larger, grid voltage or kWp outside the range, and an untrained solar layout.
-- **Never predicted:** voltage unbalance, neutral current, reverse flow.
+- **The street:** street hash and solver hash checked; the line layout as built plus its first three switching
+  candidates (the ones the controller permits); the phase map as built.
+- **Battery:** up to 100 kW at any of the street's declared nodes. These are the nodes that were its highest-voltage
+  node on 24 sampled days.
+- **Settings:** taps 0-2 and the four inverter modes.
+- **Values:** each input inside its trained min-max, and a Mahalanobis novelty distance below the 99.9th percentile
+  of the calibrate split.
+- **Everything else** is `unsupported` and goes to the solver: moved phases, other switched layouts, an ambient
+  correction, a battery elsewhere or larger, out-of-range or novel states.
+- **Optional VUF limit:** the screen can apply one (`screen(..., vuf_limit=2.0)`).
 
-## Data and splits (`data/surrogate/<street>/manifest.json`, `data/surrogate/splits.json`)
+## Data (`data/surrogate/<street>/manifest.json`, `data/surrogate/splits.json`)
 
-Families are (date, adoption, tap, mode), 6 scenarios × 96 steps each, plus about 30% boundary states (Illinois
-bisection to within 2 V of a ±6%/±10% limit, or 95–105% loading). Battery power and curtailment are drawn per state.
+Per street: 160 families of (date, solar layout, tap, mode, line layout). Each has 6 scenarios × 96 quarter hours plus
+about 40% near-limit states found by bisection. A quarter of families use the planning solar layouts; the rest use
+random homes with 1.5-5 kWp panels. Battery power, battery node and curtailment are drawn per state.
 
-| Split | Months (2025) | States per street | Use |
-| --- | --- | --- | --- |
-| train | Jan Feb Apr May Jul Aug Oct Nov, days 5 and 15 | about 45,000 | fitting |
-| tune | Jan Apr Jul Oct, day 25 | about 11,000 | early stopping, selection |
-| calibrate | Feb May Aug Nov, day 25 | about 11,000 | margins |
-| test | Mar Jun Sep Dec, days 10 and 20 | about 22,400 | rounds 1–2, scored once |
-| test_fresh | Mar Jun Sep Dec, days 3 and 27 | about 22,400 | round 3 (shipped), scored once |
-| out of range | 8 kinds × 250 | 2,000 | routing check |
-
-Tap 2 with Volt/VAR+Volt/Watt, and tap 1 with Volt/Watt, never appear in development data.
-
-## Rounds
-
-1. **One margin per extreme.** On tune it was safe but rejected most safe states, because the margin was set by
-   deep under-voltage errors far from any limit.
-2. **Margins by predicted value (Mondrian, 8 bins).** Shipped margins at the ±6% limits:
-   - benchmark: 2.6 V (upper), 3.9 V (lower);
-   - weak feeder: 1.2 V and 1.6 V.
-
-   At the ±10% lower limit, and at 100% loading, the margins stay wide (15–71 V, 31–43 points), so those decisions
-   mostly go to the solver.
-3. **Trained solar layouts only.** The first test set showed the per-feature box let an unseen 75% adoption layout
-   through. The weak feeder's guarded screen then called 585 of 7,152 unsafe states safe (±6%). Round 3 refuses such
-   layouts and was scored on a fresh test set.
-
-## Results on the fresh test set (shipped configuration, as deployed)
-
-| | Benchmark | Weak feeder |
+| Split | Months (2025) | States per street |
 | --- | --- | --- |
-| Unsafe states called safe, unseen months (±6%) | 0 of 10,158 | 0 of 7,789 |
-| Unsafe states called safe, unseen months (±10%) | 0 of 3,397 | 0 of 2,892 |
-| Unsafe states called safe, near a limit (±6% / ±10%) | 0 of 2,929 / 0 of 907 | 0 of 2,954 / 0 of 1,218 |
-| Safe states sent to the solver anyway (±6%) | 5,462 of 8,274 | 5,946 of 10,643 |
-| Test states the screen accepts | 11,205 of 22,393 | 11,099 of 22,455 |
-| Unseen tap/mode combinations accepted | 2,806 | 0 (all fell on the refused 75% layout) |
+| train | Jan Feb Apr May Jul Aug Oct Nov, days 5 and 15 | about 60,000 |
+| tune | Jan Apr Jul Oct, day 25 | about 15,000 |
+| calibrate | Feb May Aug Nov, day 25 | about 15,000 |
+| test (round 4) | Mar Jun Sep Dec, days 7 and 17 (never used before) | about 30,000 |
+| out of range | 8 kinds × 250 | 2,000 |
 
-Accuracy targets: node-voltage MAE ≤ 0.5 V and 99th percentile ≤ 2 V; loading MAE ≤ 2 and 99th percentile ≤ 5 points.
+## Results on the round 4 test set (as deployed: a refused state counts as risky)
 
-- **On the states the screen accepts, all 4 are met on both streets:**
-  - benchmark: 0.31 V MAE, 1.89 V 99th percentile; 0.44 and 2.9 loading points;
-  - weak feeder: 0.17 V, 1.00 V; 0.21 and 2.3 points.
-- **Over all test states,** including the refused 75% layout, the MLP meets 1 of 4 on each street.
+**Unsafe states called safe (unseen months):**
 
-On accepted states alone, safe states the screen still sent to the solver were:
+| | Benchmark | Rural long | Rural weak | Urban | Suburban |
+| --- | --- | --- | --- | --- | --- |
+| ±6% | 0 of 12,907 | 0 of 9,939 | 0 of 10,309 | 0 of 8,620 | 13 of 9,299 |
+| ±10% | 0 of 4,422 | 0 of 2,967 | 1 of 3,888 | 2 of 2,271 | 0 of 3,380 |
+| Near a limit, ±6% | 0 | 2 of 4,958 | 0 | 0 | 8 of 4,945 |
 
-| Street | ±6% | ±10% |
-| --- | --- | --- |
-| Benchmark | 1,189 of 4,001 | 1,717 of 7,611 |
-| Weak feeder | 1,104 of 5,801 | 1,542 of 7,367 |
+Each count has a one-sided 95% upper bound on the miss rate in the evaluation file. For example, the benchmark's 0 of
+12,907 means below 2.3 per 10,000. States within a day are correlated, so the bound is optimistic, and none of this is a
+guarantee. Round 3 had zero misses on its two streets, so **round 4 lost that record**.
 
-**Out of range:** every set was refused in full except "demand × 4". There, 169 (benchmark) and 164 (weak feeder) of
-250 states were refused. The other 81 and 86 stayed inside the trained range, because light-load hours times four
-look like normal evening demand, and they were screened.
+**Coverage and caution:**
 
-## Speed (`latency` in the evaluation file)
+| | Benchmark | Rural long | Rural weak | Urban | Suburban |
+| --- | --- | --- | --- | --- | --- |
+| Test states accepted | 34% | 72% | 60% | 64% | 49% |
+| New solar layouts accepted | 10% | 60% | 47% | 55% | 33% |
+| Safe states sent to the solver anyway (±6%) | 90% | 54% | 69% | about 99% | about 99% |
+| Accuracy targets met (accepted states) | 2 of 4 | 1 of 4 | 1 of 4 | 0 of 4 | 0 of 4 |
+| Node-voltage MAE (accepted) | 0.48 V | 0.64 V | 0.78 V | 3.5 V | 2.6 V |
 
-Per state, on the CPU:
+Unbalance error on accepted states is 0.08-0.25 points. Out-of-range sets were refused in full except "demand × 4"
+(160-200 of 250 refused).
 
-| Mode | Screen (batch 1,024) | Solver (batch 1,024) | Ratio |
+## Speed
+
+Per state, on the CPU (`latency`):
+
+| Mode | Screen | Solver | Ratio |
 | --- | --- | --- | --- |
-| Fixed power factor | about 0.1 ms | about 1 ms | about 10× |
-| Volt/VAR | about 0.1 ms | 17–24 ms | about 180–240× |
+| Fixed power factor | about 0.2 ms | about 1.3 ms | about 6-8× |
+| Volt/VAR | about 0.2 ms | about 25 ms | about 100-140× |
 
-**End to end it did not pay off in the tested runs.** In the controller-style battery and curtailment search, no
-permitted action was safe in 30 of 32 runs, so every action had to be solved anyway. Screen-then-verify was 0.9×
-the speed of the solver in cost order. In one weak-feeder run it set aside the cheapest safe action (a false
-rejection) and the verified choice curtailed more. Zero unsafe actions passed the screen. The whole-day fix tournament
-comparison, with every candidate solved both ways in 8 runs per street (16 in all):
+**End to end it does not pay off yet:**
 
-- **Speed:** 1.04× overall (benchmark) and 1.02× (weak feeder).
-- **Quality:** 0 false rejections, and the same best fix in all 16 runs.
-- **When a safe fix existed:** skipping clearly unsafe candidates saved up to 37% (145 s to 92 s).
-- **When none existed:** the skipped candidates were solved as a fallback, which was up to 10% slower.
-- **The ceiling:** building the candidate catalogue (envelopes, switching probes) takes 60–100 s per run and cannot be
-  screened.
+- **Controller-style battery and curtailment search:** 0.85-0.90× the solver in cost order (slower). Only 2 of 16 runs
+  per street had any safe action, and proving "nothing is safe" needs the solver. The chosen action matched solving
+  everything in all 80 runs, because the three cheapest actions are always solved.
+- **Fix tournament:** 0.99-1.05×, the same best fix in all 40 runs, and no false rejections. The phase optimiser (about
+  40 s) and Volt/VAR candidates (about 9 s each) dominate.
 
-## Disagreement and the solver's response
+## What changed from round 3, honestly
 
-`ml/reports/surrogate_disagreements.json` logs examples from the held-out states where the bare prediction said safe
-and the solver did not. In every logged example the margin had already flagged the state as risky. For instance, on
-the benchmark under ±6%:
+- **Met:** all five streets; switched layouts; seasonal battery nodes; unbalance, neutral and reverse-flow outputs;
+  miss bounds; the cheapest actions always solved.
+- **Partly met:** accepting new solar layouts (from 10% to 60% depending on the street).
+- **Not met:**
+  - fewer safe states sent to the solver;
+  - tight margins at every limit;
+  - an end-to-end speed-up;
+  - and zero misses, which round 3 had on its narrower support.
 
-- predicted highest voltage 243.5 V, just under the 243.8 V limit;
-- with the margin, 246.1 V, so risky;
-- the solver gave 243.9 V: unsafe and rejected.
-
-No guarded screen let an unsafe state or action through on the fresh test set, in the controller-style runs or in the
-tournaments. The overrule path is covered by a labelled fault-injection test (`tests/test_surrogate_fixes.py`).
+Learning far more variety cost precision.
 
 ## Not built
 
-- **A graph neural network:** every street here shares one layout, so its strength, new layouts, could not be tested
-  honestly.
-- **Physics-informed refinement:** it adds latency to approach what the solver gives in about 2 ms.
-- **PyTorch and the GPU:** the MLP trains on the CPU in 4–5 minutes per street.
+- **A graph neural network:** every street shares one base layout, and only three switched variants are trained.
+- **Physics-informed refinement.**
+- **PyTorch and the GPU:** the solver behind every label and every check runs only on the CPU.
 
 ## Reproduce
 
 ```
-python -m scripts.surrogate_generate            # ~10 min per street on 8 workers
-python -m scripts.surrogate_generate --fresh-test
-python -m scripts.surrogate_train               # round 1
-python -m scripts.surrogate_train --round2      # round 2 margins, trained layouts in the manifest
+python -m scripts.surrogate_generate            # about 16 min per street on 10 workers
+python -m scripts.surrogate_train               # bake-off and selection on tune; 15-35 min per street
 python -m scripts.surrogate_evaluate            # held-out, out of range, latency, end-to-end
 ```

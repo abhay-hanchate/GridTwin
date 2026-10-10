@@ -182,24 +182,25 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 
 ## Fast power-flow screen (Addition 2)
 
-A small neural network trained on solver-labelled, **simulated** states predicts each street's highest and lowest
-voltage and worst loadings about 10 times faster than the solver per state, and about 200 times faster under Volt/VAR.
-It adds a calibrated margin. It only sorts candidates: anything called safe is still solved, a "no safe action" verdict
-never rests on it, and anything it was not trained on goes straight to the solver. That includes another street,
-switching, moved phases, an untrained solar layout, a battery elsewhere and out-of-range inputs.
+Small models trained on solver-labelled, **simulated** states, one per street type and five in all, predict each
+street's voltages, loadings, unbalance, neutral current and reverse flow. They run 6-8 times faster than the solver per
+state, and about 100 times faster under Volt/VAR, and add a calibrated margin. The screen only sorts candidates:
+anything called safe is still solved, a "no safe action" verdict never rests on it, and anything it was not trained on
+goes straight to the solver.
 
-- **Results on a fresh test set (unseen months):** zero unsafe states called safe on either street. It accepts about
-  half the test states and sends many safe ones to the solver anyway.
-- **Accuracy:** on the states it accepts it meets all four targets (0.17–0.31 V average voltage error); over every
-  test state it meets 1 of 4.
-- **What failed:**
-  - an earlier round, which a new solar layout misled;
-  - end-to-end speed in the controller-style search, where almost no action was safe, so everything was solved anyway;
-  - the whole-day fix tournament gained only 2–4%.
+- **Results on the newest test set (unseen months):**
+  - Unsafe states it called safe: none on the benchmark street; a handful elsewhere (up to 13 of 9,299 on the suburban
+    street). The solver catches every one.
+  - It accepts 34-72% of states and still sends most safe states to the solver.
+  - Accuracy targets met: at most 2 of 4.
+- **What failed:** an end-to-end speed-up. In most test windows no action was safe at all, so everything had to be
+  solved anyway.
+- **What round 4 traded:** it widened the support (all streets, any solar layout, switched layouts, seasonal battery
+  nodes) and lost precision against round 3. Round 3 had zero misses on its two streets.
 
 How it was built and scored: [model card](ml/models/surrogate/README.md), pre-registration in
-[DECISIONS](docs/DECISIONS.md) ("Addition 2"), contract for the controller in `ml/surrogate/api.py`, and the
-dashboard's **Fast screen** page and `GET /api/v2/surrogate`.
+[DECISIONS](docs/DECISIONS.md) ("Addition 2", rounds 1-4), the contract for the controller in `ml/surrogate/api.py`,
+the dashboard's **Fast screen** page and `GET /api/v2/surrogate`.
 
 ## Limits
 

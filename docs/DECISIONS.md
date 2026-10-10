@@ -580,3 +580,54 @@ Asked by the owner after the round 3 report. Every change below is decided now; 
 
 Candidates, selection rule (tune only), metrics and targets are otherwise as pre-registered for round 1. Rounds 1-3
 stay in the record.
+
+### Addition 2, round 4 result (run 10-11 Oct 2026, scored once on the round 4 test set, days 7 and 17)
+
+- **Selected on tune:** MLP on benchmark_250, rural_long_100 and rural_weak_63; ridge on urban_short_160 and
+  suburban_100. On those two the MLP and LightGBM let unsafe tune states through (4 and 34), and ridge calls about 99%
+  of safe states risky, so the screen is safe but of little use there.
+- **Unsafe called safe (as deployed, unseen months, +-6% / +-10%):**
+  - benchmark: 0 / 0 (miss-rate bound below 2.3 and 6.8 per 10,000);
+  - rural_weak: 0 / 1;
+  - rural_long: 0 / 0 on the base states, plus 2 near-limit states under +-6%;
+  - urban: 0 / 2;
+  - suburban: 13 / 0.
+
+  Round 3 had 0 on its two streets with a narrower support, so this **failed** the zero-miss record. The solver
+  still verifies every choice, so no miss can become a recommendation.
+- **States accepted:**
+
+  | | Benchmark | Urban | Suburban | Rural long | Rural weak |
+  |---|---|---|---|---|---|
+  | All test states | 34% | 64% | 49% | 72% | 60% |
+  | New random solar layouts | 10% | 55% | 33% | 60% | 47% |
+
+  The novelty check is stricter than expected on the benchmark.
+- **Safe states still sent to the solver (+-6%):** benchmark 90%, rural_long 54%, rural_weak 69%, urban and
+  suburban about 99%. Worse than round 3 on the same streets: **failed** item 3.
+- **Accuracy on accepted states:**
+
+  | Street | Targets met | Node-voltage MAE |
+  |---|---|---|
+  | Benchmark | 2 of 4 | 0.48 V |
+  | Rural long | 1 of 4 | 0.64 V |
+  | Rural weak | 1 of 4 | 0.78 V |
+  | Urban | 0 of 4 | about 3 V (ridge) |
+  | Suburban | 0 of 4 | about 3 V (ridge) |
+
+  Unbalance error is 0.08-0.25 points. Round 3 met 4 of 4 on its two streets.
+- **Margins at the limits:**
+  - +-6% upper limit: 3.0-8.6 V;
+  - +-10% lower limit: up to 64 V on the weak feeder;
+  - 100% transformer loading: 15-103 points.
+
+  Item 4 **failed**: the bins are centred on the limits, but the errors there remained large.
+- **End to end:**
+  - Controller-style search: 0.85-0.90x the solver in cost order. Only 2 of 16 runs per street had any safe action.
+    The same action as solving everything was chosen in all 80 runs (item 6 met: the cheapest actions are always
+    solved). In 16 runs the controller's default battery node was not one of the declared nodes.
+  - Fix tournament: 0.99-1.05x, the same best fix in all 40 runs, no false rejections.
+- **Out of range:** every set was refused in full except demand x4 (160-200 of 250).
+- **Speed per state:** screen about 0.2 ms; solver about 1.3 ms at fixed power factor and about 25 ms under Volt/VAR.
+- **Reading:** widening the support (items 1, 2, 8) cost precision (items 3, 4) and the zero-miss record. Items 1, 6,
+  7 and 8 are met; item 2 partly; items 3, 4 and 5 are not.
