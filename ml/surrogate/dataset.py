@@ -8,10 +8,9 @@ from pathlib import Path
 import numpy as np
 
 from ml.surrogate.schema import ROOT
-from ml.surrogate.teacher import Labels, StateArrays
+from ml.surrogate.teacher import LABEL_KEYS, Labels, StateArrays
 
 DATA_DIR = ROOT / "data" / "surrogate"
-LABEL_KEYS = ("u_pu", "line_loading_pct", "trafo_loading_pct", "converged", "passes")
 
 
 def street_dir(street: str, root: Path = DATA_DIR) -> Path:
@@ -46,7 +45,6 @@ def save_ood(path: Path, ood: dict) -> None:
         arrays[f"{kind}__house_phase"] = item["network"].house_phase
         arrays[f"{kind}__line_from"] = item["network"].line_from
         arrays[f"{kind}__line_to"] = item["network"].line_to
-        arrays[f"{kind}__battery_node"] = item["battery_node"]
     np.savez_compressed(path, kinds=json.dumps(list(ood)), **arrays)
 
 
@@ -63,8 +61,7 @@ class Split:
         return len(self.boundary)
 
     def take(self, idx) -> "Split":
-        lab = Labels(*(getattr(self.labels, k)[idx] for k in LABEL_KEYS))
-        return Split(self.states.take(idx), lab, self.boundary[idx], self.boundary_kind[idx], self.family[idx],
+        return Split(self.states.take(idx), self.labels.take(idx), self.boundary[idx], self.boundary_kind[idx], self.family[idx],
                      self.step[idx])
 
 
@@ -78,8 +75,7 @@ def load_split(street: str, split: str, root: Path = DATA_DIR) -> Split:
             parts.append(Split(s, lab, d["boundary"], d["boundary_kind"], np.full(len(d["boundary"]), fid), d["step"]))
     if not parts:
         raise FileNotFoundError(f"no families for {street}/{split}")
-    return Split(StateArrays.concat([p.states for p in parts]),
-                 Labels(*(np.concatenate([getattr(p.labels, k) for p in parts]) for k in LABEL_KEYS)),
+    return Split(StateArrays.concat([p.states for p in parts]), Labels.concat([p.labels for p in parts]),
                  np.concatenate([p.boundary for p in parts]), np.concatenate([p.boundary_kind for p in parts]),
                  np.concatenate([p.family for p in parts]), np.concatenate([p.step for p in parts]))
 
@@ -90,6 +86,5 @@ def load_ood(street: str, root: Path = DATA_DIR) -> dict:
         for kind in json.loads(str(d["kinds"])):
             s, lab = _unpack(d, f"{kind}__")
             out[kind] = {"states": s, "labels": lab, "house_phase": d[f"{kind}__house_phase"],
-                         "line_ends": np.stack([d[f"{kind}__line_from"], d[f"{kind}__line_to"]], axis=1),
-                         "battery_node": int(d[f"{kind}__battery_node"])}
+                         "line_ends": np.stack([d[f"{kind}__line_from"], d[f"{kind}__line_to"]], axis=1)}
         return out

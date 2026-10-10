@@ -1,6 +1,6 @@
-"""Generate the surrogate's solver-labelled states (Addition 2, requirement 2.1).
+"""Generate the surrogate's solver-labelled states (Addition 2, requirement 2.1; round 4 in docs/DECISIONS.md).
 
-    python -m scripts.surrogate_generate                      # both streets, all families, then the out-of-range sets
+    python -m scripts.surrogate_generate                      # all five streets, all families, then the out-of-range sets
     python -m scripts.surrogate_generate --pilot              # two families per split, two scenarios: timing check
 
 Resumable: a family whose file exists is skipped. Writes data/surrogate/<street>/families/*.npz (git-ignored),
@@ -18,19 +18,17 @@ from collections import Counter
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import asdict
 from datetime import datetime, timezone
+from pathlib import Path
 
 import numpy as np
 
 from ml.surrogate import dataset, generate, schema
 
-STREETS = tuple(schema.BATTERY_NODES)
 OOD_SEED = 20261010
 
 
 def _run(fam: dict, n_scenarios: int, boundary_share: float, root: str) -> dict:
     warnings.filterwarnings("ignore")
-    from pathlib import Path
-
     from backend.v2 import compute
     fam = generate.Family(**fam)
     path = dataset.street_dir(fam.street, Path(root)) / "families" / f"{fam.id}.npz"
@@ -51,27 +49,26 @@ def _row(fam, boundary, converged, seconds) -> dict:
 
 def main(argv=None) -> None:
     p = argparse.ArgumentParser()
-    p.add_argument("--street", action="append", choices=STREETS)
+    p.add_argument("--street", action="append", choices=schema.STREETS)
     p.add_argument("--workers", type=int, default=6)
     p.add_argument("--pilot", action="store_true")
-    p.add_argument("--fresh-test", action="store_true", help="round 3: add the fresh test families to an existing street")
     p.add_argument("--root", default=str(dataset.DATA_DIR))
     args = p.parse_args(argv)
-    from pathlib import Path
     root = Path(args.root)
     n_scn = 2 if args.pilot else generate.N_SCENARIOS
-    splits_doc = {"definition": {
-        "dev_months": generate.DEV_MONTHS, "dev_days": generate.DEV_DAYS, "tune_months": generate.TUNE_MONTHS,
+    streets = args.street or schema.STREETS
+    splits_path = root / ("splits_pilot.json" if args.pilot else "splits.json")
+    splits_doc = json.loads(splits_path.read_text(encoding="utf-8")) if splits_path.exists() else {"streets": {}}
+    splits_doc["definition"] = {
+        "round": 4, "dev_months": generate.DEV_MONTHS, "dev_days": generate.DEV_DAYS, "tune_months": generate.TUNE_MONTHS,
         "calibrate_months": generate.CALIBRATE_MONTHS, "test_months": generate.TEST_MONTHS, "test_days": generate.TEST_DAYS,
-        "adoption_dev": generate.ADOPTION_DEV, "adoption_test": generate.ADOPTION_TEST,
+        "solar_layouts": {"planning": generate.PLANNING_LAYOUTS, "planning_share": generate.PLANNING_SHARE,
+                          "random_adoption": generate.ADOPTION_RANGE, "random_kwp": generate.KWP_RANGE},
+        "line_layouts": f"as built plus the first {schema.N_SWITCHED} switching candidates, dealt {generate.TOPOLOGY_DEAL}",
         "held_out_tap_mode": sorted(generate.HELD_OUT), "families_per_date": generate.FAMILIES_PER_DATE,
         "scenarios_per_family": n_scn, "boundary_share": generate.BOUNDARY_SHARE, "ood_kinds": generate.OOD_KINDS,
-        "rule": "split by family (date, adoption, tap, mode), never by row or seed"}, "streets": {}}
-    if args.fresh_test:
-        for street in args.street or STREETS:
-            _fresh(street, root, args.workers)
-        return
-    for street in args.street or STREETS:
+        "battery_nodes": schema.BATTERY_NODES, "rule": "split by family (date, layouts, tap, mode), never by row or seed"}
+    for street in streets:
         fams = generate.families(street)
         if args.pilot:
             fams = [f for s in generate.SPLITS for f in [x for x in fams if x.split == s][:2]]
@@ -81,7 +78,8 @@ def main(argv=None) -> None:
             jobs = [pool.submit(_run, asdict(f), n_scn, generate.BOUNDARY_SHARE, str(root)) for f in fams]
             for i, job in enumerate(as_completed(jobs), 1):
                 rows.append(job.result())
-                print(f"{street}: {i}/{len(jobs)} families ({rows[-1]['id']}, {rows[-1]['seconds']} s)", flush=True)
+                if i % 10 == 0 or i == len(jobs):
+                    print(f"{street}: {i}/{len(jobs)} families", flush=True)
         rows.sort(key=lambda r: r["id"])
         from backend.v2 import compute
         net = compute.network(street)
@@ -98,30 +96,8 @@ def main(argv=None) -> None:
                                      for k, v in ood.items()}}
         manifest_path.write_text(json.dumps(manifest, indent=1), encoding="utf-8")
         splits_doc["streets"][street] = {s: [r["id"] for r in rows if r["split"] == s] for s in generate.SPLITS}
+        splits_path.write_text(json.dumps(splits_doc, indent=1), encoding="utf-8")
         print(f"{street}: done in {time.perf_counter() - t0:.0f} s", flush=True)
-        del test
-    (root / ("splits_pilot.json" if args.pilot else "splits.json")).write_text(json.dumps(splits_doc, indent=1), encoding="utf-8")
-
-
-def _fresh(street: str, root, workers: int) -> None:
-    fams = generate.fresh_test_families(street)
-    t0 = time.perf_counter()
-    with ProcessPoolExecutor(max_workers=workers) as pool:
-        rows = [j.result() for j in [pool.submit(_run, asdict(f), generate.N_SCENARIOS, generate.BOUNDARY_SHARE, str(root)) for f in fams]]
-    path = dataset.street_dir(street, root) / "manifest.json"
-    manifest = json.loads(path.read_text(encoding="utf-8"))
-    manifest["families"] = [f for f in manifest["families"] if f["split"] != "test_fresh"] + rows
-    manifest["totals"]["test_fresh"] = {k: sum(r[k] for r in rows) for k in ("states", "boundary_states", "solver_failures")}
-    manifest["fresh_test"] = {"created_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                              "days": generate.FRESH_TEST_DAYS, "seconds": round(time.perf_counter() - t0, 1),
-                              "why": "round 3 in docs/DECISIONS.md: the original test split had been looked at"}
-    path.write_text(json.dumps(manifest, indent=1), encoding="utf-8")
-    splits = root / "splits.json"
-    doc = json.loads(splits.read_text(encoding="utf-8"))
-    doc["streets"][street]["test_fresh"] = [r["id"] for r in rows]
-    doc["definition"]["fresh_test_days"] = generate.FRESH_TEST_DAYS
-    splits.write_text(json.dumps(doc, indent=1), encoding="utf-8")
-    print(f"{street}: fresh test set, {len(rows)} families in {time.perf_counter() - t0:.0f} s", flush=True)
 
 
 def _write_manifest(root, street, rows, net, n_scn, seconds, pilot) -> None:
@@ -133,13 +109,14 @@ def _write_manifest(root, street, rows, net, n_scn, seconds, pilot) -> None:
         for k in ("states", "boundary_states", "solver_failures"):
             per_split[(r["split"], k)] += r[k]
     manifest = {
-        "street": street, "pilot": pilot, "created_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "street": street, "round": 4, "pilot": pilot, "created_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "provenance": "simulated: app scenario generator inputs (modelled forecasts, CEEW-based demand analogs), "
                       "labels from the power-grid-model solver; not measured data",
         "solver": {"engine": "power-grid-model", "version": power_grid_model.__version__, "asymmetric": True,
                    "method": "newton_raphson", "tolerance": 1e-8, "max_iterations": 40, "solver_hash": schema.solver_hash(),
                    "inverter_passes_max": 80, "damping": 0.3},
-        "street_hash": schema.street_hash(net), "battery_node": schema.battery_node(street),
+        "street_hash": schema.street_hash(net), "battery_nodes": schema.battery_nodes(street),
+        "line_layouts": [schema.line_ends(t) for t in schema.topologies(net)],
         "home_power_factor": schema.LOAD_PF, "battery_power_factor": 1.0,
         "config": {"scenarios_per_family": n_scn, "battery_share": generate.BATTERY_SHARE, "battery_kw": generate.BATTERY_KW,
                    "curtail_share": generate.CURTAIL_SHARE, "keep_range": generate.KEEP_RANGE,
