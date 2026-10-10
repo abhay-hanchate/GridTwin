@@ -28,7 +28,8 @@ def _make(tmp_path, *, district=True, model=True):
     for name in ("load_kw", "pv_kw_per_kwp", "upstream_vm_pu"):
         (data / f"{name}.parquet").write_bytes(b"x")
     if district:
-        (data / "v2" / "upstream_vm_pu_mathura.parquet").write_bytes(b"x")
+        for name in ("load_kw", "pv_kw_per_kwp", "upstream_vm_pu"):
+            (data / "v2" / f"{name}_mathura.parquet").write_bytes(b"x")
     if model:
         (models / "solar_v2_manifest.json").write_text("{}")
     return {"data_dir": data, "model_dir": models, "results_dir": tmp_path / "results"}

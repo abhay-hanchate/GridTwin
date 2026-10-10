@@ -95,12 +95,30 @@ def test_evaluate_reports_gate_g3_against_round_one(world):
     pred = solar_v2.predict(solar_v2.fit(X, y, day & (X.index < "2024-07-01")), X)
     s = solar_v2.evaluate(pred, y, day & (X.index >= "2024-08-01"), {"persistence": y.shift(24)})
     assert {"mae_p50", "p10_p90_coverage", "wis", "skill_vs_persistence", "gate_g3_passes"} <= set(s)
-    assert s["gate_g3_passes"] == (s["mae_p50"] < solar_v2.ROUND1_MAE)
+    assert s["gate_g3_passes"] == (s["mae_p50"] < solar_v2.first_model_mae())
+
+
+def test_the_first_models_score_is_recomputed_from_its_committed_table():
+    """The gate G3 reference comes from data/processed/solar_forecast_2025.parquet, not from a typed number: it
+    reproduces the first model's own report (ml/reports/metrics.json, solar.mae_p50 = 0.0396)."""
+    import json
+    from engine import config
+    reported = json.loads((config.ROOT / "ml" / "reports" / "metrics.json").read_text(encoding="utf-8"))["solar"]
+    assert solar_v2.first_model_mae() == pytest.approx(reported["mae_p50"], abs=5e-5)
+
+
+def test_missing_multi_model_files_name_the_download_command(tmp_path, monkeypatch):
+    from engine import config
+    monkeypatch.setattr(config, "RAW_DIR", tmp_path)
+    with pytest.raises(RuntimeError, match="python -m scripts.download_solar_v2"):
+        solar_v2.load_dataset()
 
 
 @pytest.mark.realdata
 def test_real_run_passes_gates_g2_and_g3():
     """Needs data/raw/dayahead_*_mathura_2024_2025.json and era5_mathura_2024_2025.json (scripts/download_solar_v2.py)."""
+    if not any(solar_v2.raw_path(m).exists() for m in solar_v2.CANDIDATE_MODELS):
+        pytest.skip("no multi-model weather files in data/raw; run python -m scripts.download_solar_v2")
     report = solar_v2.run()
     s = report["scores_2025"]
     assert set(report["nwp_models_used"]) == set(solar_v2.MODELS)

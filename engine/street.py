@@ -53,6 +53,18 @@ def layout(network: Network) -> dict:
             "lines": sorted(lines, key=lambda r: r["line"]), "rows": next_row[0]}
 
 
+def line_ends(network: Network) -> list[list[int]]:
+    """[parent, child] of every line, by line index, oriented away from the transformer in this network's own tree.
+
+    A fix that switches the topology re-numbers the lines, so flows of one network are matched to another network's
+    drawing by these end pairs, not by line index."""
+    t, g = tree(network)
+    ends: list[list[int]] = [[]] * network.n_lines
+    for a, b in t.edges:
+        ends[g.edges[a, b]["line"]] = [int(a), int(b)]
+    return ends
+
+
 def home_net_kw(network: Network, scn: DayScenarioBatch, controls: Controls = Controls(), s: int = 0) -> np.ndarray:
     """(T, H) demand minus delivered solar per home for scenario `s`, with curtailment and export limits applied
     the way the solver applies them (Volt/Watt's extra reduction is not included)."""

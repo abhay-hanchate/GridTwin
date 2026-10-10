@@ -40,6 +40,14 @@ def _label(model: str) -> str:
     return MODEL_LABEL.get(model, model)
 
 
+def _recorded() -> str:
+    from ml import up_demand
+    try:
+        return up_demand.recorded_note()
+    except (OSError, ValueError, KeyError):
+        return "the UP state demand record cannot be read"
+
+
 def live_forecasts(date: str, district: str = "mathura") -> dict:
     """{"solar", "demand", "voltage_pu"} frames plus provenance text, for one live date."""
     from ml import live_dayahead, live_solar_v2
@@ -61,6 +69,6 @@ def live_forecasts(date: str, district: str = "mathura") -> dict:
             "solar": f"modeled: live solar v2 forecast ({solar_source})",
             "demand": f"modeled: live day-ahead demand, {_label(dv['demand']['model'])} model",
             "voltage": f"modeled: live day-ahead grid voltage, {_label(dv['voltage']['model'])} model",
-            "anchor": dv["anchor"]["note"],
+            "anchor": dv["anchor"]["note"] if dv["anchor"].get("used") else f"{dv['anchor']['note']}; {_recorded()}",
         },
     }

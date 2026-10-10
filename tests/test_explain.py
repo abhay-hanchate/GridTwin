@@ -18,8 +18,18 @@ def test_risk_text_uses_only_numbers_from_the_result():
     allowed = {"08", "15", "8.6", "6.5", "10.8", "264.5", "253", "8", "10"}       # values plus "8 of 10 cases"
     assert set(NUMBER.findall(text)) <= allowed
     assert "not reliable as odds" in text
-    calibrated = explain_risk({**RISK, "calibration": {"reliable": True}}, limit_v=253.0)
+    calibrated = explain_risk({**RISK, "calibration": {"reliable": True, "applied": True}}, limit_v=253.0)
     assert "slightly better than the historical average" in calibrated and "not reliable" not in calibrated
+    # a reliable map that was not applied (a fix, another street) leaves raw chances
+    assert "not reliable as odds" in explain_risk({**RISK, "calibration": {"reliable": True, "applied": False}}, 253.0)
+
+
+def test_calibrated_hours_have_no_scenario_range():
+    risk = {**RISK, "expected_unsafe_hours": {"mean": 7.25, "p10": None, "p90": None},
+            "calibration": {"reliable": True, "applied": True}}
+    for lang in ("en", "hi"):
+        text = explain_risk(risk, 253.0, lang)
+        assert "7.2" in text and "None" not in text and "6.5" not in text
 
 
 def test_no_safe_action_names_the_limit_and_what_is_still_needed():

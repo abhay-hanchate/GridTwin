@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from functools import lru_cache
 from pathlib import Path
 
 import lightgbm as lgb
@@ -30,7 +31,7 @@ QUANTILES = {"p10": 0.1, "p50": 0.5, "p90": 0.9}
 FEATURES = ["pv_mean", "pv_min", "pv_max", "pv_std", "ghi_mean", "cloud_mean", "clearsky_ghi", "hour", "doy", "n_models"]
 PARAMS = {"n_estimators": 400, "learning_rate": 0.05, "num_leaves": 31, "min_child_samples": 20, "verbose": -1,
           "random_state": 42, "deterministic": True, "force_col_wise": True}
-ROUND1_MAE = 0.0396                  # Round 1 solar model on the 2025 daylight mask (gate G3 reference)
+FIRST_MODEL_TABLE = config.PROCESSED_DIR / "solar_forecast_2025.parquet"   # the first (Round 1) model's 2025 forecast
 AVAILABILITY_MIN = 0.95              # gate G2
 # Bake-off of 9 Oct 2026 (docs/DECISIONS.md, data/results/bakeoff_solar.json): no window keeps 78-82% coverage in
 # every season; 30 days has the smallest worst-season miss (winter 74.9%). 60 and 120 days stay callable via `window`.
@@ -43,6 +44,21 @@ SEASONS = {12: "winter", 1: "winter", 2: "winter", 3: "summer", 4: "summer", 5: 
            6: "monsoon", 7: "monsoon", 8: "monsoon", 9: "monsoon", 10: "post_monsoon", 11: "post_monsoon"}
 FILL = {"wind_speed_10m": 5.0, "temperature_2m": 30.0, "diffuse_radiation": 0.0,
         "direct_normal_irradiance": 0.0, "shortwave_radiation": 0.0}
+
+
+@lru_cache(maxsize=1)
+def first_model_mae(path: Path = FIRST_MODEL_TABLE) -> float:
+    """Gate G3 reference: the first solar model's 2025 MAE, recomputed from its committed forecast table.
+
+    Scored the way ml/forecast.py scored it: the table's whole-hour rows (the 15-minute rows between them are
+    interpolations written for the dashboard), daylight hours (clear-sky GHI above zero), the median against the
+    table's own `actual` column (ERA5-driven PV, the same truth solar v2 uses on these hours). That is 4,414 hours of
+    2025 and reproduces the first model's report (0.0396). Averaging the 15-minute rows mixes in interpolated values
+    and does not."""
+    table = pd.read_parquet(path)
+    hours = table[table.index.minute == 0]
+    day = profiles.clearsky_ghi(hours.index) > 0
+    return round(float((hours.loc[day, "p50"] - hours.loc[day, "actual"]).abs().mean()), 4)
 
 
 def raw_path(model: str | None, district: str = "mathura") -> Path:
@@ -212,7 +228,7 @@ def evaluate(pred: pd.DataFrame, y: pd.Series, mask: pd.Series, baselines: dict[
         b = float((series[t] - yt).abs().mean())
         scores[f"mae_{name}"] = round(b, 4)
         scores[f"skill_vs_{name}"] = round(metrics.skill(mae, b), 3)
-    scores["gate_g3_passes"] = bool(mae < ROUND1_MAE)
+    scores["gate_g3_passes"] = bool(mae < first_model_mae())
     return scores
 
 
@@ -249,6 +265,9 @@ def load_dataset(district: str = "mathura") -> tuple[pd.DataFrame, pd.Series, pd
     """Ensemble features X, ERA5-driven truth y, the availability table (gate G2) and the NWP models that passed it."""
     site = config.SITES[district]
     candidates = {m: read_previous_runs(raw_path(m, district)) for m in CANDIDATE_MODELS if raw_path(m, district).exists()}
+    if not candidates:
+        raise RuntimeError(f"no multi-model weather files in {config.RAW_DIR} (dayahead_<model>_{district}_2024_2025.json); "
+                           "run python -m scripts.download_solar_v2")
     avail = availability(candidates)
     used = [m for m in MODELS if m in avail.index and bool(avail.loc[m, "passes"])]
     if len(used) < 3:

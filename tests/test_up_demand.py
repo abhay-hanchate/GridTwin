@@ -71,3 +71,12 @@ def test_combined_energy_prefers_the_live_record_where_both_exist():
     live = pd.Series([450.0, 460.0], index=pd.date_range("2024-04-28", periods=2, freq="D"))
     both = up_demand.combined_energy(hist, live)
     assert both.tolist() == [300.0, 450.0, 460.0]          # 04-28 from the live record, 04-29 only live
+
+
+def test_recorded_days_counts_complete_days_in_the_live_record(tmp_path):
+    path = tmp_path / "up_demand.parquet"
+    assert up_demand.recorded_days(path) == 0                                        # nothing recorded yet
+    up_demand.record(_payload({"2026-10-08": 20000.0, "2026-10-09": 18000.0}), path)
+    assert up_demand.recorded_days(path) == 2
+    note = up_demand.recorded_note(path)
+    assert "2 complete days" in note and str(up_demand.MIN_WINDOW_DAYS + 1) in note

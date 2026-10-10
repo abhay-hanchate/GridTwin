@@ -30,6 +30,12 @@ Model files are checksummed (SHA-256 of the committed LF bytes) and checked befo
 Gate G2 (NWP availability): five models pass; JMA GSM and UKMO 10 km are dropped. Gate G3 (beat Round 1's MAE on
 the identical mask): passed.
 
+The Round 1 reference is computed, not typed: `ml.solar_v2.first_model_mae()` scores the first model's committed 2025
+table (`data/processed/solar_forecast_2025.parquet`) on its whole-hour rows and daylight hours against the table's own
+truth column, and gets 0.0396 on the same 4,414 hours as solar v2 (re-checked 10 Oct 2026, together with a re-run of
+G2 and G3 from the downloaded weather files: identical scores). Averaging the table's 15-minute rows, which are
+interpolations, gives a different number; that was the audit's 0.053.
+
 **What the numbers say, without spin.**
 - Most of the median gain comes from averaging five weather models, with no ML at all (0.0411 to 0.0335).
   LightGBM adds a small median gain and mainly a better interval.

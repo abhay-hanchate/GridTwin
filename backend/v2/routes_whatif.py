@@ -14,7 +14,7 @@ from pydantic import BaseModel, Field, ValidationError
 from backend.v2 import compute
 from backend.v2.errors import ApiError
 from backend.v2.jobs import cache_key
-from backend.v2.routes_decision import DEFAULT_NETWORK, _settings, _store, default_date
+from backend.v2.routes_decision import DEFAULT_NETWORK, _settings, _store, check_date, default_date
 from backend.v2.settings import ROOT, file_version
 from engine.fixes.battery import solve_with_battery
 from engine.registry import REGISTRY, catalog
@@ -119,6 +119,7 @@ def whatif(request: Request, spec: WhatIf):
     """Same spec twice = one computation (the cache key is the normalised spec)."""
     s, store = _settings(request), _store(request)
     norm, key = normalise(spec, s, store)
+    check_date(request, norm["date"])
     if s.offline:
         result = store.cached(key)
         if result is None:

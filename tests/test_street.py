@@ -1,5 +1,6 @@
 import time
 
+import networkx as nx
 import numpy as np
 import pytest
 from fastapi.testclient import TestClient
@@ -8,7 +9,7 @@ from backend.v2 import compute
 from backend.v2.app import create_app
 from backend.v2.settings import Settings
 from engine.archetypes import build
-from engine.street import layout, line_flows
+from engine.street import layout, line_ends, line_flows, tree
 
 
 @pytest.fixture(scope="module")
@@ -41,6 +42,32 @@ def test_balanced_phases_leave_no_neutral_current_and_one_phase_carries_it_all(n
 def test_exporting_homes_reverse_the_flow(net):
     f = line_flows(net, -np.ones((1, net.n_homes)))
     assert (f["phase_kw"].sum(axis=2) <= 0).all()
+
+
+def test_line_ends_follow_each_networks_own_wires_after_switching(net):
+    from engine.fixes.switching import apply, candidates
+    rec = candidates(net)[0]
+    switched = apply(net, rec)
+    pairs = lambda n: {frozenset((int(a), int(b))) for a, b in zip(n.line_from, n.line_to)}  # noqa: E731
+    for n in (net, switched):
+        ends = line_ends(n)
+        assert len(ends) == n.n_lines and {frozenset(e) for e in ends} == pairs(n)
+        assert {frozenset((ln["from"], ln["to"])) for ln in layout(n)["lines"]} == pairs(n)
+    ends = line_ends(switched)
+    assert frozenset(rec.tie) in {frozenset(e) for e in ends}
+    opened = (int(net.line_from[rec.opened_line]), int(net.line_to[rec.opened_line]))
+    assert frozenset(opened) not in {frozenset(e) for e in ends}
+    # every home is still served: the switched network's root wires, found through its own ends, carry all of it
+    f = line_flows(switched, np.ones((1, switched.n_homes)))
+    root = [i for i, (a, _) in enumerate(ends) if a == switched.trafo.to_node]
+    assert f["phase_kw"][root].sum() == pytest.approx(switched.n_homes)
+    # flows are oriented parent -> child: a line's flow equals the homes at and beyond its child end
+    t, _ = tree(switched)
+    for i, (a, b) in enumerate(ends):
+        assert t.has_edge(a, b)
+        beyond = nx.descendants(t, b) | {b}
+        n_homes = sum(int(node) in beyond for node in switched.house_node)
+        assert f["phase_kw"][i, 0].sum() == pytest.approx(n_homes)
 
 
 def test_street_and_calendar_routes(tmp_path, monkeypatch):

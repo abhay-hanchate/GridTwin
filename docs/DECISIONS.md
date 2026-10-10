@@ -393,3 +393,33 @@ October) +0.41 and +0.36; Mathura (40 days, January to February) +0.009 and **-3
 ±6% is 99.7% unsafe, so a constant forecast is nearly unbeatable there, and that sub-result stays reported as below
 the base rate. The pooled reference is a single rate for both districts, so part of the pooled skill comes from
 telling the districts apart; Bareilly alone, a single district with every season, also passes.
+
+## Which risk chances users see (decided 10 Oct 2026, fix brief F2)
+
+- **Problem:** gate G8 passes on the recalibrated (isotonic) chances, but every page drew the raw ones, and the level,
+  the first watch and act times and the expected hours came from the raw series.
+- **Decision (option 1 of the brief):** `/risk` returns in `p_unsafe` the series users see: the calibrated chances
+  when the stored map is `reliable` **and** the request is where the map was fitted (benchmark street, no fix);
+  the raw chances otherwise. `series` says which; `calibration.applied` says whether the map was used, and
+  `calibration.raw` and `calibration.calibrated` keep both.
+- **One place:** `backend/v2/compute.py::shown_series` derives the level, `first_watch`, `first_act` and the expected
+  hours from the shown series, with the same watch (20%) and act (50%) thresholds. The dashboard and the printable
+  report only read these fields.
+- **Expected hours when calibrated:** the sum of the calibrated chances times a quarter hour. The P10 to P90 range
+  comes from the raw scenario draws and does not describe the calibrated chances, so it is `null` and not shown.
+- **Grid and solar split:** the no-solar series is scaled step by step by calibrated over raw, so each bar keeps its
+  grid and solar shares; where the raw chance is 0 the whole calibrated bar counts as grid.
+- **Why not apply it everywhere:** the map was fitted with no fix on the benchmark street; applying it to a replay with
+  a fix or to another street type would be an extrapolation that was never tested.
+
+## The grid-voltage history the app reads (recorded 10 Oct 2026, fix brief F-0)
+
+- **Problem:** `backend/v2/compute.py` read the older committed Mathura files (`data/processed/load_kw.parquet`,
+  `pv_kw_per_kwp.parquet`, `upstream_vm_pu.parquet`), built from 2019 and early 2021 only. All of 2020 was missing
+  (the voltage file 55.7% empty), so March and April had no "yesterday's voltage" and a missing value reached the
+  voltage model silently; March was 8.1 V off the real record and April's daily shape correlated at 0.48.
+- **Decision:** the app prefers the full record in `data/processed/v2` (`*_mathura.parquet`, about 4 MB, committed)
+  and falls back to the old files. "Yesterday" for a 2025 date is the same calendar day of 2019, else 2020, else
+  2021, then the month's mean, then the record's mean: never missing. Readiness requires the three files.
+- **Open:** the generator still trains on Mathura only, because the benchmark street and the solar forecast are
+  Mathura's. Adding Bareilly is a separate decision.

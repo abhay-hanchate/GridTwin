@@ -19,6 +19,7 @@ def test_round_one_routes_are_gone(path):
     r = client.get(path)
     assert r.status_code == 404
     assert r.headers["content-type"].startswith("application/json")       # never the dashboard page
+    assert r.json()["error"]["code"] == "not_found" and set(r.json()["error"]) == {"code", "message", "details"}
 
 
 def test_an_unknown_api_path_is_a_json_404_even_with_the_dashboard_built(monkeypatch, tmp_path):
@@ -26,7 +27,8 @@ def test_an_unknown_api_path_is_a_json_404_even_with_the_dashboard_built(monkeyp
     (tmp_path / "index.html").write_text("<!doctype html><title>GridTwin</title>", encoding="utf-8")
     monkeypatch.setattr(api, "FRONTEND_DIST", tmp_path)
     shell = TestClient(api.create_app())
-    assert shell.get("/api/nope").status_code == 404
+    nope = shell.get("/api/nope")
+    assert nope.status_code == 404 and nope.json()["error"]["code"] == "not_found"     # the v2 error shape
     page = shell.get("/planning")
     assert page.status_code == 200 and "GridTwin" in page.text
     assert shell.get("/api/v2/health").status_code == 200
