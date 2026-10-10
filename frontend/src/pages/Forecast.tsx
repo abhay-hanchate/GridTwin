@@ -40,7 +40,7 @@ export default function Forecast({ network = DEFAULT_NETWORK, go, ...props }: Vi
         <section className="card" aria-labelledby="replay-title">
           <h3 id="replay-title">{t('home.replay_title')} <Prov kind="modeled" /></h3>
           <p className="card-sub">{t('home.replay_intro')}</p>
-          <StreetPlayer network={network} rule={view.rule} date={view.date} />
+          <StreetPlayer network={network} rule={view.rule} date={view.date} presentation="forecast" />
         </section>
       )}
       {risk.data && (

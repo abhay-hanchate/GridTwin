@@ -11,7 +11,6 @@ import PhasePlan from '../components/PhasePlan'
 import Prov from '../components/Prov'
 import Status from '../components/Status'
 import StreetPlayer from '../components/street/StreetPlayer'
-import VoltageCompare from '../components/VoltageCompare'
 import { bindingText } from '../fixes'
 import { one } from '../format'
 import { useT, type StringKey } from '../i18n'
@@ -46,7 +45,7 @@ export default function Fixes({ network = DEFAULT_NETWORK, go, ...props }: ViewP
       </header>
       <Controls view={view} />
       <Status state={fixes} />
-      {fixes.data && <FixesView key={`${fixes.data.date}-${fixes.data.rule}`} result={fixes.data} vmax={view.band?.vmax_v}
+      {fixes.data && <FixesView key={`${fixes.data.date}-${fixes.data.rule}`} result={fixes.data}
         network={network} rule={view.rule} date={view.date} />}
       <NextStep to="planning" go={go} />
     </div>
@@ -57,7 +56,7 @@ export default function Fixes({ network = DEFAULT_NETWORK, go, ...props }: ViewP
 const ordered = (outcomes: Outcome[]) => [...outcomes].sort((a, b) =>
   (a.safe === b.safe ? 0 : a.safe ? -1 : 1) || (a.rank ?? 99) - (b.rank ?? 99) || a.unsafe_steps - b.unsafe_steps)
 
-function FixesView({ result, vmax, network, rule, date }: { result: FixesResult; vmax?: number; network: string; rule: string; date: string | null }) {
+function FixesView({ result, network, rule, date }: { result: FixesResult; network: string; rule: string; date: string | null }) {
   const t = useT()
   const v = result.verdict
   const byId = new Map(result.outcomes.map((o) => [o.id, o]))
@@ -98,7 +97,6 @@ function FixesView({ result, vmax, network, rule, date }: { result: FixesResult;
           <FixDetail outcome={selected} baseline={baseline} network={network} rule={rule} date={date} />
           {selected.id === focusId && selected.details?.phase_moves && <PhasePlan moves={selected.details.phase_moves} />}
           {selected.id === focusId && selected.details?.export_limits && <Envelope limits={selected.details.export_limits} />}
-          {selected.id === focusId && selected.details?.voltage && <VoltageCompare voltage={selected.details.voltage} label={selected.label} vmax={vmax} />}
         </section>
       )}
 
@@ -176,7 +174,7 @@ function FixDetail({ outcome, baseline, network, rule, date }: { outcome: Outcom
       <div>
         <h3>{t('fixes.watch_title')}</h3>
         <p className="card-sub">{t('fixes.watch_intro')}</p>
-        <StreetPlayer network={network} rule={rule} date={date} fix={outcome.id} fixLabel={outcome.label} />
+        <StreetPlayer network={network} rule={rule} date={date} fix={outcome.id} fixLabel={outcome.label} presentation="compare" />
       </div>
     </>
   )

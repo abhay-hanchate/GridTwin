@@ -130,6 +130,17 @@ describe('Tomorrow', () => {
     expect(strip.querySelectorAll('[data-threshold]').length).toBe(2)
   })
 
+  it('keeps the street, voltage chart and cause chart on the same quarter hour', async () => {
+    serve()
+    await show()
+    const slider = screen.getByRole('slider', { name: /time of day/i })
+    fireEvent.change(slider, { target: { value: '44' } })
+    await settle()
+    expect(screen.getByRole('img', { name: /highest and lowest street voltage.*11:00/i })).toBeTruthy()
+    expect(screen.getByRole('img', { name: /solar production and home electricity use.*11:00/i })).toBeTruthy()
+    expect(screen.getByRole('img', { name: /the street at 11:00/i })).toBeTruthy()
+  })
+
   it('offline, only the computed days are offered', async () => {
     serveBase({ '/risk': risk }, { offline: true })
     await show()
