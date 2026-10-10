@@ -462,3 +462,9 @@ code before building; where the check disagreed with the blueprint, the check wi
 - **Comparison:** the existing reactive battery controller on the identical observations, starting energy and battery.
 - **Code location:** a new top-level `control/` package that uses `engine/` as a library, so the results cache key
   (and the precomputed demo) is unchanged.
+
+**Result: forecast correction settings (development day 10 June 2025, not a fixture day; 10 held-out truth scenarios,
+every 16-step horizon of the day).** Mean absolute error of the horizon's later steps without correction: solar
+0.0113 kW/kWp, demand 24.1% of the mean, grid voltage 4.63 V. Best of rho {0.3, 0.5, 0.7, 0.9} x decay {0.8, 0.9,
+0.95} by the mean of the three relative errors: **rho 0.3, decay 0.95**: solar 0.0085, demand 10.5%, grid 3.65 V
+(0.66 of the uncorrected error). These are the defaults; the fixture days were not used to choose them.
