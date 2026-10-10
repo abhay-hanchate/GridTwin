@@ -12,7 +12,7 @@ import Status from '../components/Status'
 import type { HomeView, Marker } from '../components/street/geometry'
 import StreetMap from '../components/street/StreetMap'
 import { bindingText } from '../fixes'
-import { one, pct } from '../format'
+import { change, one, pct } from '../format'
 import { useT, type StringKey } from '../i18n'
 
 type Layer = 'headroom' | 'connect' | 'meters'
@@ -221,9 +221,9 @@ function RxHeat({ data }: { data: RxMap }) {
           <span className="rx-head" role="rowheader">{t('plan.rx_r', { r: one(r) })}</span>
           {xs.map((x) => {
             const c = cell(r, x)
-            const k = c ? c.volt_var_reduction_v / max : 0
+            const k = c ? Math.max(0, c.volt_var_reduction_v) / max : 0         // a rise is drawn uncoloured
             return <span key={x} role="cell" className="rx-cell" style={{ background: `rgba(31, 99, 214, ${0.08 + k * 0.55})`, color: k > 0.6 ? '#fff' : 'var(--ink)' }}>
-              {c ? `−${one(c.volt_var_reduction_v)}` : ''}</span>
+              {c ? change(-c.volt_var_reduction_v) : ''}</span>
           })}
         </div>
       ))}

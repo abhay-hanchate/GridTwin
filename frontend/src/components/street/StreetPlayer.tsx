@@ -209,6 +209,7 @@ function Player({ s, startStep, compact }: { s: Street; startStep?: number; comp
         </section>
       )}
 
+
       {solved.length < vs.length && <p className="note" role="note">{t('player.nosolve_note')}</p>}
       {b.solar === 0 && b.grid >= 0 && over > 0 && <p className="note" role="note">{t('player.night_high')}</p>}
       <p className="muted">{t('player.how', { steps: unsafeSteps })} {t('player.flow_note')}</p>

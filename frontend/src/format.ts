@@ -2,5 +2,10 @@
 export const pct = (p: number) => `${Math.round(p * 100)}%`
 export const one = (x: number) => String(Number(x.toFixed(1)))
 export const volts = (v: number) => String(Math.round(v))
+/** A change with its sign, one decimal: '−2.9' when it falls, '+0.4' when it rises. */
+export const change = (x: number) => {
+  const v = Number(x.toFixed(1))
+  return v < 0 ? `−${one(-v)}` : v > 0 ? `+${one(v)}` : '0'
+}
 /** HH:MM of step `i` in a 96-step day of 15-minute steps (used when a response has no `t`). */
 export const stepTime = (i: number) => `${String(Math.floor(i / 4)).padStart(2, '0')}:${String((i % 4) * 15).padStart(2, '0')}`

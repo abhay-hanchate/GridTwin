@@ -35,6 +35,7 @@ export default function Proof({ go }: { go?: (area: Area) => void }) {
         <summary>{t('proof.not_built_title')}</summary>
         <ul>{NOT_BUILT.map((k) => <li key={k}>{t(`proof.not_built.${k}` as StringKey)}</li>)}</ul>
       </details>
+      <p className="note" role="note">{t('proof.flow_estimate')}</p>
       <NextStep to="home" go={go} />
     </div>
   )

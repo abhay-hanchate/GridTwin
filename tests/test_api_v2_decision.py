@@ -114,6 +114,27 @@ def test_real_risk_payload_matches_the_dashboard_shape():
     assert r["level"] in {"ok", "watch", "act"} and set(r["provenance"]) >= {"solar", "demand", "voltage"}
 
 
+_T = [f"{i // 4:02d}:{i % 4 * 15:02d}" for i in range(4)]
+_CAL = {"reliable": True, "raw": [0.0, 0.1, 0.3, 0.6], "calibrated": [0.05, 0.25, 0.45, 0.7]}
+
+
+def test_shown_series_is_calibrated_and_everything_derives_from_it():
+    out = compute.shown_series(_CAL, [0.0, 0.1, 0.3, 0.6], [0.0, 0.05, 0.3, 0.0], _T, applies=True)
+    assert out["series"] == "calibrated" and out["p_unsafe"] == [0.05, 0.25, 0.45, 0.7]
+    assert (out["level"], out["first_watch"], out["first_act"]) == ("act", "00:15", "00:45")
+    assert out["expected_unsafe_hours"] == {"mean": 0.36, "p10": None, "p90": None}     # 1.45 * 0.25 h
+    # the grid part keeps its share of each bar: half of step 1, all of step 2, none of step 3; raw 0 is all grid
+    assert out["p_unsafe_without_solar"] == [0.05, 0.125, 0.45, 0.0]
+
+
+def test_shown_series_stays_raw_when_not_reliable_or_not_where_the_map_was_fitted():
+    for cal, applies in (({**_CAL, "reliable": False}, True), (_CAL, False)):
+        out = compute.shown_series(cal, [0.0, 0.1, 0.3, 0.6], [0.0, 0.05, 0.3, 0.0], _T, applies=applies)
+        assert out["series"] == "raw" and out["p_unsafe"] == [0.0, 0.1, 0.3, 0.6]
+        assert (out["level"], out["first_watch"], out["first_act"]) == ("act", "00:30", "00:45")
+        assert out["p_unsafe_without_solar"] == [0.0, 0.05, 0.3, 0.0] and out["expected_unsafe_hours"] is None
+
+
 def test_unknown_forecast_date_is_a_404_with_the_range():
     with pytest.raises(compute.ApiError) as err:
         compute.solar_forecast("2019-01-01")

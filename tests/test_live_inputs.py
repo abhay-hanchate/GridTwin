@@ -23,11 +23,13 @@ def fake_ml(monkeypatch):
     live_dayahead = types.SimpleNamespace(current_ratio=no_anchor, live_forecast=lambda district, target, ratio=None: {
         "anchor": {"note": "pattern only"}, "demand": {"model": "pattern_only", "points": _points(0.5)},
         "voltage": {"model": "pattern_only", "points": _points(241.5)}})
+    up_demand = types.SimpleNamespace(recorded_note=lambda: "3 complete days of UP state demand recorded")
     ml = types.ModuleType("ml")
-    ml.live_solar_v2, ml.live_dayahead = live_solar_v2, live_dayahead
+    ml.live_solar_v2, ml.live_dayahead, ml.up_demand = live_solar_v2, live_dayahead, up_demand
     monkeypatch.setitem(sys.modules, "ml", ml)
     monkeypatch.setitem(sys.modules, "ml.live_solar_v2", live_solar_v2)
     monkeypatch.setitem(sys.modules, "ml.live_dayahead", live_dayahead)
+    monkeypatch.setitem(sys.modules, "ml.up_demand", up_demand)
 
 
 def test_live_forecasts_return_96_rows_and_voltage_in_per_unit(fake_ml):
@@ -36,7 +38,8 @@ def test_live_forecasts_return_96_rows_and_voltage_in_per_unit(fake_ml):
     assert f["voltage_pu"]["p50"].iloc[0] == pytest.approx(241.5 / 230)
     assert f["demand"]["p90"].iloc[0] == pytest.approx(0.55)
     assert "pattern only model" in f["provenance"]["voltage"] and "live-anchored" not in f["provenance"]["voltage"]
-    assert f["provenance"]["anchor"] == "pattern only" and "winter" in f["provenance"]["solar"]
+    assert f["provenance"]["anchor"] == "pattern only; 3 complete days of UP state demand recorded"
+    assert "winter" in f["provenance"]["solar"]
 
 
 def test_only_today_and_later_are_live(monkeypatch):

@@ -45,7 +45,6 @@ export function Shell({ render, initial = 'home' }: Props) {
           <img className="brand-mark" src="/favicon.svg" alt="" />
           <div>
             <h1>GridTwin</h1>
-            <p>{t('shell.tagline')}</p>
           </div>
         </div>
         <div className="lang-switch segmented" role="group" aria-label={t('shell.language')}>

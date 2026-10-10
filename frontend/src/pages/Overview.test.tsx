@@ -5,6 +5,7 @@ import risk from '../fixtures/v2/risk_sample.json'
 import { LangProvider } from '../i18n'
 import { causeSplit } from '../risk'
 import { CALENDAR, calls, makeStreet, results, serve as serveBase, settle } from '../test/server'
+import StreetPlayer from '../components/street/StreetPlayer'
 import Overview from './Overview'
 
 // Grid voltage alone makes the night unsafe; solar adds the midday.
@@ -59,10 +60,11 @@ describe('Overview', () => {
   })
 })
 
+// The player is on Tomorrow and Fixes (the overview no longer embeds it, PR #28); it is tested on its own.
 describe('the street player', () => {
   it('draws the transformer, the three phases and every home on its own phase', async () => {
     serve(nightRisk)
-    render(<LangProvider><Overview /></LangProvider>)
+    render(<LangProvider><StreetPlayer network="benchmark_250" rule="pm10" date={CALENDAR.tomorrow} /></LangProvider>)
     await settle()
     const map = screen.getByRole('img', { name: /the street at/i })
     expect(map.querySelectorAll('[data-home]').length).toBe(2)
@@ -73,7 +75,7 @@ describe('the street player', () => {
 
   it('at midday the solar home sends power back up phase A, goes over the limit, and the balance adds up', async () => {
     serve(nightRisk)
-    render(<LangProvider><Overview /></LangProvider>)
+    render(<LangProvider><StreetPlayer network="benchmark_250" rule="pm10" date={CALENDAR.tomorrow} /></LangProvider>)
     await settle()
     fireEvent.change(screen.getByRole('slider', { name: /time of day/i }), { target: { value: '48' } })
     await settle()
@@ -94,7 +96,7 @@ describe('the street player', () => {
   it('play moves the clock forward and pause stops it', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true })
     serve(nightRisk)
-    render(<LangProvider><Overview /></LangProvider>)
+    render(<LangProvider><StreetPlayer network="benchmark_250" rule="pm10" date={CALENDAR.tomorrow} /></LangProvider>)
     await act(async () => { await vi.advanceTimersByTimeAsync(10) })
     const time = () => document.querySelector('.clock .time')!.textContent
     const start = time()
@@ -107,7 +109,7 @@ describe('the street player', () => {
     expect(time()).toBe(stopped)
   })
 
-  it('ends with the labels explained, including the phases and the neutral', async () => {
+  it('the overview ends with the labels explained, including the phases and the neutral', async () => {
     serve(nightRisk)
     render(<LangProvider><Overview /></LangProvider>)
     await settle()
@@ -120,7 +122,7 @@ describe('the street player', () => {
     const street = makeStreet()
     street.before.home_v[0] = [258, 258]                            // midnight, solar 0, power drawn, both homes too high
     serveBase({ '/risk': nightRisk, '/fixes': fixesSafe, '/street': street })
-    render(<LangProvider><Overview /></LangProvider>)
+    render(<LangProvider><StreetPlayer network="benchmark_250" rule="pm10" date={CALENDAR.tomorrow} /></LangProvider>)
     await settle()
     fireEvent.change(screen.getByRole('slider', { name: /time of day/i }), { target: { value: '0' } })
     await settle()

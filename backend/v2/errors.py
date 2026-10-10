@@ -42,6 +42,12 @@ def install(app: FastAPI) -> None:
         message = exc.detail if isinstance(exc.detail, str) else CODES.get(exc.status_code, "error")
         return error_response(exc.status_code, message, headers=getattr(exc, "headers", None))
 
+    from ml.live_forecast import LiveForecastError
+
+    @app.exception_handler(LiveForecastError)
+    async def _live_forecast_error(request: Request, exc: LiveForecastError):
+        return error_response(503, f"the live forecast is unavailable: {exc}")
+
     @app.exception_handler(RequestValidationError)
     async def _validation_error(request: Request, exc: RequestValidationError):
         fields = [{"loc": [str(p) for p in e.get("loc", ())], "msg": e.get("msg", "")} for e in exc.errors()]

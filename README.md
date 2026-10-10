@@ -27,19 +27,22 @@ wire and **raises** the voltage, which damages appliances and trips solar invert
 ## What v2 finds
 
 On the benchmark street (99 homes on single phases, one 250 kVA transformer) for the sunny demo day, 15 May 2025.
-All values are modeled, from the precomputed results in `data/results/v2`:
+All values are modeled, from the precomputed results in `data/results/v2` (regenerated 10 Oct 2026 on the corrected
+grid-voltage history):
 
 | | ±10% of 230 V | UP Supply Code, ±6% |
 | --- | --- | --- |
-| Tomorrow's level | ACT from 06:15 | ACT from 00:00 |
-| Expected unsafe hours (P10 to P90) | 9 (7 to 11.8) | 17.5 (15 to 20.3) |
-| Fix tournament | **Recommended: tap +1 with IEEE 1547 Volt/VAR** | **No safe action.** Closest: tap +2 with Volt/VAR, 25 unsafe quarter hours left; the evening voltage falls to 208 V against the 216 V limit |
-| Hosting capacity, share of homes (P10 to P90) | 20% to 50%; with Volt/VAR 80% to 100% | 0%; with Volt/VAR 0% to 11% |
-| Extra solar a new home can add at the far end (no harm), by phase | 4.2 to 7 kW | 0 to 1.4 kW |
+| Tomorrow's level | ACT from 08:00 | ACT from 00:00 |
+| Expected unsafe hours (recalibrated chances) | 7.6 | 16.3 |
+| Fix tournament | **No safe action.** Closest: IEEE 1547 Volt/VAR, 4 unsafe quarter hours left at 254 V against the 253 V limit | **No safe action.** Closest: tap +1, Volt/VAR and per-house export limits, 28 unsafe quarter hours left at 248.4 V against 243.8 V |
+| Hosting capacity, share of homes (P10 to P90) | 0% to 20%; with Volt/VAR 76% to 100% | 0%; with Volt/VAR 0% to 10% |
+| Extra solar a new home can add at the far end (no harm), by phase | 1.4 to 8 kW | 0 to 5.2 kW |
 
-The UP rule squeezes from both sides: lowering the voltage enough for midday pushes evenings below 216 V, so no
-setting tried is safe all day. The place **and the phase** of a new connection matter as much as its size, which a
-flat state cap cannot see. On the cloudy demo day (5 August) the ±10% level is OK.
+On this day no option tried keeps every quarter hour safe under either rule; the tool names the closest option and
+what it still needs ("about 1 V less voltage at the worst moments" under ±10%). On the cloudy (5 August) and mixed
+(19 November) demo days a safe fix exists under ±10% (tap +1 with Volt/VAR, tap +2 with Volt/VAR); under the UP rule
+none does on any of the three days. The place **and the phase** of a new connection matter as much as its size, which
+a flat state cap cannot see.
 
 ## How much to trust it
 
@@ -48,14 +51,14 @@ dashboard's Proof page shows them, failed ones included.
 
 | Gate | What | Result |
 | --- | --- | --- |
-| G1 | Engine matches pandapower (0.001 V apart) and is far faster (403.6 times in the latest run; the factor varies with machine load) | pass |
+| G1 | Engine matches pandapower (0.001 V apart) and is far faster (455.7 times in the latest run; the factor varies with machine load) | pass |
 | G2 | At least three weather models available (five used) | pass |
 | G3 | Solar forecast error 0.0329 against the first solar model's 0.0396 | pass |
 | G4 | Demand v2: 9.0% skill on the Mathura 2021 winter days, needed 10% (coverage 78.8%, inside 78 to 82%); on the held-out district 15.3% and 79.8% | **fail** (no AI-improvement claim for demand) |
 | G5 | Phase-aware engine converges; peak 268.4 to 272.6 V across zero-sequence assumptions | pass |
 | G6 | Licences: Open-Meteo's free API is non-commercial only | conditional |
 | G7 | Solar yield checked against a measured plant | not run (data needs an IEEE DataPort login) |
-| G8 | Risk probabilities reliable on every rule: ±10% slightly better than the historical average; ±6% not | **fail** |
+| G8 | Risk probabilities reliable on every rule, on 100 held-out days of both districts: recalibrated Brier skill ±10% +0.51, UP ±6% +0.45 (Mathura alone under ±6% is below the base rate) | pass |
 
 ## The dashboard
 
@@ -185,18 +188,20 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
   on is assumed. A utility's own feeder and phase data replace both ([docs/ONBOARDING.md](docs/ONBOARDING.md)).
 - **Short test windows:** the Mathura 2021 file ends on 20 February 2021, so the demand and risk hold-outs cover only
   winter days.
-- **Live demand and voltage run on past patterns** until the UP state-demand recorder runs daily.
+- **Live demand and voltage run on past patterns.** The evening workflow now records UP state demand, but the
+  anchor uses the day before the forecast day, which for tomorrow is today and is complete only after midnight; on
+  past data the anchor improved the voltage forecast by 0.07 V and the demand forecast not at all.
 - **Weather licence:** a utility deployment needs a paid or other licensed weather source (gate G6).
 - All assumptions, with their status: [docs/assumptions.md](docs/assumptions.md). What was deliberately not built is on
   the Proof page.
 
 ## Quality
 
-- **Tests:** about 350 Python tests (engine, API, models, honesty and security) and 74 dashboard tests; `python
+- **Tests:** 381 Python tests (engine, API, models, honesty and security) and 116 dashboard tests; `python
   scripts/check.py` runs lint, tests and the dashboard build like CI.
 - **Honesty rules:** every number on screen comes from `results.json` or an API response; dashboard strings carry
   numbers only through placeholders; failed gates are shown.
-- **Accessibility:** Lighthouse 100 on all five pages; about 79 KB of JavaScript on first load.
+- **Accessibility:** the previous design scored Lighthouse 100; the redesigned six pages have not been re-measured. About 100 KB of JavaScript (gzipped) on first load.
 - **CI:** Python 3.12 and 3.13, the dashboard build and tests, dependency audit; nightly parity and performance tests
   and the evening precompute.
 - **Demo:** [five-minute demo script](docs/DEMO_SCRIPT.md), generated from the saved results.

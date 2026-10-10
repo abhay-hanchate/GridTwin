@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-10-10T08:37:48.584870+00:00",
- "code_version": "bcbc6d62e99c",
+ "generated_at": "2026-10-10T10:51:55.703200+00:00",
+ "code_version": "e56e06efb74b",
  "demo_dates": {
   "sunny": "2025-05-15",
   "mixed": "2025-11-19",
@@ -11,7 +11,7 @@
    "route": "risk",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "risk_99b483c7e87925b4cc83",
+   "key": "risk_8cb3de096971f08ac0ce",
    "network": "benchmark_250",
    "rule": "pm10",
    "fix": "none"
@@ -20,7 +20,7 @@
    "route": "fixes",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "fixes_a5855e13d4dd15d21ac1",
+   "key": "fixes_d79f9162615b004f39da",
    "network": "benchmark_250",
    "rule": "pm10"
   },
@@ -28,7 +28,7 @@
    "route": "street",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "street_a788f824d15cd5f6c431",
+   "key": "street_8babddcc88c31e270e3d",
    "network": "benchmark_250",
    "rule": "pm10",
    "fix": "none"
@@ -37,7 +37,7 @@
    "route": "street",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "street_2fb4b04e7c877657a7c9",
+   "key": "street_c32fe73f757df9a8ed61",
    "network": "benchmark_250",
    "rule": "pm10",
    "fix": "volt_var"
@@ -46,7 +46,7 @@
    "route": "risk",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "risk_c5b7d21791198019d91d",
+   "key": "risk_171e8d2bd886c4154271",
    "network": "benchmark_250",
    "rule": "up_2005",
    "fix": "none"
@@ -55,7 +55,7 @@
    "route": "fixes",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "fixes_98f0a9c0c06e0bee3456",
+   "key": "fixes_65cbeed6ca360b0fdc86",
    "network": "benchmark_250",
    "rule": "up_2005"
   },
@@ -63,7 +63,7 @@
    "route": "street",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "street_84ec4eb46afcea78ba25",
+   "key": "street_8235ac4891fff32bfd98",
    "network": "benchmark_250",
    "rule": "up_2005",
    "fix": "none"
@@ -72,7 +72,7 @@
    "route": "street",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "street_9356160b15b363255017",
+   "key": "street_735e86771164da7fee30",
    "network": "benchmark_250",
    "rule": "up_2005",
    "fix": "tap1_volt_var_envelope"
@@ -81,7 +81,7 @@
    "route": "risk",
    "date": "2025-11-19",
    "day_type": "mixed",
-   "key": "risk_bb5aae42e7910c912af8",
+   "key": "risk_70733e3054da3bddde01",
    "network": "benchmark_250",
    "rule": "pm10",
    "fix": "none"
@@ -90,7 +90,7 @@
    "route": "fixes",
    "date": "2025-11-19",
    "day_type": "mixed",
-   "key": "fixes_ea5083ef204b6948f02b",
+   "key": "fixes_23dcc10b0c4ea12a6336",
    "network": "benchmark_250",
    "rule": "pm10"
   },
@@ -98,7 +98,7 @@
    "route": "street",
    "date": "2025-11-19",
    "day_type": "mixed",
-   "key": "street_a8d97c12e052897e60a9",
+   "key": "street_58a895b7070ad4e137b6",
    "network": "benchmark_250",
    "rule": "pm10",
    "fix": "none"
@@ -107,7 +107,7 @@
    "route": "street",
    "date": "2025-11-19",
    "day_type": "mixed",
-   "key": "street_76ca4e128240f1306546",
+   "key": "street_4931800ec61ba845a254",
    "network": "benchmark_250",
    "rule": "pm10",
    "fix": "tap2_volt_var"
@@ -116,7 +116,7 @@
    "route": "risk",
    "date": "2025-11-19",
    "day_type": "mixed",
-   "key": "risk_7e77c1726aaa9a6424f6",
+   "key": "risk_918df64c6c4853190571",
    "network": "benchmark_250",
    "rule": "up_2005",
    "fix": "none"
@@ -125,7 +125,7 @@
    "route": "fixes",
    "date": "2025-11-19",
    "day_type": "mixed",
-   "key": "fixes_16fe804eaaa4f9f9f4c6",
+   "key": "fixes_7bd1862c08ff9dcd49fd",
    "network": "benchmark_250",
    "rule": "up_2005"
   },
@@ -133,7 +133,7 @@
    "route": "street",
    "date": "2025-11-19",
    "day_type": "mixed",
-   "key": "street_0994685446aec6857169",
+   "key": "street_9d27effb627a8e0a0fd4",
    "network": "benchmark_250",
    "rule": "up_2005",
    "fix": "none"
@@ -142,7 +142,7 @@
    "route": "street",
    "date": "2025-11-19",
    "day_type": "mixed",
-   "key": "street_d02d039ad221f55df6bf",
+   "key": "street_464a74c88d7901eff5b2",
    "network": "benchmark_250",
    "rule": "up_2005",
    "fix": "tap2_volt_var"
@@ -151,7 +151,7 @@
    "route": "risk",
    "date": "2025-08-05",
    "day_type": "cloudy",
-   "key": "risk_7cab90eceeba4449bc15",
+   "key": "risk_3e0667e2846320f5626b",
    "network": "benchmark_250",
    "rule": "pm10",
    "fix": "none"
@@ -160,7 +160,7 @@
    "route": "fixes",
    "date": "2025-08-05",
    "day_type": "cloudy",
-   "key": "fixes_95b4caa120eb5afe2aa7",
+   "key": "fixes_822f64adf3052b4f35f4",
    "network": "benchmark_250",
    "rule": "pm10"
   },
@@ -168,7 +168,7 @@
    "route": "street",
    "date": "2025-08-05",
    "day_type": "cloudy",
-   "key": "street_b72b19e8b12bcd595165",
+   "key": "street_be857bcd06f155ecffa0",
    "network": "benchmark_250",
    "rule": "pm10",
    "fix": "none"
@@ -177,7 +177,7 @@
    "route": "street",
    "date": "2025-08-05",
    "day_type": "cloudy",
-   "key": "street_1e066bf6f6bf0a279d1f",
+   "key": "street_ed201ab53f96353317e6",
    "network": "benchmark_250",
    "rule": "pm10",
    "fix": "tap1_volt_var"
@@ -186,7 +186,7 @@
    "route": "risk",
    "date": "2025-08-05",
    "day_type": "cloudy",
-   "key": "risk_b547ab9521d26785933a",
+   "key": "risk_9078e0c78ecad85e904e",
    "network": "benchmark_250",
    "rule": "up_2005",
    "fix": "none"
@@ -195,7 +195,7 @@
    "route": "fixes",
    "date": "2025-08-05",
    "day_type": "cloudy",
-   "key": "fixes_f3ed6fec835d9b8c7732",
+   "key": "fixes_f5f67eb4c63cf4f988c3",
    "network": "benchmark_250",
    "rule": "up_2005"
   },
@@ -203,7 +203,7 @@
    "route": "street",
    "date": "2025-08-05",
    "day_type": "cloudy",
-   "key": "street_309644b4ae54cac76600",
+   "key": "street_d2cb76822776ba641c27",
    "network": "benchmark_250",
    "rule": "up_2005",
    "fix": "none"
@@ -212,7 +212,7 @@
    "route": "street",
    "date": "2025-08-05",
    "day_type": "cloudy",
-   "key": "street_c6a2ff865fafb805542d",
+   "key": "street_27b1fea24c5a8d5d125b",
    "network": "benchmark_250",
    "rule": "up_2005",
    "fix": "phase_tap1_volt_var"
@@ -221,7 +221,7 @@
    "route": "headroom",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "headroom_d13229c019128901a957",
+   "key": "headroom_f0d9cd6dd1be5995488f",
    "network": "benchmark_250",
    "rule": "pm10",
    "adoption": 0.3
@@ -230,7 +230,7 @@
    "route": "hosting",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "hosting_fb4cb2dbd14d5541e4c5",
+   "key": "hosting_efcbcc270e9017fc3b04",
    "network": "benchmark_250",
    "rule": "pm10"
   },
@@ -238,7 +238,7 @@
    "route": "meter-sites",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "meter-sites_2fd0401548784feedfd5",
+   "key": "meter-sites_af82ba4bb48a9058f80a",
    "network": "benchmark_250",
    "rule": "pm10",
    "adoption": 0.3
@@ -247,7 +247,7 @@
    "route": "rx-map",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "rx-map_6f03bb29859ca755ed9a",
+   "key": "rx-map_7b40d1c97c998d7e6f80",
    "network": "benchmark_250",
    "rule": "pm10",
    "adoption": 0.3
@@ -256,7 +256,7 @@
    "route": "headroom",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "headroom_f46b324ad14d0e367aec",
+   "key": "headroom_774a3caf1aa84aaca643",
    "network": "benchmark_250",
    "rule": "up_2005",
    "adoption": 0.3
@@ -265,7 +265,7 @@
    "route": "hosting",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "hosting_8da303b26c90754f24db",
+   "key": "hosting_f1be4a0fa4e26aff4bbb",
    "network": "benchmark_250",
    "rule": "up_2005"
   },
@@ -273,7 +273,7 @@
    "route": "meter-sites",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "meter-sites_8d71c935d1173bca55bd",
+   "key": "meter-sites_d4786ed65c221e290314",
    "network": "benchmark_250",
    "rule": "up_2005",
    "adoption": 0.3
@@ -282,7 +282,7 @@
    "route": "rx-map",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "rx-map_88ad4518d045451386bf",
+   "key": "rx-map_ea0f53671ecd7cd068db",
    "network": "benchmark_250",
    "rule": "up_2005",
    "adoption": 0.3
@@ -291,7 +291,7 @@
    "route": "headroom",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "headroom_d09f48b74c81e8bcc623",
+   "key": "headroom_94ed52e6d0354701fa17",
    "network": "urban_short_160",
    "rule": "pm10",
    "adoption": 0.3
@@ -300,7 +300,7 @@
    "route": "hosting",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "hosting_c5f6d6e09bb6eb04465d",
+   "key": "hosting_d345414f3ec9f3b11c5b",
    "network": "urban_short_160",
    "rule": "pm10"
   },
@@ -308,7 +308,7 @@
    "route": "meter-sites",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "meter-sites_c7306be8f55aa5e0cd1b",
+   "key": "meter-sites_cd9dcacbd577606ca6f4",
    "network": "urban_short_160",
    "rule": "pm10",
    "adoption": 0.3
@@ -317,7 +317,7 @@
    "route": "rx-map",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "rx-map_ffe6476f798787863859",
+   "key": "rx-map_004608b3160578908168",
    "network": "urban_short_160",
    "rule": "pm10",
    "adoption": 0.3
@@ -326,7 +326,7 @@
    "route": "headroom",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "headroom_87980528f9f85cf1b911",
+   "key": "headroom_27fecffc9f724474fcdc",
    "network": "urban_short_160",
    "rule": "up_2005",
    "adoption": 0.3
@@ -335,7 +335,7 @@
    "route": "hosting",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "hosting_ddc10b855ae4e3edb8ce",
+   "key": "hosting_669c371e0d2d5500bba6",
    "network": "urban_short_160",
    "rule": "up_2005"
   },
@@ -343,7 +343,7 @@
    "route": "meter-sites",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "meter-sites_20b476b821b42c4fd790",
+   "key": "meter-sites_d5a8537af084b0818231",
    "network": "urban_short_160",
    "rule": "up_2005",
    "adoption": 0.3
@@ -352,7 +352,7 @@
    "route": "rx-map",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "rx-map_44d76af972bcf83e8be1",
+   "key": "rx-map_364404f2a542fdee9106",
    "network": "urban_short_160",
    "rule": "up_2005",
    "adoption": 0.3
@@ -361,7 +361,7 @@
    "route": "headroom",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "headroom_2823bbbbccf15ecb9870",
+   "key": "headroom_216f21191df9a06a69b9",
    "network": "suburban_100",
    "rule": "pm10",
    "adoption": 0.3
@@ -370,7 +370,7 @@
    "route": "hosting",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "hosting_fb4c308812295c585cd7",
+   "key": "hosting_b3723757fe7f4a6238d3",
    "network": "suburban_100",
    "rule": "pm10"
   },
@@ -378,7 +378,7 @@
    "route": "meter-sites",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "meter-sites_81b5ad2c6c9c96ab8635",
+   "key": "meter-sites_60f3abe38dc0585fc54c",
    "network": "suburban_100",
    "rule": "pm10",
    "adoption": 0.3
@@ -387,7 +387,7 @@
    "route": "rx-map",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "rx-map_955de6d6003da8daface",
+   "key": "rx-map_d3d241b13082ac4fd70d",
    "network": "suburban_100",
    "rule": "pm10",
    "adoption": 0.3
@@ -396,7 +396,7 @@
    "route": "headroom",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "headroom_36b3db71b8d00023c9b0",
+   "key": "headroom_c3853ff8a53ee8937a05",
    "network": "suburban_100",
    "rule": "up_2005",
    "adoption": 0.3
@@ -405,7 +405,7 @@
    "route": "hosting",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "hosting_e4c2711a778b402ca52a",
+   "key": "hosting_7e98d7306437965fa93b",
    "network": "suburban_100",
    "rule": "up_2005"
   },
@@ -413,7 +413,7 @@
    "route": "meter-sites",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "meter-sites_4c37baae153010d66e65",
+   "key": "meter-sites_e5279090a6dd74df7a67",
    "network": "suburban_100",
    "rule": "up_2005",
    "adoption": 0.3
@@ -422,7 +422,7 @@
    "route": "rx-map",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "rx-map_56e4a3ff3ec0485819d2",
+   "key": "rx-map_7ca34e5d059b22b333c0",
    "network": "suburban_100",
    "rule": "up_2005",
    "adoption": 0.3
@@ -431,7 +431,7 @@
    "route": "headroom",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "headroom_ec00429419cd9c1d0eac",
+   "key": "headroom_c60f34e98c6164e41484",
    "network": "rural_long_100",
    "rule": "pm10",
    "adoption": 0.3
@@ -440,7 +440,7 @@
    "route": "hosting",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "hosting_87abb72aa1b4bdad3c89",
+   "key": "hosting_13f5fd9dfd97506b2da5",
    "network": "rural_long_100",
    "rule": "pm10"
   },
@@ -448,7 +448,7 @@
    "route": "meter-sites",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "meter-sites_3a6ce0d6c0198b917cc1",
+   "key": "meter-sites_d78781ffe0656a4dbf0b",
    "network": "rural_long_100",
    "rule": "pm10",
    "adoption": 0.3
@@ -457,7 +457,7 @@
    "route": "rx-map",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "rx-map_0d499801730a9675a5b8",
+   "key": "rx-map_cd09b1461b547f32bb89",
    "network": "rural_long_100",
    "rule": "pm10",
    "adoption": 0.3
@@ -466,7 +466,7 @@
    "route": "headroom",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "headroom_7a9b85851e61217cff2b",
+   "key": "headroom_52c9d99a47a9991c6794",
    "network": "rural_long_100",
    "rule": "up_2005",
    "adoption": 0.3
@@ -475,7 +475,7 @@
    "route": "hosting",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "hosting_ae3606fef9e6f54f6f5c",
+   "key": "hosting_9ceff673676031d33add",
    "network": "rural_long_100",
    "rule": "up_2005"
   },
@@ -483,7 +483,7 @@
    "route": "meter-sites",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "meter-sites_56204a4f49ffecd68527",
+   "key": "meter-sites_3e1460d771fc92b4287d",
    "network": "rural_long_100",
    "rule": "up_2005",
    "adoption": 0.3
@@ -492,7 +492,7 @@
    "route": "rx-map",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "rx-map_ddf72950730969096a2b",
+   "key": "rx-map_bc8825812926460fdd1a",
    "network": "rural_long_100",
    "rule": "up_2005",
    "adoption": 0.3
@@ -501,7 +501,7 @@
    "route": "headroom",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "headroom_f39eab5d251257abb8d8",
+   "key": "headroom_b8d3869ac33986f27e87",
    "network": "rural_weak_63",
    "rule": "pm10",
    "adoption": 0.3
@@ -510,7 +510,7 @@
    "route": "hosting",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "hosting_df26d48c1815f0946613",
+   "key": "hosting_7b8acdf7b0f8ab762693",
    "network": "rural_weak_63",
    "rule": "pm10"
   },
@@ -518,7 +518,7 @@
    "route": "meter-sites",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "meter-sites_552d5c201ff159a8a69a",
+   "key": "meter-sites_880c80b0510f74199ff0",
    "network": "rural_weak_63",
    "rule": "pm10",
    "adoption": 0.3
@@ -527,7 +527,7 @@
    "route": "rx-map",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "rx-map_d45d2a27c951ebee0508",
+   "key": "rx-map_a7889a3c0562211e0359",
    "network": "rural_weak_63",
    "rule": "pm10",
    "adoption": 0.3
@@ -536,7 +536,7 @@
    "route": "headroom",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "headroom_35fc1ef93b89d0679315",
+   "key": "headroom_0009d36ee0880b73b36f",
    "network": "rural_weak_63",
    "rule": "up_2005",
    "adoption": 0.3
@@ -545,7 +545,7 @@
    "route": "hosting",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "hosting_466fe2e5ac1f927653bc",
+   "key": "hosting_90a14bfcd90ef80d8486",
    "network": "rural_weak_63",
    "rule": "up_2005"
   },
@@ -553,7 +553,7 @@
    "route": "meter-sites",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "meter-sites_f8077612b7d05c4c41d4",
+   "key": "meter-sites_e6843fe10c6f6ef05921",
    "network": "rural_weak_63",
    "rule": "up_2005",
    "adoption": 0.3
@@ -562,7 +562,7 @@
    "route": "rx-map",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "rx-map_8fa2ef41528683d8a4ad",
+   "key": "rx-map_8bc792e9a01f259f0ec6",
    "network": "rural_weak_63",
    "rule": "up_2005",
    "adoption": 0.3
@@ -571,7 +571,7 @@
    "route": "transformers",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "transformers_2d4695a1bdf0bd7ad380",
+   "key": "transformers_f17646275493e1f13e18",
    "rule": "pm10",
    "adoption": 0.3
   },
@@ -579,7 +579,7 @@
    "route": "transformers",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "transformers_f204cbfbf3b2cc545444",
+   "key": "transformers_cc09b69491011d65176b",
    "rule": "up_2005",
    "adoption": 0.3
   },
@@ -587,7 +587,7 @@
    "route": "whatif",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "whatif_34f30809100c037cc53a",
+   "key": "whatif_0248aa56a5b44d776398",
    "label": "Standard smart inverters (IEEE 1547 Volt/VAR)",
    "network": "benchmark_250",
    "rule": "pm10",
@@ -608,7 +608,7 @@
    "route": "whatif",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "whatif_fc14edea8d1fae02fb65",
+   "key": "whatif_bb58534df0a5889e4d7f",
    "label": "Evening EV charging at 20% of homes, with transformer tap +1",
    "network": "benchmark_250",
    "rule": "pm10",

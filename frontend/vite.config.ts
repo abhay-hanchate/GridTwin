@@ -16,7 +16,7 @@ export default defineConfig({
         codeSplitting: {
           groups: [
             { name: 'react', test: /node_modules[\\/](react|react-dom|scheduler)[\\/]/, priority: 2 },
-            { name: 'charts', test: /node_modules[\\/]/, priority: 1 },
+            { name: 'vendor', test: /node_modules[\\/]/, priority: 1 },
           ],
         },
       },

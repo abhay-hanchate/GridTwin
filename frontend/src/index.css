@@ -46,9 +46,10 @@
   --unsafe: var(--act);
   --unsafe-text: var(--act-text);
 
-  --head: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', 'Segoe UI', system-ui, 'Noto Sans Devanagari', sans-serif;
-  --text: 'Figtree Variable', 'Figtree', 'Segoe UI', system-ui, 'Noto Sans Devanagari', sans-serif;
-  --mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'Cascadia Mono', monospace;
+  /* Noto Sans Devanagari is bundled (Hindi) and split by unicode range, so English pages never download it */
+  --head: 'Bricolage Grotesque Variable', 'Noto Sans Devanagari Variable', 'Bricolage Grotesque', 'Segoe UI', system-ui, 'Noto Sans Devanagari', sans-serif;
+  --text: 'Figtree Variable', 'Noto Sans Devanagari Variable', 'Figtree', 'Segoe UI', system-ui, 'Noto Sans Devanagari', sans-serif;
+  --mono: 'JetBrains Mono Variable', 'Noto Sans Devanagari Variable', 'JetBrains Mono', ui-monospace, 'Cascadia Mono', monospace;
 
   --r-l: 22px;
   --r-m: 14px;
@@ -97,7 +98,6 @@ main:focus, main:focus-visible, [role='tabpanel']:focus-visible { outline: none;
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand-mark { width: 32px; height: 32px; }
 .brand h1 { margin: 0; font-size: 1.3rem; font-weight: 700; }
-.brand p { display: none; }
 .areas { order: 2; flex: 1; min-width: 0; }
 .lang-switch { order: 3; margin-left: auto; }
 .lang-switch .seg { padding: 5px 11px; font-size: var(--fs-xs); }
@@ -242,6 +242,11 @@ main:focus, main:focus-visible, [role='tabpanel']:focus-visible { outline: none;
 .street-svg .flow.back { animation-direction: reverse; }
 .street-svg .flow.idle { animation: none; stroke-opacity: 0; }
 .paused .street-svg .flow { animation-play-state: paused; }
+/* a switching fix: the opened wire is grey and still; the closed tie is dashed and stronger than a plain wire */
+.street-svg .wire-open .wire-base { stroke: var(--ink-3); stroke-dasharray: 2 4; }
+.street-svg .wire-tie .wire-base { stroke-opacity: 0.6; stroke-dasharray: 8 5; }
+.legend .wire-key.tie { border-top-style: dashed; border-color: var(--brand); }
+.legend .wire-key.open { border-top-style: dotted; border-color: var(--ink-3); }
 @keyframes flow { from { stroke-dashoffset: 26; } to { stroke-dashoffset: 0; } }
 .street-svg .drop { stroke-width: 1.4; stroke-opacity: 0.8; }
 .street-svg .home { stroke: #fff; stroke-width: 1.2; transition: fill 160ms linear; cursor: pointer; }

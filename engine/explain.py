@@ -36,14 +36,16 @@ def explain_risk(risk: dict, limit_v: float, lang: str = "en") -> str:
     """`limit_v` is the upper limit of the rule the risk was computed for, in volts."""
     t = templates(lang)
     hours = risk["expected_unsafe_hours"]
+    # calibrated chances carry no scenario range (backend.v2.compute.shown_series), so the range is left out
+    hours_range = "" if hours.get("p10") is None or hours.get("p90") is None else         t["hours_range"].format(p10=_fmt(hours["p10"]), p90=_fmt(hours["p90"]))
     values = {"first_act": risk.get("first_act"), "first_watch": risk.get("first_watch"),
-              "hours": _fmt(hours["mean"]), "hours_p10": _fmt(hours["p10"]), "hours_p90": _fmt(hours["p90"]),
+              "hours": _fmt(hours["mean"]), "hours_range": hours_range,
               "peak_v": _fmt(risk["peak_voltage_v"]["p50"]), "limit_v": _fmt(limit_v),
               "watch_pct": _fmt(risk.get("thresholds", {}).get("watch", 0.2) * 100)}
     text = t[f"risk_{risk['level']}"].format(**values)
     if risk["level"] != "ok":
-        reliable = risk.get("calibration", {}).get("reliable", False)
-        text += " " + t["risk_calibrated" if reliable else "risk_uncalibrated"]
+        applied = risk.get("calibration", {}).get("applied", False)
+        text += " " + t["risk_calibrated" if applied else "risk_uncalibrated"]
     return text
 
 

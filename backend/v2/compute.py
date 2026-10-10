@@ -183,18 +183,47 @@ def risk_payload(date: str, network_id: str, rule_id: str, fix: str | None = Non
     # The same scenarios with every panel off: what stays unsafe is the grid's own voltage (or demand), not solar.
     dark = DayScenarioBatch(scn.t, scn.load_kw, np.zeros_like(scn.pv_per_kwp), scn.upstream_pu, scn.load_pf, scn.labels)
     p_dark = [round(float(x), 3) for x in evaluate(solver.solve(dark, controls), r).unsafe.mean(axis=0)]
+    labels = _labels(res.t)
+    cal = calibration(r.id, p)
+    # The map was fitted with no fix on the benchmark street; anywhere else it would be an extrapolation.
+    shown = shown_series(cal, p, p_dark, labels, applies=fix in (None, "none") and network_id == CALIBRATED_NETWORK,
+                         watch=watch, act=act)
+    hours = shown.pop("expected_unsafe_hours") or {
+        "mean": round(res.expected_unsafe_hours, 2), "p10": round(res.unsafe_hours_p10, 2), "p90": round(res.unsafe_hours_p90, 2)}
     return {
-        "date": date, "network": network_id, "rule": r.id, "fix": fix or "none", "level": res.level,
-        "p_unsafe": p, "p_unsafe_without_solar": p_dark, "t": _labels(res.t), "thresholds": {"watch": watch, "act": act},
-        "expected_unsafe_hours": {"mean": round(res.expected_unsafe_hours, 2), "p10": round(res.unsafe_hours_p10, 2),
-                                  "p90": round(res.unsafe_hours_p90, 2)},
-        "first_watch": res.first_watch, "first_act": res.first_act,
+        "date": date, "network": network_id, "rule": r.id, "fix": fix or "none", **shown,
+        "t": labels, "thresholds": {"watch": watch, "act": act}, "expected_unsafe_hours": hours,
         "peak_voltage_v": {k: round(v, 1) for k, v in res.peak_voltage_v.items()},
         "window_risk": {WINDOW_KEYS[k]: round(v, 3) for k, v in res.window_risk.items()},
         "shares": {SHARE_KEYS[k]: round(v, 3) for k, v in res.shares.items()},
         "n_scenarios": res.n_scenarios, "provenance": provenance(date),
-        "calibration": calibration(r.id, p),
+        "calibration": {**cal, "applied": shown["series"] == "calibrated"},
     }
+
+
+CALIBRATED_NETWORK = "benchmark_250"
+
+
+def shown_series(cal: dict, raw: list[float], dark: list[float], times: list[str], *, applies: bool,
+                 watch: float = 0.20, act: float = 0.50) -> dict:
+    """The chance series users see and everything derived from it (DECISIONS.md, F2).
+
+    Calibrated when the held-out check passed (`cal["reliable"]`) and the request is where the map was fitted
+    (`applies`), raw otherwise. Level, first watch and first act use the shown series. The no-solar series is scaled
+    step by step by calibrated / raw, so the grid and solar parts of each bar keep their shares; a step with raw 0 has
+    no solar part. Calibrated expected hours are the sum of the shown chances; their P10 to P90 range is None, because
+    the scenario spread describes the raw draws. Raw series return expected hours None (the engine's values stand)."""
+    calibrated = bool(cal.get("reliable")) and applies
+    p = [round(float(x), 3) for x in (cal["calibrated"] if calibrated else raw)]
+    if calibrated:
+        p_dark = [round(c if r <= 0 else c * min(d, r) / r, 3) for c, r, d in zip(p, raw, dark)]
+        hours = {"mean": round(sum(p) * 0.25, 2), "p10": None, "p90": None}
+    else:
+        p_dark, hours = list(dark), None
+    first = lambda th: next((times[i] for i, x in enumerate(p) if x >= th), None)  # noqa: E731
+    level = "act" if first(act) else "watch" if first(watch) else "ok"
+    return {"series": "calibrated" if calibrated else "raw", "p_unsafe": p, "p_unsafe_without_solar": p_dark,
+            "level": level, "first_watch": first(watch), "first_act": first(act), "expected_unsafe_hours": hours}
 
 
 def calibration(rule_id: str, raw: list[float]) -> dict:
@@ -397,7 +426,7 @@ def _candidate(fix: str, net, scn, r):
 
 
 def _street_run(candidate, design, r) -> dict:
-    from engine.street import home_net_kw, line_flows
+    from engine.street import home_net_kw, line_ends, line_flows
     res = _solve(candidate, design, r)
     v = evaluate(res, r)
     net = candidate.network
@@ -407,6 +436,7 @@ def _street_run(candidate, design, r) -> dict:
     return {
         "home_v": np.round(home_v, 1).tolist(),
         "home_phase": [PHASE[p] for p in net.house_phase],
+        "line_ends": line_ends(net),                      # [parent, child] per line of this run's own network
         "line_phase_kw": np.round(flows["phase_kw"].transpose(1, 0, 2), 1).tolist(),     # (T, L, 3)
         "line_neutral_a": np.round(flows["neutral_a"].T, 1).tolist(),                     # (T, L)
         "line_loading_pct": np.round(res.line_loading_pct[0], 1).tolist(),
@@ -431,7 +461,9 @@ def street_payload(date: str, network_id: str, rule_id: str, fix: str = "none", 
            "limits_v": {"min": r.vmin_v, "max": r.vmax_v}, "layout": layout(net),
            "homes": [{"node": int(nd), "kwp": round(float(k), 2)} for nd, k in zip(net.house_node, net.house_kwp)],
            "trafo_kva": round(net.trafo.sn_va / 1000, 1), "before": _street_run(base, design, r),
-           "flow_method": "estimated from each home's net power (demand minus delivered solar); losses ignored",
+           "flow_method": "estimated from each home's net power (demand minus delivered solar); leaves out wire and "
+                          "transformer losses, battery charging and discharging, Volt/Watt's extra reduction and "
+                          "reactive power",
            "provenance": provenance(date)}
     if fix != "none":
         c = _candidate(fix, net, scn, r)

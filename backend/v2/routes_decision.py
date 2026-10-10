@@ -35,8 +35,26 @@ def default_date(store: JobStore, route: str) -> str:
     return max(dates) if dates else DEMO_DATE
 
 
+def check_date(request: Request, day: str) -> None:
+    """404 at once for a day with no forecast: outside the solar archive and outside today to the live horizon."""
+    from backend.v2.live_inputs import today_ist
+    today = today_ist()
+    live = {"first": today.isoformat(), "last": (today + timedelta(days=_settings(request).live_horizon_days)).isoformat()}
+    try:
+        fc = compute._solar_table()
+        archive = {"first": fc.index.min().date().isoformat(), "last": fc.index.max().date().isoformat()}
+    except (OSError, ValueError):            # no archive file here: the range is unknown, so the job decides
+        return
+    if live["first"] <= day <= live["last"] or archive["first"] <= day <= archive["last"]:
+        return
+    raise ApiError(404, f"no forecast for {day}: choose a day in the {archive['first']} to {archive['last']} archive "
+                        f"or today to {live['last']} (live)",
+                   details={"date": day, "archive": archive, "live": live})
+
+
 def _serve(request: Request, route: str, params: dict, fn) -> object:
     s, store = _settings(request), _store(request)
+    check_date(request, params["date"])
     if "network" in params:                                  # a portfolio route has none
         compute.check_network(params["network"])             # validate before any work: 404 on unknown ids
     params["rule"] = compute.rule(params["rule"]).id

@@ -9,7 +9,7 @@ from fastapi import APIRouter, Query, Request
 from pydantic import BaseModel, Field
 
 from backend.v2 import compute
-from backend.v2.routes_decision import DEFAULT_NETWORK, _serve, _settings, _store, default_date
+from backend.v2.routes_decision import DEFAULT_NETWORK, _serve, _settings, _store, check_date, default_date
 
 router = APIRouter()
 
@@ -40,6 +40,7 @@ def connection_check(request: Request, body: ConnectionRequest):
     """Approve, approve with conditions, or refuse; with the phase to use and the binding limit."""
     compute.check_network(body.network)
     day = body.date.isoformat() if body.date else default_date(_store(request), "headroom")    # planning's own date
+    check_date(request, day)
     return compute.connection_payload(day, body.network, body.rule or _settings(request).rule_default, body.node,
                                       body.kw, body.count, body.phase, body.adoption)
 

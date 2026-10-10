@@ -10,7 +10,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from backend.v2 import compute
 from backend.v2.errors import ApiError
 from backend.v2.jobs import cache_key
-from backend.v2.routes_decision import DEFAULT_NETWORK, _settings, _store, default_date
+from backend.v2.routes_decision import DEFAULT_NETWORK, _settings, _store, check_date, default_date
 from engine.report import render_report
 
 router = APIRouter()
@@ -22,6 +22,7 @@ def report(request: Request, date: Date | None = None, network: str = DEFAULT_NE
     s, store = _settings(request), _store(request)
     compute.check_network(network)
     day = date.isoformat() if date else default_date(store, "risk")
+    check_date(request, day)
     rule_id = compute.rule(rule or s.rule_default).id
     from backend.v2.live_inputs import is_live, today_ist
     extra = {"issued": today_ist().isoformat()} if is_live(day) else {}      # same keys as /risk and /fixes

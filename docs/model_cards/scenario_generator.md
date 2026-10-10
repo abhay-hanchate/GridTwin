@@ -19,21 +19,25 @@ the code, not fitted. Each draw maps to the forecast quantiles, so every scenari
 say is plausible.
 
 **Measured scores.** The generator has no score of its own; it is judged through the risk it produces. Gate G8
-(`data/results/results.json`), on 40 held-out 2021 days:
+(`data/results/results.json`), on 100 held-out 2021 days of both districts (Mathura 40 days, January and February;
+Bareilly 60 days, January to October), pre-registered in `docs/DECISIONS.md` ("Gate G8 on both districts"):
 
-| Rule | Brier skill vs base rate (raw) | After isotonic recalibration | Reliable |
-|---|---|---|---|
-| ±10% (`pm10`) | 0.01 | 0.023 | yes, slightly better than the historical average |
-| UP ±6% (`up_2005`) | -1.928 | -5.46 | no |
+| Rule | Brier skill vs base rate, pooled (raw) | After isotonic recalibration | Bareilly | Mathura |
+|---|---|---|---|---|
+| ±10% (`pm10`) | +0.50 | **+0.51** | +0.41 | +0.009 |
+| UP ±6% (`up_2005`) | +0.44 | **+0.45** | +0.36 | -3.90 |
 
-Under ±6%, 99.74% of held-out steps were unsafe, so nothing beats "always unsafe"; the dashboard says the chances
-are not reliable odds under that rule. G8 is recorded as failed because it must pass on every rule.
+G8 passes on both rules. Mathura alone under ±6% is below the base rate: 99.7% of its January and February steps were
+unsafe, so "always unsafe" is nearly unbeatable there. The pooled reference is one rate for both districts, so part of
+the pooled skill comes from telling the districts apart; Bareilly alone passes too. Since 10 Oct 2026 the dashboard
+shows the recalibrated chances where the map was fitted (benchmark street, no fix) and the raw ones elsewhere
+(`docs/DECISIONS.md`, "Which risk chances users see").
 
 **Limitations and failure modes.**
 - The copula models climatological anomalies of the meter years. Forecast archives do not overlap those years, so
   the correlation of forecast errors cannot be estimated; the Proof page says so.
-- The held-out 2021 window covers January and February only, and its voltage sits about 5 V above the training
-  years.
+- Mathura's held-out 2021 window covers January and February only (its file ends on 20 February 2021), and its
+  voltage sits about 5 V above the training years. Bareilly's covers January to October.
 - 100 scenarios give probabilities in steps of 1%; rare events below that are invisible.
 
 **Monitoring.** Gate G8 is rerun with `python -m scripts.run_reliability --rule <rule>` and
