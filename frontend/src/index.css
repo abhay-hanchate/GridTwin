@@ -247,6 +247,11 @@ main:focus, main:focus-visible, [role='tabpanel']:focus-visible { outline: none;
 .street-svg .flow.back { animation-direction: reverse; }
 .street-svg .flow.idle { animation: none; stroke-opacity: 0; }
 .paused .street-svg .flow { animation-play-state: paused; }
+/* a switching fix: the opened wire is grey and still; the closed tie is dashed and stronger than a plain wire */
+.street-svg .wire-open .wire-base { stroke: var(--ink-3); stroke-dasharray: 2 4; }
+.street-svg .wire-tie .wire-base { stroke-opacity: 0.6; stroke-dasharray: 8 5; }
+.legend .wire-key.tie { border-top-style: dashed; border-color: var(--brand); }
+.legend .wire-key.open { border-top-style: dotted; border-color: var(--ink-3); }
 @keyframes flow { from { stroke-dashoffset: 26; } to { stroke-dashoffset: 0; } }
 .street-svg .drop { stroke-width: 1.4; stroke-opacity: 0.8; }
 .street-svg .home { stroke: #fff; stroke-width: 1.2; transition: fill 160ms linear; cursor: pointer; }

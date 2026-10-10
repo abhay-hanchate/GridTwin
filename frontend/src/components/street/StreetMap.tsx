@@ -7,6 +7,12 @@ type Props = {
   homes: HomeView[]
   /** [line][conductor] flow; without it the wires are drawn still. */
   flows?: Record<number, Partial<Record<Conductor, Flow>>>
+  /** drawn lines a switching fix has opened: grey and still */
+  openLines?: Set<number>
+  /** wires a switching fix has closed that the layout does not have: dashed straight connectors */
+  ties?: { from: number; to: number; flow: Partial<Record<Conductor, Flow>> }[]
+  tieTitle?: string
+  openTitle?: string
   markers?: Marker[]
   selectedHome?: number | null
   onHome?: (home: number) => void
@@ -22,7 +28,17 @@ const HOUSE = 'M-6,1 L0,-5 L6,1 V7 H-6 Z'
 
 /** The street as a one-line diagram: transformer at the left, four conductors (phases A, B, C and the neutral N)
  *  along every wire, and each home hanging off its own phase. Flows, if given, animate along the conductors. */
-function StreetMap({ layout, homes, flows, markers = [], selectedHome, onHome, selectedNode, onNode, trafoLabel, trafoSub, label, children }: Props) {
+function flowPath(cd: Conductor, d: string, f: Flow | undefined) {
+  const mag = f ? Math.abs(f.kw) : 0
+  const idle = !f || mag < 0.05
+  const dur = idle ? 0 : Math.max(0.28, 2.6 / (0.45 + Math.sqrt(mag)))
+  return (
+    <path className={`wire flow wire-${cd.toLowerCase()} ${idle ? 'idle' : f.kw < 0 ? 'back' : ''}`} d={d}
+      strokeWidth={Math.min(4.4, 2 + mag / 6)} style={idle ? undefined : { animationDuration: `${dur.toFixed(2)}s` }} />
+  )
+}
+
+function StreetMap({ layout, homes, flows, openLines, ties = [], tieTitle, openTitle, markers = [], selectedHome, onHome, selectedNode, onNode, trafoLabel, trafoSub, label, children }: Props) {
   const { pos, width, height } = geometry(layout)
   const root = pos.get(layout.root)!
   const atNode = new Map<number, number[]>()
@@ -53,22 +69,42 @@ function StreetMap({ layout, homes, flows, markers = [], selectedHome, onHome, s
       {layout.lines.map((ln) => {
         const p = pos.get(ln.from)!
         const c = pos.get(ln.to)!
-        return CONDUCTORS.map((cd) => {
-          const d = wirePath(p, c, OFFSET[cd], ln.from === layout.root)
-          const f = flows?.[ln.line]?.[cd]
-          const mag = f ? Math.abs(f.kw) : 0
-          const idle = !f || mag < 0.05
-          const dur = idle ? 0 : Math.max(0.28, 2.6 / (0.45 + Math.sqrt(mag)))
-          return (
-            <g key={`${ln.line}-${cd}`}>
-              <path className={`wire wire-base wire-${cd.toLowerCase()}`} d={d} strokeWidth={cd === 'N' ? 1.2 : 1.6} />
-              {flows && (
-                <path className={`wire flow wire-${cd.toLowerCase()} ${idle ? 'idle' : f.kw < 0 ? 'back' : ''}`} d={d}
-                  strokeWidth={Math.min(4.4, 2 + mag / 6)} style={idle ? undefined : { animationDuration: `${dur.toFixed(2)}s` }} />
-              )}
-            </g>
-          )
-        })
+        const open = openLines?.has(ln.line)
+        return (
+          <g key={ln.line} className={open ? 'wire-open' : undefined} data-open={open ? '' : undefined}>
+            {open && openTitle && <title>{openTitle}</title>}
+            {CONDUCTORS.map((cd) => {
+              const d = wirePath(p, c, OFFSET[cd], ln.from === layout.root)
+              return (
+                <g key={cd}>
+                  <path className={`wire wire-base wire-${cd.toLowerCase()}`} d={d} strokeWidth={cd === 'N' ? 1.2 : 1.6} />
+                  {flows && !open && flowPath(cd, d, flows[ln.line]?.[cd])}
+                </g>
+              )
+            })}
+          </g>
+        )
+      })}
+
+      {/* tie switches closed by a fix: straight dashed connectors between the two ends */}
+      {ties.map((tie) => {
+        const p = pos.get(tie.from)
+        const c = pos.get(tie.to)
+        if (!p || !c) return null
+        return (
+          <g key={`tie-${tie.from}-${tie.to}`} className="wire-tie" data-tie="">
+            {tieTitle && <title>{tieTitle}</title>}
+            {CONDUCTORS.map((cd) => {
+              const d = `M${p.x},${p.y + OFFSET[cd]}L${c.x},${c.y + OFFSET[cd]}`
+              return (
+                <g key={cd}>
+                  <path className={`wire wire-base wire-${cd.toLowerCase()}`} d={d} strokeWidth={cd === 'N' ? 1.2 : 1.6} />
+                  {flows && flowPath(cd, d, tie.flow[cd])}
+                </g>
+              )
+            })}
+          </g>
+        )
       })}
 
       {/* homes: a drop from their phase conductor, the house coloured by its voltage, a panel if it has solar */}

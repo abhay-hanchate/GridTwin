@@ -314,6 +314,8 @@
   "player.key_b": "फ़ेज़ B",
   "player.key_c": "फ़ेज़ C",
   "player.key_n": "न्यूट्रल (वापसी तार)",
+  "player.key_tie": "उपाय से बंद किया गया टाई स्विच (नया जोड़)",
+  "player.key_open": "उपाय से खोला गया तार (कोई प्रवाह नहीं)",
   "player.key_panel": "छत का पैनल",
   "player.v_ok": "वोल्टेज ठीक",
   "player.v_near": "सीमा के पास",

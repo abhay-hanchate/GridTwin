@@ -5,9 +5,10 @@ import { one, volts } from '../../format'
 import { useT, type StringKey } from '../../i18n'
 import Prov from '../Prov'
 import Status from '../Status'
-import type { Conductor, Flow, HomeView } from './geometry'
+import type { HomeView } from './geometry'
 import StreetMap from './StreetMap'
 import { homeClass } from './voltage'
+import { matchWires, rootPhaseKw } from './wires'
 
 const SPEEDS = [0.5, 1, 2] as const
 const STEPS_PER_SECOND = 4                       // at 1x a day plays in 24 seconds
@@ -53,23 +54,9 @@ function Player({ s, startStep, compact }: { s: Street; startStep?: number; comp
       title: v === null ? t('player.home_nosolve', { home: i + 1, phase: run.home_phase[i] }) : t('player.home_title', { home: i + 1, phase: run.home_phase[i], v: one(v) }) }
   }), [s, run, step, t])
 
-  const flows = useMemo(() => {
-    const out: Record<number, Partial<Record<Conductor, Flow>>> = {}
-    const lp = run.line_phase_kw[step]
-    const total = lp.reduce((a, r) => a + r[0] + r[1] + r[2], 0)
-    s.layout.lines.forEach((ln) => {
-      const r = lp[ln.line]
-      // The neutral returns the imbalance to the transformer's star point: back when the street draws power,
-      // outwards when it exports. Shown in kW-equivalent at 230 V so its speed compares with the phases.
-      const nKw = (run.line_neutral_a[step][ln.line] * 230) / 1000
-      out[ln.line] = { A: { kw: r[0] }, B: { kw: r[1] }, C: { kw: r[2] }, N: { kw: total >= 0 ? -nKw : nKw } }
-    })
-    return out
-  }, [s, run, step])
-
-  const rootLines = s.layout.lines.filter((l) => l.from === s.layout.root).map((l) => l.line)
-  const phaseKw = PH.map((_, k) => rootLines.reduce((a, l) => a + run.line_phase_kw[step][l][k], 0))
-  const maxPhase = Math.max(1, ...s.before.line_phase_kw.flatMap((row) => PH.map((_, k) => Math.abs(rootLines.reduce((a, l) => a + row[l][k], 0)))))
+  const wires = useMemo(() => matchWires(s.layout, run, step), [s, run, step])
+  const phaseKw = rootPhaseKw(s.layout, run, step)
+  const maxPhase = useMemo(() => Math.max(1, ...s.before.line_phase_kw.flatMap((_, i) => rootPhaseKw(s.layout, s.before, i).map(Math.abs))), [s])
   const vs = run.home_v[step]
   const solved = vs.filter((v): v is number => v !== null && Number.isFinite(v))
   const vmax = solved.length ? Math.max(...solved) : NaN
@@ -117,7 +104,8 @@ function Player({ s, startStep, compact }: { s: Street; startStep?: number; comp
       )}
 
       <div className="street-scroll">
-        <StreetMap layout={s.layout} homes={homes} flows={flows} selectedHome={home} onHome={setHome}
+        <StreetMap layout={s.layout} homes={homes} flows={wires.flows} openLines={wires.open} ties={wires.ties}
+          tieTitle={t('player.key_tie')} openTitle={t('player.key_open')} selectedHome={home} onHome={setHome}
           trafoLabel={t('player.trafo', { kva: Math.round(s.trafo_kva) })} trafoSub={t('player.trafo_sub')}
           label={t('player.map_label', { time, over, total: s.homes.length, vmax: Number.isFinite(vmax) ? one(vmax) : '—' })} />
       </div>
@@ -183,6 +171,8 @@ function Player({ s, startStep, compact }: { s: Street; startStep?: number; comp
           <li key={p}><span className="wire-key" style={{ borderColor: `var(--ph-${p})` }} />{t(`player.key_${p}` as StringKey)}</li>
         ))}
         <li><span className="wire-key n" style={{ borderColor: 'var(--ph-n)' }} />{t('player.key_n')}</li>
+        {wires.ties.length > 0 && <li><span className="wire-key tie" />{t('player.key_tie')}</li>}
+        {wires.open.size > 0 && <li><span className="wire-key open" />{t('player.key_open')}</li>}
         {(['ok', 'near', 'over', 'under'] as const).map((c) => (
           <li key={c}><span className="dot" style={{ background: `var(--${c === 'near' ? 'watch' : c === 'over' ? 'act' : c})` }} />{t(`player.v_${c}` as StringKey)}</li>
         ))}

@@ -314,6 +314,8 @@
   "player.key_b": "Phase B",
   "player.key_c": "Phase C",
   "player.key_n": "Neutral (return wire)",
+  "player.key_tie": "Tie switch closed by the fix (new connection)",
+  "player.key_open": "Wire opened by the fix (no flow)",
   "player.key_panel": "Rooftop panel",
   "player.v_ok": "Voltage fine",
   "player.v_near": "Close to the limit",

@@ -397,7 +397,7 @@ def _candidate(fix: str, net, scn, r):
 
 
 def _street_run(candidate, design, r) -> dict:
-    from engine.street import home_net_kw, line_flows
+    from engine.street import home_net_kw, line_ends, line_flows
     res = _solve(candidate, design, r)
     v = evaluate(res, r)
     net = candidate.network
@@ -407,6 +407,7 @@ def _street_run(candidate, design, r) -> dict:
     return {
         "home_v": np.round(home_v, 1).tolist(),
         "home_phase": [PHASE[p] for p in net.house_phase],
+        "line_ends": line_ends(net),                      # [parent, child] per line of this run's own network
         "line_phase_kw": np.round(flows["phase_kw"].transpose(1, 0, 2), 1).tolist(),     # (T, L, 3)
         "line_neutral_a": np.round(flows["neutral_a"].T, 1).tolist(),                     # (T, L)
         "line_loading_pct": np.round(res.line_loading_pct[0], 1).tolist(),

@@ -237,6 +237,7 @@ export interface StreetLayout {
 export interface StreetRun {
   home_v: (number | null)[][]        // [step][home] volts on the home's own phase; null where the power flow failed
   home_phase: ('A' | 'B' | 'C')[]
+  line_ends?: number[][]             // [line] = [parent, child] in this run's own network (a switching fix re-numbers lines)
   line_phase_kw: number[][][]        // [step][line][phase] kW, positive = towards the homes
   line_neutral_a: number[][]         // [step][line] A, estimated
   line_loading_pct: number[][]
