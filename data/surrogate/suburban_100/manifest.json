@@ -1,0 +1,4054 @@
+{
+ "street": "suburban_100",
+ "round": 4,
+ "pilot": false,
+ "created_utc": "2026-10-10T18:06:43+00:00",
+ "provenance": "simulated: app scenario generator inputs (modelled forecasts, CEEW-based demand analogs), labels from the power-grid-model solver; not measured data",
+ "solver": {
+  "engine": "power-grid-model",
+  "version": "1.13.193",
+  "asymmetric": true,
+  "method": "newton_raphson",
+  "tolerance": 1e-08,
+  "max_iterations": 40,
+  "solver_hash": "5f47aa7c37a712e4",
+  "inverter_passes_max": 80,
+  "damping": 0.3
+ },
+ "street_hash": "584ab66a9c205d33",
+ "battery_nodes": [
+  25,
+  26,
+  31,
+  58,
+  65,
+  69
+ ],
+ "line_layouts": [
+  [
+   [
+    7,
+    94
+   ],
+   [
+    18,
+    48
+   ],
+   [
+    80,
+    30
+   ],
+   [
+    20,
+    13
+   ],
+   [
+    4,
+    7
+   ],
+   [
+    42,
+    67
+   ],
+   [
+    60,
+    41
+   ],
+   [
+    13,
+    70
+   ],
+   [
+    83,
+    1
+   ],
+   [
+    29,
+    20
+   ],
+   [
+    28,
+    82
+   ],
+   [
+    24,
+    63
+   ],
+   [
+    8,
+    86
+   ],
+   [
+    39,
+    54
+   ],
+   [
+    90,
+    56
+   ],
+   [
+    73,
+    62
+   ],
+   [
+    55,
+    75
+   ],
+   [
+    86,
+    64
+   ],
+   [
+    22,
+    74
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    68,
+    18
+   ],
+   [
+    40,
+    37
+   ],
+   [
+    30,
+    29
+   ],
+   [
+    44,
+    46
+   ],
+   [
+    46,
+    51
+   ],
+   [
+    56,
+    57
+   ],
+   [
+    50,
+    58
+   ],
+   [
+    91,
+    26
+   ],
+   [
+    41,
+    36
+   ],
+   [
+    2,
+    31
+   ],
+   [
+    36,
+    35
+   ],
+   [
+    48,
+    78
+   ],
+   [
+    0,
+    27
+   ],
+   [
+    63,
+    83
+   ],
+   [
+    92,
+    66
+   ],
+   [
+    23,
+    2
+   ],
+   [
+    78,
+    53
+   ],
+   [
+    64,
+    76
+   ],
+   [
+    21,
+    23
+   ],
+   [
+    61,
+    52
+   ],
+   [
+    67,
+    79
+   ],
+   [
+    62,
+    90
+   ],
+   [
+    37,
+    19
+   ],
+   [
+    16,
+    4
+   ],
+   [
+    38,
+    93
+   ],
+   [
+    43,
+    33
+   ],
+   [
+    45,
+    81
+   ],
+   [
+    57,
+    77
+   ],
+   [
+    32,
+    22
+   ],
+   [
+    19,
+    45
+   ],
+   [
+    93,
+    88
+   ],
+   [
+    35,
+    6
+   ],
+   [
+    33,
+    10
+   ],
+   [
+    74,
+    9
+   ],
+   [
+    84,
+    8
+   ],
+   [
+    52,
+    73
+   ],
+   [
+    15,
+    32
+   ],
+   [
+    5,
+    17
+   ],
+   [
+    70,
+    43
+   ],
+   [
+    1,
+    65
+   ],
+   [
+    59,
+    55
+   ],
+   [
+    76,
+    50
+   ],
+   [
+    47,
+    85
+   ],
+   [
+    34,
+    87
+   ],
+   [
+    94,
+    21
+   ],
+   [
+    77,
+    40
+   ],
+   [
+    11,
+    5
+   ],
+   [
+    82,
+    0
+   ],
+   [
+    88,
+    14
+   ],
+   [
+    14,
+    91
+   ],
+   [
+    79,
+    24
+   ],
+   [
+    22,
+    68
+   ],
+   [
+    71,
+    28
+   ],
+   [
+    89,
+    12
+   ],
+   [
+    85,
+    59
+   ],
+   [
+    87,
+    49
+   ],
+   [
+    72,
+    25
+   ],
+   [
+    69,
+    15
+   ],
+   [
+    75,
+    80
+   ],
+   [
+    95,
+    38
+   ],
+   [
+    17,
+    60
+   ],
+   [
+    10,
+    71
+   ],
+   [
+    53,
+    89
+   ],
+   [
+    51,
+    16
+   ],
+   [
+    27,
+    3
+   ],
+   [
+    66,
+    61
+   ],
+   [
+    6,
+    92
+   ],
+   [
+    81,
+    95
+   ],
+   [
+    25,
+    84
+   ],
+   [
+    49,
+    44
+   ],
+   [
+    9,
+    72
+   ],
+   [
+    75,
+    42
+   ],
+   [
+    62,
+    34
+   ],
+   [
+    12,
+    62
+   ],
+   [
+    39,
+    47
+   ]
+  ],
+  [
+   [
+    7,
+    94
+   ],
+   [
+    18,
+    48
+   ],
+   [
+    80,
+    30
+   ],
+   [
+    20,
+    13
+   ],
+   [
+    4,
+    7
+   ],
+   [
+    42,
+    67
+   ],
+   [
+    60,
+    41
+   ],
+   [
+    13,
+    70
+   ],
+   [
+    83,
+    1
+   ],
+   [
+    29,
+    20
+   ],
+   [
+    28,
+    82
+   ],
+   [
+    24,
+    63
+   ],
+   [
+    8,
+    86
+   ],
+   [
+    39,
+    54
+   ],
+   [
+    90,
+    56
+   ],
+   [
+    73,
+    62
+   ],
+   [
+    55,
+    75
+   ],
+   [
+    86,
+    64
+   ],
+   [
+    22,
+    74
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    68,
+    18
+   ],
+   [
+    40,
+    37
+   ],
+   [
+    30,
+    29
+   ],
+   [
+    44,
+    46
+   ],
+   [
+    46,
+    51
+   ],
+   [
+    56,
+    57
+   ],
+   [
+    50,
+    58
+   ],
+   [
+    41,
+    36
+   ],
+   [
+    2,
+    31
+   ],
+   [
+    36,
+    35
+   ],
+   [
+    48,
+    78
+   ],
+   [
+    0,
+    27
+   ],
+   [
+    63,
+    83
+   ],
+   [
+    92,
+    66
+   ],
+   [
+    23,
+    2
+   ],
+   [
+    78,
+    53
+   ],
+   [
+    64,
+    76
+   ],
+   [
+    21,
+    23
+   ],
+   [
+    61,
+    52
+   ],
+   [
+    67,
+    79
+   ],
+   [
+    62,
+    90
+   ],
+   [
+    37,
+    19
+   ],
+   [
+    16,
+    4
+   ],
+   [
+    38,
+    93
+   ],
+   [
+    43,
+    33
+   ],
+   [
+    45,
+    81
+   ],
+   [
+    57,
+    77
+   ],
+   [
+    32,
+    22
+   ],
+   [
+    19,
+    45
+   ],
+   [
+    93,
+    88
+   ],
+   [
+    35,
+    6
+   ],
+   [
+    33,
+    10
+   ],
+   [
+    74,
+    9
+   ],
+   [
+    84,
+    8
+   ],
+   [
+    52,
+    73
+   ],
+   [
+    15,
+    32
+   ],
+   [
+    5,
+    17
+   ],
+   [
+    70,
+    43
+   ],
+   [
+    1,
+    65
+   ],
+   [
+    59,
+    55
+   ],
+   [
+    76,
+    50
+   ],
+   [
+    47,
+    85
+   ],
+   [
+    34,
+    87
+   ],
+   [
+    94,
+    21
+   ],
+   [
+    77,
+    40
+   ],
+   [
+    11,
+    5
+   ],
+   [
+    82,
+    0
+   ],
+   [
+    88,
+    14
+   ],
+   [
+    14,
+    91
+   ],
+   [
+    79,
+    24
+   ],
+   [
+    22,
+    68
+   ],
+   [
+    71,
+    28
+   ],
+   [
+    89,
+    12
+   ],
+   [
+    85,
+    59
+   ],
+   [
+    87,
+    49
+   ],
+   [
+    72,
+    25
+   ],
+   [
+    69,
+    15
+   ],
+   [
+    75,
+    80
+   ],
+   [
+    95,
+    38
+   ],
+   [
+    17,
+    60
+   ],
+   [
+    10,
+    71
+   ],
+   [
+    53,
+    89
+   ],
+   [
+    51,
+    16
+   ],
+   [
+    27,
+    3
+   ],
+   [
+    66,
+    61
+   ],
+   [
+    6,
+    92
+   ],
+   [
+    81,
+    95
+   ],
+   [
+    25,
+    84
+   ],
+   [
+    49,
+    44
+   ],
+   [
+    9,
+    72
+   ],
+   [
+    75,
+    42
+   ],
+   [
+    62,
+    34
+   ],
+   [
+    12,
+    62
+   ],
+   [
+    39,
+    47
+   ],
+   [
+    26,
+    31
+   ]
+  ],
+  [
+   [
+    7,
+    94
+   ],
+   [
+    18,
+    48
+   ],
+   [
+    80,
+    30
+   ],
+   [
+    20,
+    13
+   ],
+   [
+    4,
+    7
+   ],
+   [
+    42,
+    67
+   ],
+   [
+    60,
+    41
+   ],
+   [
+    13,
+    70
+   ],
+   [
+    83,
+    1
+   ],
+   [
+    29,
+    20
+   ],
+   [
+    28,
+    82
+   ],
+   [
+    24,
+    63
+   ],
+   [
+    8,
+    86
+   ],
+   [
+    39,
+    54
+   ],
+   [
+    90,
+    56
+   ],
+   [
+    73,
+    62
+   ],
+   [
+    55,
+    75
+   ],
+   [
+    86,
+    64
+   ],
+   [
+    22,
+    74
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    68,
+    18
+   ],
+   [
+    40,
+    37
+   ],
+   [
+    30,
+    29
+   ],
+   [
+    44,
+    46
+   ],
+   [
+    46,
+    51
+   ],
+   [
+    56,
+    57
+   ],
+   [
+    50,
+    58
+   ],
+   [
+    91,
+    26
+   ],
+   [
+    41,
+    36
+   ],
+   [
+    2,
+    31
+   ],
+   [
+    36,
+    35
+   ],
+   [
+    48,
+    78
+   ],
+   [
+    0,
+    27
+   ],
+   [
+    63,
+    83
+   ],
+   [
+    92,
+    66
+   ],
+   [
+    23,
+    2
+   ],
+   [
+    78,
+    53
+   ],
+   [
+    64,
+    76
+   ],
+   [
+    21,
+    23
+   ],
+   [
+    61,
+    52
+   ],
+   [
+    67,
+    79
+   ],
+   [
+    62,
+    90
+   ],
+   [
+    37,
+    19
+   ],
+   [
+    16,
+    4
+   ],
+   [
+    38,
+    93
+   ],
+   [
+    43,
+    33
+   ],
+   [
+    45,
+    81
+   ],
+   [
+    57,
+    77
+   ],
+   [
+    32,
+    22
+   ],
+   [
+    19,
+    45
+   ],
+   [
+    93,
+    88
+   ],
+   [
+    35,
+    6
+   ],
+   [
+    33,
+    10
+   ],
+   [
+    74,
+    9
+   ],
+   [
+    84,
+    8
+   ],
+   [
+    52,
+    73
+   ],
+   [
+    15,
+    32
+   ],
+   [
+    5,
+    17
+   ],
+   [
+    70,
+    43
+   ],
+   [
+    1,
+    65
+   ],
+   [
+    59,
+    55
+   ],
+   [
+    76,
+    50
+   ],
+   [
+    47,
+    85
+   ],
+   [
+    34,
+    87
+   ],
+   [
+    94,
+    21
+   ],
+   [
+    77,
+    40
+   ],
+   [
+    11,
+    5
+   ],
+   [
+    82,
+    0
+   ],
+   [
+    88,
+    14
+   ],
+   [
+    79,
+    24
+   ],
+   [
+    22,
+    68
+   ],
+   [
+    71,
+    28
+   ],
+   [
+    89,
+    12
+   ],
+   [
+    85,
+    59
+   ],
+   [
+    87,
+    49
+   ],
+   [
+    72,
+    25
+   ],
+   [
+    69,
+    15
+   ],
+   [
+    75,
+    80
+   ],
+   [
+    95,
+    38
+   ],
+   [
+    17,
+    60
+   ],
+   [
+    10,
+    71
+   ],
+   [
+    53,
+    89
+   ],
+   [
+    51,
+    16
+   ],
+   [
+    27,
+    3
+   ],
+   [
+    66,
+    61
+   ],
+   [
+    6,
+    92
+   ],
+   [
+    81,
+    95
+   ],
+   [
+    25,
+    84
+   ],
+   [
+    49,
+    44
+   ],
+   [
+    9,
+    72
+   ],
+   [
+    75,
+    42
+   ],
+   [
+    62,
+    34
+   ],
+   [
+    12,
+    62
+   ],
+   [
+    39,
+    47
+   ],
+   [
+    26,
+    31
+   ]
+  ],
+  [
+   [
+    7,
+    94
+   ],
+   [
+    18,
+    48
+   ],
+   [
+    80,
+    30
+   ],
+   [
+    20,
+    13
+   ],
+   [
+    4,
+    7
+   ],
+   [
+    42,
+    67
+   ],
+   [
+    60,
+    41
+   ],
+   [
+    13,
+    70
+   ],
+   [
+    83,
+    1
+   ],
+   [
+    29,
+    20
+   ],
+   [
+    28,
+    82
+   ],
+   [
+    24,
+    63
+   ],
+   [
+    8,
+    86
+   ],
+   [
+    39,
+    54
+   ],
+   [
+    90,
+    56
+   ],
+   [
+    73,
+    62
+   ],
+   [
+    55,
+    75
+   ],
+   [
+    86,
+    64
+   ],
+   [
+    22,
+    74
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    68,
+    18
+   ],
+   [
+    40,
+    37
+   ],
+   [
+    30,
+    29
+   ],
+   [
+    44,
+    46
+   ],
+   [
+    46,
+    51
+   ],
+   [
+    56,
+    57
+   ],
+   [
+    50,
+    58
+   ],
+   [
+    91,
+    26
+   ],
+   [
+    41,
+    36
+   ],
+   [
+    2,
+    31
+   ],
+   [
+    36,
+    35
+   ],
+   [
+    48,
+    78
+   ],
+   [
+    0,
+    27
+   ],
+   [
+    63,
+    83
+   ],
+   [
+    92,
+    66
+   ],
+   [
+    23,
+    2
+   ],
+   [
+    78,
+    53
+   ],
+   [
+    64,
+    76
+   ],
+   [
+    21,
+    23
+   ],
+   [
+    61,
+    52
+   ],
+   [
+    67,
+    79
+   ],
+   [
+    62,
+    90
+   ],
+   [
+    37,
+    19
+   ],
+   [
+    16,
+    4
+   ],
+   [
+    38,
+    93
+   ],
+   [
+    43,
+    33
+   ],
+   [
+    45,
+    81
+   ],
+   [
+    57,
+    77
+   ],
+   [
+    32,
+    22
+   ],
+   [
+    19,
+    45
+   ],
+   [
+    93,
+    88
+   ],
+   [
+    35,
+    6
+   ],
+   [
+    33,
+    10
+   ],
+   [
+    74,
+    9
+   ],
+   [
+    84,
+    8
+   ],
+   [
+    52,
+    73
+   ],
+   [
+    15,
+    32
+   ],
+   [
+    5,
+    17
+   ],
+   [
+    70,
+    43
+   ],
+   [
+    1,
+    65
+   ],
+   [
+    59,
+    55
+   ],
+   [
+    76,
+    50
+   ],
+   [
+    47,
+    85
+   ],
+   [
+    34,
+    87
+   ],
+   [
+    94,
+    21
+   ],
+   [
+    77,
+    40
+   ],
+   [
+    11,
+    5
+   ],
+   [
+    82,
+    0
+   ],
+   [
+    14,
+    91
+   ],
+   [
+    79,
+    24
+   ],
+   [
+    22,
+    68
+   ],
+   [
+    71,
+    28
+   ],
+   [
+    89,
+    12
+   ],
+   [
+    85,
+    59
+   ],
+   [
+    87,
+    49
+   ],
+   [
+    72,
+    25
+   ],
+   [
+    69,
+    15
+   ],
+   [
+    75,
+    80
+   ],
+   [
+    95,
+    38
+   ],
+   [
+    17,
+    60
+   ],
+   [
+    10,
+    71
+   ],
+   [
+    53,
+    89
+   ],
+   [
+    51,
+    16
+   ],
+   [
+    27,
+    3
+   ],
+   [
+    66,
+    61
+   ],
+   [
+    6,
+    92
+   ],
+   [
+    81,
+    95
+   ],
+   [
+    25,
+    84
+   ],
+   [
+    49,
+    44
+   ],
+   [
+    9,
+    72
+   ],
+   [
+    75,
+    42
+   ],
+   [
+    62,
+    34
+   ],
+   [
+    12,
+    62
+   ],
+   [
+    39,
+    47
+   ],
+   [
+    26,
+    31
+   ]
+  ]
+ ],
+ "home_power_factor": 0.95,
+ "battery_power_factor": 1.0,
+ "config": {
+  "scenarios_per_family": 6,
+  "battery_share": 0.5,
+  "battery_kw": 100.0,
+  "curtail_share": 0.3,
+  "keep_range": [
+   0.2,
+   1.0
+  ],
+  "boundary_share": 0.4,
+  "boundary_v": 2.0,
+  "boundary_loading": [
+   95.0,
+   105.0
+  ],
+  "upstream_bracket": [
+   0.85,
+   1.15
+  ],
+  "load_scale_bracket": [
+   0.3,
+   2.0
+  ],
+  "illinois_steps": 5
+ },
+ "environment": {
+  "python": "3.12.0",
+  "numpy": "2.4.6",
+  "sklearn": "1.9.1",
+  "lightgbm": "4.7.0",
+  "machine": "AMD64 Family 25 Model 116 Stepping 1, AuthenticAMD"
+ },
+ "seconds": 978.3,
+ "totals": {
+  "train": {
+   "states": 59702,
+   "boundary_states": 13622,
+   "solver_failures": 0
+  },
+  "tune": {
+   "states": 14910,
+   "boundary_states": 3390,
+   "solver_failures": 0
+  },
+  "calibrate": {
+   "states": 14956,
+   "boundary_states": 3436,
+   "solver_failures": 0
+  },
+  "test": {
+   "states": 29862,
+   "boundary_states": 6822,
+   "solver_failures": 0
+  }
+ },
+ "families": [
+  {
+   "id": "suburban_100_2025-01-05_0",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1750538040,
+   "states": 768,
+   "boundary_states": 192,
+   "solver_failures": 0,
+   "seconds": 36.63
+  },
+  {
+   "id": "suburban_100_2025-01-05_1",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "planning:0.5",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 2247673186,
+   "states": 727,
+   "boundary_states": 151,
+   "solver_failures": 0,
+   "seconds": 64.69
+  },
+  {
+   "id": "suburban_100_2025-01-05_2",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2003440686,
+   "states": 743,
+   "boundary_states": 167,
+   "solver_failures": 0,
+   "seconds": 36.11
+  },
+  {
+   "id": "suburban_100_2025-01-05_3",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 3285634209,
+   "states": 756,
+   "boundary_states": 180,
+   "solver_failures": 0,
+   "seconds": 109.49
+  },
+  {
+   "id": "suburban_100_2025-01-05_4",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3896329240,
+   "states": 750,
+   "boundary_states": 174,
+   "solver_failures": 0,
+   "seconds": 37.84
+  },
+  {
+   "id": "suburban_100_2025-01-15_0",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 501751398,
+   "states": 758,
+   "boundary_states": 182,
+   "solver_failures": 0,
+   "seconds": 119.97
+  },
+  {
+   "id": "suburban_100_2025-01-15_1",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 68001375,
+   "states": 718,
+   "boundary_states": 142,
+   "solver_failures": 0,
+   "seconds": 117.92
+  },
+  {
+   "id": "suburban_100_2025-01-15_2",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 2910236443,
+   "states": 728,
+   "boundary_states": 152,
+   "solver_failures": 0,
+   "seconds": 100.28
+  },
+  {
+   "id": "suburban_100_2025-01-15_3",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 2561646900,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 111.39
+  },
+  {
+   "id": "suburban_100_2025-01-15_4",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 3318422622,
+   "states": 758,
+   "boundary_states": 182,
+   "solver_failures": 0,
+   "seconds": 113.71
+  },
+  {
+   "id": "suburban_100_2025-01-25_0",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "planning:0.75",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 102833287,
+   "states": 758,
+   "boundary_states": 182,
+   "solver_failures": 0,
+   "seconds": 4.18
+  },
+  {
+   "id": "suburban_100_2025-01-25_1",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "planning:1.0",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 945810049,
+   "states": 727,
+   "boundary_states": 151,
+   "solver_failures": 0,
+   "seconds": 60.62
+  },
+  {
+   "id": "suburban_100_2025-01-25_2",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "planning:0.25",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1639347355,
+   "states": 720,
+   "boundary_states": 144,
+   "solver_failures": 0,
+   "seconds": 3.66
+  },
+  {
+   "id": "suburban_100_2025-01-25_3",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "planning:0.5",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 2200031783,
+   "states": 733,
+   "boundary_states": 157,
+   "solver_failures": 0,
+   "seconds": 71.58
+  },
+  {
+   "id": "suburban_100_2025-01-25_4",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1807618462,
+   "states": 763,
+   "boundary_states": 187,
+   "solver_failures": 0,
+   "seconds": 4.18
+  },
+  {
+   "id": "suburban_100_2025-02-05_0",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 2033829217,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 0,
+   "seconds": 87.6
+  },
+  {
+   "id": "suburban_100_2025-02-05_1",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "planning:0.25",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 616425968,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 84.11
+  },
+  {
+   "id": "suburban_100_2025-02-05_2",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 2822908371,
+   "states": 710,
+   "boundary_states": 134,
+   "solver_failures": 0,
+   "seconds": 68.97
+  },
+  {
+   "id": "suburban_100_2025-02-05_3",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 3839427704,
+   "states": 778,
+   "boundary_states": 202,
+   "solver_failures": 0,
+   "seconds": 79.56
+  },
+  {
+   "id": "suburban_100_2025-02-05_4",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "planning:1.0",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 1003253974,
+   "states": 737,
+   "boundary_states": 161,
+   "solver_failures": 0,
+   "seconds": 85.96
+  },
+  {
+   "id": "suburban_100_2025-02-15_0",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "planning:0.25",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1924446804,
+   "states": 755,
+   "boundary_states": 179,
+   "solver_failures": 0,
+   "seconds": 3.83
+  },
+  {
+   "id": "suburban_100_2025-02-15_1",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 316437997,
+   "states": 721,
+   "boundary_states": 145,
+   "solver_failures": 0,
+   "seconds": 33.06
+  },
+  {
+   "id": "suburban_100_2025-02-15_2",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 4127409131,
+   "states": 734,
+   "boundary_states": 158,
+   "solver_failures": 0,
+   "seconds": 3.6
+  },
+  {
+   "id": "suburban_100_2025-02-15_3",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 3973958596,
+   "states": 746,
+   "boundary_states": 170,
+   "solver_failures": 0,
+   "seconds": 77.63
+  },
+  {
+   "id": "suburban_100_2025-02-15_4",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3826869790,
+   "states": 769,
+   "boundary_states": 193,
+   "solver_failures": 0,
+   "seconds": 3.86
+  },
+  {
+   "id": "suburban_100_2025-02-25_0",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 3856034505,
+   "states": 757,
+   "boundary_states": 181,
+   "solver_failures": 0,
+   "seconds": 90.43
+  },
+  {
+   "id": "suburban_100_2025-02-25_1",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "planning:0.75",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 519953321,
+   "states": 726,
+   "boundary_states": 150,
+   "solver_failures": 0,
+   "seconds": 78.71
+  },
+  {
+   "id": "suburban_100_2025-02-25_2",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "planning:1.0",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 1988277581,
+   "states": 705,
+   "boundary_states": 129,
+   "solver_failures": 0,
+   "seconds": 67.53
+  },
+  {
+   "id": "suburban_100_2025-02-25_3",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 2914503053,
+   "states": 751,
+   "boundary_states": 175,
+   "solver_failures": 0,
+   "seconds": 72.86
+  },
+  {
+   "id": "suburban_100_2025-02-25_4",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 4025161780,
+   "states": 755,
+   "boundary_states": 179,
+   "solver_failures": 0,
+   "seconds": 89.11
+  },
+  {
+   "id": "suburban_100_2025-03-07_0",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2293791485,
+   "states": 718,
+   "boundary_states": 142,
+   "solver_failures": 0,
+   "seconds": 102.53
+  },
+  {
+   "id": "suburban_100_2025-03-07_1",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 713344970,
+   "states": 725,
+   "boundary_states": 149,
+   "solver_failures": 0,
+   "seconds": 95.73
+  },
+  {
+   "id": "suburban_100_2025-03-07_2",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1827193503,
+   "states": 757,
+   "boundary_states": 181,
+   "solver_failures": 0,
+   "seconds": 84.51
+  },
+  {
+   "id": "suburban_100_2025-03-07_3",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "planning:1.0",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 1451686843,
+   "states": 706,
+   "boundary_states": 130,
+   "solver_failures": 0,
+   "seconds": 77.36
+  },
+  {
+   "id": "suburban_100_2025-03-07_4",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "planning:0.25",
+   "tap": 1,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 2725428853,
+   "states": 764,
+   "boundary_states": 188,
+   "solver_failures": 0,
+   "seconds": 75.17
+  },
+  {
+   "id": "suburban_100_2025-03-17_0",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 3290813514,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 4.43
+  },
+  {
+   "id": "suburban_100_2025-03-17_1",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 796036228,
+   "states": 726,
+   "boundary_states": 150,
+   "solver_failures": 0,
+   "seconds": 35.42
+  },
+  {
+   "id": "suburban_100_2025-03-17_2",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 2770755240,
+   "states": 714,
+   "boundary_states": 138,
+   "solver_failures": 0,
+   "seconds": 75.13
+  },
+  {
+   "id": "suburban_100_2025-03-17_3",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3389183710,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 4.34
+  },
+  {
+   "id": "suburban_100_2025-03-17_4",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 409589438,
+   "states": 741,
+   "boundary_states": 165,
+   "solver_failures": 0,
+   "seconds": 89.34
+  },
+  {
+   "id": "suburban_100_2025-04-05_0",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3409106267,
+   "states": 775,
+   "boundary_states": 199,
+   "solver_failures": 0,
+   "seconds": 4.08
+  },
+  {
+   "id": "suburban_100_2025-04-05_1",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 2093149802,
+   "states": 734,
+   "boundary_states": 158,
+   "solver_failures": 0,
+   "seconds": 43.75
+  },
+  {
+   "id": "suburban_100_2025-04-05_2",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 273418268,
+   "states": 716,
+   "boundary_states": 140,
+   "solver_failures": 0,
+   "seconds": 3.6
+  },
+  {
+   "id": "suburban_100_2025-04-05_3",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 1774874528,
+   "states": 755,
+   "boundary_states": 179,
+   "solver_failures": 0,
+   "seconds": 76.25
+  },
+  {
+   "id": "suburban_100_2025-04-05_4",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2329374350,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 3.9
+  },
+  {
+   "id": "suburban_100_2025-04-15_0",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 3904079426,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 86.37
+  },
+  {
+   "id": "suburban_100_2025-04-15_1",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 1978098712,
+   "states": 734,
+   "boundary_states": 158,
+   "solver_failures": 0,
+   "seconds": 76.21
+  },
+  {
+   "id": "suburban_100_2025-04-15_2",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 813148456,
+   "states": 724,
+   "boundary_states": 148,
+   "solver_failures": 0,
+   "seconds": 66.68
+  },
+  {
+   "id": "suburban_100_2025-04-15_3",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 2719158290,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 0,
+   "seconds": 69.71
+  },
+  {
+   "id": "suburban_100_2025-04-15_4",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "planning:1.0",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 294129620,
+   "states": 716,
+   "boundary_states": 140,
+   "solver_failures": 0,
+   "seconds": 74.16
+  },
+  {
+   "id": "suburban_100_2025-04-25_0",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3790682335,
+   "states": 765,
+   "boundary_states": 189,
+   "solver_failures": 0,
+   "seconds": 3.95
+  },
+  {
+   "id": "suburban_100_2025-04-25_1",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 1062909235,
+   "states": 732,
+   "boundary_states": 156,
+   "solver_failures": 0,
+   "seconds": 43.61
+  },
+  {
+   "id": "suburban_100_2025-04-25_2",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 520528496,
+   "states": 736,
+   "boundary_states": 160,
+   "solver_failures": 0,
+   "seconds": 3.6
+  },
+  {
+   "id": "suburban_100_2025-04-25_3",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 3054996151,
+   "states": 746,
+   "boundary_states": 170,
+   "solver_failures": 0,
+   "seconds": 71.58
+  },
+  {
+   "id": "suburban_100_2025-04-25_4",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1363154600,
+   "states": 761,
+   "boundary_states": 185,
+   "solver_failures": 0,
+   "seconds": 3.95
+  },
+  {
+   "id": "suburban_100_2025-05-05_0",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 110843174,
+   "states": 742,
+   "boundary_states": 166,
+   "solver_failures": 0,
+   "seconds": 93.05
+  },
+  {
+   "id": "suburban_100_2025-05-05_1",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "planning:0.75",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 610572793,
+   "states": 718,
+   "boundary_states": 142,
+   "solver_failures": 0,
+   "seconds": 70.2
+  },
+  {
+   "id": "suburban_100_2025-05-05_2",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 2370615578,
+   "states": 723,
+   "boundary_states": 147,
+   "solver_failures": 0,
+   "seconds": 67.59
+  },
+  {
+   "id": "suburban_100_2025-05-05_3",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 3368673668,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 79.87
+  },
+  {
+   "id": "suburban_100_2025-05-05_4",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 2392302667,
+   "states": 722,
+   "boundary_states": 146,
+   "solver_failures": 0,
+   "seconds": 85.65
+  },
+  {
+   "id": "suburban_100_2025-05-15_0",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1449753649,
+   "states": 771,
+   "boundary_states": 195,
+   "solver_failures": 0,
+   "seconds": 4.11
+  },
+  {
+   "id": "suburban_100_2025-05-15_1",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 3283639145,
+   "states": 735,
+   "boundary_states": 159,
+   "solver_failures": 0,
+   "seconds": 33.99
+  },
+  {
+   "id": "suburban_100_2025-05-15_2",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "planning:0.25",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 38959096,
+   "states": 736,
+   "boundary_states": 160,
+   "solver_failures": 0,
+   "seconds": 3.81
+  },
+  {
+   "id": "suburban_100_2025-05-15_3",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 2383013069,
+   "states": 723,
+   "boundary_states": 147,
+   "solver_failures": 0,
+   "seconds": 74.73
+  },
+  {
+   "id": "suburban_100_2025-05-15_4",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3639688525,
+   "states": 768,
+   "boundary_states": 192,
+   "solver_failures": 0,
+   "seconds": 4.11
+  },
+  {
+   "id": "suburban_100_2025-05-25_0",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 2292970616,
+   "states": 763,
+   "boundary_states": 187,
+   "solver_failures": 0,
+   "seconds": 90.38
+  },
+  {
+   "id": "suburban_100_2025-05-25_1",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "planning:0.25",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2087711120,
+   "states": 749,
+   "boundary_states": 173,
+   "solver_failures": 0,
+   "seconds": 78.6
+  },
+  {
+   "id": "suburban_100_2025-05-25_2",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 3063955252,
+   "states": 714,
+   "boundary_states": 138,
+   "solver_failures": 0,
+   "seconds": 71.09
+  },
+  {
+   "id": "suburban_100_2025-05-25_3",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 2978799631,
+   "states": 770,
+   "boundary_states": 194,
+   "solver_failures": 0,
+   "seconds": 70.85
+  },
+  {
+   "id": "suburban_100_2025-05-25_4",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 4099637004,
+   "states": 764,
+   "boundary_states": 188,
+   "solver_failures": 0,
+   "seconds": 80.5
+  },
+  {
+   "id": "suburban_100_2025-06-07_0",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1552711,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 4.36
+  },
+  {
+   "id": "suburban_100_2025-06-07_1",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 125897760,
+   "states": 773,
+   "boundary_states": 197,
+   "solver_failures": 0,
+   "seconds": 94.55
+  },
+  {
+   "id": "suburban_100_2025-06-07_2",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2967357359,
+   "states": 779,
+   "boundary_states": 203,
+   "solver_failures": 0,
+   "seconds": 103.54
+  },
+  {
+   "id": "suburban_100_2025-06-07_3",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "planning:0.5",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 349161828,
+   "states": 725,
+   "boundary_states": 149,
+   "solver_failures": 0,
+   "seconds": 86.15
+  },
+  {
+   "id": "suburban_100_2025-06-07_4",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "planning:0.75",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1282375018,
+   "states": 783,
+   "boundary_states": 207,
+   "solver_failures": 0,
+   "seconds": 77.51
+  },
+  {
+   "id": "suburban_100_2025-06-17_0",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 4268692671,
+   "states": 726,
+   "boundary_states": 150,
+   "solver_failures": 0,
+   "seconds": 80.11
+  },
+  {
+   "id": "suburban_100_2025-06-17_1",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 452649375,
+   "states": 780,
+   "boundary_states": 204,
+   "solver_failures": 0,
+   "seconds": 54.45
+  },
+  {
+   "id": "suburban_100_2025-06-17_2",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 1013241821,
+   "states": 769,
+   "boundary_states": 193,
+   "solver_failures": 0,
+   "seconds": 4.61
+  },
+  {
+   "id": "suburban_100_2025-06-17_3",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 3601581241,
+   "states": 743,
+   "boundary_states": 167,
+   "solver_failures": 0,
+   "seconds": 31.42
+  },
+  {
+   "id": "suburban_100_2025-06-17_4",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 4248811568,
+   "states": 734,
+   "boundary_states": 158,
+   "solver_failures": 0,
+   "seconds": 78.55
+  },
+  {
+   "id": "suburban_100_2025-07-05_0",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 4062343728,
+   "states": 770,
+   "boundary_states": 194,
+   "solver_failures": 0,
+   "seconds": 4.03
+  },
+  {
+   "id": "suburban_100_2025-07-05_1",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 219488137,
+   "states": 733,
+   "boundary_states": 157,
+   "solver_failures": 0,
+   "seconds": 29.71
+  },
+  {
+   "id": "suburban_100_2025-07-05_2",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 96182603,
+   "states": 733,
+   "boundary_states": 157,
+   "solver_failures": 0,
+   "seconds": 3.61
+  },
+  {
+   "id": "suburban_100_2025-07-05_3",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 1872027473,
+   "states": 731,
+   "boundary_states": 155,
+   "solver_failures": 0,
+   "seconds": 78.03
+  },
+  {
+   "id": "suburban_100_2025-07-05_4",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 781714695,
+   "states": 774,
+   "boundary_states": 198,
+   "solver_failures": 0,
+   "seconds": 4.53
+  },
+  {
+   "id": "suburban_100_2025-07-15_0",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 1473046817,
+   "states": 782,
+   "boundary_states": 206,
+   "solver_failures": 0,
+   "seconds": 99.81
+  },
+  {
+   "id": "suburban_100_2025-07-15_1",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3930984528,
+   "states": 737,
+   "boundary_states": 161,
+   "solver_failures": 0,
+   "seconds": 83.81
+  },
+  {
+   "id": "suburban_100_2025-07-15_2",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 2379230014,
+   "states": 728,
+   "boundary_states": 152,
+   "solver_failures": 0,
+   "seconds": 77.87
+  },
+  {
+   "id": "suburban_100_2025-07-15_3",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1677185542,
+   "states": 765,
+   "boundary_states": 189,
+   "solver_failures": 0,
+   "seconds": 46.81
+  },
+  {
+   "id": "suburban_100_2025-07-15_4",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "planning:0.5",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 425684075,
+   "states": 771,
+   "boundary_states": 195,
+   "solver_failures": 0,
+   "seconds": 86.94
+  },
+  {
+   "id": "suburban_100_2025-07-25_0",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3462016380,
+   "states": 769,
+   "boundary_states": 193,
+   "solver_failures": 0,
+   "seconds": 3.9
+  },
+  {
+   "id": "suburban_100_2025-07-25_1",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 2188252368,
+   "states": 730,
+   "boundary_states": 154,
+   "solver_failures": 0,
+   "seconds": 31.88
+  },
+  {
+   "id": "suburban_100_2025-07-25_2",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2449745506,
+   "states": 747,
+   "boundary_states": 171,
+   "solver_failures": 0,
+   "seconds": 3.88
+  },
+  {
+   "id": "suburban_100_2025-07-25_3",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 1414329444,
+   "states": 722,
+   "boundary_states": 146,
+   "solver_failures": 0,
+   "seconds": 76.3
+  },
+  {
+   "id": "suburban_100_2025-07-25_4",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "planning:0.75",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1862817516,
+   "states": 772,
+   "boundary_states": 196,
+   "solver_failures": 0,
+   "seconds": 4.27
+  },
+  {
+   "id": "suburban_100_2025-08-05_0",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 2493913541,
+   "states": 748,
+   "boundary_states": 172,
+   "solver_failures": 0,
+   "seconds": 88.32
+  },
+  {
+   "id": "suburban_100_2025-08-05_1",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 200203817,
+   "states": 754,
+   "boundary_states": 178,
+   "solver_failures": 0,
+   "seconds": 81.76
+  },
+  {
+   "id": "suburban_100_2025-08-05_2",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "planning:0.5",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 546955193,
+   "states": 724,
+   "boundary_states": 148,
+   "solver_failures": 0,
+   "seconds": 77.34
+  },
+  {
+   "id": "suburban_100_2025-08-05_3",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 2406944155,
+   "states": 782,
+   "boundary_states": 206,
+   "solver_failures": 0,
+   "seconds": 4.12
+  },
+  {
+   "id": "suburban_100_2025-08-05_4",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 2488915923,
+   "states": 761,
+   "boundary_states": 185,
+   "solver_failures": 0,
+   "seconds": 92.17
+  },
+  {
+   "id": "suburban_100_2025-08-15_0",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "planning:0.25",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1551199277,
+   "states": 772,
+   "boundary_states": 196,
+   "solver_failures": 0,
+   "seconds": 4.54
+  },
+  {
+   "id": "suburban_100_2025-08-15_1",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 2575425771,
+   "states": 734,
+   "boundary_states": 158,
+   "solver_failures": 0,
+   "seconds": 49.78
+  },
+  {
+   "id": "suburban_100_2025-08-15_2",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3913317437,
+   "states": 732,
+   "boundary_states": 156,
+   "solver_failures": 0,
+   "seconds": 4.02
+  },
+  {
+   "id": "suburban_100_2025-08-15_3",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 2398146617,
+   "states": 732,
+   "boundary_states": 156,
+   "solver_failures": 0,
+   "seconds": 84.21
+  },
+  {
+   "id": "suburban_100_2025-08-15_4",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1226912144,
+   "states": 778,
+   "boundary_states": 202,
+   "solver_failures": 0,
+   "seconds": 4.47
+  },
+  {
+   "id": "suburban_100_2025-08-25_0",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 3955611025,
+   "states": 776,
+   "boundary_states": 200,
+   "solver_failures": 0,
+   "seconds": 101.33
+  },
+  {
+   "id": "suburban_100_2025-08-25_1",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 1192842303,
+   "states": 728,
+   "boundary_states": 152,
+   "solver_failures": 0,
+   "seconds": 86.92
+  },
+  {
+   "id": "suburban_100_2025-08-25_2",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 443130347,
+   "states": 737,
+   "boundary_states": 161,
+   "solver_failures": 0,
+   "seconds": 78.34
+  },
+  {
+   "id": "suburban_100_2025-08-25_3",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 2485564305,
+   "states": 764,
+   "boundary_states": 188,
+   "solver_failures": 0,
+   "seconds": 46.79
+  },
+  {
+   "id": "suburban_100_2025-08-25_4",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "planning:0.5",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 891598811,
+   "states": 777,
+   "boundary_states": 201,
+   "solver_failures": 0,
+   "seconds": 89.03
+  },
+  {
+   "id": "suburban_100_2025-09-07_0",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3270394540,
+   "states": 767,
+   "boundary_states": 191,
+   "solver_failures": 0,
+   "seconds": 4.37
+  },
+  {
+   "id": "suburban_100_2025-09-07_1",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 3647358214,
+   "states": 741,
+   "boundary_states": 165,
+   "solver_failures": 0,
+   "seconds": 81.54
+  },
+  {
+   "id": "suburban_100_2025-09-07_2",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2285850623,
+   "states": 754,
+   "boundary_states": 178,
+   "solver_failures": 0,
+   "seconds": 4.25
+  },
+  {
+   "id": "suburban_100_2025-09-07_3",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 259263354,
+   "states": 765,
+   "boundary_states": 189,
+   "solver_failures": 0,
+   "seconds": 99.43
+  },
+  {
+   "id": "suburban_100_2025-09-07_4",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2913310821,
+   "states": 770,
+   "boundary_states": 194,
+   "solver_failures": 0,
+   "seconds": 89.62
+  },
+  {
+   "id": "suburban_100_2025-09-17_0",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 410945842,
+   "states": 722,
+   "boundary_states": 146,
+   "solver_failures": 0,
+   "seconds": 77.4
+  },
+  {
+   "id": "suburban_100_2025-09-17_1",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 2706970064,
+   "states": 780,
+   "boundary_states": 204,
+   "solver_failures": 0,
+   "seconds": 69.02
+  },
+  {
+   "id": "suburban_100_2025-09-17_2",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 122064264,
+   "states": 718,
+   "boundary_states": 142,
+   "solver_failures": 0,
+   "seconds": 77.55
+  },
+  {
+   "id": "suburban_100_2025-09-17_3",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 2225336739,
+   "states": 767,
+   "boundary_states": 191,
+   "solver_failures": 0,
+   "seconds": 52.3
+  },
+  {
+   "id": "suburban_100_2025-09-17_4",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "planning:0.5",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 1942634177,
+   "states": 772,
+   "boundary_states": 196,
+   "solver_failures": 0,
+   "seconds": 4.53
+  },
+  {
+   "id": "suburban_100_2025-10-05_0",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1261824666,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 4.56
+  },
+  {
+   "id": "suburban_100_2025-10-05_1",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 806810665,
+   "states": 730,
+   "boundary_states": 154,
+   "solver_failures": 0,
+   "seconds": 35.41
+  },
+  {
+   "id": "suburban_100_2025-10-05_2",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3580350433,
+   "states": 737,
+   "boundary_states": 161,
+   "solver_failures": 0,
+   "seconds": 4.07
+  },
+  {
+   "id": "suburban_100_2025-10-05_3",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 1623979052,
+   "states": 727,
+   "boundary_states": 151,
+   "solver_failures": 0,
+   "seconds": 85.39
+  },
+  {
+   "id": "suburban_100_2025-10-05_4",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2470735890,
+   "states": 771,
+   "boundary_states": 195,
+   "solver_failures": 0,
+   "seconds": 4.42
+  },
+  {
+   "id": "suburban_100_2025-10-15_0",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 2956955848,
+   "states": 770,
+   "boundary_states": 194,
+   "solver_failures": 0,
+   "seconds": 109.11
+  },
+  {
+   "id": "suburban_100_2025-10-15_1",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 853323771,
+   "states": 715,
+   "boundary_states": 139,
+   "solver_failures": 0,
+   "seconds": 80.78
+  },
+  {
+   "id": "suburban_100_2025-10-15_2",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "planning:0.5",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 2832209331,
+   "states": 717,
+   "boundary_states": 141,
+   "solver_failures": 0,
+   "seconds": 68.79
+  },
+  {
+   "id": "suburban_100_2025-10-15_3",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 2696229277,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 82.47
+  },
+  {
+   "id": "suburban_100_2025-10-15_4",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 2175521113,
+   "states": 728,
+   "boundary_states": 152,
+   "solver_failures": 0,
+   "seconds": 93.65
+  },
+  {
+   "id": "suburban_100_2025-10-25_0",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2827401129,
+   "states": 764,
+   "boundary_states": 188,
+   "solver_failures": 0,
+   "seconds": 4.53
+  },
+  {
+   "id": "suburban_100_2025-10-25_1",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 4106365071,
+   "states": 731,
+   "boundary_states": 155,
+   "solver_failures": 0,
+   "seconds": 72.15
+  },
+  {
+   "id": "suburban_100_2025-10-25_2",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3438384552,
+   "states": 736,
+   "boundary_states": 160,
+   "solver_failures": 0,
+   "seconds": 4.17
+  },
+  {
+   "id": "suburban_100_2025-10-25_3",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 539901665,
+   "states": 730,
+   "boundary_states": 154,
+   "solver_failures": 0,
+   "seconds": 87.5
+  },
+  {
+   "id": "suburban_100_2025-10-25_4",
+   "street": "suburban_100",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 4155226161,
+   "states": 768,
+   "boundary_states": 192,
+   "solver_failures": 0,
+   "seconds": 4.46
+  },
+  {
+   "id": "suburban_100_2025-11-05_0",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 1489454082,
+   "states": 761,
+   "boundary_states": 185,
+   "solver_failures": 0,
+   "seconds": 111.29
+  },
+  {
+   "id": "suburban_100_2025-11-05_1",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 802317400,
+   "states": 708,
+   "boundary_states": 132,
+   "solver_failures": 0,
+   "seconds": 84.67
+  },
+  {
+   "id": "suburban_100_2025-11-05_2",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "planning:1.0",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 742777165,
+   "states": 724,
+   "boundary_states": 148,
+   "solver_failures": 0,
+   "seconds": 78.85
+  },
+  {
+   "id": "suburban_100_2025-11-05_3",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 72644368,
+   "states": 754,
+   "boundary_states": 178,
+   "solver_failures": 0,
+   "seconds": 84.54
+  },
+  {
+   "id": "suburban_100_2025-11-05_4",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 3942772466,
+   "states": 746,
+   "boundary_states": 170,
+   "solver_failures": 0,
+   "seconds": 97.54
+  },
+  {
+   "id": "suburban_100_2025-11-15_0",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1489517969,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 4.39
+  },
+  {
+   "id": "suburban_100_2025-11-15_1",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 940332559,
+   "states": 736,
+   "boundary_states": 160,
+   "solver_failures": 0,
+   "seconds": 35.97
+  },
+  {
+   "id": "suburban_100_2025-11-15_2",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3185333505,
+   "states": 747,
+   "boundary_states": 171,
+   "solver_failures": 0,
+   "seconds": 4.27
+  },
+  {
+   "id": "suburban_100_2025-11-15_3",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 2344515585,
+   "states": 758,
+   "boundary_states": 182,
+   "solver_failures": 0,
+   "seconds": 86.33
+  },
+  {
+   "id": "suburban_100_2025-11-15_4",
+   "street": "suburban_100",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2587287577,
+   "states": 770,
+   "boundary_states": 194,
+   "solver_failures": 0,
+   "seconds": 4.4
+  },
+  {
+   "id": "suburban_100_2025-11-25_0",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 1185042497,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 0,
+   "seconds": 99.78
+  },
+  {
+   "id": "suburban_100_2025-11-25_1",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3409408965,
+   "states": 726,
+   "boundary_states": 150,
+   "solver_failures": 0,
+   "seconds": 85.97
+  },
+  {
+   "id": "suburban_100_2025-11-25_2",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 3874259180,
+   "states": 723,
+   "boundary_states": 147,
+   "solver_failures": 0,
+   "seconds": 73.6
+  },
+  {
+   "id": "suburban_100_2025-11-25_3",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 2554306532,
+   "states": 756,
+   "boundary_states": 180,
+   "solver_failures": 0,
+   "seconds": 84.21
+  },
+  {
+   "id": "suburban_100_2025-11-25_4",
+   "street": "suburban_100",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 4115564399,
+   "states": 756,
+   "boundary_states": 180,
+   "solver_failures": 0,
+   "seconds": 84.22
+  },
+  {
+   "id": "suburban_100_2025-12-07_0",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 695518139,
+   "states": 731,
+   "boundary_states": 155,
+   "solver_failures": 0,
+   "seconds": 70.85
+  },
+  {
+   "id": "suburban_100_2025-12-07_1",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "planning:1.0",
+   "tap": 2,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 2267084826,
+   "states": 712,
+   "boundary_states": 136,
+   "solver_failures": 0,
+   "seconds": 75.9
+  },
+  {
+   "id": "suburban_100_2025-12-07_2",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1196146762,
+   "states": 755,
+   "boundary_states": 179,
+   "solver_failures": 0,
+   "seconds": 4.3
+  },
+  {
+   "id": "suburban_100_2025-12-07_3",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 1442317729,
+   "states": 711,
+   "boundary_states": 135,
+   "solver_failures": 0,
+   "seconds": 81.93
+  },
+  {
+   "id": "suburban_100_2025-12-07_4",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3685682563,
+   "states": 729,
+   "boundary_states": 153,
+   "solver_failures": 0,
+   "seconds": 4.04
+  },
+  {
+   "id": "suburban_100_2025-12-17_0",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 1797478632,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 80.76
+  },
+  {
+   "id": "suburban_100_2025-12-17_1",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3242687047,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 85.85
+  },
+  {
+   "id": "suburban_100_2025-12-17_2",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 2590786783,
+   "states": 754,
+   "boundary_states": 178,
+   "solver_failures": 0,
+   "seconds": 88.81
+  },
+  {
+   "id": "suburban_100_2025-12-17_3",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 776931343,
+   "states": 758,
+   "boundary_states": 182,
+   "solver_failures": 0,
+   "seconds": 79.89
+  },
+  {
+   "id": "suburban_100_2025-12-17_4",
+   "street": "suburban_100",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 237131518,
+   "states": 708,
+   "boundary_states": 132,
+   "solver_failures": 0,
+   "seconds": 66.58
+  }
+ ],
+ "ood": {
+  "seed": 20261010,
+  "seconds": 43.4,
+  "kinds": {
+   "kwp_double": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "load_x4": {
+    "states": 250,
+    "solver_failures": 1
+   },
+   "upstream_out": {
+    "states": 250,
+    "solver_failures": 2
+   },
+   "tap_negative": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "battery_150": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "battery_other_node": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "phase_map": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "layout": {
+    "states": 250,
+    "solver_failures": 0
+   }
+  }
+ }
+}

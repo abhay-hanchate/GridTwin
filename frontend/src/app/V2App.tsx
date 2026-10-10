@@ -8,13 +8,14 @@ import type { ViewProps } from './view'
 const pages = {
   overview: () => import('../pages/Overview'), forecast: () => import('../pages/Forecast'), fixes: () => import('../pages/Fixes'),
   try: () => import('../pages/TryChange'), planning: () => import('../pages/Planning'),
-  control: () => import('../pages/Control'),
+  control: () => import('../pages/Control'), surrogate: () => import('../pages/Surrogate'),
 }
 const Overview = lazy(pages.overview)
 const Forecast = lazy(pages.forecast)
 const Fixes = lazy(pages.fixes)
 const TryChange = lazy(pages.try)
 const Control = lazy(pages.control)
+const Surrogate = lazy(pages.surrogate)
 const Planning = lazy(pages.planning)
 
 /** After the first page shows, fetch the other pages' code in the background so every step opens at once. */
@@ -32,6 +33,7 @@ function Page({ area, view, go }: { area: Area; view: ViewProps; go: (area: Area
     case 'forecast': return <Forecast {...view} go={go} />
     case 'try': return <TryChange {...view} go={go} />
     case 'control': return <Control go={go} />
+    case 'surrogate': return <Surrogate go={go} />
     case 'fixes': return <Fixes {...view} go={go} />
     case 'planning': return <Planning {...view} go={go} />
   }

@@ -197,6 +197,28 @@ python -m scripts.demo_script        # docs/DEMO_SCRIPT.md from the saved result
 
 For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn backend.main:app --reload`.
 
+## Fast power-flow screen (Addition 2)
+
+Small models trained on solver-labelled, **simulated** states, one per street type and five in all, predict each
+street's voltages, loadings, unbalance, neutral current and reverse flow. They run 6-8 times faster than the solver per
+state, and about 100 times faster under Volt/VAR, and add a calibrated margin. The screen only sorts candidates:
+anything called safe is still solved, a "no safe action" verdict never rests on it, and anything it was not trained on
+goes straight to the solver.
+
+- **Results on the newest test set (unseen months):**
+  - Unsafe states it called safe: none on the benchmark street; a handful elsewhere (up to 13 of 9,299 on the suburban
+    street). The solver catches every one.
+  - It accepts 34-72% of states and still sends most safe states to the solver.
+  - Accuracy targets met: at most 2 of 4.
+- **What failed:** an end-to-end speed-up. In most test windows no action was safe at all, so everything had to be
+  solved anyway.
+- **What round 4 traded:** it widened the support (all streets, any solar layout, switched layouts, seasonal battery
+  nodes) and lost precision against round 3. Round 3 had zero misses on its two streets.
+
+How it was built and scored: [model card](ml/models/surrogate/README.md), pre-registration in
+[DECISIONS](docs/DECISIONS.md) ("Addition 2", rounds 1-4), the contract for the controller in `ml/surrogate/api.py`,
+the dashboard's **Fast screen** page and `GET /api/v2/surrogate`.
+
 ## Limits
 
 - **No real-life check.** No public live household meters exist, so tomorrow's forecasts cannot be scored day by day;
@@ -226,7 +248,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 ## Features
 
 <!-- FEATURES:START -->
-**23 of 28 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
+**23 of 29 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
 
 | ID | Feature | Area | Owner | Status | Pull request |
 | --- | --- | --- | --- | --- | --- |
@@ -258,6 +280,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 | F26 | Live deployment with a public link | DevOps | Team | ⏳ Planned |  |
 | F27 | Keep labels explainer on Overview only |  | ieafraazzz | ✅ Done | [#28](https://github.com/abhay-hanchate/GridTwin/pull/28) |
 | F28 | Fix brief 10 Oct 2026: F1-F10  results regenerated on the fixed code |  | Tabsirshaikh | ✅ Done | [#29](https://github.com/abhay-hanchate/GridTwin/pull/29) |
+| F29 | Addition 2: power-flow surrogate screen with solver verification | ML | Tabsirshaikh | 🔄 In progress |  |
 <!-- FEATURES:END -->
 
 ## Team

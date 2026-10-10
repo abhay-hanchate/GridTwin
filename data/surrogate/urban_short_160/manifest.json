@@ -1,0 +1,4054 @@
+{
+ "street": "urban_short_160",
+ "round": 4,
+ "pilot": false,
+ "created_utc": "2026-10-10T17:49:52+00:00",
+ "provenance": "simulated: app scenario generator inputs (modelled forecasts, CEEW-based demand analogs), labels from the power-grid-model solver; not measured data",
+ "solver": {
+  "engine": "power-grid-model",
+  "version": "1.13.193",
+  "asymmetric": true,
+  "method": "newton_raphson",
+  "tolerance": 1e-08,
+  "max_iterations": 40,
+  "solver_hash": "5f47aa7c37a712e4",
+  "inverter_passes_max": 80,
+  "damping": 0.3
+ },
+ "street_hash": "118322ce6b5dd5a1",
+ "battery_nodes": [
+  13,
+  21,
+  26,
+  58,
+  62,
+  65
+ ],
+ "line_layouts": [
+  [
+   [
+    7,
+    94
+   ],
+   [
+    18,
+    48
+   ],
+   [
+    80,
+    30
+   ],
+   [
+    20,
+    13
+   ],
+   [
+    4,
+    7
+   ],
+   [
+    42,
+    67
+   ],
+   [
+    60,
+    41
+   ],
+   [
+    13,
+    70
+   ],
+   [
+    83,
+    1
+   ],
+   [
+    29,
+    20
+   ],
+   [
+    28,
+    82
+   ],
+   [
+    24,
+    63
+   ],
+   [
+    8,
+    86
+   ],
+   [
+    39,
+    54
+   ],
+   [
+    90,
+    56
+   ],
+   [
+    73,
+    62
+   ],
+   [
+    55,
+    75
+   ],
+   [
+    86,
+    64
+   ],
+   [
+    22,
+    74
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    68,
+    18
+   ],
+   [
+    40,
+    37
+   ],
+   [
+    30,
+    29
+   ],
+   [
+    44,
+    46
+   ],
+   [
+    46,
+    51
+   ],
+   [
+    56,
+    57
+   ],
+   [
+    50,
+    58
+   ],
+   [
+    91,
+    26
+   ],
+   [
+    41,
+    36
+   ],
+   [
+    2,
+    31
+   ],
+   [
+    36,
+    35
+   ],
+   [
+    48,
+    78
+   ],
+   [
+    0,
+    27
+   ],
+   [
+    63,
+    83
+   ],
+   [
+    92,
+    66
+   ],
+   [
+    23,
+    2
+   ],
+   [
+    78,
+    53
+   ],
+   [
+    64,
+    76
+   ],
+   [
+    21,
+    23
+   ],
+   [
+    61,
+    52
+   ],
+   [
+    67,
+    79
+   ],
+   [
+    62,
+    90
+   ],
+   [
+    37,
+    19
+   ],
+   [
+    16,
+    4
+   ],
+   [
+    38,
+    93
+   ],
+   [
+    43,
+    33
+   ],
+   [
+    45,
+    81
+   ],
+   [
+    57,
+    77
+   ],
+   [
+    32,
+    22
+   ],
+   [
+    19,
+    45
+   ],
+   [
+    93,
+    88
+   ],
+   [
+    35,
+    6
+   ],
+   [
+    33,
+    10
+   ],
+   [
+    74,
+    9
+   ],
+   [
+    84,
+    8
+   ],
+   [
+    52,
+    73
+   ],
+   [
+    15,
+    32
+   ],
+   [
+    5,
+    17
+   ],
+   [
+    70,
+    43
+   ],
+   [
+    1,
+    65
+   ],
+   [
+    59,
+    55
+   ],
+   [
+    76,
+    50
+   ],
+   [
+    47,
+    85
+   ],
+   [
+    34,
+    87
+   ],
+   [
+    94,
+    21
+   ],
+   [
+    77,
+    40
+   ],
+   [
+    11,
+    5
+   ],
+   [
+    82,
+    0
+   ],
+   [
+    88,
+    14
+   ],
+   [
+    14,
+    91
+   ],
+   [
+    79,
+    24
+   ],
+   [
+    22,
+    68
+   ],
+   [
+    71,
+    28
+   ],
+   [
+    89,
+    12
+   ],
+   [
+    85,
+    59
+   ],
+   [
+    87,
+    49
+   ],
+   [
+    72,
+    25
+   ],
+   [
+    69,
+    15
+   ],
+   [
+    75,
+    80
+   ],
+   [
+    95,
+    38
+   ],
+   [
+    17,
+    60
+   ],
+   [
+    10,
+    71
+   ],
+   [
+    53,
+    89
+   ],
+   [
+    51,
+    16
+   ],
+   [
+    27,
+    3
+   ],
+   [
+    66,
+    61
+   ],
+   [
+    6,
+    92
+   ],
+   [
+    81,
+    95
+   ],
+   [
+    25,
+    84
+   ],
+   [
+    49,
+    44
+   ],
+   [
+    9,
+    72
+   ],
+   [
+    75,
+    42
+   ],
+   [
+    62,
+    34
+   ],
+   [
+    12,
+    62
+   ],
+   [
+    39,
+    47
+   ]
+  ],
+  [
+   [
+    7,
+    94
+   ],
+   [
+    18,
+    48
+   ],
+   [
+    80,
+    30
+   ],
+   [
+    20,
+    13
+   ],
+   [
+    4,
+    7
+   ],
+   [
+    42,
+    67
+   ],
+   [
+    60,
+    41
+   ],
+   [
+    13,
+    70
+   ],
+   [
+    83,
+    1
+   ],
+   [
+    29,
+    20
+   ],
+   [
+    28,
+    82
+   ],
+   [
+    24,
+    63
+   ],
+   [
+    8,
+    86
+   ],
+   [
+    39,
+    54
+   ],
+   [
+    90,
+    56
+   ],
+   [
+    73,
+    62
+   ],
+   [
+    55,
+    75
+   ],
+   [
+    86,
+    64
+   ],
+   [
+    22,
+    74
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    68,
+    18
+   ],
+   [
+    40,
+    37
+   ],
+   [
+    30,
+    29
+   ],
+   [
+    44,
+    46
+   ],
+   [
+    46,
+    51
+   ],
+   [
+    56,
+    57
+   ],
+   [
+    50,
+    58
+   ],
+   [
+    41,
+    36
+   ],
+   [
+    2,
+    31
+   ],
+   [
+    36,
+    35
+   ],
+   [
+    48,
+    78
+   ],
+   [
+    0,
+    27
+   ],
+   [
+    63,
+    83
+   ],
+   [
+    92,
+    66
+   ],
+   [
+    23,
+    2
+   ],
+   [
+    78,
+    53
+   ],
+   [
+    64,
+    76
+   ],
+   [
+    21,
+    23
+   ],
+   [
+    61,
+    52
+   ],
+   [
+    67,
+    79
+   ],
+   [
+    62,
+    90
+   ],
+   [
+    37,
+    19
+   ],
+   [
+    16,
+    4
+   ],
+   [
+    38,
+    93
+   ],
+   [
+    43,
+    33
+   ],
+   [
+    45,
+    81
+   ],
+   [
+    57,
+    77
+   ],
+   [
+    32,
+    22
+   ],
+   [
+    19,
+    45
+   ],
+   [
+    93,
+    88
+   ],
+   [
+    35,
+    6
+   ],
+   [
+    33,
+    10
+   ],
+   [
+    74,
+    9
+   ],
+   [
+    84,
+    8
+   ],
+   [
+    52,
+    73
+   ],
+   [
+    15,
+    32
+   ],
+   [
+    5,
+    17
+   ],
+   [
+    70,
+    43
+   ],
+   [
+    1,
+    65
+   ],
+   [
+    59,
+    55
+   ],
+   [
+    76,
+    50
+   ],
+   [
+    47,
+    85
+   ],
+   [
+    34,
+    87
+   ],
+   [
+    94,
+    21
+   ],
+   [
+    77,
+    40
+   ],
+   [
+    11,
+    5
+   ],
+   [
+    82,
+    0
+   ],
+   [
+    88,
+    14
+   ],
+   [
+    14,
+    91
+   ],
+   [
+    79,
+    24
+   ],
+   [
+    22,
+    68
+   ],
+   [
+    71,
+    28
+   ],
+   [
+    89,
+    12
+   ],
+   [
+    85,
+    59
+   ],
+   [
+    87,
+    49
+   ],
+   [
+    72,
+    25
+   ],
+   [
+    69,
+    15
+   ],
+   [
+    75,
+    80
+   ],
+   [
+    95,
+    38
+   ],
+   [
+    17,
+    60
+   ],
+   [
+    10,
+    71
+   ],
+   [
+    53,
+    89
+   ],
+   [
+    51,
+    16
+   ],
+   [
+    27,
+    3
+   ],
+   [
+    66,
+    61
+   ],
+   [
+    6,
+    92
+   ],
+   [
+    81,
+    95
+   ],
+   [
+    25,
+    84
+   ],
+   [
+    49,
+    44
+   ],
+   [
+    9,
+    72
+   ],
+   [
+    75,
+    42
+   ],
+   [
+    62,
+    34
+   ],
+   [
+    12,
+    62
+   ],
+   [
+    39,
+    47
+   ],
+   [
+    26,
+    31
+   ]
+  ],
+  [
+   [
+    7,
+    94
+   ],
+   [
+    18,
+    48
+   ],
+   [
+    80,
+    30
+   ],
+   [
+    20,
+    13
+   ],
+   [
+    4,
+    7
+   ],
+   [
+    42,
+    67
+   ],
+   [
+    60,
+    41
+   ],
+   [
+    13,
+    70
+   ],
+   [
+    83,
+    1
+   ],
+   [
+    29,
+    20
+   ],
+   [
+    28,
+    82
+   ],
+   [
+    24,
+    63
+   ],
+   [
+    8,
+    86
+   ],
+   [
+    39,
+    54
+   ],
+   [
+    90,
+    56
+   ],
+   [
+    73,
+    62
+   ],
+   [
+    55,
+    75
+   ],
+   [
+    86,
+    64
+   ],
+   [
+    22,
+    74
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    68,
+    18
+   ],
+   [
+    40,
+    37
+   ],
+   [
+    30,
+    29
+   ],
+   [
+    44,
+    46
+   ],
+   [
+    46,
+    51
+   ],
+   [
+    56,
+    57
+   ],
+   [
+    50,
+    58
+   ],
+   [
+    91,
+    26
+   ],
+   [
+    41,
+    36
+   ],
+   [
+    2,
+    31
+   ],
+   [
+    36,
+    35
+   ],
+   [
+    48,
+    78
+   ],
+   [
+    0,
+    27
+   ],
+   [
+    63,
+    83
+   ],
+   [
+    92,
+    66
+   ],
+   [
+    23,
+    2
+   ],
+   [
+    78,
+    53
+   ],
+   [
+    64,
+    76
+   ],
+   [
+    21,
+    23
+   ],
+   [
+    61,
+    52
+   ],
+   [
+    67,
+    79
+   ],
+   [
+    62,
+    90
+   ],
+   [
+    37,
+    19
+   ],
+   [
+    16,
+    4
+   ],
+   [
+    38,
+    93
+   ],
+   [
+    43,
+    33
+   ],
+   [
+    45,
+    81
+   ],
+   [
+    57,
+    77
+   ],
+   [
+    32,
+    22
+   ],
+   [
+    19,
+    45
+   ],
+   [
+    93,
+    88
+   ],
+   [
+    35,
+    6
+   ],
+   [
+    33,
+    10
+   ],
+   [
+    74,
+    9
+   ],
+   [
+    84,
+    8
+   ],
+   [
+    52,
+    73
+   ],
+   [
+    15,
+    32
+   ],
+   [
+    5,
+    17
+   ],
+   [
+    70,
+    43
+   ],
+   [
+    1,
+    65
+   ],
+   [
+    59,
+    55
+   ],
+   [
+    76,
+    50
+   ],
+   [
+    47,
+    85
+   ],
+   [
+    34,
+    87
+   ],
+   [
+    94,
+    21
+   ],
+   [
+    77,
+    40
+   ],
+   [
+    11,
+    5
+   ],
+   [
+    82,
+    0
+   ],
+   [
+    88,
+    14
+   ],
+   [
+    79,
+    24
+   ],
+   [
+    22,
+    68
+   ],
+   [
+    71,
+    28
+   ],
+   [
+    89,
+    12
+   ],
+   [
+    85,
+    59
+   ],
+   [
+    87,
+    49
+   ],
+   [
+    72,
+    25
+   ],
+   [
+    69,
+    15
+   ],
+   [
+    75,
+    80
+   ],
+   [
+    95,
+    38
+   ],
+   [
+    17,
+    60
+   ],
+   [
+    10,
+    71
+   ],
+   [
+    53,
+    89
+   ],
+   [
+    51,
+    16
+   ],
+   [
+    27,
+    3
+   ],
+   [
+    66,
+    61
+   ],
+   [
+    6,
+    92
+   ],
+   [
+    81,
+    95
+   ],
+   [
+    25,
+    84
+   ],
+   [
+    49,
+    44
+   ],
+   [
+    9,
+    72
+   ],
+   [
+    75,
+    42
+   ],
+   [
+    62,
+    34
+   ],
+   [
+    12,
+    62
+   ],
+   [
+    39,
+    47
+   ],
+   [
+    26,
+    31
+   ]
+  ],
+  [
+   [
+    7,
+    94
+   ],
+   [
+    18,
+    48
+   ],
+   [
+    80,
+    30
+   ],
+   [
+    20,
+    13
+   ],
+   [
+    4,
+    7
+   ],
+   [
+    42,
+    67
+   ],
+   [
+    60,
+    41
+   ],
+   [
+    13,
+    70
+   ],
+   [
+    83,
+    1
+   ],
+   [
+    29,
+    20
+   ],
+   [
+    28,
+    82
+   ],
+   [
+    24,
+    63
+   ],
+   [
+    8,
+    86
+   ],
+   [
+    39,
+    54
+   ],
+   [
+    90,
+    56
+   ],
+   [
+    73,
+    62
+   ],
+   [
+    55,
+    75
+   ],
+   [
+    86,
+    64
+   ],
+   [
+    22,
+    74
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    68,
+    18
+   ],
+   [
+    40,
+    37
+   ],
+   [
+    30,
+    29
+   ],
+   [
+    44,
+    46
+   ],
+   [
+    46,
+    51
+   ],
+   [
+    56,
+    57
+   ],
+   [
+    50,
+    58
+   ],
+   [
+    91,
+    26
+   ],
+   [
+    41,
+    36
+   ],
+   [
+    2,
+    31
+   ],
+   [
+    36,
+    35
+   ],
+   [
+    48,
+    78
+   ],
+   [
+    0,
+    27
+   ],
+   [
+    63,
+    83
+   ],
+   [
+    92,
+    66
+   ],
+   [
+    23,
+    2
+   ],
+   [
+    78,
+    53
+   ],
+   [
+    64,
+    76
+   ],
+   [
+    21,
+    23
+   ],
+   [
+    61,
+    52
+   ],
+   [
+    67,
+    79
+   ],
+   [
+    62,
+    90
+   ],
+   [
+    37,
+    19
+   ],
+   [
+    16,
+    4
+   ],
+   [
+    38,
+    93
+   ],
+   [
+    43,
+    33
+   ],
+   [
+    45,
+    81
+   ],
+   [
+    57,
+    77
+   ],
+   [
+    32,
+    22
+   ],
+   [
+    19,
+    45
+   ],
+   [
+    93,
+    88
+   ],
+   [
+    35,
+    6
+   ],
+   [
+    33,
+    10
+   ],
+   [
+    74,
+    9
+   ],
+   [
+    84,
+    8
+   ],
+   [
+    52,
+    73
+   ],
+   [
+    15,
+    32
+   ],
+   [
+    5,
+    17
+   ],
+   [
+    70,
+    43
+   ],
+   [
+    1,
+    65
+   ],
+   [
+    59,
+    55
+   ],
+   [
+    76,
+    50
+   ],
+   [
+    47,
+    85
+   ],
+   [
+    34,
+    87
+   ],
+   [
+    94,
+    21
+   ],
+   [
+    77,
+    40
+   ],
+   [
+    11,
+    5
+   ],
+   [
+    82,
+    0
+   ],
+   [
+    14,
+    91
+   ],
+   [
+    79,
+    24
+   ],
+   [
+    22,
+    68
+   ],
+   [
+    71,
+    28
+   ],
+   [
+    89,
+    12
+   ],
+   [
+    85,
+    59
+   ],
+   [
+    87,
+    49
+   ],
+   [
+    72,
+    25
+   ],
+   [
+    69,
+    15
+   ],
+   [
+    75,
+    80
+   ],
+   [
+    95,
+    38
+   ],
+   [
+    17,
+    60
+   ],
+   [
+    10,
+    71
+   ],
+   [
+    53,
+    89
+   ],
+   [
+    51,
+    16
+   ],
+   [
+    27,
+    3
+   ],
+   [
+    66,
+    61
+   ],
+   [
+    6,
+    92
+   ],
+   [
+    81,
+    95
+   ],
+   [
+    25,
+    84
+   ],
+   [
+    49,
+    44
+   ],
+   [
+    9,
+    72
+   ],
+   [
+    75,
+    42
+   ],
+   [
+    62,
+    34
+   ],
+   [
+    12,
+    62
+   ],
+   [
+    39,
+    47
+   ],
+   [
+    26,
+    31
+   ]
+  ]
+ ],
+ "home_power_factor": 0.95,
+ "battery_power_factor": 1.0,
+ "config": {
+  "scenarios_per_family": 6,
+  "battery_share": 0.5,
+  "battery_kw": 100.0,
+  "curtail_share": 0.3,
+  "keep_range": [
+   0.2,
+   1.0
+  ],
+  "boundary_share": 0.4,
+  "boundary_v": 2.0,
+  "boundary_loading": [
+   95.0,
+   105.0
+  ],
+  "upstream_bracket": [
+   0.85,
+   1.15
+  ],
+  "load_scale_bracket": [
+   0.3,
+   2.0
+  ],
+  "illinois_steps": 5
+ },
+ "environment": {
+  "python": "3.12.0",
+  "numpy": "2.4.6",
+  "sklearn": "1.9.1",
+  "lightgbm": "4.7.0",
+  "machine": "AMD64 Family 25 Model 116 Stepping 1, AuthenticAMD"
+ },
+ "seconds": 819.9,
+ "totals": {
+  "train": {
+   "states": 59648,
+   "boundary_states": 13568,
+   "solver_failures": 0
+  },
+  "tune": {
+   "states": 14879,
+   "boundary_states": 3359,
+   "solver_failures": 0
+  },
+  "calibrate": {
+   "states": 14948,
+   "boundary_states": 3428,
+   "solver_failures": 0
+  },
+  "test": {
+   "states": 29855,
+   "boundary_states": 6815,
+   "solver_failures": 0
+  }
+ },
+ "families": [
+  {
+   "id": "urban_short_160_2025-01-05_0",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "planning:0.25",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1583260782,
+   "states": 722,
+   "boundary_states": 146,
+   "solver_failures": 0,
+   "seconds": 30.91
+  },
+  {
+   "id": "urban_short_160_2025-01-05_1",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 3484644890,
+   "states": 708,
+   "boundary_states": 132,
+   "solver_failures": 0,
+   "seconds": 100.88
+  },
+  {
+   "id": "urban_short_160_2025-01-05_2",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1278968562,
+   "states": 721,
+   "boundary_states": 145,
+   "solver_failures": 0,
+   "seconds": 54.79
+  },
+  {
+   "id": "urban_short_160_2025-01-05_3",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 3558498712,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 30.17
+  },
+  {
+   "id": "urban_short_160_2025-01-05_4",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 1457219161,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 0,
+   "seconds": 102.5
+  },
+  {
+   "id": "urban_short_160_2025-01-15_0",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "planning:0.5",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 2912132620,
+   "states": 717,
+   "boundary_states": 141,
+   "solver_failures": 0,
+   "seconds": 92.0
+  },
+  {
+   "id": "urban_short_160_2025-01-15_1",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "planning:0.75",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 387034816,
+   "states": 769,
+   "boundary_states": 193,
+   "solver_failures": 0,
+   "seconds": 117.81
+  },
+  {
+   "id": "urban_short_160_2025-01-15_2",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "planning:1.0",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 2412522713,
+   "states": 703,
+   "boundary_states": 127,
+   "solver_failures": 0,
+   "seconds": 98.3
+  },
+  {
+   "id": "urban_short_160_2025-01-15_3",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1486742998,
+   "states": 771,
+   "boundary_states": 195,
+   "solver_failures": 0,
+   "seconds": 30.67
+  },
+  {
+   "id": "urban_short_160_2025-01-15_4",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 1735732223,
+   "states": 775,
+   "boundary_states": 199,
+   "solver_failures": 0,
+   "seconds": 102.79
+  },
+  {
+   "id": "urban_short_160_2025-01-25_0",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 147429307,
+   "states": 739,
+   "boundary_states": 163,
+   "solver_failures": 0,
+   "seconds": 3.35
+  },
+  {
+   "id": "urban_short_160_2025-01-25_1",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 4156739106,
+   "states": 744,
+   "boundary_states": 168,
+   "solver_failures": 0,
+   "seconds": 74.48
+  },
+  {
+   "id": "urban_short_160_2025-01-25_2",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1815962849,
+   "states": 722,
+   "boundary_states": 146,
+   "solver_failures": 0,
+   "seconds": 29.12
+  },
+  {
+   "id": "urban_short_160_2025-01-25_3",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 646375186,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 0,
+   "seconds": 3.34
+  },
+  {
+   "id": "urban_short_160_2025-01-25_4",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2694251822,
+   "states": 754,
+   "boundary_states": 178,
+   "solver_failures": 0,
+   "seconds": 76.08
+  },
+  {
+   "id": "urban_short_160_2025-02-05_0",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 3764075838,
+   "states": 721,
+   "boundary_states": 145,
+   "solver_failures": 0,
+   "seconds": 68.09
+  },
+  {
+   "id": "urban_short_160_2025-02-05_1",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2946672200,
+   "states": 751,
+   "boundary_states": 175,
+   "solver_failures": 0,
+   "seconds": 94.59
+  },
+  {
+   "id": "urban_short_160_2025-02-05_2",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 1163394761,
+   "states": 721,
+   "boundary_states": 145,
+   "solver_failures": 0,
+   "seconds": 78.63
+  },
+  {
+   "id": "urban_short_160_2025-02-05_3",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 357784597,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 3.45
+  },
+  {
+   "id": "urban_short_160_2025-02-05_4",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 2720736088,
+   "states": 754,
+   "boundary_states": 178,
+   "solver_failures": 0,
+   "seconds": 74.56
+  },
+  {
+   "id": "urban_short_160_2025-02-15_0",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2466218672,
+   "states": 743,
+   "boundary_states": 167,
+   "solver_failures": 0,
+   "seconds": 3.3
+  },
+  {
+   "id": "urban_short_160_2025-02-15_1",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 2182292514,
+   "states": 768,
+   "boundary_states": 192,
+   "solver_failures": 0,
+   "seconds": 77.13
+  },
+  {
+   "id": "urban_short_160_2025-02-15_2",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 396689213,
+   "states": 724,
+   "boundary_states": 148,
+   "solver_failures": 0,
+   "seconds": 46.58
+  },
+  {
+   "id": "urban_short_160_2025-02-15_3",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 3934718090,
+   "states": 757,
+   "boundary_states": 181,
+   "solver_failures": 0,
+   "seconds": 3.36
+  },
+  {
+   "id": "urban_short_160_2025-02-15_4",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2798540311,
+   "states": 756,
+   "boundary_states": 180,
+   "solver_failures": 0,
+   "seconds": 71.05
+  },
+  {
+   "id": "urban_short_160_2025-02-25_0",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "planning:0.5",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 362745668,
+   "states": 721,
+   "boundary_states": 145,
+   "solver_failures": 0,
+   "seconds": 60.75
+  },
+  {
+   "id": "urban_short_160_2025-02-25_1",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3857695764,
+   "states": 757,
+   "boundary_states": 181,
+   "solver_failures": 0,
+   "seconds": 85.73
+  },
+  {
+   "id": "urban_short_160_2025-02-25_2",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 2821721256,
+   "states": 735,
+   "boundary_states": 159,
+   "solver_failures": 0,
+   "seconds": 84.84
+  },
+  {
+   "id": "urban_short_160_2025-02-25_3",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 591136262,
+   "states": 772,
+   "boundary_states": 196,
+   "solver_failures": 0,
+   "seconds": 5.01
+  },
+  {
+   "id": "urban_short_160_2025-02-25_4",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 4148849363,
+   "states": 757,
+   "boundary_states": 181,
+   "solver_failures": 0,
+   "seconds": 72.05
+  },
+  {
+   "id": "urban_short_160_2025-03-07_0",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2252354234,
+   "states": 764,
+   "boundary_states": 188,
+   "solver_failures": 0,
+   "seconds": 76.8
+  },
+  {
+   "id": "urban_short_160_2025-03-07_1",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 2366237435,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 0,
+   "seconds": 3.72
+  },
+  {
+   "id": "urban_short_160_2025-03-07_2",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3850448144,
+   "states": 699,
+   "boundary_states": 123,
+   "solver_failures": 0,
+   "seconds": 65.3
+  },
+  {
+   "id": "urban_short_160_2025-03-07_3",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 1424854701,
+   "states": 755,
+   "boundary_states": 179,
+   "solver_failures": 0,
+   "seconds": 74.9
+  },
+  {
+   "id": "urban_short_160_2025-03-07_4",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "planning:0.25",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2913543021,
+   "states": 730,
+   "boundary_states": 154,
+   "solver_failures": 0,
+   "seconds": 3.38
+  },
+  {
+   "id": "urban_short_160_2025-03-17_0",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 843367957,
+   "states": 768,
+   "boundary_states": 192,
+   "solver_failures": 0,
+   "seconds": 3.77
+  },
+  {
+   "id": "urban_short_160_2025-03-17_1",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 1479810256,
+   "states": 717,
+   "boundary_states": 141,
+   "solver_failures": 0,
+   "seconds": 61.95
+  },
+  {
+   "id": "urban_short_160_2025-03-17_2",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 1452969715,
+   "states": 764,
+   "boundary_states": 188,
+   "solver_failures": 0,
+   "seconds": 67.06
+  },
+  {
+   "id": "urban_short_160_2025-03-17_3",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 67449316,
+   "states": 746,
+   "boundary_states": 170,
+   "solver_failures": 0,
+   "seconds": 76.14
+  },
+  {
+   "id": "urban_short_160_2025-03-17_4",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 3530443832,
+   "states": 767,
+   "boundary_states": 191,
+   "solver_failures": 0,
+   "seconds": 89.89
+  },
+  {
+   "id": "urban_short_160_2025-04-05_0",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1790832691,
+   "states": 740,
+   "boundary_states": 164,
+   "solver_failures": 0,
+   "seconds": 3.38
+  },
+  {
+   "id": "urban_short_160_2025-04-05_1",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 1895124736,
+   "states": 731,
+   "boundary_states": 155,
+   "solver_failures": 0,
+   "seconds": 66.37
+  },
+  {
+   "id": "urban_short_160_2025-04-05_2",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 784096817,
+   "states": 726,
+   "boundary_states": 150,
+   "solver_failures": 0,
+   "seconds": 32.58
+  },
+  {
+   "id": "urban_short_160_2025-04-05_3",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 613752830,
+   "states": 761,
+   "boundary_states": 185,
+   "solver_failures": 0,
+   "seconds": 3.5
+  },
+  {
+   "id": "urban_short_160_2025-04-05_4",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3552158627,
+   "states": 767,
+   "boundary_states": 191,
+   "solver_failures": 0,
+   "seconds": 81.1
+  },
+  {
+   "id": "urban_short_160_2025-04-15_0",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 942239521,
+   "states": 721,
+   "boundary_states": 145,
+   "solver_failures": 0,
+   "seconds": 63.04
+  },
+  {
+   "id": "urban_short_160_2025-04-15_1",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2522882251,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 81.72
+  },
+  {
+   "id": "urban_short_160_2025-04-15_2",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 920833609,
+   "states": 754,
+   "boundary_states": 178,
+   "solver_failures": 0,
+   "seconds": 73.63
+  },
+  {
+   "id": "urban_short_160_2025-04-15_3",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2080596893,
+   "states": 763,
+   "boundary_states": 187,
+   "solver_failures": 0,
+   "seconds": 3.64
+  },
+  {
+   "id": "urban_short_160_2025-04-15_4",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 3731817040,
+   "states": 749,
+   "boundary_states": 173,
+   "solver_failures": 0,
+   "seconds": 65.52
+  },
+  {
+   "id": "urban_short_160_2025-04-25_0",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 319747542,
+   "states": 726,
+   "boundary_states": 150,
+   "solver_failures": 0,
+   "seconds": 3.23
+  },
+  {
+   "id": "urban_short_160_2025-04-25_1",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 1818031193,
+   "states": 755,
+   "boundary_states": 179,
+   "solver_failures": 0,
+   "seconds": 67.86
+  },
+  {
+   "id": "urban_short_160_2025-04-25_2",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1822604331,
+   "states": 714,
+   "boundary_states": 138,
+   "solver_failures": 0,
+   "seconds": 32.77
+  },
+  {
+   "id": "urban_short_160_2025-04-25_3",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 3086005816,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 3.58
+  },
+  {
+   "id": "urban_short_160_2025-04-25_4",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3466498434,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 74.49
+  },
+  {
+   "id": "urban_short_160_2025-05-05_0",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 1659091775,
+   "states": 720,
+   "boundary_states": 144,
+   "solver_failures": 0,
+   "seconds": 70.87
+  },
+  {
+   "id": "urban_short_160_2025-05-05_1",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "planning:0.75",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 397130867,
+   "states": 757,
+   "boundary_states": 181,
+   "solver_failures": 0,
+   "seconds": 76.49
+  },
+  {
+   "id": "urban_short_160_2025-05-05_2",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 1942862785,
+   "states": 724,
+   "boundary_states": 148,
+   "solver_failures": 0,
+   "seconds": 68.35
+  },
+  {
+   "id": "urban_short_160_2025-05-05_3",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 660613531,
+   "states": 767,
+   "boundary_states": 191,
+   "solver_failures": 0,
+   "seconds": 3.47
+  },
+  {
+   "id": "urban_short_160_2025-05-05_4",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 4041794357,
+   "states": 772,
+   "boundary_states": 196,
+   "solver_failures": 0,
+   "seconds": 74.19
+  },
+  {
+   "id": "urban_short_160_2025-05-15_0",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3346654864,
+   "states": 730,
+   "boundary_states": 154,
+   "solver_failures": 0,
+   "seconds": 3.52
+  },
+  {
+   "id": "urban_short_160_2025-05-15_1",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 2431565613,
+   "states": 765,
+   "boundary_states": 189,
+   "solver_failures": 0,
+   "seconds": 75.04
+  },
+  {
+   "id": "urban_short_160_2025-05-15_2",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 444173869,
+   "states": 723,
+   "boundary_states": 147,
+   "solver_failures": 0,
+   "seconds": 10.37
+  },
+  {
+   "id": "urban_short_160_2025-05-15_3",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 821557121,
+   "states": 768,
+   "boundary_states": 192,
+   "solver_failures": 0,
+   "seconds": 3.54
+  },
+  {
+   "id": "urban_short_160_2025-05-15_4",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "planning:0.75",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 600687956,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 72.55
+  },
+  {
+   "id": "urban_short_160_2025-05-25_0",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "planning:1.0",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 3932603654,
+   "states": 716,
+   "boundary_states": 140,
+   "solver_failures": 0,
+   "seconds": 59.68
+  },
+  {
+   "id": "urban_short_160_2025-05-25_1",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2021215006,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 88.64
+  },
+  {
+   "id": "urban_short_160_2025-05-25_2",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 3518335861,
+   "states": 720,
+   "boundary_states": 144,
+   "solver_failures": 0,
+   "seconds": 73.06
+  },
+  {
+   "id": "urban_short_160_2025-05-25_3",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1574971608,
+   "states": 756,
+   "boundary_states": 180,
+   "solver_failures": 0,
+   "seconds": 3.72
+  },
+  {
+   "id": "urban_short_160_2025-05-25_4",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "planning:1.0",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 264317684,
+   "states": 773,
+   "boundary_states": 197,
+   "solver_failures": 0,
+   "seconds": 66.64
+  },
+  {
+   "id": "urban_short_160_2025-06-07_0",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1279811385,
+   "states": 736,
+   "boundary_states": 160,
+   "solver_failures": 0,
+   "seconds": 30.64
+  },
+  {
+   "id": "urban_short_160_2025-06-07_1",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 4201845476,
+   "states": 743,
+   "boundary_states": 167,
+   "solver_failures": 0,
+   "seconds": 81.02
+  },
+  {
+   "id": "urban_short_160_2025-06-07_2",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2873445282,
+   "states": 765,
+   "boundary_states": 189,
+   "solver_failures": 0,
+   "seconds": 82.69
+  },
+  {
+   "id": "urban_short_160_2025-06-07_3",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 3100245257,
+   "states": 768,
+   "boundary_states": 192,
+   "solver_failures": 0,
+   "seconds": 3.72
+  },
+  {
+   "id": "urban_short_160_2025-06-07_4",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2784422214,
+   "states": 728,
+   "boundary_states": 152,
+   "solver_failures": 0,
+   "seconds": 73.24
+  },
+  {
+   "id": "urban_short_160_2025-06-17_0",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 1838859406,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 65.38
+  },
+  {
+   "id": "urban_short_160_2025-06-17_1",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1986526110,
+   "states": 741,
+   "boundary_states": 165,
+   "solver_failures": 0,
+   "seconds": 3.6
+  },
+  {
+   "id": "urban_short_160_2025-06-17_2",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "planning:0.5",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 3711280740,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 3.91
+  },
+  {
+   "id": "urban_short_160_2025-06-17_3",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 1065398591,
+   "states": 709,
+   "boundary_states": 133,
+   "solver_failures": 0,
+   "seconds": 63.68
+  },
+  {
+   "id": "urban_short_160_2025-06-17_4",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 1468908923,
+   "states": 772,
+   "boundary_states": 196,
+   "solver_failures": 0,
+   "seconds": 71.48
+  },
+  {
+   "id": "urban_short_160_2025-07-05_0",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 997702827,
+   "states": 727,
+   "boundary_states": 151,
+   "solver_failures": 0,
+   "seconds": 3.38
+  },
+  {
+   "id": "urban_short_160_2025-07-05_1",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 2448356448,
+   "states": 746,
+   "boundary_states": 170,
+   "solver_failures": 0,
+   "seconds": 68.9
+  },
+  {
+   "id": "urban_short_160_2025-07-05_2",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1589721460,
+   "states": 720,
+   "boundary_states": 144,
+   "solver_failures": 0,
+   "seconds": 23.43
+  },
+  {
+   "id": "urban_short_160_2025-07-05_3",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 4202169262,
+   "states": 772,
+   "boundary_states": 196,
+   "solver_failures": 0,
+   "seconds": 3.69
+  },
+  {
+   "id": "urban_short_160_2025-07-05_4",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 4206542954,
+   "states": 756,
+   "boundary_states": 180,
+   "solver_failures": 0,
+   "seconds": 67.51
+  },
+  {
+   "id": "urban_short_160_2025-07-15_0",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 3312519376,
+   "states": 721,
+   "boundary_states": 145,
+   "solver_failures": 0,
+   "seconds": 59.13
+  },
+  {
+   "id": "urban_short_160_2025-07-15_1",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 84267552,
+   "states": 765,
+   "boundary_states": 189,
+   "solver_failures": 0,
+   "seconds": 75.79
+  },
+  {
+   "id": "urban_short_160_2025-07-15_2",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 2165647567,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 71.94
+  },
+  {
+   "id": "urban_short_160_2025-07-15_3",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 963286443,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 3.6
+  },
+  {
+   "id": "urban_short_160_2025-07-15_4",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "planning:0.5",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 4038672343,
+   "states": 774,
+   "boundary_states": 198,
+   "solver_failures": 0,
+   "seconds": 54.47
+  },
+  {
+   "id": "urban_short_160_2025-07-25_0",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3323041471,
+   "states": 743,
+   "boundary_states": 167,
+   "solver_failures": 0,
+   "seconds": 3.25
+  },
+  {
+   "id": "urban_short_160_2025-07-25_1",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 4191872810,
+   "states": 722,
+   "boundary_states": 146,
+   "solver_failures": 0,
+   "seconds": 65.13
+  },
+  {
+   "id": "urban_short_160_2025-07-25_2",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 4170956707,
+   "states": 714,
+   "boundary_states": 138,
+   "solver_failures": 0,
+   "seconds": 25.72
+  },
+  {
+   "id": "urban_short_160_2025-07-25_3",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 369820785,
+   "states": 769,
+   "boundary_states": 193,
+   "solver_failures": 0,
+   "seconds": 3.47
+  },
+  {
+   "id": "urban_short_160_2025-07-25_4",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 1850180813,
+   "states": 770,
+   "boundary_states": 194,
+   "solver_failures": 0,
+   "seconds": 76.0
+  },
+  {
+   "id": "urban_short_160_2025-08-05_0",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 2535392940,
+   "states": 693,
+   "boundary_states": 117,
+   "solver_failures": 0,
+   "seconds": 51.55
+  },
+  {
+   "id": "urban_short_160_2025-08-05_1",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2852728983,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 67.1
+  },
+  {
+   "id": "urban_short_160_2025-08-05_2",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 3589893294,
+   "states": 708,
+   "boundary_states": 132,
+   "solver_failures": 0,
+   "seconds": 60.11
+  },
+  {
+   "id": "urban_short_160_2025-08-05_3",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 953704322,
+   "states": 767,
+   "boundary_states": 191,
+   "solver_failures": 0,
+   "seconds": 3.38
+  },
+  {
+   "id": "urban_short_160_2025-08-05_4",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 1485106898,
+   "states": 756,
+   "boundary_states": 180,
+   "solver_failures": 0,
+   "seconds": 3.04
+  },
+  {
+   "id": "urban_short_160_2025-08-15_0",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3421342322,
+   "states": 726,
+   "boundary_states": 150,
+   "solver_failures": 0,
+   "seconds": 3.09
+  },
+  {
+   "id": "urban_short_160_2025-08-15_1",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 1302765691,
+   "states": 733,
+   "boundary_states": 157,
+   "solver_failures": 0,
+   "seconds": 66.28
+  },
+  {
+   "id": "urban_short_160_2025-08-15_2",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 457610021,
+   "states": 730,
+   "boundary_states": 154,
+   "solver_failures": 0,
+   "seconds": 23.07
+  },
+  {
+   "id": "urban_short_160_2025-08-15_3",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 3545390574,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 3.53
+  },
+  {
+   "id": "urban_short_160_2025-08-15_4",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3792181881,
+   "states": 773,
+   "boundary_states": 197,
+   "solver_failures": 0,
+   "seconds": 69.36
+  },
+  {
+   "id": "urban_short_160_2025-08-25_0",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 4037030079,
+   "states": 725,
+   "boundary_states": 149,
+   "solver_failures": 0,
+   "seconds": 65.01
+  },
+  {
+   "id": "urban_short_160_2025-08-25_1",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3622177719,
+   "states": 758,
+   "boundary_states": 182,
+   "solver_failures": 0,
+   "seconds": 82.2
+  },
+  {
+   "id": "urban_short_160_2025-08-25_2",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "planning:1.0",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 1530834445,
+   "states": 730,
+   "boundary_states": 154,
+   "solver_failures": 0,
+   "seconds": 62.45
+  },
+  {
+   "id": "urban_short_160_2025-08-25_3",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2312027081,
+   "states": 763,
+   "boundary_states": 187,
+   "solver_failures": 0,
+   "seconds": 3.61
+  },
+  {
+   "id": "urban_short_160_2025-08-25_4",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 1117627479,
+   "states": 767,
+   "boundary_states": 191,
+   "solver_failures": 0,
+   "seconds": 38.77
+  },
+  {
+   "id": "urban_short_160_2025-09-07_0",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2221821661,
+   "states": 707,
+   "boundary_states": 131,
+   "solver_failures": 0,
+   "seconds": 63.58
+  },
+  {
+   "id": "urban_short_160_2025-09-07_1",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 1546971995,
+   "states": 770,
+   "boundary_states": 194,
+   "solver_failures": 0,
+   "seconds": 90.29
+  },
+  {
+   "id": "urban_short_160_2025-09-07_2",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 2580557577,
+   "states": 714,
+   "boundary_states": 138,
+   "solver_failures": 0,
+   "seconds": 9.56
+  },
+  {
+   "id": "urban_short_160_2025-09-07_3",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 781776574,
+   "states": 710,
+   "boundary_states": 134,
+   "solver_failures": 0,
+   "seconds": 64.95
+  },
+  {
+   "id": "urban_short_160_2025-09-07_4",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 4132568344,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 76.76
+  },
+  {
+   "id": "urban_short_160_2025-09-17_0",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "planning:0.5",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 456492855,
+   "states": 765,
+   "boundary_states": 189,
+   "solver_failures": 0,
+   "seconds": 3.67
+  },
+  {
+   "id": "urban_short_160_2025-09-17_1",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3772861480,
+   "states": 715,
+   "boundary_states": 139,
+   "solver_failures": 0,
+   "seconds": 59.85
+  },
+  {
+   "id": "urban_short_160_2025-09-17_2",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "planning:1.0",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 2256102991,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 49.83
+  },
+  {
+   "id": "urban_short_160_2025-09-17_3",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2707014794,
+   "states": 731,
+   "boundary_states": 155,
+   "solver_failures": 0,
+   "seconds": 3.33
+  },
+  {
+   "id": "urban_short_160_2025-09-17_4",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "planning:0.5",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 3365205451,
+   "states": 764,
+   "boundary_states": 188,
+   "solver_failures": 0,
+   "seconds": 3.61
+  },
+  {
+   "id": "urban_short_160_2025-10-05_0",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2331851239,
+   "states": 743,
+   "boundary_states": 167,
+   "solver_failures": 0,
+   "seconds": 3.44
+  },
+  {
+   "id": "urban_short_160_2025-10-05_1",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "planning:1.0",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 4160581109,
+   "states": 701,
+   "boundary_states": 125,
+   "solver_failures": 0,
+   "seconds": 55.97
+  },
+  {
+   "id": "urban_short_160_2025-10-05_2",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1172265648,
+   "states": 703,
+   "boundary_states": 127,
+   "solver_failures": 0,
+   "seconds": 25.95
+  },
+  {
+   "id": "urban_short_160_2025-10-05_3",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 1303525999,
+   "states": 764,
+   "boundary_states": 188,
+   "solver_failures": 0,
+   "seconds": 3.52
+  },
+  {
+   "id": "urban_short_160_2025-10-05_4",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 676841077,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 75.01
+  },
+  {
+   "id": "urban_short_160_2025-10-15_0",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 4052053299,
+   "states": 712,
+   "boundary_states": 136,
+   "solver_failures": 0,
+   "seconds": 56.14
+  },
+  {
+   "id": "urban_short_160_2025-10-15_1",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2330982095,
+   "states": 752,
+   "boundary_states": 176,
+   "solver_failures": 0,
+   "seconds": 72.43
+  },
+  {
+   "id": "urban_short_160_2025-10-15_2",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 1503978865,
+   "states": 756,
+   "boundary_states": 180,
+   "solver_failures": 0,
+   "seconds": 71.06
+  },
+  {
+   "id": "urban_short_160_2025-10-15_3",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2408147083,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 3.32
+  },
+  {
+   "id": "urban_short_160_2025-10-15_4",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "planning:1.0",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 4210645716,
+   "states": 749,
+   "boundary_states": 173,
+   "solver_failures": 0,
+   "seconds": 58.35
+  },
+  {
+   "id": "urban_short_160_2025-10-25_0",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2851538432,
+   "states": 728,
+   "boundary_states": 152,
+   "solver_failures": 0,
+   "seconds": 3.14
+  },
+  {
+   "id": "urban_short_160_2025-10-25_1",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "planning:0.5",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 218819316,
+   "states": 749,
+   "boundary_states": 173,
+   "solver_failures": 0,
+   "seconds": 63.33
+  },
+  {
+   "id": "urban_short_160_2025-10-25_2",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 699690238,
+   "states": 724,
+   "boundary_states": 148,
+   "solver_failures": 0,
+   "seconds": 30.21
+  },
+  {
+   "id": "urban_short_160_2025-10-25_3",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 2003452439,
+   "states": 772,
+   "boundary_states": 196,
+   "solver_failures": 0,
+   "seconds": 3.46
+  },
+  {
+   "id": "urban_short_160_2025-10-25_4",
+   "street": "urban_short_160",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2119730666,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 66.38
+  },
+  {
+   "id": "urban_short_160_2025-11-05_0",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "planning:0.5",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 4031012359,
+   "states": 716,
+   "boundary_states": 140,
+   "solver_failures": 0,
+   "seconds": 55.31
+  },
+  {
+   "id": "urban_short_160_2025-11-05_1",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3450264372,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 0,
+   "seconds": 90.22
+  },
+  {
+   "id": "urban_short_160_2025-11-05_2",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 434074257,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 0,
+   "seconds": 84.9
+  },
+  {
+   "id": "urban_short_160_2025-11-05_3",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 719990563,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 3.13
+  },
+  {
+   "id": "urban_short_160_2025-11-05_4",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 3102236545,
+   "states": 761,
+   "boundary_states": 185,
+   "solver_failures": 0,
+   "seconds": 71.53
+  },
+  {
+   "id": "urban_short_160_2025-11-15_0",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 746420299,
+   "states": 735,
+   "boundary_states": 159,
+   "solver_failures": 0,
+   "seconds": 3.36
+  },
+  {
+   "id": "urban_short_160_2025-11-15_1",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 4055621026,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 0,
+   "seconds": 74.37
+  },
+  {
+   "id": "urban_short_160_2025-11-15_2",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1041941412,
+   "states": 726,
+   "boundary_states": 150,
+   "solver_failures": 0,
+   "seconds": 29.91
+  },
+  {
+   "id": "urban_short_160_2025-11-15_3",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "planning:0.5",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 1640851467,
+   "states": 751,
+   "boundary_states": 175,
+   "solver_failures": 0,
+   "seconds": 3.5
+  },
+  {
+   "id": "urban_short_160_2025-11-15_4",
+   "street": "urban_short_160",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3337132738,
+   "states": 763,
+   "boundary_states": 187,
+   "solver_failures": 0,
+   "seconds": 79.77
+  },
+  {
+   "id": "urban_short_160_2025-11-25_0",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 4159658180,
+   "states": 709,
+   "boundary_states": 133,
+   "solver_failures": 0,
+   "seconds": 59.25
+  },
+  {
+   "id": "urban_short_160_2025-11-25_1",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 1638466101,
+   "states": 755,
+   "boundary_states": 179,
+   "solver_failures": 0,
+   "seconds": 85.64
+  },
+  {
+   "id": "urban_short_160_2025-11-25_2",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 126276748,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 82.13
+  },
+  {
+   "id": "urban_short_160_2025-11-25_3",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 303349677,
+   "states": 768,
+   "boundary_states": 192,
+   "solver_failures": 0,
+   "seconds": 3.36
+  },
+  {
+   "id": "urban_short_160_2025-11-25_4",
+   "street": "urban_short_160",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "planning:1.0",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 293572328,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 68.72
+  },
+  {
+   "id": "urban_short_160_2025-12-07_0",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 1126540902,
+   "states": 727,
+   "boundary_states": 151,
+   "solver_failures": 0,
+   "seconds": 66.02
+  },
+  {
+   "id": "urban_short_160_2025-12-07_1",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 551509952,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 69.43
+  },
+  {
+   "id": "urban_short_160_2025-12-07_2",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 1456976786,
+   "states": 768,
+   "boundary_states": 192,
+   "solver_failures": 0,
+   "seconds": 74.03
+  },
+  {
+   "id": "urban_short_160_2025-12-07_3",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 3081536905,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 84.04
+  },
+  {
+   "id": "urban_short_160_2025-12-07_4",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1013851766,
+   "states": 733,
+   "boundary_states": 157,
+   "solver_failures": 0,
+   "seconds": 32.99
+  },
+  {
+   "id": "urban_short_160_2025-12-17_0",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 1171513771,
+   "states": 758,
+   "boundary_states": 182,
+   "solver_failures": 0,
+   "seconds": 77.43
+  },
+  {
+   "id": "urban_short_160_2025-12-17_1",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 405688608,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 65.92
+  },
+  {
+   "id": "urban_short_160_2025-12-17_2",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 2116048546,
+   "states": 764,
+   "boundary_states": 188,
+   "solver_failures": 0,
+   "seconds": 3.68
+  },
+  {
+   "id": "urban_short_160_2025-12-17_3",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 772951915,
+   "states": 709,
+   "boundary_states": 133,
+   "solver_failures": 0,
+   "seconds": 57.3
+  },
+  {
+   "id": "urban_short_160_2025-12-17_4",
+   "street": "urban_short_160",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 3931227849,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 61.7
+  }
+ ],
+ "ood": {
+  "seed": 20261010,
+  "seconds": 30.8,
+  "kinds": {
+   "kwp_double": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "load_x4": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "upstream_out": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "tap_negative": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "battery_150": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "battery_other_node": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "phase_map": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "layout": {
+    "states": 250,
+    "solver_failures": 0
+   }
+  }
+ }
+}

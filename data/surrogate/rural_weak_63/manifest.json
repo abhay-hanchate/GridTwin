@@ -1,0 +1,4054 @@
+{
+ "street": "rural_weak_63",
+ "round": 4,
+ "pilot": false,
+ "created_utc": "2026-10-10T18:45:42+00:00",
+ "provenance": "simulated: app scenario generator inputs (modelled forecasts, CEEW-based demand analogs), labels from the power-grid-model solver; not measured data",
+ "solver": {
+  "engine": "power-grid-model",
+  "version": "1.13.193",
+  "asymmetric": true,
+  "method": "newton_raphson",
+  "tolerance": 1e-08,
+  "max_iterations": 40,
+  "solver_hash": "5f47aa7c37a712e4",
+  "inverter_passes_max": 80,
+  "damping": 0.3
+ },
+ "street_hash": "8949025a9172fc73",
+ "battery_nodes": [
+  26,
+  31,
+  41,
+  58,
+  65,
+  69
+ ],
+ "line_layouts": [
+  [
+   [
+    7,
+    94
+   ],
+   [
+    18,
+    48
+   ],
+   [
+    80,
+    30
+   ],
+   [
+    20,
+    13
+   ],
+   [
+    4,
+    7
+   ],
+   [
+    42,
+    67
+   ],
+   [
+    60,
+    41
+   ],
+   [
+    13,
+    70
+   ],
+   [
+    83,
+    1
+   ],
+   [
+    29,
+    20
+   ],
+   [
+    28,
+    82
+   ],
+   [
+    24,
+    63
+   ],
+   [
+    8,
+    86
+   ],
+   [
+    39,
+    54
+   ],
+   [
+    90,
+    56
+   ],
+   [
+    73,
+    62
+   ],
+   [
+    55,
+    75
+   ],
+   [
+    86,
+    64
+   ],
+   [
+    22,
+    74
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    68,
+    18
+   ],
+   [
+    40,
+    37
+   ],
+   [
+    30,
+    29
+   ],
+   [
+    44,
+    46
+   ],
+   [
+    46,
+    51
+   ],
+   [
+    56,
+    57
+   ],
+   [
+    50,
+    58
+   ],
+   [
+    91,
+    26
+   ],
+   [
+    41,
+    36
+   ],
+   [
+    2,
+    31
+   ],
+   [
+    36,
+    35
+   ],
+   [
+    48,
+    78
+   ],
+   [
+    0,
+    27
+   ],
+   [
+    63,
+    83
+   ],
+   [
+    92,
+    66
+   ],
+   [
+    23,
+    2
+   ],
+   [
+    78,
+    53
+   ],
+   [
+    64,
+    76
+   ],
+   [
+    21,
+    23
+   ],
+   [
+    61,
+    52
+   ],
+   [
+    67,
+    79
+   ],
+   [
+    62,
+    90
+   ],
+   [
+    37,
+    19
+   ],
+   [
+    16,
+    4
+   ],
+   [
+    38,
+    93
+   ],
+   [
+    43,
+    33
+   ],
+   [
+    45,
+    81
+   ],
+   [
+    57,
+    77
+   ],
+   [
+    32,
+    22
+   ],
+   [
+    19,
+    45
+   ],
+   [
+    93,
+    88
+   ],
+   [
+    35,
+    6
+   ],
+   [
+    33,
+    10
+   ],
+   [
+    74,
+    9
+   ],
+   [
+    84,
+    8
+   ],
+   [
+    52,
+    73
+   ],
+   [
+    15,
+    32
+   ],
+   [
+    5,
+    17
+   ],
+   [
+    70,
+    43
+   ],
+   [
+    1,
+    65
+   ],
+   [
+    59,
+    55
+   ],
+   [
+    76,
+    50
+   ],
+   [
+    47,
+    85
+   ],
+   [
+    34,
+    87
+   ],
+   [
+    94,
+    21
+   ],
+   [
+    77,
+    40
+   ],
+   [
+    11,
+    5
+   ],
+   [
+    82,
+    0
+   ],
+   [
+    88,
+    14
+   ],
+   [
+    14,
+    91
+   ],
+   [
+    79,
+    24
+   ],
+   [
+    22,
+    68
+   ],
+   [
+    71,
+    28
+   ],
+   [
+    89,
+    12
+   ],
+   [
+    85,
+    59
+   ],
+   [
+    87,
+    49
+   ],
+   [
+    72,
+    25
+   ],
+   [
+    69,
+    15
+   ],
+   [
+    75,
+    80
+   ],
+   [
+    95,
+    38
+   ],
+   [
+    17,
+    60
+   ],
+   [
+    10,
+    71
+   ],
+   [
+    53,
+    89
+   ],
+   [
+    51,
+    16
+   ],
+   [
+    27,
+    3
+   ],
+   [
+    66,
+    61
+   ],
+   [
+    6,
+    92
+   ],
+   [
+    81,
+    95
+   ],
+   [
+    25,
+    84
+   ],
+   [
+    49,
+    44
+   ],
+   [
+    9,
+    72
+   ],
+   [
+    75,
+    42
+   ],
+   [
+    62,
+    34
+   ],
+   [
+    12,
+    62
+   ],
+   [
+    39,
+    47
+   ]
+  ],
+  [
+   [
+    7,
+    94
+   ],
+   [
+    18,
+    48
+   ],
+   [
+    80,
+    30
+   ],
+   [
+    20,
+    13
+   ],
+   [
+    4,
+    7
+   ],
+   [
+    42,
+    67
+   ],
+   [
+    60,
+    41
+   ],
+   [
+    13,
+    70
+   ],
+   [
+    83,
+    1
+   ],
+   [
+    29,
+    20
+   ],
+   [
+    28,
+    82
+   ],
+   [
+    24,
+    63
+   ],
+   [
+    8,
+    86
+   ],
+   [
+    39,
+    54
+   ],
+   [
+    90,
+    56
+   ],
+   [
+    73,
+    62
+   ],
+   [
+    55,
+    75
+   ],
+   [
+    86,
+    64
+   ],
+   [
+    22,
+    74
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    68,
+    18
+   ],
+   [
+    40,
+    37
+   ],
+   [
+    30,
+    29
+   ],
+   [
+    44,
+    46
+   ],
+   [
+    46,
+    51
+   ],
+   [
+    56,
+    57
+   ],
+   [
+    50,
+    58
+   ],
+   [
+    41,
+    36
+   ],
+   [
+    2,
+    31
+   ],
+   [
+    36,
+    35
+   ],
+   [
+    48,
+    78
+   ],
+   [
+    0,
+    27
+   ],
+   [
+    63,
+    83
+   ],
+   [
+    92,
+    66
+   ],
+   [
+    23,
+    2
+   ],
+   [
+    78,
+    53
+   ],
+   [
+    64,
+    76
+   ],
+   [
+    21,
+    23
+   ],
+   [
+    61,
+    52
+   ],
+   [
+    67,
+    79
+   ],
+   [
+    62,
+    90
+   ],
+   [
+    37,
+    19
+   ],
+   [
+    16,
+    4
+   ],
+   [
+    38,
+    93
+   ],
+   [
+    43,
+    33
+   ],
+   [
+    45,
+    81
+   ],
+   [
+    57,
+    77
+   ],
+   [
+    32,
+    22
+   ],
+   [
+    19,
+    45
+   ],
+   [
+    93,
+    88
+   ],
+   [
+    35,
+    6
+   ],
+   [
+    33,
+    10
+   ],
+   [
+    74,
+    9
+   ],
+   [
+    84,
+    8
+   ],
+   [
+    52,
+    73
+   ],
+   [
+    15,
+    32
+   ],
+   [
+    5,
+    17
+   ],
+   [
+    70,
+    43
+   ],
+   [
+    1,
+    65
+   ],
+   [
+    59,
+    55
+   ],
+   [
+    76,
+    50
+   ],
+   [
+    47,
+    85
+   ],
+   [
+    34,
+    87
+   ],
+   [
+    94,
+    21
+   ],
+   [
+    77,
+    40
+   ],
+   [
+    11,
+    5
+   ],
+   [
+    82,
+    0
+   ],
+   [
+    88,
+    14
+   ],
+   [
+    14,
+    91
+   ],
+   [
+    79,
+    24
+   ],
+   [
+    22,
+    68
+   ],
+   [
+    71,
+    28
+   ],
+   [
+    89,
+    12
+   ],
+   [
+    85,
+    59
+   ],
+   [
+    87,
+    49
+   ],
+   [
+    72,
+    25
+   ],
+   [
+    69,
+    15
+   ],
+   [
+    75,
+    80
+   ],
+   [
+    95,
+    38
+   ],
+   [
+    17,
+    60
+   ],
+   [
+    10,
+    71
+   ],
+   [
+    53,
+    89
+   ],
+   [
+    51,
+    16
+   ],
+   [
+    27,
+    3
+   ],
+   [
+    66,
+    61
+   ],
+   [
+    6,
+    92
+   ],
+   [
+    81,
+    95
+   ],
+   [
+    25,
+    84
+   ],
+   [
+    49,
+    44
+   ],
+   [
+    9,
+    72
+   ],
+   [
+    75,
+    42
+   ],
+   [
+    62,
+    34
+   ],
+   [
+    12,
+    62
+   ],
+   [
+    39,
+    47
+   ],
+   [
+    26,
+    31
+   ]
+  ],
+  [
+   [
+    7,
+    94
+   ],
+   [
+    18,
+    48
+   ],
+   [
+    80,
+    30
+   ],
+   [
+    20,
+    13
+   ],
+   [
+    4,
+    7
+   ],
+   [
+    42,
+    67
+   ],
+   [
+    60,
+    41
+   ],
+   [
+    13,
+    70
+   ],
+   [
+    83,
+    1
+   ],
+   [
+    29,
+    20
+   ],
+   [
+    28,
+    82
+   ],
+   [
+    24,
+    63
+   ],
+   [
+    8,
+    86
+   ],
+   [
+    39,
+    54
+   ],
+   [
+    90,
+    56
+   ],
+   [
+    73,
+    62
+   ],
+   [
+    55,
+    75
+   ],
+   [
+    86,
+    64
+   ],
+   [
+    22,
+    74
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    68,
+    18
+   ],
+   [
+    40,
+    37
+   ],
+   [
+    30,
+    29
+   ],
+   [
+    44,
+    46
+   ],
+   [
+    46,
+    51
+   ],
+   [
+    56,
+    57
+   ],
+   [
+    50,
+    58
+   ],
+   [
+    91,
+    26
+   ],
+   [
+    41,
+    36
+   ],
+   [
+    2,
+    31
+   ],
+   [
+    36,
+    35
+   ],
+   [
+    48,
+    78
+   ],
+   [
+    0,
+    27
+   ],
+   [
+    63,
+    83
+   ],
+   [
+    92,
+    66
+   ],
+   [
+    23,
+    2
+   ],
+   [
+    78,
+    53
+   ],
+   [
+    64,
+    76
+   ],
+   [
+    21,
+    23
+   ],
+   [
+    61,
+    52
+   ],
+   [
+    67,
+    79
+   ],
+   [
+    62,
+    90
+   ],
+   [
+    37,
+    19
+   ],
+   [
+    16,
+    4
+   ],
+   [
+    38,
+    93
+   ],
+   [
+    43,
+    33
+   ],
+   [
+    45,
+    81
+   ],
+   [
+    57,
+    77
+   ],
+   [
+    32,
+    22
+   ],
+   [
+    19,
+    45
+   ],
+   [
+    93,
+    88
+   ],
+   [
+    35,
+    6
+   ],
+   [
+    33,
+    10
+   ],
+   [
+    74,
+    9
+   ],
+   [
+    84,
+    8
+   ],
+   [
+    52,
+    73
+   ],
+   [
+    15,
+    32
+   ],
+   [
+    5,
+    17
+   ],
+   [
+    70,
+    43
+   ],
+   [
+    1,
+    65
+   ],
+   [
+    59,
+    55
+   ],
+   [
+    76,
+    50
+   ],
+   [
+    47,
+    85
+   ],
+   [
+    34,
+    87
+   ],
+   [
+    94,
+    21
+   ],
+   [
+    77,
+    40
+   ],
+   [
+    11,
+    5
+   ],
+   [
+    82,
+    0
+   ],
+   [
+    88,
+    14
+   ],
+   [
+    79,
+    24
+   ],
+   [
+    22,
+    68
+   ],
+   [
+    71,
+    28
+   ],
+   [
+    89,
+    12
+   ],
+   [
+    85,
+    59
+   ],
+   [
+    87,
+    49
+   ],
+   [
+    72,
+    25
+   ],
+   [
+    69,
+    15
+   ],
+   [
+    75,
+    80
+   ],
+   [
+    95,
+    38
+   ],
+   [
+    17,
+    60
+   ],
+   [
+    10,
+    71
+   ],
+   [
+    53,
+    89
+   ],
+   [
+    51,
+    16
+   ],
+   [
+    27,
+    3
+   ],
+   [
+    66,
+    61
+   ],
+   [
+    6,
+    92
+   ],
+   [
+    81,
+    95
+   ],
+   [
+    25,
+    84
+   ],
+   [
+    49,
+    44
+   ],
+   [
+    9,
+    72
+   ],
+   [
+    75,
+    42
+   ],
+   [
+    62,
+    34
+   ],
+   [
+    12,
+    62
+   ],
+   [
+    39,
+    47
+   ],
+   [
+    26,
+    31
+   ]
+  ],
+  [
+   [
+    7,
+    94
+   ],
+   [
+    18,
+    48
+   ],
+   [
+    80,
+    30
+   ],
+   [
+    20,
+    13
+   ],
+   [
+    4,
+    7
+   ],
+   [
+    42,
+    67
+   ],
+   [
+    60,
+    41
+   ],
+   [
+    13,
+    70
+   ],
+   [
+    83,
+    1
+   ],
+   [
+    29,
+    20
+   ],
+   [
+    28,
+    82
+   ],
+   [
+    24,
+    63
+   ],
+   [
+    8,
+    86
+   ],
+   [
+    39,
+    54
+   ],
+   [
+    90,
+    56
+   ],
+   [
+    73,
+    62
+   ],
+   [
+    55,
+    75
+   ],
+   [
+    86,
+    64
+   ],
+   [
+    22,
+    74
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    68,
+    18
+   ],
+   [
+    40,
+    37
+   ],
+   [
+    30,
+    29
+   ],
+   [
+    44,
+    46
+   ],
+   [
+    46,
+    51
+   ],
+   [
+    56,
+    57
+   ],
+   [
+    50,
+    58
+   ],
+   [
+    91,
+    26
+   ],
+   [
+    41,
+    36
+   ],
+   [
+    2,
+    31
+   ],
+   [
+    36,
+    35
+   ],
+   [
+    48,
+    78
+   ],
+   [
+    0,
+    27
+   ],
+   [
+    63,
+    83
+   ],
+   [
+    92,
+    66
+   ],
+   [
+    23,
+    2
+   ],
+   [
+    78,
+    53
+   ],
+   [
+    64,
+    76
+   ],
+   [
+    21,
+    23
+   ],
+   [
+    61,
+    52
+   ],
+   [
+    67,
+    79
+   ],
+   [
+    62,
+    90
+   ],
+   [
+    37,
+    19
+   ],
+   [
+    16,
+    4
+   ],
+   [
+    38,
+    93
+   ],
+   [
+    43,
+    33
+   ],
+   [
+    45,
+    81
+   ],
+   [
+    57,
+    77
+   ],
+   [
+    32,
+    22
+   ],
+   [
+    19,
+    45
+   ],
+   [
+    93,
+    88
+   ],
+   [
+    35,
+    6
+   ],
+   [
+    33,
+    10
+   ],
+   [
+    74,
+    9
+   ],
+   [
+    84,
+    8
+   ],
+   [
+    52,
+    73
+   ],
+   [
+    15,
+    32
+   ],
+   [
+    5,
+    17
+   ],
+   [
+    70,
+    43
+   ],
+   [
+    1,
+    65
+   ],
+   [
+    59,
+    55
+   ],
+   [
+    76,
+    50
+   ],
+   [
+    47,
+    85
+   ],
+   [
+    34,
+    87
+   ],
+   [
+    94,
+    21
+   ],
+   [
+    77,
+    40
+   ],
+   [
+    11,
+    5
+   ],
+   [
+    82,
+    0
+   ],
+   [
+    14,
+    91
+   ],
+   [
+    79,
+    24
+   ],
+   [
+    22,
+    68
+   ],
+   [
+    71,
+    28
+   ],
+   [
+    89,
+    12
+   ],
+   [
+    85,
+    59
+   ],
+   [
+    87,
+    49
+   ],
+   [
+    72,
+    25
+   ],
+   [
+    69,
+    15
+   ],
+   [
+    75,
+    80
+   ],
+   [
+    95,
+    38
+   ],
+   [
+    17,
+    60
+   ],
+   [
+    10,
+    71
+   ],
+   [
+    53,
+    89
+   ],
+   [
+    51,
+    16
+   ],
+   [
+    27,
+    3
+   ],
+   [
+    66,
+    61
+   ],
+   [
+    6,
+    92
+   ],
+   [
+    81,
+    95
+   ],
+   [
+    25,
+    84
+   ],
+   [
+    49,
+    44
+   ],
+   [
+    9,
+    72
+   ],
+   [
+    75,
+    42
+   ],
+   [
+    62,
+    34
+   ],
+   [
+    12,
+    62
+   ],
+   [
+    39,
+    47
+   ],
+   [
+    26,
+    31
+   ]
+  ]
+ ],
+ "home_power_factor": 0.95,
+ "battery_power_factor": 1.0,
+ "config": {
+  "scenarios_per_family": 6,
+  "battery_share": 0.5,
+  "battery_kw": 100.0,
+  "curtail_share": 0.3,
+  "keep_range": [
+   0.2,
+   1.0
+  ],
+  "boundary_share": 0.4,
+  "boundary_v": 2.0,
+  "boundary_loading": [
+   95.0,
+   105.0
+  ],
+  "upstream_bracket": [
+   0.85,
+   1.15
+  ],
+  "load_scale_bracket": [
+   0.3,
+   2.0
+  ],
+  "illinois_steps": 5
+ },
+ "environment": {
+  "python": "3.12.0",
+  "numpy": "2.4.6",
+  "sklearn": "1.9.1",
+  "lightgbm": "4.7.0",
+  "machine": "AMD64 Family 25 Model 116 Stepping 1, AuthenticAMD"
+ },
+ "seconds": 1308.5,
+ "totals": {
+  "train": {
+   "states": 59574,
+   "boundary_states": 13494,
+   "solver_failures": 511
+  },
+  "tune": {
+   "states": 14945,
+   "boundary_states": 3425,
+   "solver_failures": 54
+  },
+  "calibrate": {
+   "states": 14752,
+   "boundary_states": 3232,
+   "solver_failures": 199
+  },
+  "test": {
+   "states": 29848,
+   "boundary_states": 6808,
+   "solver_failures": 248
+  }
+ },
+ "families": [
+  {
+   "id": "rural_weak_63_2025-01-05_0",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 281485508,
+   "states": 737,
+   "boundary_states": 161,
+   "solver_failures": 11,
+   "seconds": 29.69
+  },
+  {
+   "id": "rural_weak_63_2025-01-05_1",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 963739465,
+   "states": 752,
+   "boundary_states": 176,
+   "solver_failures": 0,
+   "seconds": 108.35
+  },
+  {
+   "id": "rural_weak_63_2025-01-05_2",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 1176799409,
+   "states": 767,
+   "boundary_states": 191,
+   "solver_failures": 0,
+   "seconds": 130.67
+  },
+  {
+   "id": "rural_weak_63_2025-01-05_3",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 1379725360,
+   "states": 734,
+   "boundary_states": 158,
+   "solver_failures": 0,
+   "seconds": 69.84
+  },
+  {
+   "id": "rural_weak_63_2025-01-05_4",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1449745958,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 104.33
+  },
+  {
+   "id": "rural_weak_63_2025-01-15_0",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 2157847951,
+   "states": 734,
+   "boundary_states": 158,
+   "solver_failures": 0,
+   "seconds": 105.5
+  },
+  {
+   "id": "rural_weak_63_2025-01-15_1",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3908939278,
+   "states": 708,
+   "boundary_states": 132,
+   "solver_failures": 0,
+   "seconds": 90.52
+  },
+  {
+   "id": "rural_weak_63_2025-01-15_2",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 4085114730,
+   "states": 729,
+   "boundary_states": 153,
+   "solver_failures": 18,
+   "seconds": 29.82
+  },
+  {
+   "id": "rural_weak_63_2025-01-15_3",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 4291947641,
+   "states": 755,
+   "boundary_states": 179,
+   "solver_failures": 0,
+   "seconds": 104.14
+  },
+  {
+   "id": "rural_weak_63_2025-01-15_4",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 1991862241,
+   "states": 728,
+   "boundary_states": 152,
+   "solver_failures": 26,
+   "seconds": 31.9
+  },
+  {
+   "id": "rural_weak_63_2025-01-25_0",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1084612342,
+   "states": 748,
+   "boundary_states": 172,
+   "solver_failures": 10,
+   "seconds": 6.53
+  },
+  {
+   "id": "rural_weak_63_2025-01-25_1",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 4011656351,
+   "states": 746,
+   "boundary_states": 170,
+   "solver_failures": 0,
+   "seconds": 89.14
+  },
+  {
+   "id": "rural_weak_63_2025-01-25_2",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 1420618391,
+   "states": 752,
+   "boundary_states": 176,
+   "solver_failures": 0,
+   "seconds": 83.66
+  },
+  {
+   "id": "rural_weak_63_2025-01-25_3",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "planning:0.5",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 3612256190,
+   "states": 741,
+   "boundary_states": 165,
+   "solver_failures": 0,
+   "seconds": 55.42
+  },
+  {
+   "id": "rural_weak_63_2025-01-25_4",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1081891761,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 79.16
+  },
+  {
+   "id": "rural_weak_63_2025-02-05_0",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 3603793812,
+   "states": 720,
+   "boundary_states": 144,
+   "solver_failures": 0,
+   "seconds": 85.94
+  },
+  {
+   "id": "rural_weak_63_2025-02-05_1",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "planning:0.25",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 708383624,
+   "states": 716,
+   "boundary_states": 140,
+   "solver_failures": 0,
+   "seconds": 62.47
+  },
+  {
+   "id": "rural_weak_63_2025-02-05_2",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 4145607149,
+   "states": 738,
+   "boundary_states": 162,
+   "solver_failures": 10,
+   "seconds": 5.14
+  },
+  {
+   "id": "rural_weak_63_2025-02-05_3",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2953196585,
+   "states": 757,
+   "boundary_states": 181,
+   "solver_failures": 0,
+   "seconds": 91.92
+  },
+  {
+   "id": "rural_weak_63_2025-02-05_4",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "planning:1.0",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 1026918033,
+   "states": 717,
+   "boundary_states": 141,
+   "solver_failures": 19,
+   "seconds": 5.95
+  },
+  {
+   "id": "rural_weak_63_2025-02-15_0",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "planning:0.25",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2028041132,
+   "states": 742,
+   "boundary_states": 166,
+   "solver_failures": 14,
+   "seconds": 5.3
+  },
+  {
+   "id": "rural_weak_63_2025-02-15_1",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 3919793745,
+   "states": 733,
+   "boundary_states": 157,
+   "solver_failures": 0,
+   "seconds": 88.57
+  },
+  {
+   "id": "rural_weak_63_2025-02-15_2",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 547353530,
+   "states": 764,
+   "boundary_states": 188,
+   "solver_failures": 0,
+   "seconds": 100.57
+  },
+  {
+   "id": "rural_weak_63_2025-02-15_3",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 2189580015,
+   "states": 743,
+   "boundary_states": 167,
+   "solver_failures": 0,
+   "seconds": 64.87
+  },
+  {
+   "id": "rural_weak_63_2025-02-15_4",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1943714002,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 82.89
+  },
+  {
+   "id": "rural_weak_63_2025-02-25_0",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 219699082,
+   "states": 726,
+   "boundary_states": 150,
+   "solver_failures": 0,
+   "seconds": 85.69
+  },
+  {
+   "id": "rural_weak_63_2025-02-25_1",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2653847117,
+   "states": 720,
+   "boundary_states": 144,
+   "solver_failures": 0,
+   "seconds": 74.85
+  },
+  {
+   "id": "rural_weak_63_2025-02-25_2",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 2541114793,
+   "states": 741,
+   "boundary_states": 165,
+   "solver_failures": 15,
+   "seconds": 5.37
+  },
+  {
+   "id": "rural_weak_63_2025-02-25_3",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3030851175,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 84.59
+  },
+  {
+   "id": "rural_weak_63_2025-02-25_4",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "planning:0.5",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 1511123525,
+   "states": 729,
+   "boundary_states": 153,
+   "solver_failures": 23,
+   "seconds": 5.83
+  },
+  {
+   "id": "rural_weak_63_2025-03-07_0",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2330097315,
+   "states": 720,
+   "boundary_states": 144,
+   "solver_failures": 0,
+   "seconds": 87.01
+  },
+  {
+   "id": "rural_weak_63_2025-03-07_1",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 1796006402,
+   "states": 757,
+   "boundary_states": 181,
+   "solver_failures": 0,
+   "seconds": 89.32
+  },
+  {
+   "id": "rural_weak_63_2025-03-07_2",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3081669946,
+   "states": 728,
+   "boundary_states": 152,
+   "solver_failures": 0,
+   "seconds": 81.73
+  },
+  {
+   "id": "rural_weak_63_2025-03-07_3",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 3312287950,
+   "states": 713,
+   "boundary_states": 137,
+   "solver_failures": 28,
+   "seconds": 7.05
+  },
+  {
+   "id": "rural_weak_63_2025-03-07_4",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2279437279,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 109.75
+  },
+  {
+   "id": "rural_weak_63_2025-03-17_0",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 2923095286,
+   "states": 765,
+   "boundary_states": 189,
+   "solver_failures": 0,
+   "seconds": 93.67
+  },
+  {
+   "id": "rural_weak_63_2025-03-17_1",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1099539195,
+   "states": 749,
+   "boundary_states": 173,
+   "solver_failures": 13,
+   "seconds": 6.34
+  },
+  {
+   "id": "rural_weak_63_2025-03-17_2",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 3329491855,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 94.99
+  },
+  {
+   "id": "rural_weak_63_2025-03-17_3",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 4090853026,
+   "states": 756,
+   "boundary_states": 180,
+   "solver_failures": 0,
+   "seconds": 101.92
+  },
+  {
+   "id": "rural_weak_63_2025-03-17_4",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 2131188126,
+   "states": 747,
+   "boundary_states": 171,
+   "solver_failures": 20,
+   "seconds": 6.6
+  },
+  {
+   "id": "rural_weak_63_2025-04-05_0",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 957319913,
+   "states": 739,
+   "boundary_states": 163,
+   "solver_failures": 24,
+   "seconds": 6.22
+  },
+  {
+   "id": "rural_weak_63_2025-04-05_1",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 264849739,
+   "states": 722,
+   "boundary_states": 146,
+   "solver_failures": 0,
+   "seconds": 94.24
+  },
+  {
+   "id": "rural_weak_63_2025-04-05_2",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3953818185,
+   "states": 755,
+   "boundary_states": 179,
+   "solver_failures": 0,
+   "seconds": 93.06
+  },
+  {
+   "id": "rural_weak_63_2025-04-05_3",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 3288182339,
+   "states": 716,
+   "boundary_states": 140,
+   "solver_failures": 0,
+   "seconds": 35.98
+  },
+  {
+   "id": "rural_weak_63_2025-04-05_4",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 3220638914,
+   "states": 776,
+   "boundary_states": 200,
+   "solver_failures": 0,
+   "seconds": 84.96
+  },
+  {
+   "id": "rural_weak_63_2025-04-15_0",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 430436479,
+   "states": 733,
+   "boundary_states": 157,
+   "solver_failures": 0,
+   "seconds": 81.87
+  },
+  {
+   "id": "rural_weak_63_2025-04-15_1",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3411159626,
+   "states": 712,
+   "boundary_states": 136,
+   "solver_failures": 0,
+   "seconds": 70.49
+  },
+  {
+   "id": "rural_weak_63_2025-04-15_2",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 3342380747,
+   "states": 738,
+   "boundary_states": 162,
+   "solver_failures": 22,
+   "seconds": 6.66
+  },
+  {
+   "id": "rural_weak_63_2025-04-15_3",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2310262376,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 90.64
+  },
+  {
+   "id": "rural_weak_63_2025-04-15_4",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 3787550197,
+   "states": 720,
+   "boundary_states": 144,
+   "solver_failures": 23,
+   "seconds": 6.32
+  },
+  {
+   "id": "rural_weak_63_2025-04-25_0",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "planning:0.25",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1073457303,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 15,
+   "seconds": 6.04
+  },
+  {
+   "id": "rural_weak_63_2025-04-25_1",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 666557403,
+   "states": 728,
+   "boundary_states": 152,
+   "solver_failures": 0,
+   "seconds": 81.75
+  },
+  {
+   "id": "rural_weak_63_2025-04-25_2",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 1354816965,
+   "states": 746,
+   "boundary_states": 170,
+   "solver_failures": 0,
+   "seconds": 91.72
+  },
+  {
+   "id": "rural_weak_63_2025-04-25_3",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 4020766058,
+   "states": 735,
+   "boundary_states": 159,
+   "solver_failures": 0,
+   "seconds": 41.81
+  },
+  {
+   "id": "rural_weak_63_2025-04-25_4",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 526222777,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 61.34
+  },
+  {
+   "id": "rural_weak_63_2025-05-05_0",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 2822689803,
+   "states": 774,
+   "boundary_states": 198,
+   "solver_failures": 0,
+   "seconds": 92.27
+  },
+  {
+   "id": "rural_weak_63_2025-05-05_1",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3933150522,
+   "states": 703,
+   "boundary_states": 127,
+   "solver_failures": 0,
+   "seconds": 83.52
+  },
+  {
+   "id": "rural_weak_63_2025-05-05_2",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 2955232284,
+   "states": 750,
+   "boundary_states": 174,
+   "solver_failures": 23,
+   "seconds": 6.29
+  },
+  {
+   "id": "rural_weak_63_2025-05-05_3",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3085644239,
+   "states": 767,
+   "boundary_states": 191,
+   "solver_failures": 0,
+   "seconds": 98.69
+  },
+  {
+   "id": "rural_weak_63_2025-05-05_4",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 2507713422,
+   "states": 729,
+   "boundary_states": 153,
+   "solver_failures": 40,
+   "seconds": 7.43
+  },
+  {
+   "id": "rural_weak_63_2025-05-15_0",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 4054740914,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 20,
+   "seconds": 5.8
+  },
+  {
+   "id": "rural_weak_63_2025-05-15_1",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 909841064,
+   "states": 746,
+   "boundary_states": 170,
+   "solver_failures": 0,
+   "seconds": 102.44
+  },
+  {
+   "id": "rural_weak_63_2025-05-15_2",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 261699539,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 113.02
+  },
+  {
+   "id": "rural_weak_63_2025-05-15_3",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 2171613617,
+   "states": 750,
+   "boundary_states": 174,
+   "solver_failures": 0,
+   "seconds": 51.64
+  },
+  {
+   "id": "rural_weak_63_2025-05-15_4",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "planning:0.75",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1506421663,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 80.25
+  },
+  {
+   "id": "rural_weak_63_2025-05-25_0",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 1976875018,
+   "states": 736,
+   "boundary_states": 160,
+   "solver_failures": 0,
+   "seconds": 90.0
+  },
+  {
+   "id": "rural_weak_63_2025-05-25_1",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "planning:0.25",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2755958056,
+   "states": 706,
+   "boundary_states": 130,
+   "solver_failures": 0,
+   "seconds": 76.43
+  },
+  {
+   "id": "rural_weak_63_2025-05-25_2",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 2886337150,
+   "states": 743,
+   "boundary_states": 167,
+   "solver_failures": 22,
+   "seconds": 7.66
+  },
+  {
+   "id": "rural_weak_63_2025-05-25_3",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 1168009523,
+   "states": 767,
+   "boundary_states": 191,
+   "solver_failures": 0,
+   "seconds": 98.23
+  },
+  {
+   "id": "rural_weak_63_2025-05-25_4",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 2481386717,
+   "states": 725,
+   "boundary_states": 149,
+   "solver_failures": 32,
+   "seconds": 7.44
+  },
+  {
+   "id": "rural_weak_63_2025-06-07_0",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3984705470,
+   "states": 785,
+   "boundary_states": 209,
+   "solver_failures": 0,
+   "seconds": 106.9
+  },
+  {
+   "id": "rural_weak_63_2025-06-07_1",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 2110315753,
+   "states": 742,
+   "boundary_states": 166,
+   "solver_failures": 0,
+   "seconds": 40.63
+  },
+  {
+   "id": "rural_weak_63_2025-06-07_2",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "planning:0.25",
+   "tap": 2,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 1478867918,
+   "states": 743,
+   "boundary_states": 167,
+   "solver_failures": 0,
+   "seconds": 91.7
+  },
+  {
+   "id": "rural_weak_63_2025-06-07_3",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 979876176,
+   "states": 781,
+   "boundary_states": 205,
+   "solver_failures": 0,
+   "seconds": 84.1
+  },
+  {
+   "id": "rural_weak_63_2025-06-07_4",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 768876158,
+   "states": 728,
+   "boundary_states": 152,
+   "solver_failures": 0,
+   "seconds": 92.55
+  },
+  {
+   "id": "rural_weak_63_2025-06-17_0",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "planning:1.0",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 1611538499,
+   "states": 729,
+   "boundary_states": 153,
+   "solver_failures": 42,
+   "seconds": 8.09
+  },
+  {
+   "id": "rural_weak_63_2025-06-17_1",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3284218000,
+   "states": 774,
+   "boundary_states": 198,
+   "solver_failures": 0,
+   "seconds": 99.59
+  },
+  {
+   "id": "rural_weak_63_2025-06-17_2",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 2141671279,
+   "states": 732,
+   "boundary_states": 156,
+   "solver_failures": 0,
+   "seconds": 94.86
+  },
+  {
+   "id": "rural_weak_63_2025-06-17_3",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1979868563,
+   "states": 750,
+   "boundary_states": 174,
+   "solver_failures": 24,
+   "seconds": 7.74
+  },
+  {
+   "id": "rural_weak_63_2025-06-17_4",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "planning:1.0",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 443961065,
+   "states": 776,
+   "boundary_states": 200,
+   "solver_failures": 0,
+   "seconds": 79.69
+  },
+  {
+   "id": "rural_weak_63_2025-07-05_0",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3528013624,
+   "states": 744,
+   "boundary_states": 168,
+   "solver_failures": 15,
+   "seconds": 6.92
+  },
+  {
+   "id": "rural_weak_63_2025-07-05_1",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 1116997730,
+   "states": 781,
+   "boundary_states": 205,
+   "solver_failures": 0,
+   "seconds": 116.81
+  },
+  {
+   "id": "rural_weak_63_2025-07-05_2",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 4101544930,
+   "states": 761,
+   "boundary_states": 185,
+   "solver_failures": 0,
+   "seconds": 134.98
+  },
+  {
+   "id": "rural_weak_63_2025-07-05_3",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 2488511191,
+   "states": 732,
+   "boundary_states": 156,
+   "solver_failures": 0,
+   "seconds": 35.83
+  },
+  {
+   "id": "rural_weak_63_2025-07-05_4",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 973222338,
+   "states": 775,
+   "boundary_states": 199,
+   "solver_failures": 0,
+   "seconds": 104.59
+  },
+  {
+   "id": "rural_weak_63_2025-07-15_0",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "planning:0.5",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 1385417566,
+   "states": 742,
+   "boundary_states": 166,
+   "solver_failures": 0,
+   "seconds": 111.06
+  },
+  {
+   "id": "rural_weak_63_2025-07-15_1",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2966936652,
+   "states": 718,
+   "boundary_states": 142,
+   "solver_failures": 0,
+   "seconds": 98.89
+  },
+  {
+   "id": "rural_weak_63_2025-07-15_2",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 3726038969,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 19,
+   "seconds": 7.1
+  },
+  {
+   "id": "rural_weak_63_2025-07-15_3",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 4133929202,
+   "states": 786,
+   "boundary_states": 210,
+   "solver_failures": 0,
+   "seconds": 119.86
+  },
+  {
+   "id": "rural_weak_63_2025-07-15_4",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 3764895408,
+   "states": 735,
+   "boundary_states": 159,
+   "solver_failures": 28,
+   "seconds": 7.88
+  },
+  {
+   "id": "rural_weak_63_2025-07-25_0",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "planning:0.75",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 4115035391,
+   "states": 754,
+   "boundary_states": 178,
+   "solver_failures": 14,
+   "seconds": 6.52
+  },
+  {
+   "id": "rural_weak_63_2025-07-25_1",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 2326352471,
+   "states": 721,
+   "boundary_states": 145,
+   "solver_failures": 0,
+   "seconds": 120.63
+  },
+  {
+   "id": "rural_weak_63_2025-07-25_2",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2283869573,
+   "states": 776,
+   "boundary_states": 200,
+   "solver_failures": 0,
+   "seconds": 132.52
+  },
+  {
+   "id": "rural_weak_63_2025-07-25_3",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 211811476,
+   "states": 734,
+   "boundary_states": 158,
+   "solver_failures": 0,
+   "seconds": 37.01
+  },
+  {
+   "id": "rural_weak_63_2025-07-25_4",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1342219477,
+   "states": 778,
+   "boundary_states": 202,
+   "solver_failures": 0,
+   "seconds": 101.75
+  },
+  {
+   "id": "rural_weak_63_2025-08-05_0",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "planning:1.0",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 632856104,
+   "states": 744,
+   "boundary_states": 168,
+   "solver_failures": 0,
+   "seconds": 106.66
+  },
+  {
+   "id": "rural_weak_63_2025-08-05_1",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3816419189,
+   "states": 705,
+   "boundary_states": 129,
+   "solver_failures": 0,
+   "seconds": 95.36
+  },
+  {
+   "id": "rural_weak_63_2025-08-05_2",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "planning:0.5",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 1366449191,
+   "states": 751,
+   "boundary_states": 175,
+   "solver_failures": 25,
+   "seconds": 10.37
+  },
+  {
+   "id": "rural_weak_63_2025-08-05_3",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "planning:0.75",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2768638943,
+   "states": 772,
+   "boundary_states": 196,
+   "solver_failures": 0,
+   "seconds": 101.95
+  },
+  {
+   "id": "rural_weak_63_2025-08-05_4",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "planning:1.0",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 2318138446,
+   "states": 729,
+   "boundary_states": 153,
+   "solver_failures": 45,
+   "seconds": 11.0
+  },
+  {
+   "id": "rural_weak_63_2025-08-15_0",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 716335453,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 22,
+   "seconds": 10.43
+  },
+  {
+   "id": "rural_weak_63_2025-08-15_1",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 1081984065,
+   "states": 731,
+   "boundary_states": 155,
+   "solver_failures": 0,
+   "seconds": 100.87
+  },
+  {
+   "id": "rural_weak_63_2025-08-15_2",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 612340279,
+   "states": 775,
+   "boundary_states": 199,
+   "solver_failures": 0,
+   "seconds": 105.43
+  },
+  {
+   "id": "rural_weak_63_2025-08-15_3",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 2457100997,
+   "states": 726,
+   "boundary_states": 150,
+   "solver_failures": 0,
+   "seconds": 33.02
+  },
+  {
+   "id": "rural_weak_63_2025-08-15_4",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1158375336,
+   "states": 769,
+   "boundary_states": 193,
+   "solver_failures": 0,
+   "seconds": 84.46
+  },
+  {
+   "id": "rural_weak_63_2025-08-25_0",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 3557563911,
+   "states": 763,
+   "boundary_states": 187,
+   "solver_failures": 0,
+   "seconds": 96.66
+  },
+  {
+   "id": "rural_weak_63_2025-08-25_1",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 420103475,
+   "states": 720,
+   "boundary_states": 144,
+   "solver_failures": 0,
+   "seconds": 82.71
+  },
+  {
+   "id": "rural_weak_63_2025-08-25_2",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "planning:1.0",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 4034909073,
+   "states": 757,
+   "boundary_states": 181,
+   "solver_failures": 29,
+   "seconds": 7.08
+  },
+  {
+   "id": "rural_weak_63_2025-08-25_3",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3740570618,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 100.1
+  },
+  {
+   "id": "rural_weak_63_2025-08-25_4",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "planning:0.5",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 889417018,
+   "states": 729,
+   "boundary_states": 153,
+   "solver_failures": 30,
+   "seconds": 8.61
+  },
+  {
+   "id": "rural_weak_63_2025-09-07_0",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "planning:0.25",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2911442905,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 90.22
+  },
+  {
+   "id": "rural_weak_63_2025-09-07_1",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "planning:0.5",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 4159848573,
+   "states": 744,
+   "boundary_states": 168,
+   "solver_failures": 33,
+   "seconds": 8.22
+  },
+  {
+   "id": "rural_weak_63_2025-09-07_2",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "planning:0.75",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3632910639,
+   "states": 772,
+   "boundary_states": 196,
+   "solver_failures": 0,
+   "seconds": 228.57
+  },
+  {
+   "id": "rural_weak_63_2025-09-07_3",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "planning:1.0",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 1939696653,
+   "states": 736,
+   "boundary_states": 160,
+   "solver_failures": 0,
+   "seconds": 39.5
+  },
+  {
+   "id": "rural_weak_63_2025-09-07_4",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 1955370113,
+   "states": 741,
+   "boundary_states": 165,
+   "solver_failures": 0,
+   "seconds": 77.31
+  },
+  {
+   "id": "rural_weak_63_2025-09-17_0",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 1784164698,
+   "states": 774,
+   "boundary_states": 198,
+   "solver_failures": 0,
+   "seconds": 51.32
+  },
+  {
+   "id": "rural_weak_63_2025-09-17_1",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2326051341,
+   "states": 736,
+   "boundary_states": 160,
+   "solver_failures": 0,
+   "seconds": 71.97
+  },
+  {
+   "id": "rural_weak_63_2025-09-17_2",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 2133881277,
+   "states": 732,
+   "boundary_states": 156,
+   "solver_failures": 25,
+   "seconds": 8.4
+  },
+  {
+   "id": "rural_weak_63_2025-09-17_3",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 126741361,
+   "states": 774,
+   "boundary_states": 198,
+   "solver_failures": 0,
+   "seconds": 236.73
+  },
+  {
+   "id": "rural_weak_63_2025-09-17_4",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 565171055,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 264.93
+  },
+  {
+   "id": "rural_weak_63_2025-10-05_0",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3084644431,
+   "states": 751,
+   "boundary_states": 175,
+   "solver_failures": 15,
+   "seconds": 7.12
+  },
+  {
+   "id": "rural_weak_63_2025-10-05_1",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 157740951,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 95.12
+  },
+  {
+   "id": "rural_weak_63_2025-10-05_2",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 205581578,
+   "states": 770,
+   "boundary_states": 194,
+   "solver_failures": 0,
+   "seconds": 94.13
+  },
+  {
+   "id": "rural_weak_63_2025-10-05_3",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 1841837526,
+   "states": 724,
+   "boundary_states": 148,
+   "solver_failures": 0,
+   "seconds": 43.1
+  },
+  {
+   "id": "rural_weak_63_2025-10-05_4",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "planning:0.75",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 3515800569,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 79.33
+  },
+  {
+   "id": "rural_weak_63_2025-10-15_0",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 996980212,
+   "states": 741,
+   "boundary_states": 165,
+   "solver_failures": 0,
+   "seconds": 84.74
+  },
+  {
+   "id": "rural_weak_63_2025-10-15_1",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "planning:0.25",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2105017950,
+   "states": 726,
+   "boundary_states": 150,
+   "solver_failures": 0,
+   "seconds": 74.9
+  },
+  {
+   "id": "rural_weak_63_2025-10-15_2",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 3937397917,
+   "states": 742,
+   "boundary_states": 166,
+   "solver_failures": 12,
+   "seconds": 6.33
+  },
+  {
+   "id": "rural_weak_63_2025-10-15_3",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "planning:0.75",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 386065764,
+   "states": 755,
+   "boundary_states": 179,
+   "solver_failures": 0,
+   "seconds": 88.86
+  },
+  {
+   "id": "rural_weak_63_2025-10-15_4",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 3577321352,
+   "states": 718,
+   "boundary_states": 142,
+   "solver_failures": 32,
+   "seconds": 7.73
+  },
+  {
+   "id": "rural_weak_63_2025-10-25_0",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2050948655,
+   "states": 743,
+   "boundary_states": 167,
+   "solver_failures": 15,
+   "seconds": 6.43
+  },
+  {
+   "id": "rural_weak_63_2025-10-25_1",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 2371092716,
+   "states": 711,
+   "boundary_states": 135,
+   "solver_failures": 0,
+   "seconds": 93.8
+  },
+  {
+   "id": "rural_weak_63_2025-10-25_2",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3331935040,
+   "states": 778,
+   "boundary_states": 202,
+   "solver_failures": 0,
+   "seconds": 123.45
+  },
+  {
+   "id": "rural_weak_63_2025-10-25_3",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 2698190577,
+   "states": 717,
+   "boundary_states": 141,
+   "solver_failures": 0,
+   "seconds": 53.31
+  },
+  {
+   "id": "rural_weak_63_2025-10-25_4",
+   "street": "rural_weak_63",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1716577023,
+   "states": 765,
+   "boundary_states": 189,
+   "solver_failures": 0,
+   "seconds": 87.7
+  },
+  {
+   "id": "rural_weak_63_2025-11-05_0",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 471357554,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 0,
+   "seconds": 96.74
+  },
+  {
+   "id": "rural_weak_63_2025-11-05_1",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 1428277008,
+   "states": 708,
+   "boundary_states": 132,
+   "solver_failures": 0,
+   "seconds": 74.23
+  },
+  {
+   "id": "rural_weak_63_2025-11-05_2",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "planning:1.0",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 2685494468,
+   "states": 747,
+   "boundary_states": 171,
+   "solver_failures": 16,
+   "seconds": 6.67
+  },
+  {
+   "id": "rural_weak_63_2025-11-05_3",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 558725439,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 92.57
+  },
+  {
+   "id": "rural_weak_63_2025-11-05_4",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 3729934877,
+   "states": 725,
+   "boundary_states": 149,
+   "solver_failures": 18,
+   "seconds": 6.53
+  },
+  {
+   "id": "rural_weak_63_2025-11-15_0",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1588033503,
+   "states": 752,
+   "boundary_states": 176,
+   "solver_failures": 14,
+   "seconds": 6.23
+  },
+  {
+   "id": "rural_weak_63_2025-11-15_1",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 2832733576,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 97.44
+  },
+  {
+   "id": "rural_weak_63_2025-11-15_2",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 1110397274,
+   "states": 749,
+   "boundary_states": 173,
+   "solver_failures": 0,
+   "seconds": 120.67
+  },
+  {
+   "id": "rural_weak_63_2025-11-15_3",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "planning:0.5",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 3698690126,
+   "states": 732,
+   "boundary_states": 156,
+   "solver_failures": 0,
+   "seconds": 57.37
+  },
+  {
+   "id": "rural_weak_63_2025-11-15_4",
+   "street": "rural_weak_63",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1895102245,
+   "states": 776,
+   "boundary_states": 200,
+   "solver_failures": 0,
+   "seconds": 100.17
+  },
+  {
+   "id": "rural_weak_63_2025-11-25_0",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 3403853546,
+   "states": 748,
+   "boundary_states": 172,
+   "solver_failures": 0,
+   "seconds": 95.2
+  },
+  {
+   "id": "rural_weak_63_2025-11-25_1",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3599699458,
+   "states": 709,
+   "boundary_states": 133,
+   "solver_failures": 0,
+   "seconds": 84.34
+  },
+  {
+   "id": "rural_weak_63_2025-11-25_2",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 1518278672,
+   "states": 745,
+   "boundary_states": 169,
+   "solver_failures": 22,
+   "seconds": 7.03
+  },
+  {
+   "id": "rural_weak_63_2025-11-25_3",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "planning:0.75",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3596342762,
+   "states": 761,
+   "boundary_states": 185,
+   "solver_failures": 0,
+   "seconds": 97.32
+  },
+  {
+   "id": "rural_weak_63_2025-11-25_4",
+   "street": "rural_weak_63",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "planning:1.0",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 594191414,
+   "states": 708,
+   "boundary_states": 132,
+   "solver_failures": 26,
+   "seconds": 7.38
+  },
+  {
+   "id": "rural_weak_63_2025-12-07_0",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3652233740,
+   "states": 744,
+   "boundary_states": 168,
+   "solver_failures": 17,
+   "seconds": 10.57
+  },
+  {
+   "id": "rural_weak_63_2025-12-07_1",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 2071200523,
+   "states": 752,
+   "boundary_states": 176,
+   "solver_failures": 0,
+   "seconds": 257.0
+  },
+  {
+   "id": "rural_weak_63_2025-12-07_2",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 839939535,
+   "states": 714,
+   "boundary_states": 138,
+   "solver_failures": 0,
+   "seconds": 282.83
+  },
+  {
+   "id": "rural_weak_63_2025-12-07_3",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "planning:0.5",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 190111791,
+   "states": 738,
+   "boundary_states": 162,
+   "solver_failures": 20,
+   "seconds": 13.95
+  },
+  {
+   "id": "rural_weak_63_2025-12-07_4",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3329443477,
+   "states": 765,
+   "boundary_states": 189,
+   "solver_failures": 0,
+   "seconds": 324.27
+  },
+  {
+   "id": "rural_weak_63_2025-12-17_0",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 3828735040,
+   "states": 730,
+   "boundary_states": 154,
+   "solver_failures": 0,
+   "seconds": 100.83
+  },
+  {
+   "id": "rural_weak_63_2025-12-17_1",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 811229451,
+   "states": 715,
+   "boundary_states": 139,
+   "solver_failures": 0,
+   "seconds": 281.39
+  },
+  {
+   "id": "rural_weak_63_2025-12-17_2",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 2970052267,
+   "states": 755,
+   "boundary_states": 179,
+   "solver_failures": 0,
+   "seconds": 287.42
+  },
+  {
+   "id": "rural_weak_63_2025-12-17_3",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 4021311003,
+   "states": 710,
+   "boundary_states": 134,
+   "solver_failures": 0,
+   "seconds": 247.94
+  },
+  {
+   "id": "rural_weak_63_2025-12-17_4",
+   "street": "rural_weak_63",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 1063236406,
+   "states": 708,
+   "boundary_states": 132,
+   "solver_failures": 26,
+   "seconds": 19.2
+  }
+ ],
+ "ood": {
+  "seed": 20261010,
+  "seconds": 40.1,
+  "kinds": {
+   "kwp_double": {
+    "states": 250,
+    "solver_failures": 6
+   },
+   "load_x4": {
+    "states": 250,
+    "solver_failures": 6
+   },
+   "upstream_out": {
+    "states": 250,
+    "solver_failures": 4
+   },
+   "tap_negative": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "battery_150": {
+    "states": 250,
+    "solver_failures": 121
+   },
+   "battery_other_node": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "phase_map": {
+    "states": 250,
+    "solver_failures": 2
+   },
+   "layout": {
+    "states": 250,
+    "solver_failures": 2
+   }
+  }
+ }
+}

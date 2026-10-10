@@ -1,0 +1,4052 @@
+{
+ "street": "benchmark_250",
+ "round": 4,
+ "pilot": false,
+ "created_utc": "2026-10-10T17:35:14+00:00",
+ "provenance": "simulated: app scenario generator inputs (modelled forecasts, CEEW-based demand analogs), labels from the power-grid-model solver; not measured data",
+ "solver": {
+  "engine": "power-grid-model",
+  "version": "1.13.193",
+  "asymmetric": true,
+  "method": "newton_raphson",
+  "tolerance": 1e-08,
+  "max_iterations": 40,
+  "solver_hash": "5f47aa7c37a712e4",
+  "inverter_passes_max": 80,
+  "damping": 0.3
+ },
+ "street_hash": "c16292f830f091a5",
+ "battery_nodes": [
+  21,
+  26,
+  54,
+  65
+ ],
+ "line_layouts": [
+  [
+   [
+    7,
+    94
+   ],
+   [
+    18,
+    48
+   ],
+   [
+    80,
+    30
+   ],
+   [
+    20,
+    13
+   ],
+   [
+    4,
+    7
+   ],
+   [
+    42,
+    67
+   ],
+   [
+    60,
+    41
+   ],
+   [
+    13,
+    70
+   ],
+   [
+    83,
+    1
+   ],
+   [
+    29,
+    20
+   ],
+   [
+    28,
+    82
+   ],
+   [
+    24,
+    63
+   ],
+   [
+    8,
+    86
+   ],
+   [
+    39,
+    54
+   ],
+   [
+    90,
+    56
+   ],
+   [
+    73,
+    62
+   ],
+   [
+    55,
+    75
+   ],
+   [
+    86,
+    64
+   ],
+   [
+    22,
+    74
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    68,
+    18
+   ],
+   [
+    40,
+    37
+   ],
+   [
+    30,
+    29
+   ],
+   [
+    44,
+    46
+   ],
+   [
+    46,
+    51
+   ],
+   [
+    56,
+    57
+   ],
+   [
+    50,
+    58
+   ],
+   [
+    91,
+    26
+   ],
+   [
+    41,
+    36
+   ],
+   [
+    2,
+    31
+   ],
+   [
+    36,
+    35
+   ],
+   [
+    48,
+    78
+   ],
+   [
+    0,
+    27
+   ],
+   [
+    63,
+    83
+   ],
+   [
+    92,
+    66
+   ],
+   [
+    23,
+    2
+   ],
+   [
+    78,
+    53
+   ],
+   [
+    64,
+    76
+   ],
+   [
+    21,
+    23
+   ],
+   [
+    61,
+    52
+   ],
+   [
+    67,
+    79
+   ],
+   [
+    62,
+    90
+   ],
+   [
+    37,
+    19
+   ],
+   [
+    16,
+    4
+   ],
+   [
+    38,
+    93
+   ],
+   [
+    43,
+    33
+   ],
+   [
+    45,
+    81
+   ],
+   [
+    57,
+    77
+   ],
+   [
+    32,
+    22
+   ],
+   [
+    19,
+    45
+   ],
+   [
+    93,
+    88
+   ],
+   [
+    35,
+    6
+   ],
+   [
+    33,
+    10
+   ],
+   [
+    74,
+    9
+   ],
+   [
+    84,
+    8
+   ],
+   [
+    52,
+    73
+   ],
+   [
+    15,
+    32
+   ],
+   [
+    5,
+    17
+   ],
+   [
+    70,
+    43
+   ],
+   [
+    1,
+    65
+   ],
+   [
+    59,
+    55
+   ],
+   [
+    76,
+    50
+   ],
+   [
+    47,
+    85
+   ],
+   [
+    34,
+    87
+   ],
+   [
+    94,
+    21
+   ],
+   [
+    77,
+    40
+   ],
+   [
+    11,
+    5
+   ],
+   [
+    82,
+    0
+   ],
+   [
+    88,
+    14
+   ],
+   [
+    14,
+    91
+   ],
+   [
+    79,
+    24
+   ],
+   [
+    22,
+    68
+   ],
+   [
+    71,
+    28
+   ],
+   [
+    89,
+    12
+   ],
+   [
+    85,
+    59
+   ],
+   [
+    87,
+    49
+   ],
+   [
+    72,
+    25
+   ],
+   [
+    69,
+    15
+   ],
+   [
+    75,
+    80
+   ],
+   [
+    95,
+    38
+   ],
+   [
+    17,
+    60
+   ],
+   [
+    10,
+    71
+   ],
+   [
+    53,
+    89
+   ],
+   [
+    51,
+    16
+   ],
+   [
+    27,
+    3
+   ],
+   [
+    66,
+    61
+   ],
+   [
+    6,
+    92
+   ],
+   [
+    81,
+    95
+   ],
+   [
+    25,
+    84
+   ],
+   [
+    49,
+    44
+   ],
+   [
+    9,
+    72
+   ],
+   [
+    75,
+    42
+   ],
+   [
+    62,
+    34
+   ],
+   [
+    12,
+    62
+   ],
+   [
+    39,
+    47
+   ]
+  ],
+  [
+   [
+    7,
+    94
+   ],
+   [
+    18,
+    48
+   ],
+   [
+    80,
+    30
+   ],
+   [
+    20,
+    13
+   ],
+   [
+    4,
+    7
+   ],
+   [
+    42,
+    67
+   ],
+   [
+    60,
+    41
+   ],
+   [
+    13,
+    70
+   ],
+   [
+    83,
+    1
+   ],
+   [
+    29,
+    20
+   ],
+   [
+    28,
+    82
+   ],
+   [
+    24,
+    63
+   ],
+   [
+    8,
+    86
+   ],
+   [
+    39,
+    54
+   ],
+   [
+    90,
+    56
+   ],
+   [
+    73,
+    62
+   ],
+   [
+    55,
+    75
+   ],
+   [
+    86,
+    64
+   ],
+   [
+    22,
+    74
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    68,
+    18
+   ],
+   [
+    40,
+    37
+   ],
+   [
+    30,
+    29
+   ],
+   [
+    44,
+    46
+   ],
+   [
+    46,
+    51
+   ],
+   [
+    56,
+    57
+   ],
+   [
+    50,
+    58
+   ],
+   [
+    41,
+    36
+   ],
+   [
+    2,
+    31
+   ],
+   [
+    36,
+    35
+   ],
+   [
+    48,
+    78
+   ],
+   [
+    0,
+    27
+   ],
+   [
+    63,
+    83
+   ],
+   [
+    92,
+    66
+   ],
+   [
+    23,
+    2
+   ],
+   [
+    78,
+    53
+   ],
+   [
+    64,
+    76
+   ],
+   [
+    21,
+    23
+   ],
+   [
+    61,
+    52
+   ],
+   [
+    67,
+    79
+   ],
+   [
+    62,
+    90
+   ],
+   [
+    37,
+    19
+   ],
+   [
+    16,
+    4
+   ],
+   [
+    38,
+    93
+   ],
+   [
+    43,
+    33
+   ],
+   [
+    45,
+    81
+   ],
+   [
+    57,
+    77
+   ],
+   [
+    32,
+    22
+   ],
+   [
+    19,
+    45
+   ],
+   [
+    93,
+    88
+   ],
+   [
+    35,
+    6
+   ],
+   [
+    33,
+    10
+   ],
+   [
+    74,
+    9
+   ],
+   [
+    84,
+    8
+   ],
+   [
+    52,
+    73
+   ],
+   [
+    15,
+    32
+   ],
+   [
+    5,
+    17
+   ],
+   [
+    70,
+    43
+   ],
+   [
+    1,
+    65
+   ],
+   [
+    59,
+    55
+   ],
+   [
+    76,
+    50
+   ],
+   [
+    47,
+    85
+   ],
+   [
+    34,
+    87
+   ],
+   [
+    94,
+    21
+   ],
+   [
+    77,
+    40
+   ],
+   [
+    11,
+    5
+   ],
+   [
+    82,
+    0
+   ],
+   [
+    88,
+    14
+   ],
+   [
+    14,
+    91
+   ],
+   [
+    79,
+    24
+   ],
+   [
+    22,
+    68
+   ],
+   [
+    71,
+    28
+   ],
+   [
+    89,
+    12
+   ],
+   [
+    85,
+    59
+   ],
+   [
+    87,
+    49
+   ],
+   [
+    72,
+    25
+   ],
+   [
+    69,
+    15
+   ],
+   [
+    75,
+    80
+   ],
+   [
+    95,
+    38
+   ],
+   [
+    17,
+    60
+   ],
+   [
+    10,
+    71
+   ],
+   [
+    53,
+    89
+   ],
+   [
+    51,
+    16
+   ],
+   [
+    27,
+    3
+   ],
+   [
+    66,
+    61
+   ],
+   [
+    6,
+    92
+   ],
+   [
+    81,
+    95
+   ],
+   [
+    25,
+    84
+   ],
+   [
+    49,
+    44
+   ],
+   [
+    9,
+    72
+   ],
+   [
+    75,
+    42
+   ],
+   [
+    62,
+    34
+   ],
+   [
+    12,
+    62
+   ],
+   [
+    39,
+    47
+   ],
+   [
+    26,
+    31
+   ]
+  ],
+  [
+   [
+    7,
+    94
+   ],
+   [
+    18,
+    48
+   ],
+   [
+    80,
+    30
+   ],
+   [
+    20,
+    13
+   ],
+   [
+    4,
+    7
+   ],
+   [
+    42,
+    67
+   ],
+   [
+    60,
+    41
+   ],
+   [
+    13,
+    70
+   ],
+   [
+    83,
+    1
+   ],
+   [
+    29,
+    20
+   ],
+   [
+    28,
+    82
+   ],
+   [
+    24,
+    63
+   ],
+   [
+    8,
+    86
+   ],
+   [
+    39,
+    54
+   ],
+   [
+    90,
+    56
+   ],
+   [
+    73,
+    62
+   ],
+   [
+    55,
+    75
+   ],
+   [
+    86,
+    64
+   ],
+   [
+    22,
+    74
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    68,
+    18
+   ],
+   [
+    40,
+    37
+   ],
+   [
+    30,
+    29
+   ],
+   [
+    44,
+    46
+   ],
+   [
+    46,
+    51
+   ],
+   [
+    56,
+    57
+   ],
+   [
+    50,
+    58
+   ],
+   [
+    91,
+    26
+   ],
+   [
+    41,
+    36
+   ],
+   [
+    2,
+    31
+   ],
+   [
+    36,
+    35
+   ],
+   [
+    48,
+    78
+   ],
+   [
+    0,
+    27
+   ],
+   [
+    63,
+    83
+   ],
+   [
+    92,
+    66
+   ],
+   [
+    23,
+    2
+   ],
+   [
+    78,
+    53
+   ],
+   [
+    64,
+    76
+   ],
+   [
+    21,
+    23
+   ],
+   [
+    61,
+    52
+   ],
+   [
+    67,
+    79
+   ],
+   [
+    62,
+    90
+   ],
+   [
+    37,
+    19
+   ],
+   [
+    16,
+    4
+   ],
+   [
+    38,
+    93
+   ],
+   [
+    43,
+    33
+   ],
+   [
+    45,
+    81
+   ],
+   [
+    57,
+    77
+   ],
+   [
+    32,
+    22
+   ],
+   [
+    19,
+    45
+   ],
+   [
+    93,
+    88
+   ],
+   [
+    35,
+    6
+   ],
+   [
+    33,
+    10
+   ],
+   [
+    74,
+    9
+   ],
+   [
+    84,
+    8
+   ],
+   [
+    52,
+    73
+   ],
+   [
+    15,
+    32
+   ],
+   [
+    5,
+    17
+   ],
+   [
+    70,
+    43
+   ],
+   [
+    1,
+    65
+   ],
+   [
+    59,
+    55
+   ],
+   [
+    76,
+    50
+   ],
+   [
+    47,
+    85
+   ],
+   [
+    34,
+    87
+   ],
+   [
+    94,
+    21
+   ],
+   [
+    77,
+    40
+   ],
+   [
+    11,
+    5
+   ],
+   [
+    82,
+    0
+   ],
+   [
+    88,
+    14
+   ],
+   [
+    79,
+    24
+   ],
+   [
+    22,
+    68
+   ],
+   [
+    71,
+    28
+   ],
+   [
+    89,
+    12
+   ],
+   [
+    85,
+    59
+   ],
+   [
+    87,
+    49
+   ],
+   [
+    72,
+    25
+   ],
+   [
+    69,
+    15
+   ],
+   [
+    75,
+    80
+   ],
+   [
+    95,
+    38
+   ],
+   [
+    17,
+    60
+   ],
+   [
+    10,
+    71
+   ],
+   [
+    53,
+    89
+   ],
+   [
+    51,
+    16
+   ],
+   [
+    27,
+    3
+   ],
+   [
+    66,
+    61
+   ],
+   [
+    6,
+    92
+   ],
+   [
+    81,
+    95
+   ],
+   [
+    25,
+    84
+   ],
+   [
+    49,
+    44
+   ],
+   [
+    9,
+    72
+   ],
+   [
+    75,
+    42
+   ],
+   [
+    62,
+    34
+   ],
+   [
+    12,
+    62
+   ],
+   [
+    39,
+    47
+   ],
+   [
+    26,
+    31
+   ]
+  ],
+  [
+   [
+    7,
+    94
+   ],
+   [
+    18,
+    48
+   ],
+   [
+    80,
+    30
+   ],
+   [
+    20,
+    13
+   ],
+   [
+    4,
+    7
+   ],
+   [
+    42,
+    67
+   ],
+   [
+    60,
+    41
+   ],
+   [
+    13,
+    70
+   ],
+   [
+    83,
+    1
+   ],
+   [
+    29,
+    20
+   ],
+   [
+    28,
+    82
+   ],
+   [
+    24,
+    63
+   ],
+   [
+    8,
+    86
+   ],
+   [
+    39,
+    54
+   ],
+   [
+    90,
+    56
+   ],
+   [
+    73,
+    62
+   ],
+   [
+    55,
+    75
+   ],
+   [
+    86,
+    64
+   ],
+   [
+    22,
+    74
+   ],
+   [
+    3,
+    11
+   ],
+   [
+    68,
+    18
+   ],
+   [
+    40,
+    37
+   ],
+   [
+    30,
+    29
+   ],
+   [
+    44,
+    46
+   ],
+   [
+    46,
+    51
+   ],
+   [
+    56,
+    57
+   ],
+   [
+    50,
+    58
+   ],
+   [
+    91,
+    26
+   ],
+   [
+    41,
+    36
+   ],
+   [
+    2,
+    31
+   ],
+   [
+    36,
+    35
+   ],
+   [
+    48,
+    78
+   ],
+   [
+    0,
+    27
+   ],
+   [
+    63,
+    83
+   ],
+   [
+    92,
+    66
+   ],
+   [
+    23,
+    2
+   ],
+   [
+    78,
+    53
+   ],
+   [
+    64,
+    76
+   ],
+   [
+    21,
+    23
+   ],
+   [
+    61,
+    52
+   ],
+   [
+    67,
+    79
+   ],
+   [
+    62,
+    90
+   ],
+   [
+    37,
+    19
+   ],
+   [
+    16,
+    4
+   ],
+   [
+    38,
+    93
+   ],
+   [
+    43,
+    33
+   ],
+   [
+    45,
+    81
+   ],
+   [
+    57,
+    77
+   ],
+   [
+    32,
+    22
+   ],
+   [
+    19,
+    45
+   ],
+   [
+    93,
+    88
+   ],
+   [
+    35,
+    6
+   ],
+   [
+    33,
+    10
+   ],
+   [
+    74,
+    9
+   ],
+   [
+    84,
+    8
+   ],
+   [
+    52,
+    73
+   ],
+   [
+    15,
+    32
+   ],
+   [
+    5,
+    17
+   ],
+   [
+    70,
+    43
+   ],
+   [
+    1,
+    65
+   ],
+   [
+    59,
+    55
+   ],
+   [
+    76,
+    50
+   ],
+   [
+    47,
+    85
+   ],
+   [
+    34,
+    87
+   ],
+   [
+    94,
+    21
+   ],
+   [
+    77,
+    40
+   ],
+   [
+    11,
+    5
+   ],
+   [
+    82,
+    0
+   ],
+   [
+    14,
+    91
+   ],
+   [
+    79,
+    24
+   ],
+   [
+    22,
+    68
+   ],
+   [
+    71,
+    28
+   ],
+   [
+    89,
+    12
+   ],
+   [
+    85,
+    59
+   ],
+   [
+    87,
+    49
+   ],
+   [
+    72,
+    25
+   ],
+   [
+    69,
+    15
+   ],
+   [
+    75,
+    80
+   ],
+   [
+    95,
+    38
+   ],
+   [
+    17,
+    60
+   ],
+   [
+    10,
+    71
+   ],
+   [
+    53,
+    89
+   ],
+   [
+    51,
+    16
+   ],
+   [
+    27,
+    3
+   ],
+   [
+    66,
+    61
+   ],
+   [
+    6,
+    92
+   ],
+   [
+    81,
+    95
+   ],
+   [
+    25,
+    84
+   ],
+   [
+    49,
+    44
+   ],
+   [
+    9,
+    72
+   ],
+   [
+    75,
+    42
+   ],
+   [
+    62,
+    34
+   ],
+   [
+    12,
+    62
+   ],
+   [
+    39,
+    47
+   ],
+   [
+    26,
+    31
+   ]
+  ]
+ ],
+ "home_power_factor": 0.95,
+ "battery_power_factor": 1.0,
+ "config": {
+  "scenarios_per_family": 6,
+  "battery_share": 0.5,
+  "battery_kw": 100.0,
+  "curtail_share": 0.3,
+  "keep_range": [
+   0.2,
+   1.0
+  ],
+  "boundary_share": 0.4,
+  "boundary_v": 2.0,
+  "boundary_loading": [
+   95.0,
+   105.0
+  ],
+  "upstream_bracket": [
+   0.85,
+   1.15
+  ],
+  "load_scale_bracket": [
+   0.3,
+   2.0
+  ],
+  "illinois_steps": 5
+ },
+ "environment": {
+  "python": "3.12.0",
+  "numpy": "2.4.6",
+  "sklearn": "1.9.1",
+  "lightgbm": "4.7.0",
+  "machine": "AMD64 Family 25 Model 116 Stepping 1, AuthenticAMD"
+ },
+ "seconds": 926.8,
+ "totals": {
+  "train": {
+   "states": 59716,
+   "boundary_states": 13636,
+   "solver_failures": 43
+  },
+  "tune": {
+   "states": 14799,
+   "boundary_states": 3279,
+   "solver_failures": 18
+  },
+  "calibrate": {
+   "states": 15021,
+   "boundary_states": 3501,
+   "solver_failures": 14
+  },
+  "test": {
+   "states": 29709,
+   "boundary_states": 6669,
+   "solver_failures": 21
+  }
+ },
+ "families": [
+  {
+   "id": "benchmark_250_2025-01-05_0",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1460521253,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 22.0
+  },
+  {
+   "id": "benchmark_250_2025-01-05_1",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "planning:0.5",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 3509020236,
+   "states": 747,
+   "boundary_states": 171,
+   "solver_failures": 0,
+   "seconds": 73.59
+  },
+  {
+   "id": "benchmark_250_2025-01-05_2",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 4176502999,
+   "states": 740,
+   "boundary_states": 164,
+   "solver_failures": 0,
+   "seconds": 22.81
+  },
+  {
+   "id": "benchmark_250_2025-01-05_3",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 2330394165,
+   "states": 732,
+   "boundary_states": 156,
+   "solver_failures": 0,
+   "seconds": 97.97
+  },
+  {
+   "id": "benchmark_250_2025-01-05_4",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-01-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2212067166,
+   "states": 751,
+   "boundary_states": 175,
+   "solver_failures": 0,
+   "seconds": 100.56
+  },
+  {
+   "id": "benchmark_250_2025-01-15_0",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 2018210508,
+   "states": 755,
+   "boundary_states": 179,
+   "solver_failures": 0,
+   "seconds": 21.67
+  },
+  {
+   "id": "benchmark_250_2025-01-15_1",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2212836403,
+   "states": 729,
+   "boundary_states": 153,
+   "solver_failures": 0,
+   "seconds": 88.9
+  },
+  {
+   "id": "benchmark_250_2025-01-15_2",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 860518140,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 107.47
+  },
+  {
+   "id": "benchmark_250_2025-01-15_3",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "planning:0.25",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 3116321556,
+   "states": 752,
+   "boundary_states": 176,
+   "solver_failures": 0,
+   "seconds": 83.62
+  },
+  {
+   "id": "benchmark_250_2025-01-15_4",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-01-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 290293817,
+   "states": 764,
+   "boundary_states": 188,
+   "solver_failures": 0,
+   "seconds": 97.01
+  },
+  {
+   "id": "benchmark_250_2025-01-25_0",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1679278271,
+   "states": 745,
+   "boundary_states": 169,
+   "solver_failures": 0,
+   "seconds": 4.11
+  },
+  {
+   "id": "benchmark_250_2025-01-25_1",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 658548056,
+   "states": 733,
+   "boundary_states": 157,
+   "solver_failures": 0,
+   "seconds": 66.8
+  },
+  {
+   "id": "benchmark_250_2025-01-25_2",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "planning:0.25",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1854472654,
+   "states": 732,
+   "boundary_states": 156,
+   "solver_failures": 2,
+   "seconds": 4.08
+  },
+  {
+   "id": "benchmark_250_2025-01-25_3",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 1107961327,
+   "states": 734,
+   "boundary_states": 158,
+   "solver_failures": 0,
+   "seconds": 78.47
+  },
+  {
+   "id": "benchmark_250_2025-01-25_4",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-01-25",
+   "layout": "planning:0.75",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2852791283,
+   "states": 743,
+   "boundary_states": 167,
+   "solver_failures": 0,
+   "seconds": 80.73
+  },
+  {
+   "id": "benchmark_250_2025-02-05_0",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 1258004626,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 3.79
+  },
+  {
+   "id": "benchmark_250_2025-02-05_1",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "planning:0.25",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 1418411549,
+   "states": 720,
+   "boundary_states": 144,
+   "solver_failures": 0,
+   "seconds": 61.84
+  },
+  {
+   "id": "benchmark_250_2025-02-05_2",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 2648322045,
+   "states": 761,
+   "boundary_states": 185,
+   "solver_failures": 0,
+   "seconds": 95.37
+  },
+  {
+   "id": "benchmark_250_2025-02-05_3",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1408689191,
+   "states": 763,
+   "boundary_states": 187,
+   "solver_failures": 0,
+   "seconds": 71.97
+  },
+  {
+   "id": "benchmark_250_2025-02-05_4",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-02-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 3417556979,
+   "states": 754,
+   "boundary_states": 178,
+   "solver_failures": 0,
+   "seconds": 81.83
+  },
+  {
+   "id": "benchmark_250_2025-02-15_0",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2939421359,
+   "states": 754,
+   "boundary_states": 178,
+   "solver_failures": 0,
+   "seconds": 3.8
+  },
+  {
+   "id": "benchmark_250_2025-02-15_1",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 4166796644,
+   "states": 727,
+   "boundary_states": 151,
+   "solver_failures": 0,
+   "seconds": 76.36
+  },
+  {
+   "id": "benchmark_250_2025-02-15_2",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3443370264,
+   "states": 744,
+   "boundary_states": 168,
+   "solver_failures": 1,
+   "seconds": 3.9
+  },
+  {
+   "id": "benchmark_250_2025-02-15_3",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 1084264567,
+   "states": 755,
+   "boundary_states": 179,
+   "solver_failures": 0,
+   "seconds": 77.3
+  },
+  {
+   "id": "benchmark_250_2025-02-15_4",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-02-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 569244034,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 85.77
+  },
+  {
+   "id": "benchmark_250_2025-02-25_0",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 1172739362,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 4.17
+  },
+  {
+   "id": "benchmark_250_2025-02-25_1",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3850208469,
+   "states": 732,
+   "boundary_states": 156,
+   "solver_failures": 0,
+   "seconds": 68.53
+  },
+  {
+   "id": "benchmark_250_2025-02-25_2",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 4115633944,
+   "states": 758,
+   "boundary_states": 182,
+   "solver_failures": 0,
+   "seconds": 78.56
+  },
+  {
+   "id": "benchmark_250_2025-02-25_3",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 961841577,
+   "states": 755,
+   "boundary_states": 179,
+   "solver_failures": 0,
+   "seconds": 69.25
+  },
+  {
+   "id": "benchmark_250_2025-02-25_4",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-02-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 574641361,
+   "states": 765,
+   "boundary_states": 189,
+   "solver_failures": 0,
+   "seconds": 89.06
+  },
+  {
+   "id": "benchmark_250_2025-03-07_0",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1153022973,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 76.97
+  },
+  {
+   "id": "benchmark_250_2025-03-07_1",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 1867710637,
+   "states": 720,
+   "boundary_states": 144,
+   "solver_failures": 0,
+   "seconds": 76.24
+  },
+  {
+   "id": "benchmark_250_2025-03-07_2",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3640882479,
+   "states": 737,
+   "boundary_states": 161,
+   "solver_failures": 0,
+   "seconds": 83.84
+  },
+  {
+   "id": "benchmark_250_2025-03-07_3",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 2082544920,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 0,
+   "seconds": 3.71
+  },
+  {
+   "id": "benchmark_250_2025-03-07_4",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-03-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 1160139836,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 83.27
+  },
+  {
+   "id": "benchmark_250_2025-03-17_0",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 2487176777,
+   "states": 734,
+   "boundary_states": 158,
+   "solver_failures": 0,
+   "seconds": 73.61
+  },
+  {
+   "id": "benchmark_250_2025-03-17_1",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "planning:0.75",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 442244122,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 3.93
+  },
+  {
+   "id": "benchmark_250_2025-03-17_2",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 3556829418,
+   "states": 743,
+   "boundary_states": 167,
+   "solver_failures": 0,
+   "seconds": 81.79
+  },
+  {
+   "id": "benchmark_250_2025-03-17_3",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 10499062,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 0,
+   "seconds": 86.27
+  },
+  {
+   "id": "benchmark_250_2025-03-17_4",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-03-17",
+   "layout": "planning:0.5",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 3883688617,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 74.07
+  },
+  {
+   "id": "benchmark_250_2025-04-05_0",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "planning:0.75",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 4288047020,
+   "states": 765,
+   "boundary_states": 189,
+   "solver_failures": 0,
+   "seconds": 3.92
+  },
+  {
+   "id": "benchmark_250_2025-04-05_1",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 3417642334,
+   "states": 737,
+   "boundary_states": 161,
+   "solver_failures": 0,
+   "seconds": 66.03
+  },
+  {
+   "id": "benchmark_250_2025-04-05_2",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "planning:0.25",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2675031739,
+   "states": 722,
+   "boundary_states": 146,
+   "solver_failures": 1,
+   "seconds": 3.69
+  },
+  {
+   "id": "benchmark_250_2025-04-05_3",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 2265075001,
+   "states": 761,
+   "boundary_states": 185,
+   "solver_failures": 0,
+   "seconds": 78.56
+  },
+  {
+   "id": "benchmark_250_2025-04-05_4",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-04-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2792274845,
+   "states": 752,
+   "boundary_states": 176,
+   "solver_failures": 0,
+   "seconds": 85.89
+  },
+  {
+   "id": "benchmark_250_2025-04-15_0",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "planning:1.0",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 171577520,
+   "states": 757,
+   "boundary_states": 181,
+   "solver_failures": 0,
+   "seconds": 3.92
+  },
+  {
+   "id": "benchmark_250_2025-04-15_1",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 2737906693,
+   "states": 716,
+   "boundary_states": 140,
+   "solver_failures": 0,
+   "seconds": 64.74
+  },
+  {
+   "id": "benchmark_250_2025-04-15_2",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 2474333744,
+   "states": 768,
+   "boundary_states": 192,
+   "solver_failures": 0,
+   "seconds": 76.39
+  },
+  {
+   "id": "benchmark_250_2025-04-15_3",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 3708495553,
+   "states": 764,
+   "boundary_states": 188,
+   "solver_failures": 0,
+   "seconds": 62.26
+  },
+  {
+   "id": "benchmark_250_2025-04-15_4",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-04-15",
+   "layout": "planning:1.0",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 2117052196,
+   "states": 752,
+   "boundary_states": 176,
+   "solver_failures": 0,
+   "seconds": 83.23
+  },
+  {
+   "id": "benchmark_250_2025-04-25_0",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 184362523,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 1,
+   "seconds": 4.16
+  },
+  {
+   "id": "benchmark_250_2025-04-25_1",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 2246713675,
+   "states": 735,
+   "boundary_states": 159,
+   "solver_failures": 0,
+   "seconds": 58.86
+  },
+  {
+   "id": "benchmark_250_2025-04-25_2",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 709009648,
+   "states": 731,
+   "boundary_states": 155,
+   "solver_failures": 4,
+   "seconds": 3.98
+  },
+  {
+   "id": "benchmark_250_2025-04-25_3",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 3231049730,
+   "states": 755,
+   "boundary_states": 179,
+   "solver_failures": 0,
+   "seconds": 80.67
+  },
+  {
+   "id": "benchmark_250_2025-04-25_4",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-04-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 4179109021,
+   "states": 756,
+   "boundary_states": 180,
+   "solver_failures": 0,
+   "seconds": 76.06
+  },
+  {
+   "id": "benchmark_250_2025-05-05_0",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 392378184,
+   "states": 748,
+   "boundary_states": 172,
+   "solver_failures": 5,
+   "seconds": 4.15
+  },
+  {
+   "id": "benchmark_250_2025-05-05_1",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3910786634,
+   "states": 712,
+   "boundary_states": 136,
+   "solver_failures": 0,
+   "seconds": 63.19
+  },
+  {
+   "id": "benchmark_250_2025-05-05_2",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 67224275,
+   "states": 746,
+   "boundary_states": 170,
+   "solver_failures": 0,
+   "seconds": 72.95
+  },
+  {
+   "id": "benchmark_250_2025-05-05_3",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 4209282519,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 66.57
+  },
+  {
+   "id": "benchmark_250_2025-05-05_4",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-05-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 2257194393,
+   "states": 764,
+   "boundary_states": 188,
+   "solver_failures": 0,
+   "seconds": 78.31
+  },
+  {
+   "id": "benchmark_250_2025-05-15_0",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3484116257,
+   "states": 749,
+   "boundary_states": 173,
+   "solver_failures": 3,
+   "seconds": 4.32
+  },
+  {
+   "id": "benchmark_250_2025-05-15_1",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 1043269336,
+   "states": 734,
+   "boundary_states": 158,
+   "solver_failures": 0,
+   "seconds": 35.94
+  },
+  {
+   "id": "benchmark_250_2025-05-15_2",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3110230207,
+   "states": 739,
+   "boundary_states": 163,
+   "solver_failures": 5,
+   "seconds": 4.17
+  },
+  {
+   "id": "benchmark_250_2025-05-15_3",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 1441350763,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 77.53
+  },
+  {
+   "id": "benchmark_250_2025-05-15_4",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-05-15",
+   "layout": "planning:0.75",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3013147870,
+   "states": 751,
+   "boundary_states": 175,
+   "solver_failures": 0,
+   "seconds": 81.75
+  },
+  {
+   "id": "benchmark_250_2025-05-25_0",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "planning:1.0",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 593515906,
+   "states": 747,
+   "boundary_states": 171,
+   "solver_failures": 4,
+   "seconds": 4.22
+  },
+  {
+   "id": "benchmark_250_2025-05-25_1",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 1654653126,
+   "states": 724,
+   "boundary_states": 148,
+   "solver_failures": 0,
+   "seconds": 64.6
+  },
+  {
+   "id": "benchmark_250_2025-05-25_2",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 2366156257,
+   "states": 765,
+   "boundary_states": 189,
+   "solver_failures": 0,
+   "seconds": 83.99
+  },
+  {
+   "id": "benchmark_250_2025-05-25_3",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 854690451,
+   "states": 764,
+   "boundary_states": 188,
+   "solver_failures": 0,
+   "seconds": 61.43
+  },
+  {
+   "id": "benchmark_250_2025-05-25_4",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-05-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 2419365363,
+   "states": 756,
+   "boundary_states": 180,
+   "solver_failures": 0,
+   "seconds": 77.75
+  },
+  {
+   "id": "benchmark_250_2025-06-07_0",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 915215427,
+   "states": 710,
+   "boundary_states": 134,
+   "solver_failures": 0,
+   "seconds": 69.44
+  },
+  {
+   "id": "benchmark_250_2025-06-07_1",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 3986678324,
+   "states": 740,
+   "boundary_states": 164,
+   "solver_failures": 7,
+   "seconds": 4.81
+  },
+  {
+   "id": "benchmark_250_2025-06-07_2",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 4278582183,
+   "states": 769,
+   "boundary_states": 193,
+   "solver_failures": 0,
+   "seconds": 72.91
+  },
+  {
+   "id": "benchmark_250_2025-06-07_3",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "planning:0.5",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 3732629466,
+   "states": 714,
+   "boundary_states": 138,
+   "solver_failures": 0,
+   "seconds": 65.77
+  },
+  {
+   "id": "benchmark_250_2025-06-07_4",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-06-07",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3158133352,
+   "states": 719,
+   "boundary_states": 143,
+   "solver_failures": 0,
+   "seconds": 96.1
+  },
+  {
+   "id": "benchmark_250_2025-06-17_0",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 1626978808,
+   "states": 750,
+   "boundary_states": 174,
+   "solver_failures": 1,
+   "seconds": 4.83
+  },
+  {
+   "id": "benchmark_250_2025-06-17_1",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 418058695,
+   "states": 758,
+   "boundary_states": 182,
+   "solver_failures": 0,
+   "seconds": 87.39
+  },
+  {
+   "id": "benchmark_250_2025-06-17_2",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 473012750,
+   "states": 737,
+   "boundary_states": 161,
+   "solver_failures": 0,
+   "seconds": 48.72
+  },
+  {
+   "id": "benchmark_250_2025-06-17_3",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3671814505,
+   "states": 750,
+   "boundary_states": 174,
+   "solver_failures": 7,
+   "seconds": 4.71
+  },
+  {
+   "id": "benchmark_250_2025-06-17_4",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-06-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 3820940945,
+   "states": 719,
+   "boundary_states": 143,
+   "solver_failures": 0,
+   "seconds": 130.99
+  },
+  {
+   "id": "benchmark_250_2025-07-05_0",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 720948262,
+   "states": 754,
+   "boundary_states": 178,
+   "solver_failures": 3,
+   "seconds": 4.33
+  },
+  {
+   "id": "benchmark_250_2025-07-05_1",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "planning:0.5",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 3448565032,
+   "states": 729,
+   "boundary_states": 153,
+   "solver_failures": 0,
+   "seconds": 25.86
+  },
+  {
+   "id": "benchmark_250_2025-07-05_2",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3451145848,
+   "states": 723,
+   "boundary_states": 147,
+   "solver_failures": 5,
+   "seconds": 3.85
+  },
+  {
+   "id": "benchmark_250_2025-07-05_3",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "planning:1.0",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 1575374144,
+   "states": 736,
+   "boundary_states": 160,
+   "solver_failures": 0,
+   "seconds": 73.92
+  },
+  {
+   "id": "benchmark_250_2025-07-05_4",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-07-05",
+   "layout": "planning:0.25",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2462556588,
+   "states": 761,
+   "boundary_states": 185,
+   "solver_failures": 0,
+   "seconds": 74.3
+  },
+  {
+   "id": "benchmark_250_2025-07-15_0",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 579016619,
+   "states": 744,
+   "boundary_states": 168,
+   "solver_failures": 6,
+   "seconds": 4.35
+  },
+  {
+   "id": "benchmark_250_2025-07-15_1",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 1737680450,
+   "states": 712,
+   "boundary_states": 136,
+   "solver_failures": 0,
+   "seconds": 71.99
+  },
+  {
+   "id": "benchmark_250_2025-07-15_2",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 2334212396,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 79.97
+  },
+  {
+   "id": "benchmark_250_2025-07-15_3",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1364401135,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 0,
+   "seconds": 62.33
+  },
+  {
+   "id": "benchmark_250_2025-07-15_4",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-07-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 2832659951,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 0,
+   "seconds": 86.13
+  },
+  {
+   "id": "benchmark_250_2025-07-25_0",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1058146701,
+   "states": 750,
+   "boundary_states": 174,
+   "solver_failures": 4,
+   "seconds": 4.16
+  },
+  {
+   "id": "benchmark_250_2025-07-25_1",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 580340345,
+   "states": 743,
+   "boundary_states": 167,
+   "solver_failures": 0,
+   "seconds": 61.02
+  },
+  {
+   "id": "benchmark_250_2025-07-25_2",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 908180970,
+   "states": 729,
+   "boundary_states": 153,
+   "solver_failures": 7,
+   "seconds": 4.1
+  },
+  {
+   "id": "benchmark_250_2025-07-25_3",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "planning:0.5",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 4262689031,
+   "states": 764,
+   "boundary_states": 188,
+   "solver_failures": 0,
+   "seconds": 77.71
+  },
+  {
+   "id": "benchmark_250_2025-07-25_4",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-07-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2748336889,
+   "states": 725,
+   "boundary_states": 149,
+   "solver_failures": 0,
+   "seconds": 77.55
+  },
+  {
+   "id": "benchmark_250_2025-08-05_0",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "planning:1.0",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 363511690,
+   "states": 758,
+   "boundary_states": 182,
+   "solver_failures": 5,
+   "seconds": 4.24
+  },
+  {
+   "id": "benchmark_250_2025-08-05_1",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 311407759,
+   "states": 714,
+   "boundary_states": 138,
+   "solver_failures": 0,
+   "seconds": 68.87
+  },
+  {
+   "id": "benchmark_250_2025-08-05_2",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 3945365998,
+   "states": 747,
+   "boundary_states": 171,
+   "solver_failures": 0,
+   "seconds": 98.94
+  },
+  {
+   "id": "benchmark_250_2025-08-05_3",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 669120901,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 3.43
+  },
+  {
+   "id": "benchmark_250_2025-08-05_4",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-08-05",
+   "layout": "planning:1.0",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 1012999862,
+   "states": 758,
+   "boundary_states": 182,
+   "solver_failures": 0,
+   "seconds": 94.17
+  },
+  {
+   "id": "benchmark_250_2025-08-15_0",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2234358041,
+   "states": 745,
+   "boundary_states": 169,
+   "solver_failures": 2,
+   "seconds": 4.44
+  },
+  {
+   "id": "benchmark_250_2025-08-15_1",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 2867867734,
+   "states": 724,
+   "boundary_states": 148,
+   "solver_failures": 0,
+   "seconds": 35.13
+  },
+  {
+   "id": "benchmark_250_2025-08-15_2",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 2092934921,
+   "states": 730,
+   "boundary_states": 154,
+   "solver_failures": 3,
+   "seconds": 4.02
+  },
+  {
+   "id": "benchmark_250_2025-08-15_3",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "planning:1.0",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 1052917214,
+   "states": 718,
+   "boundary_states": 142,
+   "solver_failures": 0,
+   "seconds": 74.27
+  },
+  {
+   "id": "benchmark_250_2025-08-15_4",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-08-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 777570406,
+   "states": 722,
+   "boundary_states": 146,
+   "solver_failures": 0,
+   "seconds": 75.83
+  },
+  {
+   "id": "benchmark_250_2025-08-25_0",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 1121300285,
+   "states": 752,
+   "boundary_states": 176,
+   "solver_failures": 10,
+   "seconds": 4.7
+  },
+  {
+   "id": "benchmark_250_2025-08-25_1",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 1571829781,
+   "states": 711,
+   "boundary_states": 135,
+   "solver_failures": 0,
+   "seconds": 69.71
+  },
+  {
+   "id": "benchmark_250_2025-08-25_2",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 4139308637,
+   "states": 768,
+   "boundary_states": 192,
+   "solver_failures": 0,
+   "seconds": 78.1
+  },
+  {
+   "id": "benchmark_250_2025-08-25_3",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 1756033390,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 37.48
+  },
+  {
+   "id": "benchmark_250_2025-08-25_4",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-08-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 4285911053,
+   "states": 757,
+   "boundary_states": 181,
+   "solver_failures": 0,
+   "seconds": 80.82
+  },
+  {
+   "id": "benchmark_250_2025-09-07_0",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 875357046,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 80.7
+  },
+  {
+   "id": "benchmark_250_2025-09-07_1",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 152068528,
+   "states": 751,
+   "boundary_states": 175,
+   "solver_failures": 0,
+   "seconds": 62.13
+  },
+  {
+   "id": "benchmark_250_2025-09-07_2",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 4046968891,
+   "states": 727,
+   "boundary_states": 151,
+   "solver_failures": 0,
+   "seconds": 69.4
+  },
+  {
+   "id": "benchmark_250_2025-09-07_3",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 3288089672,
+   "states": 725,
+   "boundary_states": 149,
+   "solver_failures": 2,
+   "seconds": 4.03
+  },
+  {
+   "id": "benchmark_250_2025-09-07_4",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-09-07",
+   "layout": "planning:0.25",
+   "tap": 1,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 292185064,
+   "states": 766,
+   "boundary_states": 190,
+   "solver_failures": 0,
+   "seconds": 38.02
+  },
+  {
+   "id": "benchmark_250_2025-09-17_0",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 1779189525,
+   "states": 709,
+   "boundary_states": 133,
+   "solver_failures": 0,
+   "seconds": 69.02
+  },
+  {
+   "id": "benchmark_250_2025-09-17_1",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 1569881817,
+   "states": 743,
+   "boundary_states": 167,
+   "solver_failures": 0,
+   "seconds": 75.86
+  },
+  {
+   "id": "benchmark_250_2025-09-17_2",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 3850558929,
+   "states": 741,
+   "boundary_states": 165,
+   "solver_failures": 4,
+   "seconds": 4.31
+  },
+  {
+   "id": "benchmark_250_2025-09-17_3",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 140282536,
+   "states": 769,
+   "boundary_states": 193,
+   "solver_failures": 0,
+   "seconds": 89.93
+  },
+  {
+   "id": "benchmark_250_2025-09-17_4",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-09-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 1938970250,
+   "states": 733,
+   "boundary_states": 157,
+   "solver_failures": 0,
+   "seconds": 41.79
+  },
+  {
+   "id": "benchmark_250_2025-10-05_0",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3191703099,
+   "states": 760,
+   "boundary_states": 184,
+   "solver_failures": 1,
+   "seconds": 3.92
+  },
+  {
+   "id": "benchmark_250_2025-10-05_1",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "planning:1.0",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 1,
+   "seed": 2736985455,
+   "states": 744,
+   "boundary_states": 168,
+   "solver_failures": 0,
+   "seconds": 65.86
+  },
+  {
+   "id": "benchmark_250_2025-10-05_2",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3757809854,
+   "states": 737,
+   "boundary_states": 161,
+   "solver_failures": 2,
+   "seconds": 3.89
+  },
+  {
+   "id": "benchmark_250_2025-10-05_3",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 2088114302,
+   "states": 746,
+   "boundary_states": 170,
+   "solver_failures": 0,
+   "seconds": 80.28
+  },
+  {
+   "id": "benchmark_250_2025-10-05_4",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-10-05",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 1378548822,
+   "states": 732,
+   "boundary_states": 156,
+   "solver_failures": 0,
+   "seconds": 74.83
+  },
+  {
+   "id": "benchmark_250_2025-10-15_0",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 2908168856,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 4.24
+  },
+  {
+   "id": "benchmark_250_2025-10-15_1",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "planning:0.25",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 669016628,
+   "states": 729,
+   "boundary_states": 153,
+   "solver_failures": 0,
+   "seconds": 58.97
+  },
+  {
+   "id": "benchmark_250_2025-10-15_2",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "planning:0.5",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 1,
+   "seed": 1501057935,
+   "states": 767,
+   "boundary_states": 191,
+   "solver_failures": 0,
+   "seconds": 85.44
+  },
+  {
+   "id": "benchmark_250_2025-10-15_3",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 3559792109,
+   "states": 751,
+   "boundary_states": 175,
+   "solver_failures": 0,
+   "seconds": 73.6
+  },
+  {
+   "id": "benchmark_250_2025-10-15_4",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-10-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 2,
+   "seed": 515417739,
+   "states": 759,
+   "boundary_states": 183,
+   "solver_failures": 0,
+   "seconds": 79.61
+  },
+  {
+   "id": "benchmark_250_2025-10-25_0",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3941497362,
+   "states": 756,
+   "boundary_states": 180,
+   "solver_failures": 0,
+   "seconds": 3.87
+  },
+  {
+   "id": "benchmark_250_2025-10-25_1",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "planning:0.5",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 3,
+   "seed": 4031825547,
+   "states": 721,
+   "boundary_states": 145,
+   "solver_failures": 0,
+   "seconds": 52.0
+  },
+  {
+   "id": "benchmark_250_2025-10-25_2",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "planning:0.75",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3786087214,
+   "states": 728,
+   "boundary_states": 152,
+   "solver_failures": 0,
+   "seconds": 3.55
+  },
+  {
+   "id": "benchmark_250_2025-10-25_3",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 2701048249,
+   "states": 741,
+   "boundary_states": 165,
+   "solver_failures": 0,
+   "seconds": 83.33
+  },
+  {
+   "id": "benchmark_250_2025-10-25_4",
+   "street": "benchmark_250",
+   "split": "tune",
+   "date": "2025-10-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 2274880807,
+   "states": 725,
+   "boundary_states": 149,
+   "solver_failures": 0,
+   "seconds": 84.89
+  },
+  {
+   "id": "benchmark_250_2025-11-05_0",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "planning:0.5",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 4083276255,
+   "states": 749,
+   "boundary_states": 173,
+   "solver_failures": 0,
+   "seconds": 3.67
+  },
+  {
+   "id": "benchmark_250_2025-11-05_1",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 427293030,
+   "states": 720,
+   "boundary_states": 144,
+   "solver_failures": 0,
+   "seconds": 77.66
+  },
+  {
+   "id": "benchmark_250_2025-11-05_2",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 3,
+   "seed": 703652892,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 92.15
+  },
+  {
+   "id": "benchmark_250_2025-11-05_3",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 2377216795,
+   "states": 757,
+   "boundary_states": 181,
+   "solver_failures": 0,
+   "seconds": 87.79
+  },
+  {
+   "id": "benchmark_250_2025-11-05_4",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-11-05",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 3985209867,
+   "states": 753,
+   "boundary_states": 177,
+   "solver_failures": 0,
+   "seconds": 84.82
+  },
+  {
+   "id": "benchmark_250_2025-11-15_0",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "random",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3429854677,
+   "states": 743,
+   "boundary_states": 167,
+   "solver_failures": 1,
+   "seconds": 3.94
+  },
+  {
+   "id": "benchmark_250_2025-11-15_1",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "planning:1.0",
+   "tap": 2,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 2754565532,
+   "states": 741,
+   "boundary_states": 165,
+   "solver_failures": 0,
+   "seconds": 81.08
+  },
+  {
+   "id": "benchmark_250_2025-11-15_2",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "random",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 1065061375,
+   "states": 735,
+   "boundary_states": 159,
+   "solver_failures": 0,
+   "seconds": 4.28
+  },
+  {
+   "id": "benchmark_250_2025-11-15_3",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "planning:0.5",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 2724786615,
+   "states": 750,
+   "boundary_states": 174,
+   "solver_failures": 0,
+   "seconds": 78.58
+  },
+  {
+   "id": "benchmark_250_2025-11-15_4",
+   "street": "benchmark_250",
+   "split": "train",
+   "date": "2025-11-15",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3335760132,
+   "states": 765,
+   "boundary_states": 189,
+   "solver_failures": 0,
+   "seconds": 89.56
+  },
+  {
+   "id": "benchmark_250_2025-11-25_0",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 1,
+   "seed": 2940560195,
+   "states": 751,
+   "boundary_states": 175,
+   "solver_failures": 0,
+   "seconds": 7.02
+  },
+  {
+   "id": "benchmark_250_2025-11-25_1",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3191125954,
+   "states": 721,
+   "boundary_states": 145,
+   "solver_failures": 0,
+   "seconds": 74.73
+  },
+  {
+   "id": "benchmark_250_2025-11-25_2",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var_watt",
+   "topology": 2,
+   "seed": 1939656149,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 96.34
+  },
+  {
+   "id": "benchmark_250_2025-11-25_3",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 2777524182,
+   "states": 758,
+   "boundary_states": 182,
+   "solver_failures": 0,
+   "seconds": 73.13
+  },
+  {
+   "id": "benchmark_250_2025-11-25_4",
+   "street": "benchmark_250",
+   "split": "calibrate",
+   "date": "2025-11-25",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 3,
+   "seed": 878572333,
+   "states": 756,
+   "boundary_states": 180,
+   "solver_failures": 0,
+   "seconds": 72.12
+  },
+  {
+   "id": "benchmark_250_2025-12-07_0",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "planning:0.75",
+   "tap": 1,
+   "mode": "fixed_pf",
+   "topology": 0,
+   "seed": 3274930461,
+   "states": 740,
+   "boundary_states": 164,
+   "solver_failures": 0,
+   "seconds": 3.75
+  },
+  {
+   "id": "benchmark_250_2025-12-07_1",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "planning:1.0",
+   "tap": 1,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 1479820117,
+   "states": 743,
+   "boundary_states": 167,
+   "solver_failures": 0,
+   "seconds": 77.33
+  },
+  {
+   "id": "benchmark_250_2025-12-07_2",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "random",
+   "tap": 0,
+   "mode": "volt_var",
+   "topology": 0,
+   "seed": 3173775229,
+   "states": 771,
+   "boundary_states": 195,
+   "solver_failures": 0,
+   "seconds": 81.6
+  },
+  {
+   "id": "benchmark_250_2025-12-07_3",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "planning:0.5",
+   "tap": 0,
+   "mode": "volt_watt",
+   "topology": 2,
+   "seed": 955075053,
+   "states": 755,
+   "boundary_states": 179,
+   "solver_failures": 0,
+   "seconds": 67.28
+  },
+  {
+   "id": "benchmark_250_2025-12-07_4",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-12-07",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 1429307940,
+   "states": 722,
+   "boundary_states": 146,
+   "solver_failures": 0,
+   "seconds": 68.14
+  },
+  {
+   "id": "benchmark_250_2025-12-17_0",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "planning:1.0",
+   "tap": 2,
+   "mode": "fixed_pf",
+   "topology": 3,
+   "seed": 1428616695,
+   "states": 736,
+   "boundary_states": 160,
+   "solver_failures": 0,
+   "seconds": 3.71
+  },
+  {
+   "id": "benchmark_250_2025-12-17_1",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_watt",
+   "topology": 0,
+   "seed": 2125400229,
+   "states": 762,
+   "boundary_states": 186,
+   "solver_failures": 0,
+   "seconds": 69.44
+  },
+  {
+   "id": "benchmark_250_2025-12-17_2",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 2,
+   "mode": "volt_var",
+   "topology": 1,
+   "seed": 3703722649,
+   "states": 709,
+   "boundary_states": 133,
+   "solver_failures": 0,
+   "seconds": 59.05
+  },
+  {
+   "id": "benchmark_250_2025-12-17_3",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "random",
+   "tap": 1,
+   "mode": "volt_var_watt",
+   "topology": 0,
+   "seed": 3152040875,
+   "states": 725,
+   "boundary_states": 149,
+   "solver_failures": 0,
+   "seconds": 78.32
+  },
+  {
+   "id": "benchmark_250_2025-12-17_4",
+   "street": "benchmark_250",
+   "split": "test",
+   "date": "2025-12-17",
+   "layout": "planning:1.0",
+   "tap": 0,
+   "mode": "fixed_pf",
+   "topology": 2,
+   "seed": 1482998846,
+   "states": 763,
+   "boundary_states": 187,
+   "solver_failures": 0,
+   "seconds": 3.83
+  }
+ ],
+ "ood": {
+  "seed": 20261010,
+  "seconds": 55.4,
+  "kinds": {
+   "kwp_double": {
+    "states": 250,
+    "solver_failures": 2
+   },
+   "load_x4": {
+    "states": 250,
+    "solver_failures": 27
+   },
+   "upstream_out": {
+    "states": 250,
+    "solver_failures": 4
+   },
+   "tap_negative": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "battery_150": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "battery_other_node": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "phase_map": {
+    "states": 250,
+    "solver_failures": 0
+   },
+   "layout": {
+    "states": 250,
+    "solver_failures": 0
+   }
+  }
+ }
+}

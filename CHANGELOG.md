@@ -19,6 +19,16 @@
   | Battery saturation: 85% charge before the solar peak (09:00 to 15:00) | **0** of 24 | 21 | 21 |
   | Depletion and an infeasible evening: weak street, grid sag and 50% more demand, permitted switching (16:00 to 22:00) | **6** of 24, all labelled unsafe | 8 | 8 |
 
+- **A fast power-flow screen, checked by the solver (Addition 2).**
+  - **What it is:** for all five street types, models trained on solver-labelled, simulated states predict voltages,
+    loadings, unbalance, neutral current and reverse flow, each with a calibrated safety margin.
+  - **What it may do:** it only sorts candidates; every action called safe is still solved.
+  - **What it refuses:** inputs it was not trained on go straight to the solver, including other switched layouts,
+    moved phases, a battery at an untrained node, and values outside the trained range or unlike the training states.
+  - **Where it lives:** `ml/surrogate/api.py` is the screening contract with the multi-step controller;
+    `GET /surrogate` and the Fast screen page show accuracy, misses with an upper bound, refusals and end-to-end speed.
+  - **How it was judged:** four pre-registered rounds in docs/DECISIONS.md, each scored on an unused test set. Failed
+    targets are reported, including round 4's loss of round 3's zero-miss record.
 - **New dashboard.** A light design with new type (Bricolage Grotesque, Figtree, JetBrains Mono) and colours that
   each mean one thing: phases A, B, C and the neutral; fine, close to the limit, too high, too low; solar and the
   grid's own voltage. An overview and five numbered steps (Tomorrow, Fixes, Planning, Try a change, Proof), each

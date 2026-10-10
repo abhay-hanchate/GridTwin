@@ -55,7 +55,7 @@ describe('Overview', () => {
     await settle()
     fireEvent.click(document.querySelector('[data-area="planning"]')!)
     expect(go).toHaveBeenCalledWith('planning')
-    expect(document.querySelectorAll('[data-area]').length).toBe(5)                  // four steps plus control the day
+    expect(document.querySelectorAll('[data-area]').length).toBe(6)                  // four steps, control the day and the fast screen
     expect(document.querySelector('[data-area="proof"]')).toBeNull()
     expect(screen.queryByRole('region', { name: /checks passed/i })).toBeNull()
   })

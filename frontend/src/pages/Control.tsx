@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useV2 } from '../api/v2'
 import type { ControlRecord, ControlRun, ControlRuns } from '../api/v2types'
-import type { Area } from '../app/areas'
+import { AREAS, type Area } from '../app/areas'
 import { NextStep } from '../components/Explainer'
 import Prov from '../components/Prov'
 import Status from '../components/Status'
@@ -25,7 +25,7 @@ export default function Control({ go }: { go?: (area: Area) => void }) {
   return (
     <div className="v2-page control-page">
       <header className="page-hero">
-        <span className="kicker">{t('journey.step', { n: 5 })} · {t('area.control')}</span>
+        <span className="kicker">{t('journey.step', { n: AREAS.indexOf('control') })} · {t('area.control')}</span>
         <h2>{t('control.page_title')}</h2>
         <p>{t('control.page_intro')}</p>
       </header>
@@ -44,7 +44,7 @@ export default function Control({ go }: { go?: (area: Area) => void }) {
       {id && <Rerun fixture={id} onRun={setCustom} />}
       {runs.data?.near_limit && <NearLimit sweep={runs.data.near_limit} />}
       <p className="note" role="note">{t('control.honesty')}</p>
-      <NextStep to="home" go={go} />
+      <NextStep to="surrogate" go={go} />
     </div>
   )
 }
