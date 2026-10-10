@@ -1,64 +1,73 @@
-import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
-import { readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import risk from '../fixtures/v2/risk_sample.json'
 import rules from '../fixtures/v2/rules_sample.json'
 import { LangProvider } from '../i18n'
-import Home from './Home'
-import type { Results } from '../api/v2types'
+import { CALENDAR, calls, serve as serveBase, settle } from '../test/server'
+import Forecast from './Forecast'
 
-// The file GET /results serves (written by python -m scripts.evaluate), read directly so the test never checks a copy.
-const results: Results = JSON.parse(readFileSync(resolve(import.meta.dirname, '../../../data/results/results.json'), 'utf-8'))
-
-const json = (body: unknown) => Promise.resolve(new Response(JSON.stringify(body), { status: 200 }))
-
-function serve(overrides: Record<string, unknown> = {}) {
-  return vi.spyOn(globalThis, 'fetch').mockImplementation((input) => {
-    const url = new URL(String(input), 'http://x')
-    if (url.pathname === '/api/v2/rules') return json(rules.rules)
-    if (url.pathname === '/api/v2/results') return json(results)
-    if (url.pathname === '/api/v2/risk') return json({ ...risk, rule: url.searchParams.get('rule'), ...overrides })
-    return Promise.resolve(new Response('{}', { status: 404 }))
-  })
-}
-
-const show = async () => {
-  render(<LangProvider><Home /></LangProvider>)
-  await act(async () => { await new Promise((r) => setTimeout(r, 0)) })
-}
+const verdictHeading = () => document.querySelector('h2.verdict') as HTMLElement
+const serve = (overrides: Record<string, unknown> = {}) =>
+  serveBase({ '/risk': (url: URL) => ({ ...risk, rule: url.searchParams.get('rule'), date: url.searchParams.get('date'), ...overrides }) })
+const show = async () => { render(<LangProvider><Forecast /></LangProvider>); await settle() }
 
 beforeEach(() => localStorage.clear())
-afterEach(cleanup)
+afterEach(() => { cleanup(); vi.restoreAllMocks() })
 
-describe('Home', () => {
+describe('Tomorrow', () => {
+  it('asks for the real tomorrow by default and names the day in the headline', async () => {
+    const m = serve()
+    await show()
+    expect(calls(m, '/risk').at(-1)).toContain(`date=${CALENDAR.tomorrow}`)
+    expect(verdictHeading().textContent).toMatch(/^ACT\s*Tomorrow:/)
+  })
+
   it('level act renders the act wording, the first act time and the end of the act window', async () => {
     serve()
     await show()
-    const headline = screen.getByRole('heading', { level: 2 })
-    expect(headline.textContent).toContain('ACT')
+    const headline = verdictHeading()
     expect(headline.textContent).toContain(risk.first_act)
     const lastAct = risk.t[risk.p_unsafe.map((p, i) => (p >= 0.5 ? i : -1)).filter((i) => i >= 0).at(-1)!]
     expect(headline.textContent).toContain(lastAct)
     expect(headline.textContent).toContain('over-voltage')
   })
 
+  it('a past day is named by its date, never as tomorrow', async () => {
+    serve()
+    await show()
+    fireEvent.change(screen.getByLabelText(/pick a date/i), { target: { value: '2025-11-19' } })
+    await settle()
+    expect(verdictHeading().textContent).toContain('19 November 2025')
+    expect(verdictHeading().textContent).not.toMatch(/tomorrow/i)
+  })
+
   it('a quiet day says so instead of naming a time', async () => {
     serve({ level: 'ok', first_watch: null, first_act: null, p_unsafe: Array(96).fill(0) })
     await show()
-    expect(screen.getByRole('heading', { level: 2 }).textContent).toContain('OK')
+    expect(verdictHeading().textContent).toContain('OK')
+    expect(verdictHeading().textContent).toMatch(/no unsafe period/i)
+  })
+
+  it('says the grid is the cause when the street stays unsafe with every panel off', async () => {
+    serve({ p_unsafe_without_solar: risk.p_unsafe })
+    await show()
+    expect(document.querySelector('.verdict-box .cause')!.textContent).toMatch(/grid's own voltage/i)
+  })
+
+  it('says solar is the cause when switching the panels off removes the risk', async () => {
+    serve({ p_unsafe_without_solar: risk.p_unsafe.map(() => 0) })
+    await show()
+    expect(document.querySelector('.verdict-box .cause')!.textContent).toMatch(/rooftop solar/i)
   })
 
   it('the rule selector changes the request and shows the rule source and verification', async () => {
-    const fetchMock = serve()
+    const m = serve()
     await show()
-    const riskCalls = () => fetchMock.mock.calls.map((c) => String(c[0])).filter((u) => u.includes('/risk'))
-    expect(riskCalls().at(-1)).toContain('rule=up_2005')
+    expect(calls(m, '/risk').at(-1)).toContain('rule=up_2005')
     fireEvent.click(screen.getByRole('button', { name: rules.rules[1].label }))
-    await act(async () => { await new Promise((r) => setTimeout(r, 0)) })
-    expect(riskCalls().at(-1)).toContain('rule=pm10')
+    await settle()
+    expect(calls(m, '/risk').at(-1)).toContain('rule=pm10')
     expect(screen.getByText(new RegExp(rules.rules[1].source.replace(/[()]/g, '.')))).toBeTruthy()
-    expect(screen.getByText(/secondary/)).toBeTruthy()
   })
 
   it('every number block carries a provenance tag', async () => {
@@ -66,7 +75,8 @@ describe('Home', () => {
     await show()
     const blocks = document.querySelectorAll('[data-numbers]')
     expect(blocks.length).toBeGreaterThanOrEqual(3)
-    blocks.forEach((b) => expect(b.querySelector('[data-provenance]'), b.getAttribute('data-numbers') ?? '').not.toBeNull())
+    blocks.forEach((b) => expect(b.querySelector('[data-provenance]') ?? b.closest('section')?.querySelector('[data-provenance]'),
+      b.getAttribute('data-numbers') ?? '').not.toBeNull())
   })
 
   it('chances that failed the held-out check say they are not reliable odds', async () => {
@@ -83,35 +93,14 @@ describe('Home', () => {
     expect(note).not.toMatch(/accurate/i)
   })
 
-  it('a live forecast shows its anchor note with the inputs', async () => {
-    serve({ provenance: { ...risk.provenance, anchor: 'pattern only: the UP anchor needs yesterday' } })
-    await show()
-    expect(screen.getByText(/pattern only: the UP anchor needs yesterday/)).toBeTruthy()
-  })
-
-  it('the demo-day selector lists the precomputed days and changes the requested date', async () => {
-    const fetchMock = serve()
-    await show()
-    const riskCalls = () => fetchMock.mock.calls.map((c) => String(c[0])).filter((u) => u.includes('/risk'))
-    const days = screen.getByRole('group', { name: /day/i })
-    expect(within(days).getAllByRole('button').length).toBe(3)
-    // with no day chosen, the latest precomputed day is selected and requested (the API's own default)
-    expect(within(days).getByRole('button', { pressed: true }).textContent).toContain('Mixed')
-    expect(riskCalls().at(-1)).toContain('date=2025-11-19')
-    fireEvent.click(within(days).getByRole('button', { name: /cloudy/i }))
-    await act(async () => { await new Promise((r) => setTimeout(r, 0)) })
-    expect(riskCalls().at(-1)).toContain('date=2025-08-05')
-  })
-
   it('links to the printable evening report for the same day, rule and language', async () => {
     localStorage.setItem('gridtwin.lang', 'hi')
     serve()
     await show()
-    const href = screen.getByRole('link', { name: /रिपोर्ट/ }).getAttribute('href')!
-    const url = new URL(href, 'http://x')
+    const url = new URL(screen.getByRole('link', { name: /रिपोर्ट/ }).getAttribute('href')!, 'http://x')
     expect(url.pathname).toBe('/api/v2/report')
     expect(url.searchParams.get('rule')).toBe('up_2005')
-    expect(url.searchParams.get('date')).toBe(risk.date)
+    expect(url.searchParams.get('date')).toBe(CALENDAR.tomorrow)
     expect(url.searchParams.get('lang')).toBe('hi')
   })
 
@@ -121,5 +110,31 @@ describe('Home', () => {
     const strip = screen.getByRole('img', { name: /probability/i })
     expect(strip.querySelectorAll('[data-step]').length).toBe(96)
     expect(strip.querySelectorAll('[data-threshold]').length).toBe(2)
+  })
+
+  it('offline, only the computed days are offered', async () => {
+    serveBase({ '/risk': risk }, { offline: true })
+    await show()
+    const days = screen.getByRole('group', { name: /^day$/i })
+    expect(within(days).getAllByRole('button').map((b) => b.textContent)).toEqual(CALENDAR.ready)
+    expect(within(days).getByRole('button', { pressed: true }).textContent).toBe(CALENDAR.ready.at(-1))
+  })
+
+  it('ends by explaining every level and pointing to the fixes', async () => {
+    serve()
+    render(<LangProvider><Forecast go={vi.fn()} /></LangProvider>)
+    await settle()
+    const explainer = screen.getByRole('region', { name: /what the labels mean/i })
+    for (const level of ['OK', 'WATCH', 'ACT']) expect(within(explainer).getByText(level)).toBeTruthy()
+    expect(screen.getByRole('button', { name: /^fixes/i })).toBeTruthy()
+  })
+
+  it('says why past days of one month look alike, but not for the real tomorrow', async () => {
+    serve()
+    await show()
+    expect(screen.queryByText(/days of the same month look alike/i)).toBeNull()
+    fireEvent.change(screen.getByLabelText(/pick a date/i), { target: { value: '2025-12-18' } })
+    await settle()
+    expect(screen.getByText(/days of the same month look alike/i)).toBeTruthy()
   })
 })

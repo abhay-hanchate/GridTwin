@@ -1,37 +1,53 @@
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { LangProvider, useT } from '../i18n'
 import type { Area } from './areas'
 import { DEFAULT_RULE } from './defaults'
 import { Shell } from './Shell'
 import type { ViewProps } from './view'
 
-const Home = lazy(() => import('../pages/Home'))
-const Fixes = lazy(() => import('../pages/Fixes'))
-const TryChange = lazy(() => import('../pages/TryChange'))
-const Planning = lazy(() => import('../pages/Planning'))
-const Proof = lazy(() => import('../pages/Proof'))
+const pages = {
+  overview: () => import('../pages/Overview'), forecast: () => import('../pages/Forecast'), fixes: () => import('../pages/Fixes'),
+  try: () => import('../pages/TryChange'), planning: () => import('../pages/Planning'), proof: () => import('../pages/Proof'),
+}
+const Overview = lazy(pages.overview)
+const Forecast = lazy(pages.forecast)
+const Fixes = lazy(pages.fixes)
+const TryChange = lazy(pages.try)
+const Planning = lazy(pages.planning)
+const Proof = lazy(pages.proof)
 
-function Page({ area, view }: { area: Area; view: ViewProps }) {
+/** After the first page shows, fetch the other pages' code in the background so every step opens at once. */
+function usePreloadPages() {
+  useEffect(() => {
+    const load = () => Object.values(pages).forEach((p) => { p().catch(() => undefined) })
+    const id = setTimeout(load, 1500)
+    return () => clearTimeout(id)
+  }, [])
+}
+
+function Page({ area, view, go }: { area: Area; view: ViewProps; go: (area: Area) => void }) {
   switch (area) {
-    case 'home': return <Home {...view} />
-    case 'try': return <TryChange {...view} />
-    case 'fixes': return <Fixes {...view} />
-    case 'planning': return <Planning {...view} />
-    case 'proof': return <Proof />
+    case 'home': return <Overview {...view} go={go} />
+    case 'forecast': return <Forecast {...view} go={go} />
+    case 'try': return <TryChange {...view} go={go} />
+    case 'fixes': return <Fixes {...view} go={go} />
+    case 'planning': return <Planning {...view} go={go} />
+    case 'proof': return <Proof go={go} />
   }
 }
 
 function Layout() {
   const t = useT()
+  usePreloadPages()
   // One rule and one day for the whole dashboard, so switching ±6% to ±10% on Home carries over to Fixes.
   const [rule, setRule] = useState(DEFAULT_RULE)
   const [date, setDate] = useState<string | null>(null)
   const view: ViewProps = { rule, onRule: setRule, date, onDate: setDate }
   return (
     <Shell
-      render={(area) => (
+      render={(area, go) => (
         <Suspense fallback={<div className="loading" role="status">{t('shell.loading')}</div>}>
-          <Page area={area} view={view} />
+          <Page area={area} view={view} go={go} />
         </Suspense>
       )}
     />

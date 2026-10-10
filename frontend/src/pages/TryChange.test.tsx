@@ -1,104 +1,114 @@
-import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import catalog from '../fixtures/v2/catalog.json'
-import rules from '../fixtures/v2/rules_sample.json'
 import whatif from '../fixtures/v2/whatif_sample.json'
 import { LangProvider } from '../i18n'
+import { serve as serveBase, settle } from '../test/server'
 import TryChange from './TryChange'
 
-const json = (body: unknown) => Promise.resolve(new Response(JSON.stringify(body), { status: 200 }))
 const AFTER = { ...whatif.after, summary: { ...whatif.after.summary, violation_steps: 12, max_vm_pu: 1.05 } }
-
-function serve(mode = 'online') {
-  return vi.spyOn(globalThis, 'fetch').mockImplementation((input, init) => {
-    const url = new URL(String(input), 'http://x')
-    if (url.pathname === '/api/v2/rules') return json(rules.rules)
-    if (url.pathname === '/api/v2/readiness') return json({ ready: true, mode, checks: {} })
-    if (url.pathname === '/api/v2/catalog') return json(catalog)
-    if (url.pathname === '/api/v2/whatif' && init?.method === 'POST') return json({ ...whatif, after: AFTER })
-    return Promise.resolve(new Response('{}', { status: 503 }))
-  })
-}
+const serve = (offline = false) => serveBase({
+  '/catalog': catalog,
+  '/whatif': (_: URL, init?: RequestInit) => (init?.method === 'POST' ? { ...whatif, after: AFTER } : {}),
+}, { offline })
 const posts = (m: ReturnType<typeof serve>) => m.mock.calls.filter((c) => c[1]?.method === 'POST')
-const settle = () => act(async () => { await new Promise((r) => setTimeout(r, 0)) })
-const show = async () => { render(<LangProvider><TryChange rule="up_2005" onRule={() => {}} /></LangProvider>); await settle() }
-const entry = (id: string) => screen.getByRole('group', { name: catalog.find((e) => e.id === id)!.label })
+const show = async (rule = 'up_2005') => { render(<LangProvider><TryChange rule={rule} onRule={() => {}} /></LangProvider>); await settle() }
+const card = (id: string) => document.querySelector(`[data-entry="${id}"]`) as HTMLElement
+const toggle = (id: string) => fireEvent.click(within(card(id)).getByRole('switch'))
+const run = () => screen.getByRole('button', { name: /^run/i }) as HTMLButtonElement
 
 beforeEach(() => localStorage.clear())
-afterEach(cleanup)
+afterEach(() => { cleanup(); vi.restoreAllMocks() })
 
-describe('Try a change', () => {
-  it('the form has one entry per catalog item and every parameter with its bounds', async () => {
+describe('What if', () => {
+  it('says what the page is for before asking for anything', async () => {
     serve()
     await show()
-    for (const e of catalog) expect(entry(e.id)).toBeTruthy()
-    const battery = within(entry('fix.battery'))
-    const kw = battery.getByRole('spinbutton', { name: /^kw$/i }) as HTMLInputElement
-    expect(kw.max).toBe('500')
-    expect(kw.value).toBe('50')
-    const tap = within(entry('fix.tap')).getByRole('spinbutton') as HTMLInputElement
+    expect(document.querySelectorAll('.usecase > div').length).toBe(3)
+  })
+
+  it('has one card per catalog item, each parameter a slider within its bounds', async () => {
+    serve()
+    await show()
+    for (const e of catalog) expect(card(e.id)).not.toBeNull()
+    const kw = within(card('fix.battery')).getAllByRole('slider')[0] as HTMLInputElement
+    expect(kw.type).toBe('range')
+    expect([kw.max, kw.value]).toEqual(['500', '50'])
+    const tap = within(card('fix.tap')).getByRole('slider') as HTMLInputElement
     expect([tap.min, tap.max, tap.step]).toEqual(['-2', '2', '1'])
+    expect(tap.disabled).toBe(true)
   })
 
-  it('invalid input is blocked before the request', async () => {
-    const fetchMock = serve()
+  it('nothing can run until a change or fix is switched on', async () => {
+    const m = serve()
     await show()
-    const box = within(entry('change.panel_size'))
-    fireEvent.click(box.getByRole('checkbox'))
-    fireEvent.change(box.getByRole('spinbutton'), { target: { value: '25' } })
-    expect(box.getByRole('alert').textContent).toMatch(/10/)
-    const run = screen.getByRole('button', { name: /run/i }) as HTMLButtonElement
-    expect(run.disabled).toBe(true)
-    fireEvent.click(run)
+    expect(run().disabled).toBe(true)
+    fireEvent.click(run())
     await settle()
-    expect(posts(fetchMock).length).toBe(0)
+    expect(posts(m).length).toBe(0)
   })
 
-  it('a zero battery size is invalid (the bound is exclusive)', async () => {
+  it('a preset switches on its change with its values', async () => {
     serve()
     await show()
-    const box = within(entry('fix.battery'))
-    fireEvent.click(box.getByRole('checkbox'))
-    fireEvent.change(box.getByRole('spinbutton', { name: /^kw$/i }), { target: { value: '0' } })
-    expect(box.getByRole('alert')).toBeTruthy()
+    fireEvent.click(screen.getByRole('button', { name: /electric cars/i }))
+    await settle()
+    expect(within(card('change.ev_charging')).getByRole('switch').getAttribute('aria-checked')).toBe('true')
+    expect((within(card('change.ev_charging')).getAllByRole('slider')[0] as HTMLInputElement).value).toBe('0.5')
   })
 
-  it('runs the chosen changes and fixes and shows unsafe quarter hours and peak voltage before and after', async () => {
-    const fetchMock = serve()
+  it('runs the chosen changes and fixes and shows each number before and after', async () => {
+    const m = serve()
     await show()
-    fireEvent.click(within(entry('change.heatwave')).getByRole('checkbox'))
-    fireEvent.click(within(entry('fix.tap')).getByRole('checkbox'))
-    fireEvent.click(screen.getByRole('button', { name: /run/i }))
+    toggle('change.heatwave')
+    toggle('fix.tap')
+    fireEvent.click(run())
     await settle()
-    const sent = JSON.parse(String(posts(fetchMock)[0][1]!.body))
+    const sent = JSON.parse(String(posts(m)[0][1]!.body))
     expect(sent.changes).toEqual([{ id: 'change.heatwave', params: { load_factor: 1.3 } }])
     expect(sent.fixes).toEqual([{ id: 'fix.tap', params: { tap_pos: 1 } }])
     expect(sent.rule).toBe('up_2005')
-    const table = screen.getByRole('table', { name: /before and after/i })
-    expect(table.textContent).toContain(String(whatif.before.summary.violation_steps))
-    expect(table.textContent).toContain('12')
-    expect(table.textContent).toContain(String(Math.round(whatif.before.summary.max_vm_pu * 230)))
-    expect(table.textContent).toContain(String(Math.round(1.05 * 230)))
-    expect(screen.getByRole('img', { name: /along the street/i })).toBeTruthy()
+    const result = screen.getByRole('region', { name: /before and after/i }).textContent ?? ''
+    expect(result).toContain(String(whatif.before.summary.violation_steps))
+    expect(result).toContain('12')
+    expect(result).toContain(String(Math.round(1.05 * 230)))
+    expect(screen.getByRole('img', { name: /highest voltage of the day/i })).toBeTruthy()
   })
 
   it('a result is never shown under a rule it was not computed for', async () => {
     serve()
     const { rerender } = render(<LangProvider><TryChange rule="up_2005" onRule={() => {}} /></LangProvider>)
     await settle()
-    fireEvent.click(screen.getByRole('button', { name: /run/i }))
+    toggle('change.heatwave')
+    fireEvent.click(run())
     await settle()
-    expect(screen.getByRole('table', { name: /before and after/i })).toBeTruthy()
+    expect(screen.getByRole('region', { name: /before and after/i })).toBeTruthy()
     rerender(<LangProvider><TryChange rule="pm10" onRule={() => {}} /></LangProvider>)
     await settle()
-    expect(screen.queryByRole('table', { name: /before and after/i })).toBeNull()
+    expect(screen.queryByRole('region', { name: /before and after/i })).toBeNull()
   })
 
-  it('in offline mode it says what-if needs the live engine and does not offer to run', async () => {
-    const fetchMock = serve('offline')
+  it('in offline mode it says what-if needs the live engine and does not run', async () => {
+    const m = serve(true)
     await show()
-    expect(screen.getByRole('note').textContent).toMatch(/offline/i)
-    expect((screen.getByRole('button', { name: /run/i }) as HTMLButtonElement).disabled).toBe(true)
-    expect(posts(fetchMock).length).toBe(0)
+    expect(screen.getByRole('note').textContent).toContain('GRIDTWIN_OFFLINE=0')
+    toggle('change.heatwave')
+    expect(run().disabled).toBe(true)
+    expect(posts(m).length).toBe(0)
+  })
+
+  it('compares with the street as it is today, and shows the changes alone when fixes are added too', async () => {
+    const today = { ...whatif.before, summary: { ...whatif.before.summary, violation_steps: 3 } }
+    const m = serveBase({ '/catalog': catalog, '/whatif': (_: URL, init?: RequestInit) =>
+      (init?.method === 'POST' ? { ...whatif, fixes: ['fix.tap'], today, after: AFTER } : {}) })
+    await show()
+    toggle('change.heatwave')
+    toggle('fix.tap')
+    fireEvent.click(run())
+    await settle()
+    expect(posts(m).length).toBe(1)
+    const unsafe = [...document.querySelectorAll('.stat')].find((el) => /unsafe/i.test(el.textContent ?? ''))!
+    expect(unsafe.textContent).toContain('was 3')
+    expect(unsafe.textContent).toContain(`with the changes but no fix: ${whatif.before.summary.violation_steps}`)
   })
 })

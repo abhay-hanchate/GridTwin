@@ -20,6 +20,7 @@ export interface Risk {
   rule: string
   level: Level
   p_unsafe: number[]                       // 96 steps
+  p_unsafe_without_solar?: number[]        // the same scenarios with every panel off
   t?: string[]                             // HH:MM per step
   thresholds?: { watch: number; act: number }
   expected_unsafe_hours: { mean: number; p10: number; p90: number }
@@ -28,6 +29,7 @@ export interface Risk {
   peak_voltage_v: { p10: number; p50: number; p90: number }
   window_risk: Record<string, number>
   shares: Partial<Record<LimitType, number>>
+  n_scenarios?: number
   provenance: Record<string, string>
   calibration?: { reliable?: boolean; raw: number[]; calibrated: number[] }
 }
@@ -50,7 +52,7 @@ export interface Verdict {
 export interface OutcomeDetails {
   phase_moves?: { home: number; from: string; to: string }[]
   export_limits?: { homes: number[]; t: string[]; kw: number[][] }   // kw[home][step]
-  voltage?: { t: string[]; before_max_v: number[]; after_max_v: number[] }
+  voltage?: { t: string[]; before_max_v: (number | null)[]; after_max_v: (number | null)[] }
 }
 
 export interface Outcome {
@@ -151,8 +153,8 @@ export interface DaySummary {
 export interface WhatIfRun {
   summary: DaySummary
   unsafe: boolean[]
-  max_v: number[]
-  node_max_v: number[][]          // [step][node]
+  max_v: (number | null)[]
+  node_max_v: (number | null)[][]   // [step][node]; null where the power flow failed
 }
 
 export interface WhatIfResult {
@@ -164,8 +166,9 @@ export interface WhatIfResult {
   limits_v: { min: number; max: number }
   nodes: number[]
   provenance: Record<string, string>
-  before: WhatIfRun
-  after: WhatIfRun
+  today?: WhatIfRun                 // the street as it is (absent in results cached before it was added)
+  before: WhatIfRun                 // with the changes, no fix
+  after: WhatIfRun                  // with the changes and the fixes
 }
 
 export interface Quantiles { p10: number; p50: number; p90: number }
@@ -201,3 +204,65 @@ export interface ConnectionCheck {
   evidence: { baseline_unsafe_steps: number; unsafe_steps_with_request: number; worsened_steps: number; per_phase_worsened_steps: Record<string, number> }
   regulatory_status: string
 }
+
+/** GET /meter-sites (engine.planning_extra.rank_meter_sites): where one smart meter reveals the most. */
+export interface MeterSite { node: number; dv_per_kw_v: number; homes_downstream: number; distance_m: number; score: number }
+export interface MeterSites { date: string; network: string; rule: string; adoption: number; sites: MeterSite[]; n_candidates: number; probe_kw: number; provenance: Record<string, string> }
+
+/** GET /rx-map (engine.planning_extra.rx_map): peak voltage with and without Volt/VAR as line R and X are scaled. */
+export interface RxCell { r_scale: number; x_scale: number; r_over_x: number; peak_v_without: number; peak_v_volt_var: number; volt_var_reduction_v: number }
+export interface RxMap { date: string; network: string; rule: string; adoption: number; vmax_v: number; cells: RxCell[]; note: string; provenance: Record<string, string> }
+
+/** GET /transformers (engine.planning_extra.rank_transformers over the street archetypes). */
+export interface TransformerRank {
+  id: string
+  label: string
+  connected_kw: number
+  headroom_kw: number
+  at_search_limit: boolean
+  share_of_headroom_used: number
+  metered: boolean
+  score: number
+  trafo_kva: number
+}
+export interface Transformers { date: string; rule: string; adoption: number; transformers: TransformerRank[]; search_limit_kw: number; metering: string; provenance: Record<string, string> }
+
+/** GET /street (engine.street + compute.street_payload): the street as a schematic and the design day step by step. */
+export interface StreetLayout {
+  root: number
+  rows: number
+  nodes: { id: number; x: number; y: number }[]
+  lines: { line: number; from: number; to: number }[]
+}
+export interface StreetRun {
+  home_v: (number | null)[][]        // [step][home] volts on the home's own phase; null where the power flow failed
+  home_phase: ('A' | 'B' | 'C')[]
+  line_phase_kw: number[][][]        // [step][line][phase] kW, positive = towards the homes
+  line_neutral_a: number[][]         // [step][line] A, estimated
+  line_loading_pct: number[][]
+  trafo_kw: number[]                 // positive = from the grid into the street
+  trafo_loading_pct: number[]
+  solar_kw: number[]
+  neutral_a: number[]
+  unsafe: boolean[]
+  summary: DaySummary
+}
+export interface Street {
+  date: string
+  network: string
+  rule: string
+  fix: string
+  fix_label?: string
+  t: string[]
+  limits_v: { min: number; max: number }
+  layout: StreetLayout
+  homes: { node: number; kwp: number }[]
+  trafo_kva: number
+  before: StreetRun
+  after?: StreetRun
+  flow_method: string
+  provenance: Record<string, string>
+}
+
+/** GET /calendar */
+export interface Calendar { tomorrow: string; archive: { first: string; last: string }; ready: string[]; offline: boolean }

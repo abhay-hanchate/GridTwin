@@ -3,12 +3,12 @@ import DaySelector from './DaySelector'
 import RuleSelector from './RuleSelector'
 import Status from './Status'
 
-/** The rule and day pickers at the top of a page. `answered` is the date the API actually used. */
-export default function Controls({ view, answered }: { view: View; answered?: string }) {
+/** The rule and day pickers at the top of a page. */
+export default function Controls({ view }: { view: View; answered?: string }) {
   return (
-    <>
+    <div className="controls">
       {view.rules.data ? <RuleSelector rules={view.rules.data} value={view.rule} onChange={view.setRule} /> : <Status state={view.rules} />}
-      <DaySelector days={view.days} value={view.date ?? answered} onChange={view.setDate} />
-    </>
+      <DaySelector calendar={view.calendar} value={view.date} onChange={view.setDate} />
+    </div>
   )
 }

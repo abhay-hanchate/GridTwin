@@ -9,11 +9,12 @@ const H = 100
 /** Highest street voltage per quarter hour before and after a fix, with the rule's upper limit. */
 export default function VoltageCompare({ voltage, label, vmax }: Props) {
   const t = useT()
-  const all = [...voltage.before_max_v, ...voltage.after_max_v, ...(vmax ? [vmax] : [])]
+  // A step the power flow could not solve arrives as null: it has no point (and no part in the scale).
+  const all = [...voltage.before_max_v, ...voltage.after_max_v, ...(vmax ? [vmax] : [])].filter((v): v is number => Number.isFinite(v))
   const lo = Math.floor(Math.min(...all) - 2)
   const hi = Math.ceil(Math.max(...all) + 2)
   const y = (v: number) => H - ((v - lo) / (hi - lo)) * H
-  const points = (vs: number[]) => vs.map((v, i) => `${((i + 0.5) * W) / vs.length},${y(v).toFixed(2)}`).join(' ')
+  const points = (vs: (number | null)[]) => vs.flatMap((v, i) => (v === null || !Number.isFinite(v) ? [] : [`${((i + 0.5) * W) / vs.length},${y(v).toFixed(2)}`])).join(' ')
   const name = t('fixes.chart_label', { label, vmax: vmax ?? '' })
   return (
     <section className="card" data-numbers="voltage before and after">

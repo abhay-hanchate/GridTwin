@@ -13,7 +13,7 @@ type Props = {
   initial?: Area
 }
 
-/** The v2 layout: language switch, five areas as WAI-ARIA tabs, one panel. Pages come from `render`. */
+/** The layout: brand, the areas as WAI-ARIA tabs numbered in the order of the journey, language switch, one panel. */
 export function Shell({ render, initial = 'home' }: Props) {
   // The URL hash names the area (#fixes), so a demo can link straight to a page.
   const [area, setAreaState] = useState<Area>(() => fromHash() ?? initial)
@@ -59,7 +59,10 @@ export function Shell({ render, initial = 'home' }: Props) {
             {AREAS.map((id) => (
               <button key={id} id={`area-${id}`} role="tab" aria-selected={area === id} aria-controls="panel"
                 tabIndex={area === id ? 0 : -1} className={`tab ${area === id ? 'active' : ''}`}
-                onClick={() => setArea(id)} onKeyDown={onTabKey}>{t(label(id))}</button>
+                onClick={() => setArea(id)} onKeyDown={onTabKey}>
+                {id !== 'home' && <span className="step-no" aria-hidden="true">{AREAS.indexOf(id)}</span>}
+                {t(label(id))}
+              </button>
             ))}
           </div>
         </nav>
