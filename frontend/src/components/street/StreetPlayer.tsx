@@ -373,7 +373,7 @@ function StandardPlayer({ s, startStep, compact, markers, onPick, modeLabels }: 
               <div key={p} className={`lane ${dir}`}>
                 <b style={{ color: `var(--ph-${p.toLowerCase()})` }}>{p}</b>
                 <div className="track">
-                  <span className="fill" style={{ ['--c' as string]: dir === 'back' ? 'var(--sun)' : dir === 'draw' ? '#0ea5e9' : 'var(--ph-n)', left: ph[k] >= 0 ? '50%' : `${50 - w}%`, width: `${w}%` }} />
+                  <span className="fill" style={{ ['--c' as string]: dir === 'back' ? 'var(--sun)' : dir === 'draw' ? 'var(--import)' : 'var(--ph-n)', left: ph[k] >= 0 ? '50%' : `${50 - w}%`, width: `${w}%` }} />
                   <i className="mid" />
                 </div>
                 <span className="val"><Num v={ph[k]} fmt={one} /> kW</span>

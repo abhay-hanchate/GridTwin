@@ -1,9 +1,11 @@
+import { BatteryCharging, Cpu, Gauge, GitBranch, Layers, Shuffle, SlidersHorizontal, SunDim } from 'lucide-react'
 import { useRef, useState, type ReactElement } from 'react'
 import { useV2, v2Path } from '../api/v2'
 import type { Fixes as FixesResult, Outcome, Verdict } from '../api/v2types'
 import type { Area } from '../app/areas'
 import { DEFAULT_NETWORK } from '../app/defaults'
 import { useView, type ViewProps } from '../app/view'
+import Info from '../components/Info'
 import DayContext from '../components/DayContext'
 import Envelope from '../components/Envelope'
 import { NextStep } from '../components/Explainer'
@@ -20,16 +22,16 @@ type Kind = (typeof KINDS)[number]
 const BEST = 6                     // options shown as cards with a description; the rest are a list
 const kindOf = (k: string): Kind => ((KINDS as readonly string[]).includes(k) ? (k as Kind) : 'combined')
 
-const s = { fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
+const ic = { size: 20, strokeWidth: 2, 'aria-hidden': true } as const
 const ICON: Record<Kind, ReactElement> = {
-  tap: <svg viewBox="0 0 24 24" {...s} aria-hidden="true"><circle cx="12" cy="12" r="8" /><path d="M12 12l4-4M12 4v2M20 12h-2" /></svg>,
-  inverter: <svg viewBox="0 0 24 24" {...s} aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2" /><path d="M8 12c1-2 2-2 3 0s2 2 3 0 2-2 3 0" /></svg>,
-  combined: <svg viewBox="0 0 24 24" {...s} aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>,
-  curtailment: <svg viewBox="0 0 24 24" {...s} aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M4 20 20 4" /></svg>,
-  envelope: <svg viewBox="0 0 24 24" {...s} aria-hidden="true"><path d="M3 12h4l2-6 4 12 2-6h6" /></svg>,
-  phase: <svg viewBox="0 0 24 24" {...s} aria-hidden="true"><path d="M4 7h12l-3-3M20 17H8l3 3" /></svg>,
-  battery: <svg viewBox="0 0 24 24" {...s} aria-hidden="true"><rect x="3" y="7" width="16" height="10" rx="2" /><path d="M21 11v2M7 10v4M11 10v4" /></svg>,
-  switching: <svg viewBox="0 0 24 24" {...s} aria-hidden="true"><circle cx="5" cy="12" r="2" /><circle cx="19" cy="12" r="2" /><path d="M7 12l9-5" /></svg>,
+  tap: <Gauge {...ic} />,
+  inverter: <Cpu {...ic} />,
+  combined: <Layers {...ic} />,
+  curtailment: <SunDim {...ic} />,
+  envelope: <SlidersHorizontal {...ic} />,
+  phase: <Shuffle {...ic} />,
+  battery: <BatteryCharging {...ic} />,
+  switching: <GitBranch {...ic} />,
 }
 
 /** Fixes: every option the physics tested for the day, ranked; click one to see what it does and watch it work. */
@@ -41,8 +43,7 @@ export default function Fixes({ network = DEFAULT_NETWORK, go, ...props }: ViewP
     <div className="v2-page">
       <header className="page-hero">
         <span className="kicker">{t('journey.step', { n: 2 })} · {t('area.fixes')}</span>
-        <h2>{t('fixes.page_title')}</h2>
-        <p>{t('fixes.page_intro')}</p>
+        <div className="hero-title"><h2>{t('fixes.page_title')}</h2><Info>{t('fixes.page_intro')}</Info></div>
       </header>
       <DayContext view={view} />
       <Status state={fixes} />
@@ -76,8 +77,7 @@ function FixesView({ result, network, rule, date }: { result: FixesResult; netwo
         : <NoSafeAction verdict={v} closest={focusId ? byId.get(focusId) : undefined} />}
 
       <section className="card" aria-labelledby="tested-title">
-        <h3 id="tested-title">{t('fixes.best_title', { n: Math.min(BEST, all.length) })} <Prov kind="modeled" /></h3>
-        <p className="card-sub">{t('fixes.tested_intro', { steps: baseline, n: all.length })}</p>
+        <div className="card-head"><h3 id="tested-title">{t('fixes.best_title', { n: Math.min(BEST, all.length) })} <Prov kind="modeled" /></h3><Info>{t('fixes.tested_intro', { steps: baseline, n: all.length })}</Info></div>
         <div className="best-grid">
           {best.map((o, i) => <BestCard key={o.id} outcome={o} pos={i + 1} baseline={baseline} chosen={chosen === o.id} onPick={() => pick(o.id)} />)}
         </div>
@@ -160,8 +160,7 @@ function FixDetail({ outcome, baseline, network, rule, date }: { outcome: Outcom
       </div>
       {outcome.binding_limit && <p className="note">{bindingText(t, outcome.binding_limit)}</p>}
       <div>
-        <h3>{t('fixes.watch_title')}</h3>
-        <p className="card-sub">{t('fixes.watch_intro')}</p>
+        <div className="card-head"><h3>{t('fixes.watch_title')}</h3><Info>{t('fixes.watch_intro')}</Info></div>
         <StreetPlayer network={network} rule={rule} date={date} fix={outcome.id} fixLabel={outcome.label} presentation="compare" />
       </div>
     </>

@@ -3,6 +3,7 @@ import type { Street, StreetRun } from '../../api/v2types'
 import { one, volts } from '../../format'
 import { useT } from '../../i18n'
 import Prov from '../Prov'
+import Info from '../Info'
 import { balance } from './balance'
 
 type Props = { street: Street; run: StreetRun; step: number; onStep?: (step: number) => void }
@@ -182,8 +183,7 @@ function DayChart({
     <section className="day-chart" data-numbers={title}>
       <header className="day-chart-head">
         <div className="day-chart-title-group">
-          <h3>{title} <Prov kind="modeled" /></h3>
-          <p>{description}</p>
+          <h3>{title} <Prov kind="modeled" /> <Info>{description}</Info></h3>
         </div>
         <div className="day-chart-live-badge">
           <span className="live-clock">{times[step]}</span>

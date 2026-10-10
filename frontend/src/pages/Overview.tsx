@@ -1,10 +1,13 @@
-import type { ReactElement } from 'react'
+import { ShieldCheck, Sun, Zap } from 'lucide-react'
 import { useV2, v2Path } from '../api/v2'
 import type { Fixes, Risk } from '../api/v2types'
 import type { Area } from '../app/areas'
 import { DEFAULT_NETWORK } from '../app/defaults'
 import { useView, type ViewProps } from '../app/view'
 import Explainer, { NextStep } from '../components/Explainer'
+import CountUp from '../components/CountUp'
+import HeroStreet from '../components/HeroStreet'
+import Info from '../components/Info'
 import Prov from '../components/Prov'
 import Status from '../components/Status'
 import { dayName } from '../day'
@@ -15,12 +18,6 @@ import { causeSplit } from '../risk'
 type Props = ViewProps & { go?: (area: Area) => void }
 
 const JOURNEY: Area[] = ['forecast', 'fixes', 'planning', 'try', 'control', 'surrogate']
-
-const ICONS: Record<'sun' | 'act' | 'ok', ReactElement> = {
-  sun: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>,
-  act: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z" /></svg>,
-  ok: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z" /><path d="m9 12 2 2 4-4" /></svg>,
-}
 
 const scrollTop = () => { if (typeof window.scrollTo === 'function') try { window.scrollTo({ top: 0 }) } catch { /* jsdom */ } }
 
@@ -45,13 +42,20 @@ export default function Overview({ network = DEFAULT_NETWORK, go, ...props }: Pr
             <button className="btn btn-ghost" onClick={open('forecast')}>{t('overview.cta_forecast')} <span className="arrow" aria-hidden="true">→</span></button>
           </div>
         </div>
-        <div className="hero-facts reveal reveal-2">
-          {(['sun', 'act', 'ok'] as const).map((k) => (
-            <div key={k} className="fact">
-              <span className={`icon ${k}`}>{ICONS[k]}</span>
-              <div><h3>{t(`overview.fact_${k}_title` as StringKey)}</h3><p>{t(`overview.fact_${k}` as StringKey)}</p></div>
-            </div>
-          ))}
+        <div className="hero-art reveal reveal-2">
+          <HeroStreet />
+          <ul className="hero-chips">
+            {(['sun', 'act', 'ok'] as const).map((k) => {
+              const Icon = { sun: Sun, act: Zap, ok: ShieldCheck }[k]
+              return (
+                <li key={k} className={`chip-fact ${k}`}>
+                  <Icon size={16} strokeWidth={2.2} aria-hidden="true" />
+                  <span>{t(`overview.fact_${k}_title` as StringKey)}</span>
+                  <Info>{t(`overview.fact_${k}` as StringKey)}</Info>
+                </li>
+              )
+            })}
+          </ul>
         </div>
       </section>
 
@@ -62,7 +66,6 @@ export default function Overview({ network = DEFAULT_NETWORK, go, ...props }: Pr
         <header>
           <span className="eyebrow">{t('overview.journey_eyebrow')}</span>
           <h2 id="journey-title">{t('overview.journey_title')}</h2>
-          <p>{t('overview.journey_intro')}</p>
         </header>
         <ol className="journey">
           {JOURNEY.map((a, i) => (
@@ -71,8 +74,7 @@ export default function Overview({ network = DEFAULT_NETWORK, go, ...props }: Pr
                 <span className="no">{i + 1}</span>
                 <span className="eyebrow">{t(`area.${a}` as StringKey)}</span>
                 <span className="q">{t(`overview.q_${a}` as StringKey)}</span>
-                <p>{t(`overview.a_${a}` as StringKey)}</p>
-                <span className="go">{t('overview.open')} →</span>
+                <span className="go">{t('overview.open')} <span className="arrow" aria-hidden="true">→</span></span>
               </button>
             </li>
           ))}
@@ -110,19 +112,19 @@ function Summary({ risk, fixes, rule, vmax }: { risk: Risk; fixes: Fixes | null;
       <div className="stats">
         <div className={`stat ${risk.level === 'ok' ? 'ok' : 'act'}`}>
           <span className="label">{t('overview.f_hours')}</span>
-          <span className="value">{one(risk.expected_unsafe_hours.mean)}<small>{t('overview.unit_h')}</small></span>
+          <span className="value"><CountUp value={risk.expected_unsafe_hours.mean} format={one} /><small>{t('overview.unit_h')}</small></span>
           {risk.expected_unsafe_hours.p10 !== null && risk.expected_unsafe_hours.p90 !== null && (
             <p>{t('home.hours_range', { p10: one(risk.expected_unsafe_hours.p10), p90: one(risk.expected_unsafe_hours.p90) })}</p>
           )}
         </div>
         <div className="stat">
           <span className="label">{t('overview.f_peak')}</span>
-          <span className="value">{volts(risk.peak_voltage_v.p50)}<small>V</small></span>
+          <span className="value"><CountUp value={risk.peak_voltage_v.p50} format={volts} /><small>V</small></span>
           <p>{vmax !== undefined ? t('overview.f_peak_note', { vmax: one(vmax) }) : ''}</p>
         </div>
         <div className="stat">
           <span className="label">{t('overview.f_cause')}</span>
-          <span className="value">{share === null ? '—' : `${Math.round(share * 100)}%`}</span>
+          <span className="value">{share === null ? '—' : <CountUp value={share * 100} format={(n) => `${Math.round(n)}%`} />}</span>
           <p>{t('overview.f_cause_note')}</p>
         </div>
         <div className="stat">

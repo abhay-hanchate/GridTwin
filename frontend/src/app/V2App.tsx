@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { LangProvider, useT } from '../i18n'
+import ContextBar from '../components/ContextBar'
 import type { Area } from './areas'
 import { DEFAULT_RULE } from './defaults'
 import { Shell } from './Shell'
@@ -62,6 +63,8 @@ function Layout() {
   const view: ViewProps = { rule, onRule: setRule, date, onDate: setDate }
   return (
     <Shell
+      // the day and rule matter on the pages that share them; Control and Fast screen have their own inputs
+      context={(area) => (['control', 'surrogate'].includes(area) ? null : <ContextBar rule={rule} date={date} />)}
       render={(area, go) => (
         <Suspense fallback={<div className="loading" role="status">{t('shell.loading')}</div>}>
           <Page area={area} view={view} go={go} />

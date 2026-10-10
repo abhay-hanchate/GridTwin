@@ -4,6 +4,7 @@ import type { CatalogEntry, DaySummary, ParamSchema, Street, WhatIfResult } from
 import type { Area } from '../app/areas'
 import { DEFAULT_NETWORK } from '../app/defaults'
 import { useView, type ViewProps } from '../app/view'
+import Info from '../components/Info'
 import DayContext from '../components/DayContext'
 import { NextStep } from '../components/Explainer'
 import Prov from '../components/Prov'
@@ -50,8 +51,7 @@ export default function TryChange({ network = DEFAULT_NETWORK, go, ...props }: V
     <div className="v2-page">
       <header className="page-hero">
         <span className="kicker">{t('journey.step', { n: 4 })} · {t('area.try')}</span>
-        <h2>{t('try.page_title')}</h2>
-        <p>{t('try.page_intro')}</p>
+        <div className="hero-title"><h2>{t('try.page_title')}</h2><Info>{t('try.page_intro')}</Info></div>
       </header>
       <div className="usecase">
         {(['planner', 'policy', 'operator'] as const).map((k) => (
@@ -182,8 +182,7 @@ function Outcome({ result, network }: { result: WhatIfResult; network: string })
   return (
     <>
       <section className="card q-block" data-numbers="before and after" aria-labelledby="whatif-title">
-        <h3 id="whatif-title">{t('try.result_title')} <Prov kind="modeled" /></h3>
-        <p className="card-sub">{t('try.result_day', { date: result.date, min: volts(result.limits_v.min), max: volts(result.limits_v.max) })}</p>
+        <div className="card-head"><h3 id="whatif-title">{t('try.result_title')} <Prov kind="modeled" /></h3><Info>{t('try.result_day', { date: result.date, min: volts(result.limits_v.min), max: volts(result.limits_v.max) })}</Info></div>
         <div className="stats">
           {ROWS.map((r) => {
             const b = r.value(base.summary)
@@ -208,8 +207,7 @@ function Outcome({ result, network }: { result: WhatIfResult; network: string })
         label={t('try.chart_name')} vmax={result.limits_v.max} />
       {street && (
         <section className="card q-block" aria-labelledby="whatif-map-title">
-          <h3 id="whatif-map-title">{t('try.map_title')} <Prov kind="modeled" /></h3>
-          <p className="card-sub">{t('try.map_intro')}</p>
+          <div className="card-head"><h3 id="whatif-map-title">{t('try.map_title')} <Prov kind="modeled" /></h3><Info>{t('try.map_intro')}</Info></div>
           <StreetPlayback s={street} modeLabels={{
             before: t('try.map_before', { steps: street.before.unsafe.filter(Boolean).length }),
             after: t('try.map_after', { steps: street.after!.unsafe.filter(Boolean).length }),

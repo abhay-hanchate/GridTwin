@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useV2 } from '../api/v2'
 import type { Rule } from '../api/v2types'
 import { AREAS, type Area } from '../app/areas'
+import Info from '../components/Info'
 import { NextStep } from '../components/Explainer'
 import Status from '../components/Status'
 import { useT, type StringKey } from '../i18n'
@@ -55,8 +56,7 @@ export default function Surrogate({ go }: { go?: (area: Area) => void }) {
     <div className="v2-page">
       <header className="page-hero">
         <span className="kicker">{t('journey.step', { n: AREAS.indexOf('surrogate') })} · {t('area.surrogate')}</span>
-        <h2>{t('surrogate.page_title')}</h2>
-        <p>{t('surrogate.page_intro')}</p>
+        <div className="hero-title"><h2>{t('surrogate.page_title')}</h2><Info>{t('surrogate.page_intro')}</Info></div>
       </header>
       <Status state={data} />
       {data.data && <SurrogateView d={data.data} />}
@@ -120,8 +120,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
       </section>
 
       <section className="card" aria-labelledby="sg-accuracy">
-        <h3 id="sg-accuracy">{t('surrogate.q_accuracy')}</h3>
-        <p className="card-sub">{t('surrogate.q_accuracy_intro')}</p>
+        <div className="card-head"><h3 id="sg-accuracy">{t('surrogate.q_accuracy')}</h3><Info>{t('surrogate.q_accuracy_intro')}</Info></div>
         <div className="table-scroll">
           <table className="data-table" aria-label={t('surrogate.q_accuracy')}>
             <thead><tr>{(['col_model', 'col_v_mae', 'col_v_p99', 'col_l_mae', 'col_l_p99', 'col_boundary', 'col_vuf', 'col_gates'] as const)
@@ -151,8 +150,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
       </section>
 
       <section className="card" aria-labelledby="sg-misses">
-        <h3 id="sg-misses">{t('surrogate.q_misses')}</h3>
-        <p className="card-sub">{t('surrogate.q_misses_intro')}</p>
+        <div className="card-head"><h3 id="sg-misses">{t('surrogate.q_misses')}</h3><Info>{t('surrogate.q_misses_intro')}</Info></div>
         <div className="table-scroll">
           <table className="data-table" aria-label={t('surrogate.q_misses')}>
             <thead><tr>{(['col_rule', 'col_split', 'col_missed', 'col_bound', 'col_missed_point', 'col_false_rej'] as const)
@@ -175,8 +173,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
 
       {s.rounds.length > 0 && (
         <section className="card" aria-labelledby="sg-rounds">
-          <h3 id="sg-rounds">{t('surrogate.rounds_title')}</h3>
-          <p className="card-sub">{t('surrogate.rounds_intro')}</p>
+          <div className="card-head"><h3 id="sg-rounds">{t('surrogate.rounds_title')}</h3><Info>{t('surrogate.rounds_intro')}</Info></div>
           <div className="table-scroll">
             <table className="data-table" aria-label={t('surrogate.rounds_title')}>
               <thead><tr>{(['col_round', 'col_rule', 'col_missed', 'col_false_rej'] as const).map((k) => <th key={k} scope="col">{t(`surrogate.${k}`)}</th>)}</tr></thead>
@@ -197,8 +194,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
       )}
 
       <section className="card" aria-labelledby="sg-limits">
-        <h3 id="sg-limits">{t('surrogate.q_limits')}</h3>
-        <p className="card-sub">{t('surrogate.q_limits_intro')}</p>
+        <div className="card-head"><h3 id="sg-limits">{t('surrogate.q_limits')}</h3><Info>{t('surrogate.q_limits_intro')}</Info></div>
         {s.support && <p>{t('surrogate.support', { taps: s.support.taps.join(', '), modes: s.support.modes.map(mode).join(', '),
           bmin: num(s.support.battery_kw[0], 1), bmax: num(s.support.battery_kw[1], 1), nodes: s.support.battery_nodes.join(', '),
           layouts: s.support.line_layouts ?? '—',
@@ -220,8 +216,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
       </section>
 
       <section className="card" aria-labelledby="sg-speed">
-        <h3 id="sg-speed">{t('surrogate.q_speed')}</h3>
-        <p className="card-sub">{t('surrogate.q_speed_intro')}</p>
+        <div className="card-head"><h3 id="sg-speed">{t('surrogate.q_speed')}</h3><Info>{t('surrogate.q_speed_intro')}</Info></div>
         <h3>{t('surrogate.e1_title')}</h3>
         <p data-section="e1">{s.e1 ? t('surrogate.e1_text', { runs: s.e1.runs, vs_all: num(s.e1.speedup_vs_solve_all), vs_order: num(s.e1.speedup_vs_cost_order),
           same: s.e1.same_choice_as_solve_all, fr: s.e1.false_rejections, over: s.e1.overrules,
@@ -251,8 +246,7 @@ function Disagreements({ d }: { d: SurrogatePayload }) {
   const type = (s: string) => (TYPES[s] ? t(`surrogate.dis.type.${TYPES[s]}` as StringKey) : s)
   return (
     <section className="card" aria-labelledby="sg-dis">
-      <h3 id="sg-dis">{t('surrogate.q_disagree')}</h3>
-      <p className="card-sub">{t('surrogate.q_disagree_intro')}</p>
+      <div className="card-head"><h3 id="sg-dis">{t('surrogate.q_disagree')}</h3><Info>{t('surrogate.q_disagree_intro')}</Info></div>
       {d.disagreements.counts.length === 0 ? <p>{t('surrogate.dis_none')}</p> : (
         <ul>{d.disagreements.counts.map((c) => (
           <li key={`${c.source}-${c.type}`}>{t('surrogate.dis_count', { rows: c.rows, type: type(c.type), source: source(c.source) })}</li>

@@ -1,5 +1,6 @@
 import type { Calendar } from '../api/v2types'
 import { useT } from '../i18n'
+import Info from './Info'
 
 /** Pick the day: the real tomorrow in one click, or any day of the forecast archive from the calendar.
  *  Offline (GRIDTWIN_OFFLINE=1) only the days that were computed can be shown, so only those are offered. */
@@ -28,7 +29,7 @@ export default function DaySelector({ calendar, value, onChange }: { calendar: C
         <label className="sr-only" htmlFor="day-input">{t('day.pick')}</label>
         <input id="day-input" type="date" className={isTomorrow ? '' : 'active'} min={calendar.archive.first} max={calendar.archive.last}
           value={!isTomorrow && value ? value : ''} onChange={(e) => e.target.value && onChange(e.target.value)} />
-        <p className="hint muted">{isTomorrow ? t('day.live_hint') : t('day.archive_hint', { first: calendar.archive.first, last: calendar.archive.last })}</p>
+        <Info>{isTomorrow ? t('day.live_hint') : t('day.archive_hint', { first: calendar.archive.first, last: calendar.archive.last })}</Info>
       </div>
     </div>
   )

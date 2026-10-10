@@ -4,6 +4,7 @@ import type { Headroom, Hosting, MeterSites, RxMap, Street, Transformers } from 
 import type { Area } from '../app/areas'
 import { DEFAULT_NETWORK } from '../app/defaults'
 import { useView, type ViewProps } from '../app/view'
+import Info from '../components/Info'
 import ConnectionPanel from '../components/ConnectionPanel'
 import DayContext from '../components/DayContext'
 import { NextStep } from '../components/Explainer'
@@ -34,8 +35,7 @@ export default function Planning({ network = DEFAULT_NETWORK, go, ...props }: Vi
     <div className="v2-page">
       <header className="page-hero">
         <span className="kicker">{t('journey.step', { n: 3 })} · {t('area.planning')}</span>
-        <h2>{t('plan.page_title')}</h2>
-        <p>{t('plan.page_intro')}</p>
+        <div className="hero-title"><h2>{t('plan.page_title')}</h2><Info>{t('plan.page_intro')}</Info></div>
       </header>
       <DayContext view={view} />
 
@@ -218,7 +218,7 @@ function RxHeat({ data }: { data: RxMap }) {
           {xs.map((x) => {
             const c = cell(r, x)
             const k = c ? Math.max(0, c.volt_var_reduction_v) / max : 0         // a rise is drawn uncoloured
-            return <span key={x} role="cell" className="rx-cell" style={{ background: `rgba(31, 99, 214, ${0.08 + k * 0.55})`, color: k > 0.6 ? '#fff' : 'var(--ink)' }}>
+            return <span key={x} role="cell" className="rx-cell" style={{ background: `rgba(79, 109, 81, ${0.08 + k * 0.62})`, color: k > 0.6 ? '#fff' : 'var(--ink)' }}>
               {c ? change(-c.volt_var_reduction_v) : ''}</span>
           })}
         </div>
