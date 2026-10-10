@@ -368,9 +368,51 @@ main:focus, main:focus-visible, [role='tabpanel']:focus-visible { outline: none;
 .sim-result b { font-family: var(--mono); font-size: var(--fs-s); }
 .compare-player > .card { box-shadow: none; }
 
-.forecast-sim-grid { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(330px, 0.92fr); gap: 16px; align-items: stretch; }
-.forecast-map { display: grid; align-content: start; min-width: 0; }
-.forecast-map > .sim-pane > header { display: none; }
+/* ---- Forecast Simulation Layout (Full-width simulation + bottom charts) ---- */
+.forecast-sim-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  width: 100%;
+}
+
+.forecast-map-full {
+  width: 100%;
+  min-width: 0;
+}
+
+.forecast-map-full .sim-pane {
+  width: 100%;
+  gap: 12px;
+}
+
+.forecast-map-full .sim-pane > header {
+  display: none;
+}
+
+.forecast-map-full .sv-wrap {
+  width: 100%;
+  border-radius: var(--r-l);
+  box-shadow: var(--shadow);
+}
+
+.forecast-bottom-charts {
+  width: 100%;
+}
+
+.forecast-bottom-charts .street-day-charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: none;
+  gap: 18px;
+  width: 100%;
+}
+
+@media (max-width: 960px) {
+  .forecast-bottom-charts .street-day-charts {
+    grid-template-columns: 1fr;
+  }
+}
 /* ---- Synchronized simulation day charts ------------------------------------------------------------------- */
 .street-day-charts { display: grid; grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 16px; min-width: 0; }
 .day-chart {

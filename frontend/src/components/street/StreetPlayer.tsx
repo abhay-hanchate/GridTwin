@@ -113,7 +113,7 @@ function mapScale(s: Street, runs: StreetRun[]) {
   }
 }
 
-function SimMap({ s, run, flows, scale, step, heading, tone }: {
+function SimMap({ s, run, flows, scale, step, heading, tone, showLegend = false }: {
   s: Street
   run: StreetRun
   flows: ReturnType<typeof homeFlows>
@@ -121,6 +121,7 @@ function SimMap({ s, run, flows, scale, step, heading, tone }: {
   step: number
   heading: string
   tone: 'before' | 'after'
+  showLegend?: boolean
 }) {
   const t = useT()
   const [home, setHome] = useState<number | null>(null)
@@ -140,6 +141,16 @@ function SimMap({ s, run, flows, scale, step, heading, tone }: {
       <StreetView phase={run.home_phase} dist={dist} kwp={kwp} now={now} phaseKw={ph} grid={b.grid} scale={scale}
         limits={s.limits_v} trafoKva={s.trafo_kva} loadingPct={run.trafo_loading_pct[step]} selected={home} onHome={setHome}
         label={t('player.map_label', { time: s.t[step], over, total: s.homes.length, vmax: Number.isFinite(vmax) ? one(vmax) : '—' })} />
+      {showLegend && (
+        <ul className="legend sv-legend">
+          {(['ok', 'near', 'over', 'under'] as const).map((c) => (
+            <li key={c}><span className={`roof-key v-${c}`} />{t(`player.v_${c}` as StringKey)}</li>
+          ))}
+          <li><span className="flow-key back" />{t('sv.key_back')}</li>
+          <li><span className="flow-key draw" />{t('sv.key_draw')}</li>
+          <li><span className="panel-key" />{t('player.key_panel')}</li>
+        </ul>
+      )}
       <div className={`sim-result ${over ? 'act' : 'ok'}`}><span>{t('compare.highest')}</span><b>{Number.isFinite(vmax) ? `${volts(vmax)} V` : '—'}</b></div>
       {home !== null && <HomeCard home={home} phase={run.home_phase[home]} kwp={kwp[home]} now={now[home]} shared={flows.shared[home]}
         limits={s.limits_v} onClose={() => setHome(null)} />}
@@ -180,13 +191,13 @@ function ForecastPlayer({ s, startStep }: { s: Street; startStep?: number }) {
   return (
     <div className={`player forecast-player ${state.playing ? '' : 'paused'}`}>
       <PlaybackControls s={s} run={s.before} scale={scale.grid} state={state} />
-      <div className="forecast-sim-grid">
-        <div className="forecast-map">
-          <h3>{t('charts.sim_title')}</h3>
-          <p className="card-sub">{t('charts.sim_intro')}</p>
-          <SimMap s={s} run={s.before} flows={flows[0]} scale={scale} step={state.step} heading={t('charts.now', { time: s.t[state.step] })} tone="before" />
+      <div className="forecast-sim-layout">
+        <div className="forecast-map-full">
+          <SimMap s={s} run={s.before} flows={flows[0]} scale={scale} step={state.step} heading={t('charts.now', { time: s.t[state.step] })} tone="before" showLegend />
         </div>
-        <StreetDayCharts street={s} run={s.before} step={state.step} onStep={state.setStep} />
+        <div className="forecast-bottom-charts">
+          <StreetDayCharts street={s} run={s.before} step={state.step} onStep={state.setStep} />
+        </div>
       </div>
     </div>
   )
