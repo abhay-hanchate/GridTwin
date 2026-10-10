@@ -44,6 +44,23 @@ what it still needs ("about 1 V less voltage at the worst moments" under ±10%).
 none does on any of the three days. The place **and the phase** of a new connection matter as much as its size, which
 a flat state cap cannot see.
 
+## Control across the day (Addition 1)
+
+Every quarter hour the controller looks four hours ahead, plans the battery, curtailment of each phase group and
+permitted switching together, executes the first step, sees what happened and plans again with the battery's real
+charge. Each executed action is solved in the full three-phase power flow at the observed state before it counts as
+safe; when nothing permitted is safe it says so and logs the least-violation action as unsafe. Observations are
+simulated (another scenario of the same forecast with declared changes), the tie switches are hypothetical and the
+transformer tap stays fixed for the day. Code in `control/`, method in [docs/DECISIONS.md](docs/DECISIONS.md),
+rerun with `python -m scripts.control_replay`.
+
+| Demonstration (`data/results/control/`) | Receding-horizon controller | Reactive battery rule, same observations | No control |
+| --- | --- | --- | --- |
+| Forecast error: an unforecast cloud (benchmark street, 09:00 to 18:00) | **0** of 36 unsafe | 10 | 13 |
+| Battery only, like for like with the reactive rule (same day) | **9** of 36 | 10 | 13 |
+| Battery saturation: 85% charge before the solar peak (09:00 to 15:00) | **0** of 24 | 21 | 21 |
+| Depletion and an infeasible evening: weak street, grid sag and 50% more demand, permitted switching (16:00 to 22:00) | **6** of 24, all labelled unsafe | 8 | 8 |
+
 ## How much to trust it
 
 Every gate is measured by `python -m scripts.evaluate` into [data/results/results.json](data/results/results.json); the
@@ -180,6 +197,28 @@ python -m scripts.demo_script        # docs/DEMO_SCRIPT.md from the saved result
 
 For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn backend.main:app --reload`.
 
+## Fast power-flow screen (Addition 2)
+
+Small models trained on solver-labelled, **simulated** states, one per street type and five in all, predict each
+street's voltages, loadings, unbalance, neutral current and reverse flow. They run 6-8 times faster than the solver per
+state, and about 100 times faster under Volt/VAR, and add a calibrated margin. The screen only sorts candidates:
+anything called safe is still solved, a "no safe action" verdict never rests on it, and anything it was not trained on
+goes straight to the solver.
+
+- **Results on the newest test set (unseen months):**
+  - Unsafe states it called safe: none on the benchmark street; a handful elsewhere (up to 13 of 9,299 on the suburban
+    street). The solver catches every one.
+  - It accepts 34-72% of states and still sends most safe states to the solver.
+  - Accuracy targets met: at most 2 of 4.
+- **What failed:** an end-to-end speed-up. In most test windows no action was safe at all, so everything had to be
+  solved anyway.
+- **What round 4 traded:** it widened the support (all streets, any solar layout, switched layouts, seasonal battery
+  nodes) and lost precision against round 3. Round 3 had zero misses on its two streets.
+
+How it was built and scored: [model card](ml/models/surrogate/README.md), pre-registration in
+[DECISIONS](docs/DECISIONS.md) ("Addition 2", rounds 1-4), the contract for the controller in `ml/surrogate/api.py`,
+the dashboard's **Fast screen** page and `GET /api/v2/surrogate`.
+
 ## Limits
 
 - **No real-life check.** No public live household meters exist, so tomorrow's forecasts cannot be scored day by day;
@@ -209,7 +248,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 ## Features
 
 <!-- FEATURES:START -->
-**23 of 28 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
+**23 of 29 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
 
 | ID | Feature | Area | Owner | Status | Pull request |
 | --- | --- | --- | --- | --- | --- |
@@ -241,6 +280,7 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 | F26 | Live deployment with a public link | DevOps | Team | ⏳ Planned |  |
 | F27 | Keep labels explainer on Overview only |  | ieafraazzz | ✅ Done | [#28](https://github.com/abhay-hanchate/GridTwin/pull/28) |
 | F28 | Fix brief 10 Oct 2026: F1-F10  results regenerated on the fixed code |  | Tabsirshaikh | ✅ Done | [#29](https://github.com/abhay-hanchate/GridTwin/pull/29) |
+| F29 | Addition 2: power-flow surrogate screen with solver verification | ML | Tabsirshaikh | 🔄 In progress |  |
 <!-- FEATURES:END -->
 
 ## Team

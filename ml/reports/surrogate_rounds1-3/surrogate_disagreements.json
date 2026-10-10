@@ -1,0 +1,2912 @@
+{
+ "note": "Examples of states or actions the surrogate judged differently from the solver, and what the system did (at most 25 per street, rule and type; the full counts are in surrogate_evaluation.json). The solver's verdict always stands.",
+ "counts": [
+  {
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "rows": 100
+  }
+ ],
+ "examples": [
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.5,
+    "v_min_v": 216.78,
+    "max_line_loading_pct": 30.0,
+    "max_trafo_loading_pct": 49.4
+   },
+   "guarded": {
+    "v_max_v": 246.12,
+    "v_min_v": 212.84,
+    "max_line_loading_pct": 42.5,
+    "max_trafo_loading_pct": 85.0
+   },
+   "solver": {
+    "v_max_v": 243.87,
+    "v_min_v": 215.49,
+    "max_line_loading_pct": 33.3,
+    "max_trafo_loading_pct": 50.5,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.66,
+    "v_min_v": 221.21,
+    "max_line_loading_pct": 33.2,
+    "max_trafo_loading_pct": 47.7
+   },
+   "guarded": {
+    "v_max_v": 246.29,
+    "v_min_v": 217.27,
+    "max_line_loading_pct": 45.7,
+    "max_trafo_loading_pct": 83.2
+   },
+   "solver": {
+    "v_max_v": 244.07,
+    "v_min_v": 220.8,
+    "max_line_loading_pct": 34.5,
+    "max_trafo_loading_pct": 49.7,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 242.45,
+    "v_min_v": 220.52,
+    "max_line_loading_pct": 45.2,
+    "max_trafo_loading_pct": 71.0
+   },
+   "guarded": {
+    "v_max_v": 245.08,
+    "v_min_v": 216.58,
+    "max_line_loading_pct": 84.5,
+    "max_trafo_loading_pct": 106.6
+   },
+   "solver": {
+    "v_max_v": 245.0,
+    "v_min_v": 220.62,
+    "max_line_loading_pct": 47.4,
+    "max_trafo_loading_pct": 72.9,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 242.53,
+    "v_min_v": 229.9,
+    "max_line_loading_pct": 38.8,
+    "max_trafo_loading_pct": 63.8
+   },
+   "guarded": {
+    "v_max_v": 245.16,
+    "v_min_v": 227.15,
+    "max_line_loading_pct": 78.1,
+    "max_trafo_loading_pct": 99.3
+   },
+   "solver": {
+    "v_max_v": 244.69,
+    "v_min_v": 230.15,
+    "max_line_loading_pct": 40.9,
+    "max_trafo_loading_pct": 63.5,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.29,
+    "v_min_v": 223.22,
+    "max_line_loading_pct": 27.1,
+    "max_trafo_loading_pct": 40.0
+   },
+   "guarded": {
+    "v_max_v": 245.91,
+    "v_min_v": 220.46,
+    "max_line_loading_pct": 39.6,
+    "max_trafo_loading_pct": 61.1
+   },
+   "solver": {
+    "v_max_v": 244.15,
+    "v_min_v": 222.0,
+    "max_line_loading_pct": 28.9,
+    "max_trafo_loading_pct": 42.3,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 218.11,
+    "v_min_v": 216.22,
+    "max_line_loading_pct": 3.0,
+    "max_trafo_loading_pct": 4.7
+   },
+   "guarded": {
+    "v_max_v": 221.87,
+    "v_min_v": 212.27,
+    "max_line_loading_pct": 5.4,
+    "max_trafo_loading_pct": 16.7
+   },
+   "solver": {
+    "v_max_v": 218.41,
+    "v_min_v": 215.96,
+    "max_line_loading_pct": 3.8,
+    "max_trafo_loading_pct": 4.9,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 242.43,
+    "v_min_v": 218.06,
+    "max_line_loading_pct": 50.0,
+    "max_trafo_loading_pct": 78.8
+   },
+   "guarded": {
+    "v_max_v": 245.06,
+    "v_min_v": 214.11,
+    "max_line_loading_pct": 89.3,
+    "max_trafo_loading_pct": 114.4
+   },
+   "solver": {
+    "v_max_v": 244.06,
+    "v_min_v": 218.26,
+    "max_line_loading_pct": 51.4,
+    "max_trafo_loading_pct": 78.9,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.21,
+    "v_min_v": 219.51,
+    "max_line_loading_pct": 49.3,
+    "max_trafo_loading_pct": 77.6
+   },
+   "guarded": {
+    "v_max_v": 245.84,
+    "v_min_v": 215.56,
+    "max_line_loading_pct": 88.6,
+    "max_trafo_loading_pct": 113.1
+   },
+   "solver": {
+    "v_max_v": 244.99,
+    "v_min_v": 219.65,
+    "max_line_loading_pct": 50.7,
+    "max_trafo_loading_pct": 77.3,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 242.85,
+    "v_min_v": 225.67,
+    "max_line_loading_pct": 42.6,
+    "max_trafo_loading_pct": 66.8
+   },
+   "guarded": {
+    "v_max_v": 245.48,
+    "v_min_v": 222.92,
+    "max_line_loading_pct": 81.8,
+    "max_trafo_loading_pct": 102.3
+   },
+   "solver": {
+    "v_max_v": 244.14,
+    "v_min_v": 225.74,
+    "max_line_loading_pct": 44.5,
+    "max_trafo_loading_pct": 65.9,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.55,
+    "v_min_v": 221.44,
+    "max_line_loading_pct": 43.9,
+    "max_trafo_loading_pct": 67.8
+   },
+   "guarded": {
+    "v_max_v": 246.18,
+    "v_min_v": 217.5,
+    "max_line_loading_pct": 83.2,
+    "max_trafo_loading_pct": 103.3
+   },
+   "solver": {
+    "v_max_v": 244.85,
+    "v_min_v": 221.44,
+    "max_line_loading_pct": 44.9,
+    "max_trafo_loading_pct": 67.4,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.63,
+    "v_min_v": 234.8,
+    "max_line_loading_pct": 33.9,
+    "max_trafo_loading_pct": 49.6
+   },
+   "guarded": {
+    "v_max_v": 246.26,
+    "v_min_v": 232.58,
+    "max_line_loading_pct": 46.4,
+    "max_trafo_loading_pct": 85.2
+   },
+   "solver": {
+    "v_max_v": 244.09,
+    "v_min_v": 234.65,
+    "max_line_loading_pct": 33.2,
+    "max_trafo_loading_pct": 48.3,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.66,
+    "v_min_v": 233.79,
+    "max_line_loading_pct": 36.0,
+    "max_trafo_loading_pct": 51.7
+   },
+   "guarded": {
+    "v_max_v": 246.29,
+    "v_min_v": 230.9,
+    "max_line_loading_pct": 75.3,
+    "max_trafo_loading_pct": 87.3
+   },
+   "solver": {
+    "v_max_v": 243.88,
+    "v_min_v": 233.94,
+    "max_line_loading_pct": 35.9,
+    "max_trafo_loading_pct": 52.4,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.77,
+    "v_min_v": 228.83,
+    "max_line_loading_pct": 30.3,
+    "max_trafo_loading_pct": 46.4
+   },
+   "guarded": {
+    "v_max_v": 246.4,
+    "v_min_v": 226.08,
+    "max_line_loading_pct": 42.8,
+    "max_trafo_loading_pct": 82.0
+   },
+   "solver": {
+    "v_max_v": 244.66,
+    "v_min_v": 228.91,
+    "max_line_loading_pct": 30.1,
+    "max_trafo_loading_pct": 47.3,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 235.08,
+    "v_min_v": 216.25,
+    "max_line_loading_pct": 9.9,
+    "max_trafo_loading_pct": 12.0
+   },
+   "guarded": {
+    "v_max_v": 237.72,
+    "v_min_v": 212.3,
+    "max_line_loading_pct": 15.4,
+    "max_trafo_loading_pct": 22.3
+   },
+   "solver": {
+    "v_max_v": 236.11,
+    "v_min_v": 215.37,
+    "max_line_loading_pct": 11.7,
+    "max_trafo_loading_pct": 12.6,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.67,
+    "v_min_v": 217.53,
+    "max_line_loading_pct": 31.1,
+    "max_trafo_loading_pct": 38.0
+   },
+   "guarded": {
+    "v_max_v": 246.3,
+    "v_min_v": 213.58,
+    "max_line_loading_pct": 43.6,
+    "max_trafo_loading_pct": 59.0
+   },
+   "solver": {
+    "v_max_v": 244.13,
+    "v_min_v": 217.78,
+    "max_line_loading_pct": 31.7,
+    "max_trafo_loading_pct": 41.3,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 242.71,
+    "v_min_v": 227.32,
+    "max_line_loading_pct": 9.7,
+    "max_trafo_loading_pct": 15.2
+   },
+   "guarded": {
+    "v_max_v": 245.34,
+    "v_min_v": 224.57,
+    "max_line_loading_pct": 15.3,
+    "max_trafo_loading_pct": 25.5
+   },
+   "solver": {
+    "v_max_v": 244.13,
+    "v_min_v": 225.35,
+    "max_line_loading_pct": 17.2,
+    "max_trafo_loading_pct": 20.9,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 241.95,
+    "v_min_v": 228.7,
+    "max_line_loading_pct": 13.4,
+    "max_trafo_loading_pct": 26.3
+   },
+   "guarded": {
+    "v_max_v": 243.91,
+    "v_min_v": 225.95,
+    "max_line_loading_pct": 18.1,
+    "max_trafo_loading_pct": 41.0
+   },
+   "solver": {
+    "v_max_v": 243.83,
+    "v_min_v": 227.43,
+    "max_line_loading_pct": 16.7,
+    "max_trafo_loading_pct": 26.4,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.64,
+    "v_min_v": 233.94,
+    "max_line_loading_pct": 17.3,
+    "max_trafo_loading_pct": 30.8
+   },
+   "guarded": {
+    "v_max_v": 246.27,
+    "v_min_v": 231.05,
+    "max_line_loading_pct": 23.1,
+    "max_trafo_loading_pct": 50.6
+   },
+   "solver": {
+    "v_max_v": 244.03,
+    "v_min_v": 234.95,
+    "max_line_loading_pct": 20.1,
+    "max_trafo_loading_pct": 34.3,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.63,
+    "v_min_v": 232.51,
+    "max_line_loading_pct": 25.2,
+    "max_trafo_loading_pct": 39.0
+   },
+   "guarded": {
+    "v_max_v": 246.26,
+    "v_min_v": 229.62,
+    "max_line_loading_pct": 37.7,
+    "max_trafo_loading_pct": 60.1
+   },
+   "solver": {
+    "v_max_v": 244.74,
+    "v_min_v": 232.73,
+    "max_line_loading_pct": 25.3,
+    "max_trafo_loading_pct": 38.1,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 222.12,
+    "v_min_v": 216.51,
+    "max_line_loading_pct": 8.7,
+    "max_trafo_loading_pct": 13.8
+   },
+   "guarded": {
+    "v_max_v": 225.89,
+    "v_min_v": 212.56,
+    "max_line_loading_pct": 14.2,
+    "max_trafo_loading_pct": 24.1
+   },
+   "solver": {
+    "v_max_v": 222.08,
+    "v_min_v": 215.1,
+    "max_line_loading_pct": 12.4,
+    "max_trafo_loading_pct": 13.6,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-09-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 227.14,
+    "v_min_v": 217.0,
+    "max_line_loading_pct": 18.5,
+    "max_trafo_loading_pct": 30.2
+   },
+   "guarded": {
+    "v_max_v": 230.54,
+    "v_min_v": 213.05,
+    "max_line_loading_pct": 24.3,
+    "max_trafo_loading_pct": 50.0
+   },
+   "solver": {
+    "v_max_v": 227.32,
+    "v_min_v": 215.3,
+    "max_line_loading_pct": 20.9,
+    "max_trafo_loading_pct": 34.4,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-09-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 223.3,
+    "v_min_v": 216.22,
+    "max_line_loading_pct": 11.2,
+    "max_trafo_loading_pct": 14.9
+   },
+   "guarded": {
+    "v_max_v": 227.07,
+    "v_min_v": 212.28,
+    "max_line_loading_pct": 16.8,
+    "max_trafo_loading_pct": 25.2
+   },
+   "solver": {
+    "v_max_v": 223.18,
+    "v_min_v": 215.65,
+    "max_line_loading_pct": 12.7,
+    "max_trafo_loading_pct": 17.5,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-09-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 224.06,
+    "v_min_v": 216.47,
+    "max_line_loading_pct": 16.6,
+    "max_trafo_loading_pct": 28.8
+   },
+   "guarded": {
+    "v_max_v": 227.83,
+    "v_min_v": 212.53,
+    "max_line_loading_pct": 22.3,
+    "max_trafo_loading_pct": 48.6
+   },
+   "solver": {
+    "v_max_v": 223.9,
+    "v_min_v": 216.09,
+    "max_line_loading_pct": 17.7,
+    "max_trafo_loading_pct": 35.2,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-09-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 221.28,
+    "v_min_v": 216.69,
+    "max_line_loading_pct": 4.6,
+    "max_trafo_loading_pct": 8.5
+   },
+   "guarded": {
+    "v_max_v": 225.05,
+    "v_min_v": 212.74,
+    "max_line_loading_pct": 7.0,
+    "max_trafo_loading_pct": 18.7
+   },
+   "solver": {
+    "v_max_v": 222.04,
+    "v_min_v": 216.13,
+    "max_line_loading_pct": 5.8,
+    "max_trafo_loading_pct": 7.1,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-09-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.53,
+    "v_min_v": 235.03,
+    "max_line_loading_pct": 11.0,
+    "max_trafo_loading_pct": 15.9
+   },
+   "guarded": {
+    "v_max_v": 246.16,
+    "v_min_v": 232.81,
+    "max_line_loading_pct": 16.5,
+    "max_trafo_loading_pct": 27.4
+   },
+   "solver": {
+    "v_max_v": 244.34,
+    "v_min_v": 235.36,
+    "max_line_loading_pct": 12.0,
+    "max_trafo_loading_pct": 14.7,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 252.95,
+    "v_min_v": 243.57,
+    "max_line_loading_pct": 34.2,
+    "max_trafo_loading_pct": 52.1
+   },
+   "guarded": {
+    "v_max_v": 263.78,
+    "v_min_v": 240.8,
+    "max_line_loading_pct": 46.7,
+    "max_trafo_loading_pct": 87.6
+   },
+   "solver": {
+    "v_max_v": 253.26,
+    "v_min_v": 244.12,
+    "max_line_loading_pct": 35.2,
+    "max_trafo_loading_pct": 54.1,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 252.61,
+    "v_min_v": 227.55,
+    "max_line_loading_pct": 49.2,
+    "max_trafo_loading_pct": 69.9
+   },
+   "guarded": {
+    "v_max_v": 263.44,
+    "v_min_v": 224.8,
+    "max_line_loading_pct": 88.5,
+    "max_trafo_loading_pct": 105.5
+   },
+   "solver": {
+    "v_max_v": 253.51,
+    "v_min_v": 227.85,
+    "max_line_loading_pct": 48.3,
+    "max_trafo_loading_pct": 70.5,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 251.46,
+    "v_min_v": 241.9,
+    "max_line_loading_pct": 27.0,
+    "max_trafo_loading_pct": 46.1
+   },
+   "guarded": {
+    "v_max_v": 255.24,
+    "v_min_v": 239.14,
+    "max_line_loading_pct": 39.5,
+    "max_trafo_loading_pct": 81.7
+   },
+   "solver": {
+    "v_max_v": 253.02,
+    "v_min_v": 242.06,
+    "max_line_loading_pct": 28.7,
+    "max_trafo_loading_pct": 50.2,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 252.78,
+    "v_min_v": 239.43,
+    "max_line_loading_pct": 29.9,
+    "max_trafo_loading_pct": 44.9
+   },
+   "guarded": {
+    "v_max_v": 263.62,
+    "v_min_v": 236.61,
+    "max_line_loading_pct": 42.4,
+    "max_trafo_loading_pct": 80.5
+   },
+   "solver": {
+    "v_max_v": 253.83,
+    "v_min_v": 239.4,
+    "max_line_loading_pct": 29.9,
+    "max_trafo_loading_pct": 43.5,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 252.32,
+    "v_min_v": 247.53,
+    "max_line_loading_pct": 6.1,
+    "max_trafo_loading_pct": 1.7
+   },
+   "guarded": {
+    "v_max_v": 256.1,
+    "v_min_v": 245.8,
+    "max_line_loading_pct": 9.5,
+    "max_trafo_loading_pct": 13.6
+   },
+   "solver": {
+    "v_max_v": 253.02,
+    "v_min_v": 247.47,
+    "max_line_loading_pct": 6.3,
+    "max_trafo_loading_pct": 1.9,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 215.24,
+    "v_min_v": 207.6,
+    "max_line_loading_pct": 14.5,
+    "max_trafo_loading_pct": 32.1
+   },
+   "guarded": {
+    "v_max_v": 219.0,
+    "v_min_v": 137.03,
+    "max_line_loading_pct": 19.2,
+    "max_trafo_loading_pct": 51.8
+   },
+   "solver": {
+    "v_max_v": 214.34,
+    "v_min_v": 205.94,
+    "max_line_loading_pct": 15.3,
+    "max_trafo_loading_pct": 29.9,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 209.93,
+    "v_min_v": 207.45,
+    "max_line_loading_pct": 7.7,
+    "max_trafo_loading_pct": 11.2
+   },
+   "guarded": {
+    "v_max_v": 213.69,
+    "v_min_v": 136.88,
+    "max_line_loading_pct": 11.0,
+    "max_trafo_loading_pct": 21.5
+   },
+   "solver": {
+    "v_max_v": 210.91,
+    "v_min_v": 206.98,
+    "max_line_loading_pct": 7.7,
+    "max_trafo_loading_pct": 10.5,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 221.25,
+    "v_min_v": 207.17,
+    "max_line_loading_pct": 39.4,
+    "max_trafo_loading_pct": 69.2
+   },
+   "guarded": {
+    "v_max_v": 225.01,
+    "v_min_v": 136.6,
+    "max_line_loading_pct": 78.6,
+    "max_trafo_loading_pct": 104.8
+   },
+   "solver": {
+    "v_max_v": 222.12,
+    "v_min_v": 206.96,
+    "max_line_loading_pct": 39.2,
+    "max_trafo_loading_pct": 70.0,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 252.59,
+    "v_min_v": 245.09,
+    "max_line_loading_pct": 47.8,
+    "max_trafo_loading_pct": 70.7
+   },
+   "guarded": {
+    "v_max_v": 263.42,
+    "v_min_v": 243.36,
+    "max_line_loading_pct": 87.1,
+    "max_trafo_loading_pct": 106.3
+   },
+   "solver": {
+    "v_max_v": 253.97,
+    "v_min_v": 245.28,
+    "max_line_loading_pct": 48.3,
+    "max_trafo_loading_pct": 69.4,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 252.15,
+    "v_min_v": 249.0,
+    "max_line_loading_pct": 40.4,
+    "max_trafo_loading_pct": 59.2
+   },
+   "guarded": {
+    "v_max_v": 255.92,
+    "v_min_v": 247.26,
+    "max_line_loading_pct": 79.7,
+    "max_trafo_loading_pct": 94.8
+   },
+   "solver": {
+    "v_max_v": 253.49,
+    "v_min_v": 249.1,
+    "max_line_loading_pct": 40.7,
+    "max_trafo_loading_pct": 62.7,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 252.44,
+    "v_min_v": 247.02,
+    "max_line_loading_pct": 36.7,
+    "max_trafo_loading_pct": 53.4
+   },
+   "guarded": {
+    "v_max_v": 263.27,
+    "v_min_v": 245.28,
+    "max_line_loading_pct": 76.0,
+    "max_trafo_loading_pct": 88.9
+   },
+   "solver": {
+    "v_max_v": 253.06,
+    "v_min_v": 247.03,
+    "max_line_loading_pct": 38.2,
+    "max_trafo_loading_pct": 55.3,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-03-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 251.07,
+    "v_min_v": 242.93,
+    "max_line_loading_pct": 35.7,
+    "max_trafo_loading_pct": 61.8
+   },
+   "guarded": {
+    "v_max_v": 254.85,
+    "v_min_v": 240.17,
+    "max_line_loading_pct": 75.0,
+    "max_trafo_loading_pct": 97.4
+   },
+   "solver": {
+    "v_max_v": 253.35,
+    "v_min_v": 242.93,
+    "max_line_loading_pct": 35.8,
+    "max_trafo_loading_pct": 63.2,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 216.31,
+    "v_min_v": 208.05,
+    "max_line_loading_pct": 44.0,
+    "max_trafo_loading_pct": 53.7
+   },
+   "guarded": {
+    "v_max_v": 220.07,
+    "v_min_v": 137.48,
+    "max_line_loading_pct": 83.3,
+    "max_trafo_loading_pct": 89.3
+   },
+   "solver": {
+    "v_max_v": 216.61,
+    "v_min_v": 206.16,
+    "max_line_loading_pct": 40.2,
+    "max_trafo_loading_pct": 54.2,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 218.26,
+    "v_min_v": 207.67,
+    "max_line_loading_pct": 36.9,
+    "max_trafo_loading_pct": 52.4
+   },
+   "guarded": {
+    "v_max_v": 222.03,
+    "v_min_v": 137.1,
+    "max_line_loading_pct": 76.2,
+    "max_trafo_loading_pct": 88.0
+   },
+   "solver": {
+    "v_max_v": 217.42,
+    "v_min_v": 206.76,
+    "max_line_loading_pct": 37.2,
+    "max_trafo_loading_pct": 54.6,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 214.85,
+    "v_min_v": 207.29,
+    "max_line_loading_pct": 31.9,
+    "max_trafo_loading_pct": 45.5
+   },
+   "guarded": {
+    "v_max_v": 218.61,
+    "v_min_v": 136.72,
+    "max_line_loading_pct": 44.4,
+    "max_trafo_loading_pct": 81.1
+   },
+   "solver": {
+    "v_max_v": 214.91,
+    "v_min_v": 206.27,
+    "max_line_loading_pct": 34.5,
+    "max_trafo_loading_pct": 51.4,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 215.53,
+    "v_min_v": 207.5,
+    "max_line_loading_pct": 46.6,
+    "max_trafo_loading_pct": 59.3
+   },
+   "guarded": {
+    "v_max_v": 219.29,
+    "v_min_v": 136.93,
+    "max_line_loading_pct": 85.9,
+    "max_trafo_loading_pct": 94.8
+   },
+   "solver": {
+    "v_max_v": 215.4,
+    "v_min_v": 206.31,
+    "max_line_loading_pct": 41.8,
+    "max_trafo_loading_pct": 58.1,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 216.73,
+    "v_min_v": 207.61,
+    "max_line_loading_pct": 9.6,
+    "max_trafo_loading_pct": 13.2
+   },
+   "guarded": {
+    "v_max_v": 220.49,
+    "v_min_v": 137.04,
+    "max_line_loading_pct": 15.1,
+    "max_trafo_loading_pct": 23.5
+   },
+   "solver": {
+    "v_max_v": 217.15,
+    "v_min_v": 206.7,
+    "max_line_loading_pct": 7.9,
+    "max_trafo_loading_pct": 12.5,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 252.61,
+    "v_min_v": 235.32,
+    "max_line_loading_pct": 35.0,
+    "max_trafo_loading_pct": 58.8
+   },
+   "guarded": {
+    "v_max_v": 263.44,
+    "v_min_v": 233.1,
+    "max_line_loading_pct": 74.3,
+    "max_trafo_loading_pct": 94.4
+   },
+   "solver": {
+    "v_max_v": 253.07,
+    "v_min_v": 236.5,
+    "max_line_loading_pct": 34.7,
+    "max_trafo_loading_pct": 56.7,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 252.53,
+    "v_min_v": 239.14,
+    "max_line_loading_pct": 36.5,
+    "max_trafo_loading_pct": 67.6
+   },
+   "guarded": {
+    "v_max_v": 263.36,
+    "v_min_v": 236.32,
+    "max_line_loading_pct": 75.8,
+    "max_trafo_loading_pct": 103.2
+   },
+   "solver": {
+    "v_max_v": 253.2,
+    "v_min_v": 239.41,
+    "max_line_loading_pct": 34.1,
+    "max_trafo_loading_pct": 65.9,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 216.03,
+    "v_min_v": 207.28,
+    "max_line_loading_pct": 36.8,
+    "max_trafo_loading_pct": 55.9
+   },
+   "guarded": {
+    "v_max_v": 219.79,
+    "v_min_v": 136.71,
+    "max_line_loading_pct": 76.1,
+    "max_trafo_loading_pct": 91.5
+   },
+   "solver": {
+    "v_max_v": 216.14,
+    "v_min_v": 206.67,
+    "max_line_loading_pct": 36.0,
+    "max_trafo_loading_pct": 54.6,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 251.88,
+    "v_min_v": 236.18,
+    "max_line_loading_pct": 21.4,
+    "max_trafo_loading_pct": 29.4
+   },
+   "guarded": {
+    "v_max_v": 255.66,
+    "v_min_v": 233.96,
+    "max_line_loading_pct": 32.4,
+    "max_trafo_loading_pct": 49.2
+   },
+   "solver": {
+    "v_max_v": 254.16,
+    "v_min_v": 236.3,
+    "max_line_loading_pct": 23.3,
+    "max_trafo_loading_pct": 25.1,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 220.35,
+    "v_min_v": 208.99,
+    "max_line_loading_pct": 12.7,
+    "max_trafo_loading_pct": 21.9
+   },
+   "guarded": {
+    "v_max_v": 224.11,
+    "v_min_v": 138.42,
+    "max_line_loading_pct": 17.4,
+    "max_trafo_loading_pct": 36.6
+   },
+   "solver": {
+    "v_max_v": 219.72,
+    "v_min_v": 206.33,
+    "max_line_loading_pct": 14.8,
+    "max_trafo_loading_pct": 19.8,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 222.11,
+    "v_min_v": 207.32,
+    "max_line_loading_pct": 12.5,
+    "max_trafo_loading_pct": 20.3
+   },
+   "guarded": {
+    "v_max_v": 225.87,
+    "v_min_v": 136.75,
+    "max_line_loading_pct": 17.3,
+    "max_trafo_loading_pct": 31.8
+   },
+   "solver": {
+    "v_max_v": 220.78,
+    "v_min_v": 206.88,
+    "max_line_loading_pct": 13.8,
+    "max_trafo_loading_pct": 23.3,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 219.26,
+    "v_min_v": 207.65,
+    "max_line_loading_pct": 13.2,
+    "max_trafo_loading_pct": 10.3
+   },
+   "guarded": {
+    "v_max_v": 223.02,
+    "v_min_v": 137.08,
+    "max_line_loading_pct": 17.9,
+    "max_trafo_loading_pct": 20.5
+   },
+   "solver": {
+    "v_max_v": 219.18,
+    "v_min_v": 207.0,
+    "max_line_loading_pct": 13.6,
+    "max_trafo_loading_pct": 10.8,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "benchmark_250",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "benchmark_250_2025-06-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 224.14,
+    "v_min_v": 207.48,
+    "max_line_loading_pct": 24.4,
+    "max_trafo_loading_pct": 33.2
+   },
+   "guarded": {
+    "v_max_v": 227.9,
+    "v_min_v": 136.91,
+    "max_line_loading_pct": 36.9,
+    "max_trafo_loading_pct": 53.0
+   },
+   "solver": {
+    "v_max_v": 224.29,
+    "v_min_v": 206.13,
+    "max_line_loading_pct": 25.3,
+    "max_trafo_loading_pct": 33.2,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-03-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 217.92,
+    "v_min_v": 216.6,
+    "max_line_loading_pct": 3.7,
+    "max_trafo_loading_pct": 13.0
+   },
+   "guarded": {
+    "v_max_v": 219.66,
+    "v_min_v": 215.04,
+    "max_line_loading_pct": 8.4,
+    "max_trafo_loading_pct": 26.4
+   },
+   "solver": {
+    "v_max_v": 217.61,
+    "v_min_v": 215.9,
+    "max_line_loading_pct": 5.2,
+    "max_trafo_loading_pct": 15.0,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-03-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.79,
+    "v_min_v": 217.53,
+    "max_line_loading_pct": 87.3,
+    "max_trafo_loading_pct": 98.2
+   },
+   "guarded": {
+    "v_max_v": 244.97,
+    "v_min_v": 215.97,
+    "max_line_loading_pct": 118.0,
+    "max_trafo_loading_pct": 141.3
+   },
+   "solver": {
+    "v_max_v": 243.34,
+    "v_min_v": 217.41,
+    "max_line_loading_pct": 85.4,
+    "max_trafo_loading_pct": 101.1,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-03-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.8,
+    "v_min_v": 234.23,
+    "max_line_loading_pct": 30.0,
+    "max_trafo_loading_pct": 48.2
+   },
+   "guarded": {
+    "v_max_v": 244.98,
+    "v_min_v": 232.97,
+    "max_line_loading_pct": 44.8,
+    "max_trafo_loading_pct": 62.1
+   },
+   "solver": {
+    "v_max_v": 243.87,
+    "v_min_v": 234.68,
+    "max_line_loading_pct": 30.3,
+    "max_trafo_loading_pct": 49.3,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-03-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.75,
+    "v_min_v": 241.42,
+    "max_line_loading_pct": 19.0,
+    "max_trafo_loading_pct": 49.2
+   },
+   "guarded": {
+    "v_max_v": 244.93,
+    "v_min_v": 240.44,
+    "max_line_loading_pct": 25.2,
+    "max_trafo_loading_pct": 63.2
+   },
+   "solver": {
+    "v_max_v": 243.93,
+    "v_min_v": 241.47,
+    "max_line_loading_pct": 19.5,
+    "max_trafo_loading_pct": 51.0,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-03-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 237.69,
+    "v_min_v": 231.03,
+    "max_line_loading_pct": 40.9,
+    "max_trafo_loading_pct": 99.3
+   },
+   "guarded": {
+    "v_max_v": 238.48,
+    "v_min_v": 229.76,
+    "max_line_loading_pct": 55.7,
+    "max_trafo_loading_pct": 142.4
+   },
+   "solver": {
+    "v_max_v": 237.33,
+    "v_min_v": 231.05,
+    "max_line_loading_pct": 40.7,
+    "max_trafo_loading_pct": 100.1,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-03-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 240.96,
+    "v_min_v": 234.09,
+    "max_line_loading_pct": 33.0,
+    "max_trafo_loading_pct": 95.9
+   },
+   "guarded": {
+    "v_max_v": 241.67,
+    "v_min_v": 232.83,
+    "max_line_loading_pct": 47.8,
+    "max_trafo_loading_pct": 139.0
+   },
+   "solver": {
+    "v_max_v": 240.9,
+    "v_min_v": 234.21,
+    "max_line_loading_pct": 30.0,
+    "max_trafo_loading_pct": 102.3,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 232.84,
+    "v_min_v": 222.39,
+    "max_line_loading_pct": 37.0,
+    "max_trafo_loading_pct": 90.1
+   },
+   "guarded": {
+    "v_max_v": 234.43,
+    "v_min_v": 220.83,
+    "max_line_loading_pct": 51.8,
+    "max_trafo_loading_pct": 132.1
+   },
+   "solver": {
+    "v_max_v": 232.55,
+    "v_min_v": 222.53,
+    "max_line_loading_pct": 36.9,
+    "max_trafo_loading_pct": 104.5,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 233.07,
+    "v_min_v": 220.65,
+    "max_line_loading_pct": 36.4,
+    "max_trafo_loading_pct": 99.9
+   },
+   "guarded": {
+    "v_max_v": 234.18,
+    "v_min_v": 219.1,
+    "max_line_loading_pct": 51.2,
+    "max_trafo_loading_pct": 142.9
+   },
+   "solver": {
+    "v_max_v": 233.39,
+    "v_min_v": 221.08,
+    "max_line_loading_pct": 34.7,
+    "max_trafo_loading_pct": 104.9,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 221.67,
+    "v_min_v": 216.84,
+    "max_line_loading_pct": 11.6,
+    "max_trafo_loading_pct": 23.5
+   },
+   "guarded": {
+    "v_max_v": 223.41,
+    "v_min_v": 215.28,
+    "max_line_loading_pct": 17.3,
+    "max_trafo_loading_pct": 36.7
+   },
+   "solver": {
+    "v_max_v": 221.18,
+    "v_min_v": 216.06,
+    "max_line_loading_pct": 11.8,
+    "max_trafo_loading_pct": 28.6,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 225.16,
+    "v_min_v": 216.59,
+    "max_line_loading_pct": 19.5,
+    "max_trafo_loading_pct": 72.1
+   },
+   "guarded": {
+    "v_max_v": 226.75,
+    "v_min_v": 215.03,
+    "max_line_loading_pct": 25.6,
+    "max_trafo_loading_pct": 114.1
+   },
+   "solver": {
+    "v_max_v": 224.15,
+    "v_min_v": 215.77,
+    "max_line_loading_pct": 19.2,
+    "max_trafo_loading_pct": 73.6,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.71,
+    "v_min_v": 237.97,
+    "max_line_loading_pct": 16.8,
+    "max_trafo_loading_pct": 40.7
+   },
+   "guarded": {
+    "v_max_v": 244.89,
+    "v_min_v": 237.34,
+    "max_line_loading_pct": 24.6,
+    "max_trafo_loading_pct": 60.8
+   },
+   "solver": {
+    "v_max_v": 243.87,
+    "v_min_v": 237.75,
+    "max_line_loading_pct": 18.1,
+    "max_trafo_loading_pct": 45.6,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 227.76,
+    "v_min_v": 216.64,
+    "max_line_loading_pct": 30.6,
+    "max_trafo_loading_pct": 64.5
+   },
+   "guarded": {
+    "v_max_v": 229.35,
+    "v_min_v": 215.09,
+    "max_line_loading_pct": 45.4,
+    "max_trafo_loading_pct": 80.6
+   },
+   "solver": {
+    "v_max_v": 227.68,
+    "v_min_v": 216.17,
+    "max_line_loading_pct": 31.9,
+    "max_trafo_loading_pct": 67.9,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 223.09,
+    "v_min_v": 216.44,
+    "max_line_loading_pct": 23.9,
+    "max_trafo_loading_pct": 57.1
+   },
+   "guarded": {
+    "v_max_v": 224.83,
+    "v_min_v": 214.88,
+    "max_line_loading_pct": 41.8,
+    "max_trafo_loading_pct": 73.2
+   },
+   "solver": {
+    "v_max_v": 223.05,
+    "v_min_v": 216.03,
+    "max_line_loading_pct": 23.8,
+    "max_trafo_loading_pct": 55.3,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.5,
+    "v_min_v": 236.62,
+    "max_line_loading_pct": 23.6,
+    "max_trafo_loading_pct": 40.6
+   },
+   "guarded": {
+    "v_max_v": 244.68,
+    "v_min_v": 235.98,
+    "max_line_loading_pct": 41.5,
+    "max_trafo_loading_pct": 60.7
+   },
+   "solver": {
+    "v_max_v": 244.0,
+    "v_min_v": 235.37,
+    "max_line_loading_pct": 23.1,
+    "max_trafo_loading_pct": 50.9,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 236.1,
+    "v_min_v": 226.07,
+    "max_line_loading_pct": 39.3,
+    "max_trafo_loading_pct": 96.2
+   },
+   "guarded": {
+    "v_max_v": 237.2,
+    "v_min_v": 224.61,
+    "max_line_loading_pct": 54.2,
+    "max_trafo_loading_pct": 139.3
+   },
+   "solver": {
+    "v_max_v": 235.69,
+    "v_min_v": 226.1,
+    "max_line_loading_pct": 37.5,
+    "max_trafo_loading_pct": 101.3,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 224.04,
+    "v_min_v": 216.3,
+    "max_line_loading_pct": 17.6,
+    "max_trafo_loading_pct": 46.9
+   },
+   "guarded": {
+    "v_max_v": 225.78,
+    "v_min_v": 214.74,
+    "max_line_loading_pct": 25.4,
+    "max_trafo_loading_pct": 60.8
+   },
+   "solver": {
+    "v_max_v": 224.03,
+    "v_min_v": 216.04,
+    "max_line_loading_pct": 17.5,
+    "max_trafo_loading_pct": 49.1,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-09-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 235.34,
+    "v_min_v": 221.48,
+    "max_line_loading_pct": 44.1,
+    "max_trafo_loading_pct": 98.3
+   },
+   "guarded": {
+    "v_max_v": 236.45,
+    "v_min_v": 219.92,
+    "max_line_loading_pct": 58.9,
+    "max_trafo_loading_pct": 141.3
+   },
+   "solver": {
+    "v_max_v": 235.91,
+    "v_min_v": 221.39,
+    "max_line_loading_pct": 46.5,
+    "max_trafo_loading_pct": 101.0,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-09-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 238.65,
+    "v_min_v": 228.25,
+    "max_line_loading_pct": 37.4,
+    "max_trafo_loading_pct": 98.4
+   },
+   "guarded": {
+    "v_max_v": 239.45,
+    "v_min_v": 226.79,
+    "max_line_loading_pct": 52.3,
+    "max_trafo_loading_pct": 141.5
+   },
+   "solver": {
+    "v_max_v": 238.82,
+    "v_min_v": 226.57,
+    "max_line_loading_pct": 35.7,
+    "max_trafo_loading_pct": 101.1,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-09-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 239.67,
+    "v_min_v": 230.97,
+    "max_line_loading_pct": 42.9,
+    "max_trafo_loading_pct": 82.2
+   },
+   "guarded": {
+    "v_max_v": 240.46,
+    "v_min_v": 229.51,
+    "max_line_loading_pct": 57.8,
+    "max_trafo_loading_pct": 124.2
+   },
+   "solver": {
+    "v_max_v": 238.7,
+    "v_min_v": 231.02,
+    "max_line_loading_pct": 46.0,
+    "max_trafo_loading_pct": 103.1,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-09-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.41,
+    "v_min_v": 235.97,
+    "max_line_loading_pct": 30.0,
+    "max_trafo_loading_pct": 75.2
+   },
+   "guarded": {
+    "v_max_v": 244.6,
+    "v_min_v": 235.34,
+    "max_line_loading_pct": 44.8,
+    "max_trafo_loading_pct": 117.2
+   },
+   "solver": {
+    "v_max_v": 243.82,
+    "v_min_v": 236.3,
+    "max_line_loading_pct": 29.8,
+    "max_trafo_loading_pct": 72.8,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-09-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 236.1,
+    "v_min_v": 227.82,
+    "max_line_loading_pct": 34.1,
+    "max_trafo_loading_pct": 94.3
+   },
+   "guarded": {
+    "v_max_v": 237.21,
+    "v_min_v": 226.36,
+    "max_line_loading_pct": 49.0,
+    "max_trafo_loading_pct": 137.4
+   },
+   "solver": {
+    "v_max_v": 236.5,
+    "v_min_v": 226.91,
+    "max_line_loading_pct": 36.3,
+    "max_trafo_loading_pct": 103.4,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-09-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 232.65,
+    "v_min_v": 221.42,
+    "max_line_loading_pct": 51.5,
+    "max_trafo_loading_pct": 98.0
+   },
+   "guarded": {
+    "v_max_v": 234.24,
+    "v_min_v": 219.86,
+    "max_line_loading_pct": 82.1,
+    "max_trafo_loading_pct": 141.0
+   },
+   "solver": {
+    "v_max_v": 232.99,
+    "v_min_v": 222.18,
+    "max_line_loading_pct": 51.3,
+    "max_trafo_loading_pct": 100.5,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-09-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 238.17,
+    "v_min_v": 227.76,
+    "max_line_loading_pct": 46.4,
+    "max_trafo_loading_pct": 91.5
+   },
+   "guarded": {
+    "v_max_v": 238.96,
+    "v_min_v": 226.3,
+    "max_line_loading_pct": 77.1,
+    "max_trafo_loading_pct": 133.5
+   },
+   "solver": {
+    "v_max_v": 238.32,
+    "v_min_v": 226.93,
+    "max_line_loading_pct": 46.2,
+    "max_trafo_loading_pct": 102.9,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-09-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 223.73,
+    "v_min_v": 216.38,
+    "max_line_loading_pct": 26.9,
+    "max_trafo_loading_pct": 56.1
+   },
+   "guarded": {
+    "v_max_v": 225.47,
+    "v_min_v": 214.83,
+    "max_line_loading_pct": 44.7,
+    "max_trafo_loading_pct": 72.1
+   },
+   "solver": {
+    "v_max_v": 223.58,
+    "v_min_v": 215.52,
+    "max_line_loading_pct": 28.5,
+    "max_trafo_loading_pct": 56.7,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "up_2005",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-12-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 227.49,
+    "v_min_v": 217.23,
+    "max_line_loading_pct": 32.1,
+    "max_trafo_loading_pct": 99.9
+   },
+   "guarded": {
+    "v_max_v": 229.08,
+    "v_min_v": 215.67,
+    "max_line_loading_pct": 47.0,
+    "max_trafo_loading_pct": 143.0
+   },
+   "solver": {
+    "v_max_v": 226.6,
+    "v_min_v": 218.16,
+    "max_line_loading_pct": 32.1,
+    "max_trafo_loading_pct": 106.9,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-03-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 252.93,
+    "v_min_v": 251.93,
+    "max_line_loading_pct": 4.7,
+    "max_trafo_loading_pct": 9.9
+   },
+   "guarded": {
+    "v_max_v": 257.19,
+    "v_min_v": 250.71,
+    "max_line_loading_pct": 9.4,
+    "max_trafo_loading_pct": 23.3
+   },
+   "solver": {
+    "v_max_v": 253.06,
+    "v_min_v": 251.83,
+    "max_line_loading_pct": 4.2,
+    "max_trafo_loading_pct": 10.6,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-03-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 252.96,
+    "v_min_v": 242.92,
+    "max_line_loading_pct": 31.0,
+    "max_trafo_loading_pct": 98.7
+   },
+   "guarded": {
+    "v_max_v": 257.22,
+    "v_min_v": 241.94,
+    "max_line_loading_pct": 45.8,
+    "max_trafo_loading_pct": 141.8
+   },
+   "solver": {
+    "v_max_v": 253.42,
+    "v_min_v": 242.72,
+    "max_line_loading_pct": 31.4,
+    "max_trafo_loading_pct": 102.7,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-03-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 243.79,
+    "v_min_v": 217.53,
+    "max_line_loading_pct": 87.3,
+    "max_trafo_loading_pct": 98.2
+   },
+   "guarded": {
+    "v_max_v": 244.97,
+    "v_min_v": 215.97,
+    "max_line_loading_pct": 118.0,
+    "max_trafo_loading_pct": 141.3
+   },
+   "solver": {
+    "v_max_v": 243.34,
+    "v_min_v": 217.41,
+    "max_line_loading_pct": 85.4,
+    "max_trafo_loading_pct": 101.1,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-03-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 237.69,
+    "v_min_v": 231.03,
+    "max_line_loading_pct": 40.9,
+    "max_trafo_loading_pct": 99.3
+   },
+   "guarded": {
+    "v_max_v": 238.48,
+    "v_min_v": 229.76,
+    "max_line_loading_pct": 55.7,
+    "max_trafo_loading_pct": 142.4
+   },
+   "solver": {
+    "v_max_v": 237.33,
+    "v_min_v": 231.05,
+    "max_line_loading_pct": 40.7,
+    "max_trafo_loading_pct": 100.1,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-03-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 240.96,
+    "v_min_v": 234.09,
+    "max_line_loading_pct": 33.0,
+    "max_trafo_loading_pct": 95.9
+   },
+   "guarded": {
+    "v_max_v": 241.67,
+    "v_min_v": 232.83,
+    "max_line_loading_pct": 47.8,
+    "max_trafo_loading_pct": 139.0
+   },
+   "solver": {
+    "v_max_v": 240.9,
+    "v_min_v": 234.21,
+    "max_line_loading_pct": 30.0,
+    "max_trafo_loading_pct": 102.3,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 221.63,
+    "v_min_v": 212.57,
+    "max_line_loading_pct": 42.0,
+    "max_trafo_loading_pct": 94.6
+   },
+   "guarded": {
+    "v_max_v": 223.37,
+    "v_min_v": 197.38,
+    "max_line_loading_pct": 56.8,
+    "max_trafo_loading_pct": 137.7
+   },
+   "solver": {
+    "v_max_v": 221.82,
+    "v_min_v": 214.34,
+    "max_line_loading_pct": 39.1,
+    "max_trafo_loading_pct": 100.4,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 232.84,
+    "v_min_v": 222.39,
+    "max_line_loading_pct": 37.0,
+    "max_trafo_loading_pct": 90.1
+   },
+   "guarded": {
+    "v_max_v": 234.43,
+    "v_min_v": 220.83,
+    "max_line_loading_pct": 51.8,
+    "max_trafo_loading_pct": 132.1
+   },
+   "solver": {
+    "v_max_v": 232.55,
+    "v_min_v": 222.53,
+    "max_line_loading_pct": 36.9,
+    "max_trafo_loading_pct": 104.5,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 215.91,
+    "v_min_v": 207.88,
+    "max_line_loading_pct": 37.5,
+    "max_trafo_loading_pct": 89.7
+   },
+   "guarded": {
+    "v_max_v": 217.65,
+    "v_min_v": 192.7,
+    "max_line_loading_pct": 52.3,
+    "max_trafo_loading_pct": 131.7
+   },
+   "solver": {
+    "v_max_v": 215.65,
+    "v_min_v": 206.45,
+    "max_line_loading_pct": 34.6,
+    "max_trafo_loading_pct": 93.2,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 233.07,
+    "v_min_v": 220.65,
+    "max_line_loading_pct": 36.4,
+    "max_trafo_loading_pct": 99.9
+   },
+   "guarded": {
+    "v_max_v": 234.18,
+    "v_min_v": 219.1,
+    "max_line_loading_pct": 51.2,
+    "max_trafo_loading_pct": 142.9
+   },
+   "solver": {
+    "v_max_v": 233.39,
+    "v_min_v": 221.08,
+    "max_line_loading_pct": 34.7,
+    "max_trafo_loading_pct": 104.9,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 222.13,
+    "v_min_v": 207.87,
+    "max_line_loading_pct": 47.6,
+    "max_trafo_loading_pct": 84.3
+   },
+   "guarded": {
+    "v_max_v": 223.87,
+    "v_min_v": 192.69,
+    "max_line_loading_pct": 78.2,
+    "max_trafo_loading_pct": 126.3
+   },
+   "solver": {
+    "v_max_v": 222.01,
+    "v_min_v": 206.9,
+    "max_line_loading_pct": 49.6,
+    "max_trafo_loading_pct": 82.4,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 244.74,
+    "v_min_v": 216.81,
+    "max_line_loading_pct": 86.1,
+    "max_trafo_loading_pct": 98.6
+   },
+   "guarded": {
+    "v_max_v": 245.92,
+    "v_min_v": 215.25,
+    "max_line_loading_pct": 116.7,
+    "max_trafo_loading_pct": 141.7
+   },
+   "solver": {
+    "v_max_v": 245.07,
+    "v_min_v": 216.69,
+    "max_line_loading_pct": 85.9,
+    "max_trafo_loading_pct": 100.9,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 229.58,
+    "v_min_v": 207.01,
+    "max_line_loading_pct": 66.0,
+    "max_trafo_loading_pct": 69.7
+   },
+   "guarded": {
+    "v_max_v": 231.17,
+    "v_min_v": 191.82,
+    "max_line_loading_pct": 96.6,
+    "max_trafo_loading_pct": 111.7
+   },
+   "solver": {
+    "v_max_v": 229.76,
+    "v_min_v": 206.62,
+    "max_line_loading_pct": 64.4,
+    "max_trafo_loading_pct": 68.6,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 234.83,
+    "v_min_v": 211.04,
+    "max_line_loading_pct": 65.8,
+    "max_trafo_loading_pct": 97.6
+   },
+   "guarded": {
+    "v_max_v": 235.93,
+    "v_min_v": 195.85,
+    "max_line_loading_pct": 96.4,
+    "max_trafo_loading_pct": 140.7
+   },
+   "solver": {
+    "v_max_v": 234.87,
+    "v_min_v": 210.51,
+    "max_line_loading_pct": 66.9,
+    "max_trafo_loading_pct": 101.6,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 220.07,
+    "v_min_v": 208.14,
+    "max_line_loading_pct": 36.9,
+    "max_trafo_loading_pct": 97.3
+   },
+   "guarded": {
+    "v_max_v": 221.81,
+    "v_min_v": 192.96,
+    "max_line_loading_pct": 51.7,
+    "max_trafo_loading_pct": 140.3
+   },
+   "solver": {
+    "v_max_v": 220.5,
+    "v_min_v": 207.56,
+    "max_line_loading_pct": 41.9,
+    "max_trafo_loading_pct": 100.2,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-03_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 212.51,
+    "v_min_v": 207.06,
+    "max_line_loading_pct": 13.5,
+    "max_trafo_loading_pct": 30.9
+   },
+   "guarded": {
+    "v_max_v": 214.25,
+    "v_min_v": 191.87,
+    "max_line_loading_pct": 19.2,
+    "max_trafo_loading_pct": 51.0
+   },
+   "solver": {
+    "v_max_v": 212.32,
+    "v_min_v": 206.56,
+    "max_line_loading_pct": 13.1,
+    "max_trafo_loading_pct": 31.0,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 214.18,
+    "v_min_v": 207.02,
+    "max_line_loading_pct": 25.1,
+    "max_trafo_loading_pct": 66.0
+   },
+   "guarded": {
+    "v_max_v": 215.92,
+    "v_min_v": 191.83,
+    "max_line_loading_pct": 43.0,
+    "max_trafo_loading_pct": 82.1
+   },
+   "solver": {
+    "v_max_v": 214.16,
+    "v_min_v": 206.23,
+    "max_line_loading_pct": 25.6,
+    "max_trafo_loading_pct": 60.4,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 211.81,
+    "v_min_v": 207.35,
+    "max_line_loading_pct": 16.1,
+    "max_trafo_loading_pct": 38.5
+   },
+   "guarded": {
+    "v_max_v": 213.55,
+    "v_min_v": 192.17,
+    "max_line_loading_pct": 23.9,
+    "max_trafo_loading_pct": 58.6
+   },
+   "solver": {
+    "v_max_v": 211.65,
+    "v_min_v": 206.72,
+    "max_line_loading_pct": 15.9,
+    "max_trafo_loading_pct": 38.5,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 219.48,
+    "v_min_v": 207.01,
+    "max_line_loading_pct": 48.4,
+    "max_trafo_loading_pct": 95.9
+   },
+   "guarded": {
+    "v_max_v": 221.22,
+    "v_min_v": 191.82,
+    "max_line_loading_pct": 79.1,
+    "max_trafo_loading_pct": 138.9
+   },
+   "solver": {
+    "v_max_v": 219.39,
+    "v_min_v": 205.89,
+    "max_line_loading_pct": 48.8,
+    "max_trafo_loading_pct": 104.9,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-27_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 211.02,
+    "v_min_v": 207.03,
+    "max_line_loading_pct": 13.4,
+    "max_trafo_loading_pct": 28.8
+   },
+   "guarded": {
+    "v_max_v": 212.76,
+    "v_min_v": 191.85,
+    "max_line_loading_pct": 19.1,
+    "max_trafo_loading_pct": 42.0
+   },
+   "solver": {
+    "v_max_v": 211.31,
+    "v_min_v": 206.12,
+    "max_line_loading_pct": 14.6,
+    "max_trafo_loading_pct": 31.7,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 211.32,
+    "v_min_v": 207.13,
+    "max_line_loading_pct": 27.6,
+    "max_trafo_loading_pct": 61.6
+   },
+   "guarded": {
+    "v_max_v": 213.06,
+    "v_min_v": 191.94,
+    "max_line_loading_pct": 45.4,
+    "max_trafo_loading_pct": 77.7
+   },
+   "solver": {
+    "v_max_v": 211.96,
+    "v_min_v": 206.91,
+    "max_line_loading_pct": 26.5,
+    "max_trafo_loading_pct": 54.5,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 247.4,
+    "v_min_v": 216.17,
+    "max_line_loading_pct": 96.8,
+    "max_trafo_loading_pct": 96.6
+   },
+   "guarded": {
+    "v_max_v": 249.38,
+    "v_min_v": 214.61,
+    "max_line_loading_pct": 127.5,
+    "max_trafo_loading_pct": 139.7
+   },
+   "solver": {
+    "v_max_v": 247.51,
+    "v_min_v": 216.08,
+    "max_line_loading_pct": 96.6,
+    "max_trafo_loading_pct": 101.3,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-06-27_3",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 236.1,
+    "v_min_v": 226.07,
+    "max_line_loading_pct": 39.3,
+    "max_trafo_loading_pct": 96.2
+   },
+   "guarded": {
+    "v_max_v": 237.2,
+    "v_min_v": 224.61,
+    "max_line_loading_pct": 54.2,
+    "max_trafo_loading_pct": 139.3
+   },
+   "solver": {
+    "v_max_v": 235.69,
+    "v_min_v": 226.1,
+    "max_line_loading_pct": 37.5,
+    "max_trafo_loading_pct": 101.3,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-09-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 212.18,
+    "v_min_v": 207.16,
+    "max_line_loading_pct": 39.4,
+    "max_trafo_loading_pct": 81.3
+   },
+   "guarded": {
+    "v_max_v": 213.92,
+    "v_min_v": 191.97,
+    "max_line_loading_pct": 54.2,
+    "max_trafo_loading_pct": 123.3
+   },
+   "solver": {
+    "v_max_v": 212.89,
+    "v_min_v": 206.42,
+    "max_line_loading_pct": 35.7,
+    "max_trafo_loading_pct": 87.7,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-09-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 235.34,
+    "v_min_v": 221.48,
+    "max_line_loading_pct": 44.1,
+    "max_trafo_loading_pct": 98.3
+   },
+   "guarded": {
+    "v_max_v": 236.45,
+    "v_min_v": 219.92,
+    "max_line_loading_pct": 58.9,
+    "max_trafo_loading_pct": 141.3
+   },
+   "solver": {
+    "v_max_v": 235.91,
+    "v_min_v": 221.39,
+    "max_line_loading_pct": 46.5,
+    "max_trafo_loading_pct": 101.0,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  },
+  {
+   "street": "rural_weak_63",
+   "rule": "pm10",
+   "source": "held-out test split",
+   "type": "point prediction said safe",
+   "family": "rural_weak_63_2025-09-03_1",
+   "boundary_state": true,
+   "caught_by_guard": true,
+   "predicted": {
+    "v_max_v": 238.65,
+    "v_min_v": 228.25,
+    "max_line_loading_pct": 37.4,
+    "max_trafo_loading_pct": 98.4
+   },
+   "guarded": {
+    "v_max_v": 239.45,
+    "v_min_v": 226.79,
+    "max_line_loading_pct": 52.3,
+    "max_trafo_loading_pct": 141.5
+   },
+   "solver": {
+    "v_max_v": 238.82,
+    "v_min_v": 226.57,
+    "max_line_loading_pct": 35.7,
+    "max_trafo_loading_pct": 101.1,
+    "converged": true
+   },
+   "solver_response": "unsafe: rejected; only the solver's verdict is used"
+  }
+ ]
+}

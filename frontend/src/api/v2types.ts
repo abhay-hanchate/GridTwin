@@ -270,3 +270,43 @@ export interface Street {
 
 /** GET /calendar */
 export interface Calendar { tomorrow: string; archive: { first: string; last: string }; ready: string[]; offline: boolean }
+
+/** Addition 1 (control/, /control/runs): receding-horizon control replays. Observations are simulated. */
+export interface ControlCheck {
+  safe: boolean; v_max_v: number | null; v_min_v: number | null; line_max_pct: number | null; trafo_pct: number | null
+  vuf_pct: number | null; margin_v: number | null; severity: number | null; reasons: string[]
+}
+export interface ControlRecord {
+  step: number; time: string; energy_before_kwh: number; energy_after_kwh: number; soc_before: number; soc_after: number
+  action: { battery_kw: number; keep: number[]; topology_id: string; source: string; curtailed_kwh: number }
+  status: string; reason: string; replan_triggers: string[]; topology_before: string; topology_after: string
+  operations_used: number; operations_left: number
+  planner: { status: string; rounds: unknown[]; predicted_infeasible_steps: number[]; horizon: number; seconds: number
+    switching_options: { id: string; considered: boolean; verified?: boolean; chosen?: boolean; reason: string }[] }
+  before: ControlCheck; after: ControlCheck
+  forecast: { forecast: Record<string, number>; observed: Record<string, number>; residual: Record<string, number> }
+  plan_horizon: { battery_kw: number; keep: number[]; energy_kwh: number }[]
+}
+export interface ControlSummary {
+  steps: number; horizon: number; statuses: Record<string, number>; unsafe_steps: number; baseline_unsafe_steps: number
+  unsafe_steps_without_control: number; curtailed_kwh: number; throughput_kwh: number; baseline_throughput_kwh: number
+  soc_min: number; soc_max: number; soc_final: number; operations_used: number; fallbacks: number; replans: number
+  infeasible_periods: { from: string; until: string; steps: number; statuses: string[]; first_reason: string }[]
+}
+export interface ControlRun {
+  config: { run_id: string; title: string; network_id: string; rule_id: string; date: string; battery_kw: number
+    battery_kwh: number; soc_start: number; soc_min: number; soc_max: number; curtail: boolean; switching: boolean
+    horizon: number; max_operations: number; perturbations: { kind: string; label: string }[] }
+  provenance: Record<string, string | number | null>
+  switches: { id: string; close: number[]; open: number[]; status: string }[]
+  records: ControlRecord[]
+  baseline: { name: string; battery_kw: number[]; energy_kwh: number[]; safe: boolean[]; v_max_v: (number | null)[]
+    v_min_v: (number | null)[]; unsafe_steps: number }
+  summary: ControlSummary
+  timing: { total_s: number; step_p50_s: number; step_p95_s: number; plan_p50_s: number }
+  limits_v: { min: number; max: number }
+}
+export interface ControlRuns {
+  runs: Record<string, { title: string; network_id: string; rule_id: string; summary: ControlSummary }>
+  near_limit: { time: string; limit_v: number; rows: { solar_factor: number; v_max_v: number; safe: boolean; margin_v: number }[] } | null
+}

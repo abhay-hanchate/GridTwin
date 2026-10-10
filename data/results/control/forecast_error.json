@@ -1,0 +1,10880 @@
+{
+ "config": {
+  "run_id": "forecast_error",
+  "title": "Forecast error: a cloud the forecast did not see",
+  "network_id": "benchmark_250",
+  "date": "2025-05-15",
+  "rule_id": "pm10",
+  "start": 36,
+  "end": 72,
+  "horizon": 16,
+  "battery_kw": 30.0,
+  "battery_kwh": 60.0,
+  "soc_start": 0.5,
+  "soc_min": 0.1,
+  "soc_max": 0.9,
+  "efficiency": 0.95,
+  "battery_node": null,
+  "curtail": true,
+  "switching": false,
+  "n_switches": 3,
+  "max_operations": 2,
+  "dwell_steps": 8,
+  "tap_pos": 0,
+  "vuf_limit": null,
+  "n_scenarios": 100,
+  "truth_quantile": 0.6,
+  "perturbations": [
+   {
+    "kind": "pv_scale",
+    "start": 46,
+    "end": 54,
+    "value": 0.5,
+    "label": "unforecast cloud: half the sun from 11:30 to 13:30"
+   }
+  ],
+  "rho": 0.3,
+  "decay": 0.95
+ },
+ "provenance": {
+  "observations": "simulated_observation: scenario 87 of the day's fan (not one of the three retained forecast scenarios) with the declared perturbations; not meter data",
+  "forecast": "issued: retained scenarios [69, 84, 72] of 100 for 2025-05-15",
+  "street": "benchmark street (SimBench topology, IS 398 conductors), not a surveyed feeder",
+  "battery_node": 65,
+  "tap": "0, fixed for the run (off-load tap changer)",
+  "voltage_rule": "pm10",
+  "unbalance_limit": null
+ },
+ "switches": [],
+ "records": [
+  {
+   "step": 36,
+   "time": "09:00",
+   "energy_before_kwh": 30.0,
+   "energy_after_kwh": 31.537,
+   "soc_before": 0.5,
+   "soc_after": 0.5256,
+   "action": {
+    "battery_kw": 6.472,
+    "keep": [
+     0.806,
+     0.992,
+     0.953
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 2.4618
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual +2.2 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 6336,
+      "objective": -567.6903,
+      "prediction_miss_v": 0.787,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [],
+    "curtailed_kwh": 91.842,
+    "seconds": 4.272,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": false,
+    "v_max_v": 257.35,
+    "v_min_v": 247.86,
+    "line_max_pct": 21.5,
+    "trafo_pct": 31.8,
+    "vuf_pct": 0.3,
+    "margin_v": -4.35,
+    "severity": 4.346,
+    "reasons": [
+     "over-voltage 257.3 V > 253.0 V"
+    ]
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.0,
+    "v_min_v": 247.36,
+    "line_max_pct": 17.1,
+    "trafo_pct": 28.8,
+    "vuf_pct": 0.27,
+    "margin_v": 1.0,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.3966388599716199,
+     "load_kw": 33.293839185246306,
+     "upstream_pu": 1.0631498684452656
+    },
+    "observed": {
+     "pv_per_kwp": 0.4003932045701168,
+     "load_kw": 34.5096990774033,
+     "upstream_pu": 1.0766565752601134
+    },
+    "residual": {
+     "pv": 0.0066,
+     "load": 0.0256,
+     "upstream_pu": 0.00945
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 6.472,
+     "keep": [
+      0.806,
+      0.992,
+      0.953
+     ],
+     "energy_kwh": 31.537
+    },
+    {
+     "battery_kw": 7.747,
+     "keep": [
+      0.799,
+      0.869,
+      1.0
+     ],
+     "energy_kwh": 33.377
+    },
+    {
+     "battery_kw": 8.166,
+     "keep": [
+      0.772,
+      0.883,
+      1.0
+     ],
+     "energy_kwh": 35.316
+    },
+    {
+     "battery_kw": 3.605,
+     "keep": [
+      0.667,
+      0.811,
+      0.839
+     ],
+     "energy_kwh": 36.173
+    },
+    {
+     "battery_kw": -0.731,
+     "keep": [
+      0.77,
+      0.963,
+      1.0
+     ],
+     "energy_kwh": 35.98
+    },
+    {
+     "battery_kw": 6.607,
+     "keep": [
+      0.708,
+      0.896,
+      1.0
+     ],
+     "energy_kwh": 37.549
+    },
+    {
+     "battery_kw": 1.029,
+     "keep": [
+      0.737,
+      0.898,
+      1.0
+     ],
+     "energy_kwh": 37.794
+    },
+    {
+     "battery_kw": 2.449,
+     "keep": [
+      0.731,
+      0.877,
+      1.0
+     ],
+     "energy_kwh": 38.375
+    },
+    {
+     "battery_kw": 12.786,
+     "keep": [
+      0.708,
+      0.829,
+      1.0
+     ],
+     "energy_kwh": 41.412
+    },
+    {
+     "battery_kw": 12.252,
+     "keep": [
+      0.701,
+      0.818,
+      1.0
+     ],
+     "energy_kwh": 44.322
+    },
+    {
+     "battery_kw": 10.011,
+     "keep": [
+      0.72,
+      0.832,
+      1.0
+     ],
+     "energy_kwh": 46.7
+    },
+    {
+     "battery_kw": 7.909,
+     "keep": [
+      0.685,
+      0.836,
+      1.0
+     ],
+     "energy_kwh": 48.578
+    },
+    {
+     "battery_kw": 9.173,
+     "keep": [
+      0.648,
+      0.824,
+      0.881
+     ],
+     "energy_kwh": 50.757
+    },
+    {
+     "battery_kw": 11.847,
+     "keep": [
+      0.749,
+      0.909,
+      1.0
+     ],
+     "energy_kwh": 53.57
+    },
+    {
+     "battery_kw": 1.221,
+     "keep": [
+      0.744,
+      0.933,
+      1.0
+     ],
+     "energy_kwh": 53.86
+    },
+    {
+     "battery_kw": 0.588,
+     "keep": [
+      0.694,
+      0.938,
+      0.983
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 37,
+   "time": "09:15",
+   "energy_before_kwh": 31.537,
+   "energy_after_kwh": 31.9724,
+   "soc_before": 0.5256,
+   "soc_after": 0.5329,
+   "action": {
+    "battery_kw": 1.833,
+    "keep": [
+     0.743,
+     1.0,
+     0.926
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 3.5217
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual +3.5 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 6498,
+      "objective": -537.1924,
+      "prediction_miss_v": 0.772,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [],
+    "curtailed_kwh": 139.782,
+    "seconds": 2.407,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": false,
+    "v_max_v": 257.94,
+    "v_min_v": 246.32,
+    "line_max_pct": 23.8,
+    "trafo_pct": 35.1,
+    "vuf_pct": 0.46,
+    "margin_v": -4.94,
+    "severity": 4.939,
+    "reasons": [
+     "over-voltage 257.9 V > 253.0 V"
+    ]
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.02,
+    "v_min_v": 246.06,
+    "line_max_pct": 20.4,
+    "trafo_pct": 33.3,
+    "vuf_pct": 0.31,
+    "margin_v": 0.98,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.42624411463877876,
+     "load_kw": 37.31984759739669,
+     "upstream_pu": 1.0519469767775818
+    },
+    "observed": {
+     "pv_per_kwp": 0.42984990295980813,
+     "load_kw": 35.45729950023744,
+     "upstream_pu": 1.0695260716056334
+    },
+    "residual": {
+     "pv": 0.0079,
+     "load": -0.0273,
+     "upstream_pu": 0.01514
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 1.833,
+     "keep": [
+      0.743,
+      1.0,
+      0.926
+     ],
+     "energy_kwh": 31.972
+    },
+    {
+     "battery_kw": 4.589,
+     "keep": [
+      0.612,
+      0.678,
+      0.753
+     ],
+     "energy_kwh": 33.062
+    },
+    {
+     "battery_kw": 0.345,
+     "keep": [
+      0.529,
+      0.63,
+      0.62
+     ],
+     "energy_kwh": 33.144
+    },
+    {
+     "battery_kw": 1.769,
+     "keep": [
+      0.746,
+      0.917,
+      0.961
+     ],
+     "energy_kwh": 33.565
+    },
+    {
+     "battery_kw": 6.941,
+     "keep": [
+      0.652,
+      0.814,
+      0.906
+     ],
+     "energy_kwh": 35.213
+    },
+    {
+     "battery_kw": -0.265,
+     "keep": [
+      0.655,
+      0.79,
+      0.871
+     ],
+     "energy_kwh": 35.143
+    },
+    {
+     "battery_kw": 5.878,
+     "keep": [
+      0.728,
+      0.865,
+      1.0
+     ],
+     "energy_kwh": 36.539
+    },
+    {
+     "battery_kw": 12.302,
+     "keep": [
+      0.661,
+      0.761,
+      0.911
+     ],
+     "energy_kwh": 39.461
+    },
+    {
+     "battery_kw": 12.517,
+     "keep": [
+      0.669,
+      0.769,
+      0.933
+     ],
+     "energy_kwh": 42.434
+    },
+    {
+     "battery_kw": 12.996,
+     "keep": [
+      0.726,
+      0.833,
+      1.0
+     ],
+     "energy_kwh": 45.521
+    },
+    {
+     "battery_kw": 8.737,
+     "keep": [
+      0.666,
+      0.8,
+      0.954
+     ],
+     "energy_kwh": 47.596
+    },
+    {
+     "battery_kw": 8.434,
+     "keep": [
+      0.614,
+      0.766,
+      0.807
+     ],
+     "energy_kwh": 49.599
+    },
+    {
+     "battery_kw": 14.274,
+     "keep": [
+      0.755,
+      0.908,
+      1.0
+     ],
+     "energy_kwh": 52.989
+    },
+    {
+     "battery_kw": 3.561,
+     "keep": [
+      0.753,
+      0.93,
+      1.0
+     ],
+     "energy_kwh": 53.835
+    },
+    {
+     "battery_kw": 0.4,
+     "keep": [
+      0.662,
+      0.888,
+      0.924
+     ],
+     "energy_kwh": 53.929
+    },
+    {
+     "battery_kw": 0.297,
+     "keep": [
+      0.503,
+      0.694,
+      0.729
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 38,
+   "time": "09:30",
+   "energy_before_kwh": 31.9724,
+   "energy_after_kwh": 33.4767,
+   "soc_before": 0.5329,
+   "soc_after": 0.5579,
+   "action": {
+    "battery_kw": 6.334,
+    "keep": [
+     0.721,
+     1.0,
+     0.995
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 3.2128
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual +4.5 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 6697,
+      "objective": -513.4286,
+      "prediction_miss_v": 0.757,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [],
+    "curtailed_kwh": 177.458,
+    "seconds": 1.012,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": false,
+    "v_max_v": 260.38,
+    "v_min_v": 246.78,
+    "line_max_pct": 26.8,
+    "trafo_pct": 38.5,
+    "vuf_pct": 0.58,
+    "margin_v": -7.38,
+    "severity": 7.381,
+    "reasons": [
+     "over-voltage 260.4 V > 253.0 V"
+    ]
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.02,
+    "v_min_v": 246.33,
+    "line_max_pct": 19.6,
+    "trafo_pct": 34.7,
+    "vuf_pct": 0.33,
+    "margin_v": 0.98,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.45348559950411405,
+     "load_kw": 35.76266290071988,
+     "upstream_pu": 1.0499397307601257
+    },
+    "observed": {
+     "pv_per_kwp": 0.45689895626009425,
+     "load_kw": 34.38173681373129,
+     "upstream_pu": 1.0711564970588194
+    },
+    "residual": {
+     "pv": 0.0076,
+     "load": -0.0352,
+     "upstream_pu": 0.01939
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 6.334,
+     "keep": [
+      0.721,
+      1.0,
+      0.995
+     ],
+     "energy_kwh": 33.477
+    },
+    {
+     "battery_kw": -0.191,
+     "keep": [
+      0.453,
+      0.533,
+      0.512
+     ],
+     "energy_kwh": 33.427
+    },
+    {
+     "battery_kw": 2.411,
+     "keep": [
+      0.697,
+      0.852,
+      0.895
+     ],
+     "energy_kwh": 33.999
+    },
+    {
+     "battery_kw": 6.119,
+     "keep": [
+      0.585,
+      0.728,
+      0.806
+     ],
+     "energy_kwh": 35.453
+    },
+    {
+     "battery_kw": -0.511,
+     "keep": [
+      0.601,
+      0.721,
+      0.793
+     ],
+     "energy_kwh": 35.318
+    },
+    {
+     "battery_kw": 8.315,
+     "keep": [
+      0.719,
+      0.852,
+      0.997
+     ],
+     "energy_kwh": 37.293
+    },
+    {
+     "battery_kw": 10.316,
+     "keep": [
+      0.589,
+      0.669,
+      0.801
+     ],
+     "energy_kwh": 39.743
+    },
+    {
+     "battery_kw": 10.958,
+     "keep": [
+      0.605,
+      0.688,
+      0.837
+     ],
+     "energy_kwh": 42.345
+    },
+    {
+     "battery_kw": 11.541,
+     "keep": [
+      0.667,
+      0.758,
+      0.912
+     ],
+     "energy_kwh": 45.086
+    },
+    {
+     "battery_kw": 8.434,
+     "keep": [
+      0.627,
+      0.75,
+      0.898
+     ],
+     "energy_kwh": 47.089
+    },
+    {
+     "battery_kw": 7.846,
+     "keep": [
+      0.573,
+      0.714,
+      0.748
+     ],
+     "energy_kwh": 48.953
+    },
+    {
+     "battery_kw": 14.818,
+     "keep": [
+      0.731,
+      0.876,
+      0.967
+     ],
+     "energy_kwh": 52.472
+    },
+    {
+     "battery_kw": 5.339,
+     "keep": [
+      0.749,
+      0.922,
+      1.0
+     ],
+     "energy_kwh": 53.74
+    },
+    {
+     "battery_kw": 0.394,
+     "keep": [
+      0.634,
+      0.851,
+      0.884
+     ],
+     "energy_kwh": 53.834
+    },
+    {
+     "battery_kw": 0.354,
+     "keep": [
+      0.496,
+      0.669,
+      0.69
+     ],
+     "energy_kwh": 53.918
+    },
+    {
+     "battery_kw": 0.347,
+     "keep": [
+      0.504,
+      0.689,
+      0.709
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 39,
+   "time": "09:45",
+   "energy_before_kwh": 33.4767,
+   "energy_after_kwh": 32.3571,
+   "soc_before": 0.5579,
+   "soc_after": 0.5393,
+   "action": {
+    "battery_kw": -4.255,
+    "keep": [
+     0.7,
+     0.973,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 3.9323
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual +4.1 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 6321,
+      "objective": -532.9625,
+      "prediction_miss_v": 0.629,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [],
+    "curtailed_kwh": 168.852,
+    "seconds": 1.369,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": false,
+    "v_max_v": 257.83,
+    "v_min_v": 242.83,
+    "line_max_pct": 29.0,
+    "trafo_pct": 42.6,
+    "vuf_pct": 0.69,
+    "margin_v": -4.83,
+    "severity": 4.827,
+    "reasons": [
+     "over-voltage 257.8 V > 253.0 V"
+    ]
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 251.92,
+    "v_min_v": 242.42,
+    "line_max_pct": 26.9,
+    "trafo_pct": 41.9,
+    "vuf_pct": 0.37,
+    "margin_v": 1.08,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.48214375261328724,
+     "load_kw": 35.0350404223858,
+     "upstream_pu": 1.036273061232436
+    },
+    "observed": {
+     "pv_per_kwp": 0.4849725556670624,
+     "load_kw": 33.06436219307211,
+     "upstream_pu": 1.0535695505713927
+    },
+    "residual": {
+     "pv": 0.0064,
+     "load": -0.0499,
+     "upstream_pu": 0.01793
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": -4.255,
+     "keep": [
+      0.7,
+      0.973,
+      1.0
+     ],
+     "energy_kwh": 32.357
+    },
+    {
+     "battery_kw": 5.398,
+     "keep": [
+      0.75,
+      0.918,
+      0.984
+     ],
+     "energy_kwh": 33.639
+    },
+    {
+     "battery_kw": 6.589,
+     "keep": [
+      0.595,
+      0.741,
+      0.823
+     ],
+     "energy_kwh": 35.204
+    },
+    {
+     "battery_kw": -0.443,
+     "keep": [
+      0.604,
+      0.726,
+      0.8
+     ],
+     "energy_kwh": 35.087
+    },
+    {
+     "battery_kw": 8.249,
+     "keep": [
+      0.721,
+      0.855,
+      1.0
+     ],
+     "energy_kwh": 37.046
+    },
+    {
+     "battery_kw": 10.53,
+     "keep": [
+      0.594,
+      0.677,
+      0.81
+     ],
+     "energy_kwh": 39.547
+    },
+    {
+     "battery_kw": 11.106,
+     "keep": [
+      0.61,
+      0.695,
+      0.844
+     ],
+     "energy_kwh": 42.185
+    },
+    {
+     "battery_kw": 11.713,
+     "keep": [
+      0.671,
+      0.765,
+      0.92
+     ],
+     "energy_kwh": 44.967
+    },
+    {
+     "battery_kw": 9.276,
+     "keep": [
+      0.641,
+      0.768,
+      0.92
+     ],
+     "energy_kwh": 47.17
+    },
+    {
+     "battery_kw": 7.882,
+     "keep": [
+      0.575,
+      0.717,
+      0.753
+     ],
+     "energy_kwh": 49.042
+    },
+    {
+     "battery_kw": 14.933,
+     "keep": [
+      0.734,
+      0.881,
+      0.973
+     ],
+     "energy_kwh": 52.589
+    },
+    {
+     "battery_kw": 5.199,
+     "keep": [
+      0.749,
+      0.923,
+      1.0
+     ],
+     "energy_kwh": 53.823
+    },
+    {
+     "battery_kw": 0.392,
+     "keep": [
+      0.636,
+      0.853,
+      0.886
+     ],
+     "energy_kwh": 53.916
+    },
+    {
+     "battery_kw": 0.352,
+     "keep": [
+      0.498,
+      0.67,
+      0.693
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": -0.511,
+     "keep": [
+      0.512,
+      0.684,
+      0.689
+     ],
+     "energy_kwh": 53.866
+    },
+    {
+     "battery_kw": 0.566,
+     "keep": [
+      0.55,
+      0.729,
+      0.772
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 40,
+   "time": "10:00",
+   "energy_before_kwh": 32.3571,
+   "energy_after_kwh": 28.8483,
+   "soc_before": 0.5393,
+   "soc_after": 0.4808,
+   "action": {
+    "battery_kw": -13.334,
+    "keep": [
+     0.61,
+     0.837,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 7.0208
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual +2.3 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 5632,
+      "objective": -590.2933,
+      "prediction_miss_v": 0.335,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     },
+     {
+      "round": 1,
+      "trust_kw": 30.0,
+      "trust_keep": 1.0,
+      "rows": 10957,
+      "objective": -592.2599,
+      "prediction_miss_v": 0.022,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [],
+    "curtailed_kwh": 117.635,
+    "seconds": 4.368,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": false,
+    "v_max_v": 257.28,
+    "v_min_v": 239.71,
+    "line_max_pct": 32.0,
+    "trafo_pct": 46.8,
+    "vuf_pct": 0.92,
+    "margin_v": -4.28,
+    "severity": 4.275,
+    "reasons": [
+     "over-voltage 257.3 V > 253.0 V"
+    ]
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.0,
+    "v_min_v": 239.15,
+    "line_max_pct": 29.8,
+    "trafo_pct": 45.7,
+    "vuf_pct": 0.42,
+    "margin_v": 1.0,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.5107064522829456,
+     "load_kw": 35.88648117589185,
+     "upstream_pu": 1.033765811718174
+    },
+    "observed": {
+     "pv_per_kwp": 0.5132826329715804,
+     "load_kw": 34.47580835774353,
+     "upstream_pu": 1.0406348658179747
+    },
+    "residual": {
+     "pv": 0.0055,
+     "load": -0.0425,
+     "upstream_pu": 0.01019
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": -13.334,
+     "keep": [
+      0.61,
+      0.837,
+      1.0
+     ],
+     "energy_kwh": 28.848
+    },
+    {
+     "battery_kw": 7.83,
+     "keep": [
+      0.696,
+      0.871,
+      0.972
+     ],
+     "energy_kwh": 30.708
+    },
+    {
+     "battery_kw": 3.146,
+     "keep": [
+      0.735,
+      0.891,
+      1.0
+     ],
+     "energy_kwh": 31.455
+    },
+    {
+     "battery_kw": 4.425,
+     "keep": [
+      0.731,
+      0.873,
+      1.0
+     ],
+     "energy_kwh": 32.506
+    },
+    {
+     "battery_kw": 13.519,
+     "keep": [
+      0.702,
+      0.816,
+      0.974
+     ],
+     "energy_kwh": 35.717
+    },
+    {
+     "battery_kw": 13.445,
+     "keep": [
+      0.704,
+      0.816,
+      0.987
+     ],
+     "energy_kwh": 38.91
+    },
+    {
+     "battery_kw": 11.671,
+     "keep": [
+      0.728,
+      0.837,
+      1.0
+     ],
+     "energy_kwh": 41.682
+    },
+    {
+     "battery_kw": 9.514,
+     "keep": [
+      0.696,
+      0.84,
+      1.0
+     ],
+     "energy_kwh": 43.941
+    },
+    {
+     "battery_kw": 14.285,
+     "keep": [
+      0.711,
+      0.893,
+      0.965
+     ],
+     "energy_kwh": 47.334
+    },
+    {
+     "battery_kw": 13.117,
+     "keep": [
+      0.756,
+      0.91,
+      1.0
+     ],
+     "energy_kwh": 50.449
+    },
+    {
+     "battery_kw": 2.547,
+     "keep": [
+      0.751,
+      0.933,
+      1.0
+     ],
+     "energy_kwh": 51.054
+    },
+    {
+     "battery_kw": 1.373,
+     "keep": [
+      0.69,
+      0.923,
+      0.968
+     ],
+     "energy_kwh": 51.38
+    },
+    {
+     "battery_kw": 8.834,
+     "keep": [
+      0.652,
+      0.862,
+      0.943
+     ],
+     "energy_kwh": 53.478
+    },
+    {
+     "battery_kw": -0.291,
+     "keep": [
+      0.552,
+      0.737,
+      0.747
+     ],
+     "energy_kwh": 53.402
+    },
+    {
+     "battery_kw": -0.684,
+     "keep": [
+      0.583,
+      0.761,
+      0.791
+     ],
+     "energy_kwh": 53.222
+    },
+    {
+     "battery_kw": 3.277,
+     "keep": [
+      0.735,
+      0.878,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 41,
+   "time": "10:15",
+   "energy_before_kwh": 28.8483,
+   "energy_after_kwh": 26.1513,
+   "soc_before": 0.4808,
+   "soc_after": 0.4359,
+   "action": {
+    "battery_kw": -10.248,
+    "keep": [
+     0.72,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 3.6947
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4986,
+      "objective": -662.1698,
+      "prediction_miss_v": 0.405,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     },
+     {
+      "round": 1,
+      "trust_kw": 30.0,
+      "trust_keep": 1.0,
+      "rows": 9844,
+      "objective": -662.6195,
+      "prediction_miss_v": 0.023,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [],
+    "curtailed_kwh": 52.131,
+    "seconds": 1.1,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": false,
+    "v_max_v": 255.67,
+    "v_min_v": 238.44,
+    "line_max_pct": 33.1,
+    "trafo_pct": 49.3,
+    "vuf_pct": 0.75,
+    "margin_v": -2.67,
+    "severity": 2.67,
+    "reasons": [
+     "over-voltage 255.7 V > 253.0 V"
+    ]
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.0,
+    "v_min_v": 238.28,
+    "line_max_pct": 34.0,
+    "trafo_pct": 50.5,
+    "vuf_pct": 0.37,
+    "margin_v": 1.0,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.5315597301063273,
+     "load_kw": 35.10183090801425,
+     "upstream_pu": 1.0466135928995095
+    },
+    "observed": {
+     "pv_per_kwp": 0.5325505043915496,
+     "load_kw": 33.07950953369632,
+     "upstream_pu": 1.0339609337424742
+    },
+    "residual": {
+     "pv": 0.0029,
+     "load": -0.0531,
+     "upstream_pu": -0.0058
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": -10.248,
+     "keep": [
+      0.72,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 26.151
+    },
+    {
+     "battery_kw": -2.076,
+     "keep": [
+      0.784,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 25.605
+    },
+    {
+     "battery_kw": 1.709,
+     "keep": [
+      0.806,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 26.011
+    },
+    {
+     "battery_kw": 14.068,
+     "keep": [
+      0.806,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 29.352
+    },
+    {
+     "battery_kw": 14.754,
+     "keep": [
+      0.805,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 32.856
+    },
+    {
+     "battery_kw": 12.349,
+     "keep": [
+      0.814,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 35.789
+    },
+    {
+     "battery_kw": 10.693,
+     "keep": [
+      0.779,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 38.328
+    },
+    {
+     "battery_kw": 12.333,
+     "keep": [
+      0.774,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 41.257
+    },
+    {
+     "battery_kw": 10.561,
+     "keep": [
+      0.804,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 43.766
+    },
+    {
+     "battery_kw": 4.693,
+     "keep": [
+      0.843,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 44.88
+    },
+    {
+     "battery_kw": -0.963,
+     "keep": [
+      0.732,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 44.627
+    },
+    {
+     "battery_kw": 10.631,
+     "keep": [
+      0.737,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 47.152
+    },
+    {
+     "battery_kw": 9.093,
+     "keep": [
+      0.745,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 49.311
+    },
+    {
+     "battery_kw": 7.457,
+     "keep": [
+      0.754,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 51.082
+    },
+    {
+     "battery_kw": 4.7,
+     "keep": [
+      0.799,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 52.198
+    },
+    {
+     "battery_kw": 7.585,
+     "keep": [
+      0.795,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 42,
+   "time": "10:30",
+   "energy_before_kwh": 26.1513,
+   "energy_after_kwh": 26.1219,
+   "soc_before": 0.4359,
+   "soc_after": 0.4354,
+   "action": {
+    "battery_kw": -0.112,
+    "keep": [
+     0.725,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 3.7804
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 5479,
+      "objective": -642.9966,
+      "prediction_miss_v": 0.229,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     },
+     {
+      "round": 1,
+      "trust_kw": 30.0,
+      "trust_keep": 1.0,
+      "rows": 10546,
+      "objective": -643.108,
+      "prediction_miss_v": 0.016,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [],
+    "curtailed_kwh": 75.267,
+    "seconds": 1.1,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": false,
+    "v_max_v": 259.74,
+    "v_min_v": 242.01,
+    "line_max_pct": 34.4,
+    "trafo_pct": 51.3,
+    "vuf_pct": 0.75,
+    "margin_v": -6.74,
+    "severity": 6.745,
+    "reasons": [
+     "over-voltage 259.7 V > 253.0 V"
+    ]
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.0,
+    "v_min_v": 241.75,
+    "line_max_pct": 30.5,
+    "trafo_pct": 48.8,
+    "vuf_pct": 0.38,
+    "margin_v": 1.0,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.5525819073034515,
+     "load_kw": 33.58619897055268,
+     "upstream_pu": 1.0433962533838235
+    },
+    "observed": {
+     "pv_per_kwp": 0.5548602769032256,
+     "load_kw": 32.57841491422061,
+     "upstream_pu": 1.0491565418815123
+    },
+    "residual": {
+     "pv": 0.0038,
+     "load": -0.0369,
+     "upstream_pu": 0.00229
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": -0.112,
+     "keep": [
+      0.725,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 26.122
+    },
+    {
+     "battery_kw": 1.583,
+     "keep": [
+      0.755,
+      0.917,
+      1.0
+     ],
+     "energy_kwh": 26.498
+    },
+    {
+     "battery_kw": 10.286,
+     "keep": [
+      0.727,
+      0.849,
+      1.0
+     ],
+     "energy_kwh": 28.941
+    },
+    {
+     "battery_kw": 17.05,
+     "keep": [
+      0.779,
+      0.952,
+      1.0
+     ],
+     "energy_kwh": 32.99
+    },
+    {
+     "battery_kw": 7.786,
+     "keep": [
+      0.735,
+      0.849,
+      1.0
+     ],
+     "energy_kwh": 34.839
+    },
+    {
+     "battery_kw": 6.029,
+     "keep": [
+      0.705,
+      0.854,
+      1.0
+     ],
+     "energy_kwh": 36.271
+    },
+    {
+     "battery_kw": 12.358,
+     "keep": [
+      0.739,
+      0.93,
+      1.0
+     ],
+     "energy_kwh": 39.206
+    },
+    {
+     "battery_kw": 14.932,
+     "keep": [
+      0.804,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 42.753
+    },
+    {
+     "battery_kw": 3.11,
+     "keep": [
+      0.788,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 43.491
+    },
+    {
+     "battery_kw": 0.791,
+     "keep": [
+      0.723,
+      0.971,
+      1.0
+     ],
+     "energy_kwh": 43.679
+    },
+    {
+     "battery_kw": 8.606,
+     "keep": [
+      0.693,
+      0.915,
+      1.0
+     ],
+     "energy_kwh": 45.723
+    },
+    {
+     "battery_kw": 7.99,
+     "keep": [
+      0.708,
+      0.931,
+      1.0
+     ],
+     "energy_kwh": 47.62
+    },
+    {
+     "battery_kw": 5.696,
+     "keep": [
+      0.713,
+      0.923,
+      1.0
+     ],
+     "energy_kwh": 48.973
+    },
+    {
+     "battery_kw": 3.167,
+     "keep": [
+      0.76,
+      0.923,
+      1.0
+     ],
+     "energy_kwh": 49.726
+    },
+    {
+     "battery_kw": 10.681,
+     "keep": [
+      0.795,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 52.262
+    },
+    {
+     "battery_kw": 7.317,
+     "keep": [
+      0.823,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 43,
+   "time": "10:45",
+   "energy_before_kwh": 26.1219,
+   "energy_after_kwh": 27.0078,
+   "soc_before": 0.4354,
+   "soc_after": 0.4501,
+   "action": {
+    "battery_kw": 3.73,
+    "keep": [
+     0.718,
+     1.0,
+     0.989
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 4.1885
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 5821,
+      "objective": -627.5255,
+      "prediction_miss_v": 0.075,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     },
+     {
+      "round": 1,
+      "trust_kw": 30.0,
+      "trust_keep": 1.0,
+      "rows": 10962,
+      "objective": -627.6931,
+      "prediction_miss_v": 0.001,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [],
+    "curtailed_kwh": 93.282,
+    "seconds": 4.11,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": false,
+    "v_max_v": 261.23,
+    "v_min_v": 243.53,
+    "line_max_pct": 35.3,
+    "trafo_pct": 52.2,
+    "vuf_pct": 0.72,
+    "margin_v": -8.23,
+    "severity": 8.231,
+    "reasons": [
+     "over-voltage 261.2 V > 253.0 V"
+    ]
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.0,
+    "v_min_v": 243.04,
+    "line_max_pct": 29.8,
+    "trafo_pct": 48.8,
+    "vuf_pct": 0.43,
+    "margin_v": 1.0,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.5701737671873228,
+     "load_kw": 33.872564157723815,
+     "upstream_pu": 1.045374491807489
+    },
+    "observed": {
+     "pv_per_kwp": 0.5763082056843924,
+     "load_kw": 34.046482335298485,
+     "upstream_pu": 1.0557000589942442
+    },
+    "residual": {
+     "pv": 0.0087,
+     "load": -0.0075,
+     "upstream_pu": 0.00792
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 3.73,
+     "keep": [
+      0.718,
+      1.0,
+      0.989
+     ],
+     "energy_kwh": 27.008
+    },
+    {
+     "battery_kw": 13.927,
+     "keep": [
+      0.721,
+      0.837,
+      1.0
+     ],
+     "energy_kwh": 30.315
+    },
+    {
+     "battery_kw": 13.366,
+     "keep": [
+      0.715,
+      0.827,
+      1.0
+     ],
+     "energy_kwh": 33.49
+    },
+    {
+     "battery_kw": 11.106,
+     "keep": [
+      0.73,
+      0.838,
+      1.0
+     ],
+     "energy_kwh": 36.128
+    },
+    {
+     "battery_kw": 9.006,
+     "keep": [
+      0.698,
+      0.841,
+      1.0
+     ],
+     "energy_kwh": 38.267
+    },
+    {
+     "battery_kw": 14.56,
+     "keep": [
+      0.723,
+      0.908,
+      0.981
+     ],
+     "energy_kwh": 41.724
+    },
+    {
+     "battery_kw": 12.682,
+     "keep": [
+      0.759,
+      0.913,
+      1.0
+     ],
+     "energy_kwh": 44.736
+    },
+    {
+     "battery_kw": 2.156,
+     "keep": [
+      0.751,
+      0.934,
+      1.0
+     ],
+     "energy_kwh": 45.248
+    },
+    {
+     "battery_kw": 0.484,
+     "keep": [
+      0.685,
+      0.918,
+      0.957
+     ],
+     "energy_kwh": 45.363
+    },
+    {
+     "battery_kw": 8.991,
+     "keep": [
+      0.661,
+      0.875,
+      0.956
+     ],
+     "energy_kwh": 47.499
+    },
+    {
+     "battery_kw": 8.116,
+     "keep": [
+      0.675,
+      0.888,
+      0.952
+     ],
+     "energy_kwh": 49.426
+    },
+    {
+     "battery_kw": 7.745,
+     "keep": [
+      0.709,
+      0.915,
+      1.0
+     ],
+     "energy_kwh": 51.266
+    },
+    {
+     "battery_kw": 2.927,
+     "keep": [
+      0.736,
+      0.879,
+      1.0
+     ],
+     "energy_kwh": 51.961
+    },
+    {
+     "battery_kw": 4.458,
+     "keep": [
+      0.722,
+      0.86,
+      1.0
+     ],
+     "energy_kwh": 53.02
+    },
+    {
+     "battery_kw": 4.127,
+     "keep": [
+      0.776,
+      0.909,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      0.874,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 44,
+   "time": "11:00",
+   "energy_before_kwh": 27.0078,
+   "energy_after_kwh": 28.0212,
+   "soc_before": 0.4501,
+   "soc_after": 0.467,
+   "action": {
+    "battery_kw": 4.267,
+    "keep": [
+     0.73,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 4.0061
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 5289,
+      "objective": -648.0645,
+      "prediction_miss_v": 0.325,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     },
+     {
+      "round": 1,
+      "trust_kw": 30.0,
+      "trust_keep": 1.0,
+      "rows": 10457,
+      "objective": -648.0984,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [],
+    "curtailed_kwh": 70.015,
+    "seconds": 1.119,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": false,
+    "v_max_v": 261.44,
+    "v_min_v": 242.74,
+    "line_max_pct": 37.4,
+    "trafo_pct": 55.2,
+    "vuf_pct": 0.75,
+    "margin_v": -8.44,
+    "severity": 8.44,
+    "reasons": [
+     "over-voltage 261.4 V > 253.0 V"
+    ]
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.0,
+    "v_min_v": 242.38,
+    "line_max_pct": 31.2,
+    "trafo_pct": 51.7,
+    "vuf_pct": 0.42,
+    "margin_v": 1.0,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.5938487719753255,
+     "load_kw": 34.235549066959095,
+     "upstream_pu": 1.0507151077157937
+    },
+    "observed": {
+     "pv_per_kwp": 0.59875311003303,
+     "load_kw": 33.051163545128226,
+     "upstream_pu": 1.0519609404181944
+    },
+    "residual": {
+     "pv": 0.0084,
+     "load": -0.0265,
+     "upstream_pu": 0.00325
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 4.267,
+     "keep": [
+      0.73,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.021
+    },
+    {
+     "battery_kw": 18.756,
+     "keep": [
+      0.785,
+      0.962,
+      1.0
+     ],
+     "energy_kwh": 32.476
+    },
+    {
+     "battery_kw": 8.647,
+     "keep": [
+      0.734,
+      0.846,
+      1.0
+     ],
+     "energy_kwh": 34.529
+    },
+    {
+     "battery_kw": 6.807,
+     "keep": [
+      0.703,
+      0.851,
+      1.0
+     ],
+     "energy_kwh": 36.146
+    },
+    {
+     "battery_kw": 13.156,
+     "keep": [
+      0.737,
+      0.928,
+      1.0
+     ],
+     "energy_kwh": 39.271
+    },
+    {
+     "battery_kw": 15.828,
+     "keep": [
+      0.803,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 43.03
+    },
+    {
+     "battery_kw": 3.879,
+     "keep": [
+      0.79,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 43.951
+    },
+    {
+     "battery_kw": 0.717,
+     "keep": [
+      0.716,
+      0.959,
+      1.0
+     ],
+     "energy_kwh": 44.121
+    },
+    {
+     "battery_kw": 9.206,
+     "keep": [
+      0.692,
+      0.913,
+      1.0
+     ],
+     "energy_kwh": 46.308
+    },
+    {
+     "battery_kw": 8.556,
+     "keep": [
+      0.707,
+      0.929,
+      1.0
+     ],
+     "energy_kwh": 48.34
+    },
+    {
+     "battery_kw": 6.231,
+     "keep": [
+      0.712,
+      0.921,
+      1.0
+     ],
+     "energy_kwh": 49.819
+    },
+    {
+     "battery_kw": 3.117,
+     "keep": [
+      0.754,
+      0.912,
+      1.0
+     ],
+     "energy_kwh": 50.56
+    },
+    {
+     "battery_kw": 6.593,
+     "keep": [
+      0.755,
+      0.924,
+      1.0
+     ],
+     "energy_kwh": 52.126
+    },
+    {
+     "battery_kw": 7.891,
+     "keep": [
+      0.823,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": -0.0,
+     "keep": [
+      0.888,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": -0.0,
+     "keep": [
+      0.902,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 45,
+   "time": "11:15",
+   "energy_before_kwh": 28.0212,
+   "energy_after_kwh": 28.4837,
+   "soc_before": 0.467,
+   "soc_after": 0.4747,
+   "action": {
+    "battery_kw": 1.948,
+    "keep": [
+     0.745,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 3.8278
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4986,
+      "objective": -659.544,
+      "prediction_miss_v": 0.332,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     },
+     {
+      "round": 1,
+      "trust_kw": 30.0,
+      "trust_keep": 1.0,
+      "rows": 9942,
+      "objective": -659.9842,
+      "prediction_miss_v": 0.005,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [],
+    "curtailed_kwh": 51.407,
+    "seconds": 1.006,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": false,
+    "v_max_v": 260.51,
+    "v_min_v": 241.86,
+    "line_max_pct": 37.6,
+    "trafo_pct": 55.3,
+    "vuf_pct": 0.73,
+    "margin_v": -7.51,
+    "severity": 7.508,
+    "reasons": [
+     "over-voltage 260.5 V > 253.0 V"
+    ]
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.0,
+    "v_min_v": 241.42,
+    "line_max_pct": 33.3,
+    "trafo_pct": 53.7,
+    "vuf_pct": 0.46,
+    "margin_v": 1.0,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.6017516929903367,
+     "load_kw": 33.9170368664152,
+     "upstream_pu": 1.0499107629027649
+    },
+    "observed": {
+     "pv_per_kwp": 0.605846868719678,
+     "load_kw": 33.58100478185756,
+     "upstream_pu": 1.047960872707318
+    },
+    "residual": {
+     "pv": 0.0073,
+     "load": -0.0149,
+     "upstream_pu": -0.00039
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 1.948,
+     "keep": [
+      0.745,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.484
+    },
+    {
+     "battery_kw": 15.717,
+     "keep": [
+      0.815,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 32.217
+    },
+    {
+     "battery_kw": 13.931,
+     "keep": [
+      0.779,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 35.525
+    },
+    {
+     "battery_kw": 15.329,
+     "keep": [
+      0.775,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 39.166
+    },
+    {
+     "battery_kw": 13.398,
+     "keep": [
+      0.805,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 42.348
+    },
+    {
+     "battery_kw": 1.817,
+     "keep": [
+      0.784,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 42.779
+    },
+    {
+     "battery_kw": 0.88,
+     "keep": [
+      0.735,
+      0.994,
+      1.0
+     ],
+     "energy_kwh": 42.988
+    },
+    {
+     "battery_kw": 11.963,
+     "keep": [
+      0.729,
+      0.984,
+      1.0
+     ],
+     "energy_kwh": 45.829
+    },
+    {
+     "battery_kw": 6.989,
+     "keep": [
+      0.711,
+      0.936,
+      1.0
+     ],
+     "energy_kwh": 47.489
+    },
+    {
+     "battery_kw": 4.735,
+     "keep": [
+      0.716,
+      0.927,
+      1.0
+     ],
+     "energy_kwh": 48.614
+    },
+    {
+     "battery_kw": 6.831,
+     "keep": [
+      0.8,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 50.236
+    },
+    {
+     "battery_kw": 9.605,
+     "keep": [
+      0.796,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 52.517
+    },
+    {
+     "battery_kw": 6.243,
+     "keep": [
+      0.824,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": -0.0,
+     "keep": [
+      0.904,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": -0.0,
+     "keep": [
+      0.916,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": -0.0,
+     "keep": [
+      0.917,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 46,
+   "time": "11:30",
+   "energy_before_kwh": 28.4837,
+   "energy_after_kwh": 28.654,
+   "soc_before": 0.4747,
+   "soc_after": 0.4776,
+   "action": {
+    "battery_kw": 0.717,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "solar residual -34%",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 3855,
+      "objective": -515.6076,
+      "prediction_miss_v": 0.516,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [],
+    "curtailed_kwh": 5.213,
+    "seconds": 0.415,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 248.52,
+    "v_min_v": 240.79,
+    "line_max_pct": 16.4,
+    "trafo_pct": 23.0,
+    "vuf_pct": 0.35,
+    "margin_v": 4.48,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 248.31,
+    "v_min_v": 240.79,
+    "line_max_pct": 16.1,
+    "trafo_pct": 22.7,
+    "vuf_pct": 0.36,
+    "margin_v": 4.69,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.6114585084468991,
+     "load_kw": 33.72283723963105,
+     "upstream_pu": 1.0445774187611225
+    },
+    "observed": {
+     "pv_per_kwp": 0.30822792558513423,
+     "load_kw": 33.75068345379091,
+     "upstream_pu": 1.0468522263144957
+    },
+    "residual": {
+     "pv": -0.345,
+     "load": -0.0039,
+     "upstream_pu": 0.00148
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 0.717,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.654
+    },
+    {
+     "battery_kw": 11.83,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 31.464
+    },
+    {
+     "battery_kw": 15.111,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 35.053
+    },
+    {
+     "battery_kw": 10.993,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 37.663
+    },
+    {
+     "battery_kw": 2.71,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 38.307
+    },
+    {
+     "battery_kw": 1.264,
+     "keep": [
+      0.911,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 38.607
+    },
+    {
+     "battery_kw": 22.321,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 43.908
+    },
+    {
+     "battery_kw": 0.18,
+     "keep": [
+      0.776,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 43.951
+    },
+    {
+     "battery_kw": 5.932,
+     "keep": [
+      0.86,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 45.36
+    },
+    {
+     "battery_kw": 11.349,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 48.056
+    },
+    {
+     "battery_kw": 15.384,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 51.709
+    },
+    {
+     "battery_kw": 9.645,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": -2.299,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 53.395
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 53.395
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 53.395
+    },
+    {
+     "battery_kw": 2.547,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 47,
+   "time": "11:45",
+   "energy_before_kwh": 28.654,
+   "energy_after_kwh": 28.654,
+   "soc_before": 0.4776,
+   "soc_after": 0.4776,
+   "action": {
+    "battery_kw": 0.0,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "solar residual -45%",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 3321,
+      "objective": -462.8678,
+      "prediction_miss_v": 0.209,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     },
+     {
+      "round": 1,
+      "trust_kw": 30.0,
+      "trust_keep": 1.0,
+      "rows": 6491,
+      "objective": -462.8725,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [],
+    "curtailed_kwh": 0.0,
+    "seconds": 0.808,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 249.45,
+    "v_min_v": 240.99,
+    "line_max_pct": 16.7,
+    "trafo_pct": 23.2,
+    "vuf_pct": 0.43,
+    "margin_v": 3.55,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 249.45,
+    "v_min_v": 240.99,
+    "line_max_pct": 16.7,
+    "trafo_pct": 23.2,
+    "vuf_pct": 0.43,
+    "margin_v": 3.55,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.6200370466247734,
+     "load_kw": 32.79053920331653,
+     "upstream_pu": 1.0457658161686543
+    },
+    "observed": {
+     "pv_per_kwp": 0.31030011197572366,
+     "load_kw": 34.83928932992335,
+     "upstream_pu": 1.04804789548869
+    },
+    "residual": {
+     "pv": -0.4532,
+     "load": 0.0426,
+     "upstream_pu": 0.00204
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.654
+    },
+    {
+     "battery_kw": 3.217,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 29.418
+    },
+    {
+     "battery_kw": 1.584,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 29.794
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 29.794
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 29.794
+    },
+    {
+     "battery_kw": 13.039,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 32.891
+    },
+    {
+     "battery_kw": 11.954,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 35.73
+    },
+    {
+     "battery_kw": 10.551,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 38.236
+    },
+    {
+     "battery_kw": 3.836,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 39.147
+    },
+    {
+     "battery_kw": 8.46,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 41.156
+    },
+    {
+     "battery_kw": 3.516,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 41.991
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 41.991
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 41.991
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 41.991
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 41.991
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 41.991
+    }
+   ]
+  },
+  {
+   "step": 48,
+   "time": "12:00",
+   "energy_before_kwh": 28.654,
+   "energy_after_kwh": 28.654,
+   "soc_before": 0.4776,
+   "soc_after": 0.4776,
+   "action": {
+    "battery_kw": 0.0,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "solar residual -49%",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 3221,
+      "objective": -437.1657,
+      "prediction_miss_v": 0.02,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     },
+     {
+      "round": 1,
+      "trust_kw": 30.0,
+      "trust_keep": 1.0,
+      "rows": 6200,
+      "objective": -437.1663,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [],
+    "curtailed_kwh": 0.0,
+    "seconds": 0.752,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 249.93,
+    "v_min_v": 241.22,
+    "line_max_pct": 17.1,
+    "trafo_pct": 24.1,
+    "vuf_pct": 0.44,
+    "margin_v": 3.07,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 249.93,
+    "v_min_v": 241.22,
+    "line_max_pct": 17.1,
+    "trafo_pct": 24.1,
+    "vuf_pct": 0.44,
+    "margin_v": 3.07,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.6257639849984092,
+     "load_kw": 30.34558873743583,
+     "upstream_pu": 1.0453527559803608
+    },
+    "observed": {
+     "pv_per_kwp": 0.31218094753101805,
+     "load_kw": 33.26368264219612,
+     "upstream_pu": 1.0489609194373595
+    },
+    "residual": {
+     "pv": -0.4867,
+     "load": 0.0801,
+     "upstream_pu": 0.00314
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.654
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.654
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.654
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.654
+    },
+    {
+     "battery_kw": 9.086,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 30.812
+    },
+    {
+     "battery_kw": 8.162,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 32.751
+    },
+    {
+     "battery_kw": 6.986,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 34.41
+    },
+    {
+     "battery_kw": 1.616,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 34.793
+    },
+    {
+     "battery_kw": 5.539,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 36.109
+    },
+    {
+     "battery_kw": 1.607,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 36.491
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 36.491
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 36.491
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 36.491
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 36.491
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 36.491
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 36.491
+    }
+   ]
+  },
+  {
+   "step": 49,
+   "time": "12:15",
+   "energy_before_kwh": 28.654,
+   "energy_after_kwh": 28.654,
+   "soc_before": 0.4776,
+   "soc_after": 0.4776,
+   "action": {
+    "battery_kw": 0.0,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "solar residual -50%",
+    "grid voltage residual +2.1 V"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 3392,
+      "objective": -419.732,
+      "prediction_miss_v": 0.21,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     },
+     {
+      "round": 1,
+      "trust_kw": 30.0,
+      "trust_keep": 1.0,
+      "rows": 6309,
+      "objective": -419.7339,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [],
+    "curtailed_kwh": 0.0,
+    "seconds": 0.801,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 249.15,
+    "v_min_v": 240.45,
+    "line_max_pct": 17.1,
+    "trafo_pct": 24.0,
+    "vuf_pct": 0.47,
+    "margin_v": 3.85,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 249.15,
+    "v_min_v": 240.45,
+    "line_max_pct": 17.1,
+    "trafo_pct": 24.0,
+    "vuf_pct": 0.47,
+    "margin_v": 3.85,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.6242887466417905,
+     "load_kw": 32.31219628175257,
+     "upstream_pu": 1.0341354002522114
+    },
+    "observed": {
+     "pv_per_kwp": 0.310111601473479,
+     "load_kw": 34.195123424789664,
+     "upstream_pu": 1.045873994884442
+    },
+    "residual": {
+     "pv": -0.4983,
+     "load": 0.0648,
+     "upstream_pu": 0.00916
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.654
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.654
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.654
+    },
+    {
+     "battery_kw": 10.808,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 31.221
+    },
+    {
+     "battery_kw": 9.857,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 33.562
+    },
+    {
+     "battery_kw": 8.648,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 35.616
+    },
+    {
+     "battery_kw": 2.696,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 36.256
+    },
+    {
+     "battery_kw": 7.228,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 37.973
+    },
+    {
+     "battery_kw": 2.677,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 38.609
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 38.609
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 38.609
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 38.609
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 38.609
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 38.609
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 38.609
+    },
+    {
+     "battery_kw": 12.864,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 41.664
+    }
+   ]
+  },
+  {
+   "step": 50,
+   "time": "12:30",
+   "energy_before_kwh": 28.654,
+   "energy_after_kwh": 28.654,
+   "soc_before": 0.4776,
+   "soc_after": 0.4776,
+   "action": {
+    "battery_kw": 0.0,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "solar residual -50%",
+    "demand residual +17%",
+    "grid voltage residual +2.0 V"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 3159,
+      "objective": -403.158,
+      "prediction_miss_v": 0.303,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     },
+     {
+      "round": 1,
+      "trust_kw": 30.0,
+      "trust_keep": 1.0,
+      "rows": 6288,
+      "objective": -403.6917,
+      "prediction_miss_v": 0.021,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [],
+    "curtailed_kwh": 0.0,
+    "seconds": 0.722,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 248.24,
+    "v_min_v": 237.64,
+    "line_max_pct": 17.7,
+    "trafo_pct": 22.8,
+    "vuf_pct": 0.61,
+    "margin_v": 4.76,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 248.24,
+    "v_min_v": 237.64,
+    "line_max_pct": 17.7,
+    "trafo_pct": 22.8,
+    "vuf_pct": 0.61,
+    "margin_v": 4.76,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.6260882858096504,
+     "load_kw": 32.32947706921261,
+     "upstream_pu": 1.0307875663008972
+    },
+    "observed": {
+     "pv_per_kwp": 0.3099851818015805,
+     "load_kw": 39.36606974658358,
+     "upstream_pu": 1.0395479155158507
+    },
+    "residual": {
+     "pv": -0.5029,
+     "load": 0.1718,
+     "upstream_pu": 0.00888
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.654
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.654
+    },
+    {
+     "battery_kw": 7.038,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 30.326
+    },
+    {
+     "battery_kw": 6.049,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 31.762
+    },
+    {
+     "battery_kw": 4.999,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 32.95
+    },
+    {
+     "battery_kw": 0.427,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 33.051
+    },
+    {
+     "battery_kw": 4.18,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 34.044
+    },
+    {
+     "battery_kw": 0.482,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 34.158
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 34.158
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 34.158
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 34.158
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 34.158
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 34.158
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 34.158
+    },
+    {
+     "battery_kw": 11.31,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 36.844
+    },
+    {
+     "battery_kw": 18.57,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 41.255
+    }
+   ]
+  },
+  {
+   "step": 51,
+   "time": "12:45",
+   "energy_before_kwh": 28.654,
+   "energy_after_kwh": 28.654,
+   "soc_before": 0.4776,
+   "soc_after": 0.4776,
+   "action": {
+    "battery_kw": 0.0,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "solar residual -50%",
+    "grid voltage residual +3.1 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 3622,
+      "objective": -348.116,
+      "prediction_miss_v": 0.707,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [
+       15
+      ],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [
+     15
+    ],
+    "curtailed_kwh": 8.288,
+    "seconds": 0.387,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 249.4,
+    "v_min_v": 239.07,
+    "line_max_pct": 17.7,
+    "trafo_pct": 22.7,
+    "vuf_pct": 0.58,
+    "margin_v": 3.6,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 249.4,
+    "v_min_v": 239.07,
+    "line_max_pct": 17.7,
+    "trafo_pct": 22.7,
+    "vuf_pct": 0.58,
+    "margin_v": 3.6,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.6218428407541213,
+     "load_kw": 35.205841214541564,
+     "upstream_pu": 1.029323775566288
+    },
+    "observed": {
+     "pv_per_kwp": 0.31194062290893754,
+     "load_kw": 39.14501173624432,
+     "upstream_pu": 1.0448087406730162
+    },
+    "residual": {
+     "pv": -0.4997,
+     "load": 0.1299,
+     "upstream_pu": 0.0135
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.654
+    },
+    {
+     "battery_kw": 9.603,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 30.935
+    },
+    {
+     "battery_kw": 8.592,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 32.976
+    },
+    {
+     "battery_kw": 7.469,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 34.749
+    },
+    {
+     "battery_kw": 2.001,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 35.225
+    },
+    {
+     "battery_kw": 6.517,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 36.773
+    },
+    {
+     "battery_kw": 2.021,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 37.253
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 37.253
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 37.253
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 37.253
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 37.253
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 37.253
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 37.253
+    },
+    {
+     "battery_kw": 13.083,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 40.36
+    },
+    {
+     "battery_kw": 20.208,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 45.159
+    },
+    {
+     "battery_kw": 15.0,
+     "keep": [
+      0.5,
+      0.539,
+      0.584
+     ],
+     "energy_kwh": 48.722
+    }
+   ]
+  },
+  {
+   "step": 52,
+   "time": "13:00",
+   "energy_before_kwh": 28.654,
+   "energy_after_kwh": 28.8124,
+   "soc_before": 0.4776,
+   "soc_after": 0.4802,
+   "action": {
+    "battery_kw": 0.667,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "solar residual -50%",
+    "demand residual +19%",
+    "grid voltage residual +4.6 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 3999,
+      "objective": 329.6783,
+      "prediction_miss_v": 0.736,
+      "worst_severity": 2.38,
+      "predicted_infeasible_steps": [
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 3844,
+      "objective": 163.2008,
+      "prediction_miss_v": 1.01,
+      "worst_severity": 1.51,
+      "predicted_infeasible_steps": [
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 2007,
+      "objective": 146.2601,
+      "prediction_miss_v": 0.002,
+      "worst_severity": 1.447,
+      "predicted_infeasible_steps": [
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 2002,
+      "objective": 146.2114,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 1.447,
+      "predicted_infeasible_steps": [
+       15
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     15
+    ],
+    "curtailed_kwh": 27.464,
+    "seconds": 1.529,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 252.26,
+    "v_min_v": 241.41,
+    "line_max_pct": 17.5,
+    "trafo_pct": 21.9,
+    "vuf_pct": 0.61,
+    "margin_v": 0.74,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.0,
+    "v_min_v": 241.11,
+    "line_max_pct": 17.2,
+    "trafo_pct": 21.6,
+    "vuf_pct": 0.61,
+    "margin_v": 1.0,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.6227612267117852,
+     "load_kw": 33.61033354238064,
+     "upstream_pu": 1.034294763204126
+    },
+    "observed": {
+     "pv_per_kwp": 0.3106575307627254,
+     "load_kw": 40.72983624983539,
+     "upstream_pu": 1.0570913506125914
+    },
+    "residual": {
+     "pv": -0.5007,
+     "load": 0.1872,
+     "upstream_pu": 0.02001
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 0.667,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.812
+    },
+    {
+     "battery_kw": 9.499,
+     "keep": [
+      0.976,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 31.068
+    },
+    {
+     "battery_kw": 9.781,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 33.391
+    },
+    {
+     "battery_kw": 3.953,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 34.33
+    },
+    {
+     "battery_kw": 8.839,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 36.43
+    },
+    {
+     "battery_kw": 3.293,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 37.212
+    },
+    {
+     "battery_kw": -5.612,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 35.735
+    },
+    {
+     "battery_kw": -7.542,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 33.75
+    },
+    {
+     "battery_kw": -6.788,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 31.964
+    },
+    {
+     "battery_kw": -0.446,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 31.846
+    },
+    {
+     "battery_kw": 0.059,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 31.861
+    },
+    {
+     "battery_kw": -5.032,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 30.536
+    },
+    {
+     "battery_kw": 14.941,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 34.085
+    },
+    {
+     "battery_kw": 23.853,
+     "keep": [
+      1.0,
+      1.0,
+      0.872
+     ],
+     "energy_kwh": 39.75
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.186,
+      0.169,
+      0.348
+     ],
+     "energy_kwh": 46.875
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.133,
+      0.0,
+      0.464
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 53,
+   "time": "13:15",
+   "energy_before_kwh": 28.8124,
+   "energy_after_kwh": 26.9225,
+   "soc_before": 0.4802,
+   "soc_after": 0.4487,
+   "action": {
+    "battery_kw": -7.182,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "solar residual -50%",
+    "grid voltage residual +3.0 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 3639,
+      "objective": 798.4906,
+      "prediction_miss_v": 0.499,
+      "worst_severity": 2.801,
+      "predicted_infeasible_steps": [
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 3601,
+      "objective": 646.49,
+      "prediction_miss_v": 0.836,
+      "worst_severity": 2.007,
+      "predicted_infeasible_steps": [
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 3549,
+      "objective": 625.3956,
+      "prediction_miss_v": 0.005,
+      "worst_severity": 1.922,
+      "predicted_infeasible_steps": [
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 3549,
+      "objective": 625.3318,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 1.921,
+      "predicted_infeasible_steps": [
+       14,
+       15
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     14,
+     15
+    ],
+    "curtailed_kwh": 30.854,
+    "seconds": 1.623,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 249.15,
+    "v_min_v": 240.04,
+    "line_max_pct": 16.8,
+    "trafo_pct": 22.1,
+    "vuf_pct": 0.51,
+    "margin_v": 3.85,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.0,
+    "v_min_v": 240.52,
+    "line_max_pct": 20.2,
+    "trafo_pct": 24.6,
+    "vuf_pct": 0.47,
+    "margin_v": 1.0,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.6142645553080874,
+     "load_kw": 35.89175056204501,
+     "upstream_pu": 1.0364904393719319
+    },
+    "observed": {
+     "pv_per_kwp": 0.3054526214892669,
+     "load_kw": 37.949234991861,
+     "upstream_pu": 1.0465695810889708
+    },
+    "residual": {
+     "pv": -0.5021,
+     "load": 0.0963,
+     "upstream_pu": 0.01306
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": -7.182,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 26.922
+    },
+    {
+     "battery_kw": 4.032,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 27.88
+    },
+    {
+     "battery_kw": -0.052,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 27.866
+    },
+    {
+     "battery_kw": 3.71,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.747
+    },
+    {
+     "battery_kw": 0.344,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.829
+    },
+    {
+     "battery_kw": -8.433,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 26.61
+    },
+    {
+     "battery_kw": -5.414,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 25.185
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 25.185
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 25.185
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 25.185
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 25.185
+    },
+    {
+     "battery_kw": 12.032,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.043
+    },
+    {
+     "battery_kw": 19.294,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 32.625
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.519,
+      0.55,
+      0.598
+     ],
+     "energy_kwh": 39.75
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.13,
+      0.0,
+      0.455
+     ],
+     "energy_kwh": 46.875
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.174,
+      0.0,
+      0.537
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 54,
+   "time": "13:30",
+   "energy_before_kwh": 26.9225,
+   "energy_after_kwh": 27.1203,
+   "soc_before": 0.4487,
+   "soc_after": 0.452,
+   "action": {
+    "battery_kw": 0.833,
+    "keep": [
+     0.751,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 3.7019
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "solar residual -16%",
+    "grid voltage residual +2.2 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4971,
+      "objective": 1326.4682,
+      "prediction_miss_v": 0.465,
+      "worst_severity": 3.469,
+      "predicted_infeasible_steps": [
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4882,
+      "objective": 1157.6007,
+      "prediction_miss_v": 0.778,
+      "worst_severity": 2.571,
+      "predicted_infeasible_steps": [
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4735,
+      "objective": 1143.7316,
+      "prediction_miss_v": 0.001,
+      "worst_severity": 2.529,
+      "predicted_infeasible_steps": [
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4736,
+      "objective": 1143.7151,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 2.529,
+      "predicted_infeasible_steps": [
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     13,
+     14,
+     15
+    ],
+    "curtailed_kwh": 77.762,
+    "seconds": 1.883,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": false,
+    "v_max_v": 259.91,
+    "v_min_v": 241.46,
+    "line_max_pct": 36.7,
+    "trafo_pct": 53.2,
+    "vuf_pct": 0.76,
+    "margin_v": -6.91,
+    "severity": 6.906,
+    "reasons": [
+     "over-voltage 259.9 V > 253.0 V"
+    ]
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.0,
+    "v_min_v": 240.93,
+    "line_max_pct": 31.1,
+    "trafo_pct": 52.4,
+    "vuf_pct": 0.48,
+    "margin_v": 1.0,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.6080778550457456,
+     "load_kw": 38.97203459386899,
+     "upstream_pu": 1.0387440711226745
+    },
+    "observed": {
+     "pv_per_kwp": 0.6015948659847979,
+     "load_kw": 38.86053997955532,
+     "upstream_pu": 1.0471130562400328
+    },
+    "residual": {
+     "pv": -0.1581,
+     "load": 0.0269,
+     "upstream_pu": 0.00978
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 0.833,
+     "keep": [
+      0.751,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 27.12
+    },
+    {
+     "battery_kw": 5.653,
+     "keep": [
+      0.812,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.463
+    },
+    {
+     "battery_kw": 8.639,
+     "keep": [
+      0.806,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 30.514
+    },
+    {
+     "battery_kw": 5.523,
+     "keep": [
+      0.839,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 31.826
+    },
+    {
+     "battery_kw": -1.632,
+     "keep": [
+      0.914,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 31.397
+    },
+    {
+     "battery_kw": -6.155,
+     "keep": [
+      0.858,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 29.777
+    },
+    {
+     "battery_kw": -5.394,
+     "keep": [
+      0.861,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.358
+    },
+    {
+     "battery_kw": -5.163,
+     "keep": [
+      0.805,
+      0.928,
+      1.0
+     ],
+     "energy_kwh": 26.999
+    },
+    {
+     "battery_kw": -2.276,
+     "keep": [
+      0.84,
+      0.951,
+      1.0
+     ],
+     "energy_kwh": 26.4
+    },
+    {
+     "battery_kw": -2.896,
+     "keep": [
+      0.909,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 25.638
+    },
+    {
+     "battery_kw": 10.214,
+     "keep": [
+      0.823,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.064
+    },
+    {
+     "battery_kw": 17.829,
+     "keep": [
+      0.816,
+      1.0,
+      0.917
+     ],
+     "energy_kwh": 32.298
+    },
+    {
+     "battery_kw": 1.375,
+     "keep": [
+      0.376,
+      0.32,
+      0.431
+     ],
+     "energy_kwh": 32.625
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.104,
+      0.0,
+      0.362
+     ],
+     "energy_kwh": 39.75
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.141,
+      0.0,
+      0.433
+     ],
+     "energy_kwh": 46.875
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.191,
+      0.0,
+      0.508
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 55,
+   "time": "13:45",
+   "energy_before_kwh": 27.1203,
+   "energy_after_kwh": 27.267,
+   "soc_before": 0.452,
+   "soc_after": 0.4544,
+   "action": {
+    "battery_kw": 0.618,
+    "keep": [
+     0.68,
+     1.0,
+     0.931
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 5.7356
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual +3.3 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 5797,
+      "objective": 3099.4371,
+      "prediction_miss_v": 0.389,
+      "worst_severity": 6.602,
+      "predicted_infeasible_steps": [
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 5545,
+      "objective": 2950.347,
+      "prediction_miss_v": 0.729,
+      "worst_severity": 5.805,
+      "predicted_infeasible_steps": [
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 5249,
+      "objective": 2941.5081,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 5.778,
+      "predicted_infeasible_steps": [
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 5244,
+      "objective": 2941.508,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 5.778,
+      "predicted_infeasible_steps": [
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     12,
+     13,
+     14,
+     15
+    ],
+    "curtailed_kwh": 145.857,
+    "seconds": 2.734,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": false,
+    "v_max_v": 261.31,
+    "v_min_v": 242.26,
+    "line_max_pct": 37.3,
+    "trafo_pct": 55.2,
+    "vuf_pct": 0.78,
+    "margin_v": -8.31,
+    "severity": 8.308,
+    "reasons": [
+     "over-voltage 261.3 V > 253.0 V"
+    ]
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.0,
+    "v_min_v": 241.97,
+    "line_max_pct": 31.7,
+    "trafo_pct": 51.3,
+    "vuf_pct": 0.46,
+    "margin_v": 1.0,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.5980791155958168,
+     "load_kw": 40.257763786845935,
+     "upstream_pu": 1.0340846568312927
+    },
+    "observed": {
+     "pv_per_kwp": 0.5959311481058778,
+     "load_kw": 33.37734033084052,
+     "upstream_pu": 1.0502653074836241
+    },
+    "residual": {
+     "pv": -0.0499,
+     "load": -0.1116,
+     "upstream_pu": 0.01426
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 0.618,
+     "keep": [
+      0.68,
+      1.0,
+      0.931
+     ],
+     "energy_kwh": 27.267
+    },
+    {
+     "battery_kw": 7.613,
+     "keep": [
+      0.674,
+      0.798,
+      0.944
+     ],
+     "energy_kwh": 29.075
+    },
+    {
+     "battery_kw": 9.2,
+     "keep": [
+      0.758,
+      0.886,
+      1.0
+     ],
+     "energy_kwh": 31.26
+    },
+    {
+     "battery_kw": 3.196,
+     "keep": [
+      0.85,
+      1.0,
+      0.985
+     ],
+     "energy_kwh": 32.019
+    },
+    {
+     "battery_kw": -0.966,
+     "keep": [
+      0.825,
+      1.0,
+      0.998
+     ],
+     "energy_kwh": 31.765
+    },
+    {
+     "battery_kw": -3.786,
+     "keep": [
+      0.775,
+      0.868,
+      1.0
+     ],
+     "energy_kwh": 30.768
+    },
+    {
+     "battery_kw": -6.348,
+     "keep": [
+      0.697,
+      0.741,
+      1.0
+     ],
+     "energy_kwh": 29.098
+    },
+    {
+     "battery_kw": -4.576,
+     "keep": [
+      0.706,
+      0.75,
+      0.968
+     ],
+     "energy_kwh": 27.893
+    },
+    {
+     "battery_kw": -2.417,
+     "keep": [
+      0.793,
+      0.847,
+      0.953
+     ],
+     "energy_kwh": 27.257
+    },
+    {
+     "battery_kw": -2.169,
+     "keep": [
+      0.524,
+      0.539,
+      0.827
+     ],
+     "energy_kwh": 26.686
+    },
+    {
+     "battery_kw": -4.558,
+     "keep": [
+      0.304,
+      0.224,
+      0.527
+     ],
+     "energy_kwh": 25.487
+    },
+    {
+     "battery_kw": 0.055,
+     "keep": [
+      0.049,
+      0.0,
+      0.182
+     ],
+     "energy_kwh": 25.5
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.091,
+      0.0,
+      0.318
+     ],
+     "energy_kwh": 32.625
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.124,
+      0.0,
+      0.382
+     ],
+     "energy_kwh": 39.75
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.17,
+      0.0,
+      0.451
+     ],
+     "energy_kwh": 46.875
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.122,
+      0.0,
+      0.47
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 56,
+   "time": "14:00",
+   "energy_before_kwh": 27.267,
+   "energy_after_kwh": 24.8545,
+   "soc_before": 0.4544,
+   "soc_after": 0.4142,
+   "action": {
+    "battery_kw": -9.168,
+    "keep": [
+     0.633,
+     1.0,
+     0.883
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 7.0183
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 5100,
+      "objective": 4041.2457,
+      "prediction_miss_v": 0.386,
+      "worst_severity": 7.412,
+      "predicted_infeasible_steps": [
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 5106,
+      "objective": 3916.7716,
+      "prediction_miss_v": 0.642,
+      "worst_severity": 6.731,
+      "predicted_infeasible_steps": [
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4911,
+      "objective": 3897.6696,
+      "prediction_miss_v": 0.003,
+      "worst_severity": 6.656,
+      "predicted_infeasible_steps": [
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4910,
+      "objective": 3897.6303,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 6.656,
+      "predicted_infeasible_steps": [
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "curtailed_kwh": 135.286,
+    "seconds": 2.185,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": false,
+    "v_max_v": 258.39,
+    "v_min_v": 239.5,
+    "line_max_pct": 36.9,
+    "trafo_pct": 54.5,
+    "vuf_pct": 0.79,
+    "margin_v": -5.39,
+    "severity": 5.386,
+    "reasons": [
+     "over-voltage 258.4 V > 253.0 V"
+    ]
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.0,
+    "v_min_v": 239.2,
+    "line_max_pct": 35.7,
+    "trafo_pct": 53.8,
+    "vuf_pct": 0.57,
+    "margin_v": 1.0,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.593633962937556,
+     "load_kw": 39.36754541918736,
+     "upstream_pu": 1.0339759379592224
+    },
+    "observed": {
+     "pv_per_kwp": 0.5851551776794426,
+     "load_kw": 34.0854513138364,
+     "upstream_pu": 1.038482661304425
+    },
+    "residual": {
+     "pv": -0.025,
+     "load": -0.1274,
+     "upstream_pu": 0.00743
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": -9.168,
+     "keep": [
+      0.633,
+      1.0,
+      0.883
+     ],
+     "energy_kwh": 24.854
+    },
+    {
+     "battery_kw": 6.278,
+     "keep": [
+      0.761,
+      0.896,
+      1.0
+     ],
+     "energy_kwh": 26.345
+    },
+    {
+     "battery_kw": 0.445,
+     "keep": [
+      0.835,
+      1.0,
+      0.98
+     ],
+     "energy_kwh": 26.451
+    },
+    {
+     "battery_kw": -3.648,
+     "keep": [
+      0.811,
+      1.0,
+      0.989
+     ],
+     "energy_kwh": 25.491
+    },
+    {
+     "battery_kw": -5.966,
+     "keep": [
+      0.768,
+      0.88,
+      1.0
+     ],
+     "energy_kwh": 23.921
+    },
+    {
+     "battery_kw": -8.254,
+     "keep": [
+      0.698,
+      0.749,
+      1.0
+     ],
+     "energy_kwh": 21.749
+    },
+    {
+     "battery_kw": -5.705,
+     "keep": [
+      0.732,
+      0.789,
+      1.0
+     ],
+     "energy_kwh": 20.248
+    },
+    {
+     "battery_kw": -3.185,
+     "keep": [
+      0.821,
+      0.896,
+      1.0
+     ],
+     "energy_kwh": 19.409
+    },
+    {
+     "battery_kw": 0.196,
+     "keep": [
+      0.638,
+      0.684,
+      1.0
+     ],
+     "energy_kwh": 19.456
+    },
+    {
+     "battery_kw": -2.605,
+     "keep": [
+      0.421,
+      0.405,
+      0.713
+     ],
+     "energy_kwh": 18.771
+    },
+    {
+     "battery_kw": -1.504,
+     "keep": [
+      0.289,
+      0.189,
+      0.379
+     ],
+     "energy_kwh": 18.375
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.089,
+      0.0,
+      0.309
+     ],
+     "energy_kwh": 25.5
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.121,
+      0.0,
+      0.373
+     ],
+     "energy_kwh": 32.625
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.166,
+      0.0,
+      0.441
+     ],
+     "energy_kwh": 39.75
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.119,
+      0.0,
+      0.46
+     ],
+     "energy_kwh": 46.875
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.0,
+      0.042,
+      0.121
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 57,
+   "time": "14:15",
+   "energy_before_kwh": 24.8545,
+   "energy_after_kwh": 19.8495,
+   "soc_before": 0.4142,
+   "soc_after": 0.3308,
+   "action": {
+    "battery_kw": -19.019,
+    "keep": [
+     0.783,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 3.0291
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual -2.5 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4452,
+      "objective": 3271.3471,
+      "prediction_miss_v": 1.268,
+      "worst_severity": 5.99,
+      "predicted_infeasible_steps": [
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 2756,
+      "objective": 3206.1295,
+      "prediction_miss_v": 0.135,
+      "worst_severity": 5.696,
+      "predicted_infeasible_steps": [
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 2755,
+      "objective": 3162.5262,
+      "prediction_miss_v": 0.166,
+      "worst_severity": 5.466,
+      "predicted_infeasible_steps": [
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 2727,
+      "objective": 3157.9848,
+      "prediction_miss_v": 0.068,
+      "worst_severity": 5.448,
+      "predicted_infeasible_steps": [
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "curtailed_kwh": 78.642,
+    "seconds": 1.661,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 250.95,
+    "v_min_v": 233.22,
+    "line_max_pct": 35.2,
+    "trafo_pct": 52.0,
+    "vuf_pct": 0.76,
+    "margin_v": 2.05,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.0,
+    "v_min_v": 233.29,
+    "line_max_pct": 39.4,
+    "trafo_pct": 57.2,
+    "vuf_pct": 0.42,
+    "margin_v": 1.0,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.5727545306876252,
+     "load_kw": 42.93133965957288,
+     "upstream_pu": 1.030251283443638
+    },
+    "observed": {
+     "pv_per_kwp": 0.5643245254791497,
+     "load_kw": 37.92723179050591,
+     "upstream_pu": 1.011830444393109
+    },
+    "residual": {
+     "pv": -0.0178,
+     "load": -0.1198,
+     "upstream_pu": -0.01066
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": -19.019,
+     "keep": [
+      0.783,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 19.85
+    },
+    {
+     "battery_kw": 2.286,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 20.392
+    },
+    {
+     "battery_kw": -11.833,
+     "keep": [
+      0.822,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 17.279
+    },
+    {
+     "battery_kw": -10.823,
+     "keep": [
+      0.817,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 14.43
+    },
+    {
+     "battery_kw": -4.937,
+     "keep": [
+      0.872,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 13.131
+    },
+    {
+     "battery_kw": -6.327,
+     "keep": [
+      0.845,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 11.466
+    },
+    {
+     "battery_kw": -1.986,
+     "keep": [
+      0.975,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 10.944
+    },
+    {
+     "battery_kw": 3.348,
+     "keep": [
+      0.81,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 11.739
+    },
+    {
+     "battery_kw": 9.107,
+     "keep": [
+      0.8,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 13.902
+    },
+    {
+     "battery_kw": 14.11,
+     "keep": [
+      0.851,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 17.253
+    },
+    {
+     "battery_kw": 4.724,
+     "keep": [
+      0.494,
+      0.383,
+      0.57
+     ],
+     "energy_kwh": 18.375
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.121,
+      0.0,
+      0.371
+     ],
+     "energy_kwh": 25.5
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.165,
+      0.0,
+      0.439
+     ],
+     "energy_kwh": 32.625
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.119,
+      0.0,
+      0.458
+     ],
+     "energy_kwh": 39.75
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.0,
+      0.042,
+      0.121
+     ],
+     "energy_kwh": 46.875
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.03,
+      0.0,
+      0.419
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 58,
+   "time": "14:30",
+   "energy_before_kwh": 19.8495,
+   "energy_after_kwh": 16.7889,
+   "soc_before": 0.3308,
+   "soc_after": 0.2798,
+   "action": {
+    "battery_kw": -11.63,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual -4.3 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4080,
+      "objective": 3375.7948,
+      "prediction_miss_v": 1.175,
+      "worst_severity": 4.49,
+      "predicted_infeasible_steps": [
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 2524,
+      "objective": 3324.8345,
+      "prediction_miss_v": 0.12,
+      "worst_severity": 4.49,
+      "predicted_infeasible_steps": [
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 2535,
+      "objective": 3284.5375,
+      "prediction_miss_v": 0.148,
+      "worst_severity": 4.49,
+      "predicted_infeasible_steps": [
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 2499,
+      "objective": 3282.2035,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 4.49,
+      "predicted_infeasible_steps": [
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "curtailed_kwh": 55.1,
+    "seconds": 1.62,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 247.57,
+    "v_min_v": 232.02,
+    "line_max_pct": 31.9,
+    "trafo_pct": 47.9,
+    "vuf_pct": 0.62,
+    "margin_v": 5.43,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.0,
+    "v_min_v": 232.09,
+    "line_max_pct": 37.3,
+    "trafo_pct": 51.9,
+    "vuf_pct": 0.56,
+    "margin_v": 1.0,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.5533502846859334,
+     "load_kw": 43.709048971460454,
+     "upstream_pu": 1.0290049503213845
+    },
+    "observed": {
+     "pv_per_kwp": 0.5397558920918375,
+     "load_kw": 40.59338227628693,
+     "upstream_pu": 1.0070478869056212
+    },
+    "residual": {
+     "pv": -0.0225,
+     "load": -0.0858,
+     "upstream_pu": -0.01857
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": -11.63,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 16.789
+    },
+    {
+     "battery_kw": -9.161,
+     "keep": [
+      0.93,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 14.378
+    },
+    {
+     "battery_kw": -4.009,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 13.323
+    },
+    {
+     "battery_kw": -4.481,
+     "keep": [
+      0.956,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 12.144
+    },
+    {
+     "battery_kw": -3.899,
+     "keep": [
+      0.965,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 11.118
+    },
+    {
+     "battery_kw": -4.874,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 9.835
+    },
+    {
+     "battery_kw": -2.24,
+     "keep": [
+      0.812,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 9.245
+    },
+    {
+     "battery_kw": 3.954,
+     "keep": [
+      0.801,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 10.184
+    },
+    {
+     "battery_kw": 9.079,
+     "keep": [
+      0.85,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 12.341
+    },
+    {
+     "battery_kw": 21.107,
+     "keep": [
+      1.0,
+      0.984,
+      1.0
+     ],
+     "energy_kwh": 17.354
+    },
+    {
+     "battery_kw": 4.3,
+     "keep": [
+      0.552,
+      0.372,
+      0.627
+     ],
+     "energy_kwh": 18.375
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.168,
+      0.0,
+      0.448
+     ],
+     "energy_kwh": 25.5
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.121,
+      0.0,
+      0.467
+     ],
+     "energy_kwh": 32.625
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.0,
+      0.042,
+      0.123
+     ],
+     "energy_kwh": 39.75
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.03,
+      0.0,
+      0.426
+     ],
+     "energy_kwh": 46.875
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.379,
+      0.017,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 59,
+   "time": "14:45",
+   "energy_before_kwh": 16.7889,
+   "energy_after_kwh": 11.6805,
+   "soc_before": 0.2798,
+   "soc_after": 0.1947,
+   "action": {
+    "battery_kw": -19.412,
+    "keep": [
+     0.868,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 1.7012
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual -3.5 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4617,
+      "objective": 4393.2602,
+      "prediction_miss_v": 0.298,
+      "worst_severity": 4.8,
+      "predicted_infeasible_steps": [
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4503,
+      "objective": 4320.049,
+      "prediction_miss_v": 0.441,
+      "worst_severity": 4.8,
+      "predicted_infeasible_steps": [
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4366,
+      "objective": 4314.715,
+      "prediction_miss_v": 0.041,
+      "worst_severity": 4.8,
+      "predicted_infeasible_steps": [
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4366,
+      "objective": 4314.7218,
+      "prediction_miss_v": 0.04,
+      "worst_severity": 4.8,
+      "predicted_infeasible_steps": [
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "curtailed_kwh": 69.029,
+    "seconds": 1.859,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 248.06,
+    "v_min_v": 233.48,
+    "line_max_pct": 30.2,
+    "trafo_pct": 44.9,
+    "vuf_pct": 0.58,
+    "margin_v": 4.94,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.0,
+    "v_min_v": 233.61,
+    "line_max_pct": 36.5,
+    "trafo_pct": 51.3,
+    "vuf_pct": 0.28,
+    "margin_v": 1.0,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.5345239715573554,
+     "load_kw": 45.54286061752264,
+     "upstream_pu": 1.0274615079131408
+    },
+    "observed": {
+     "pv_per_kwp": 0.5195558288517665,
+     "load_kw": 42.19752625655264,
+     "upstream_pu": 1.0139609528159605
+    },
+    "residual": {
+     "pv": -0.0264,
+     "load": -0.0772,
+     "upstream_pu": -0.01502
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": -19.412,
+     "keep": [
+      0.868,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 11.681
+    },
+    {
+     "battery_kw": -8.071,
+     "keep": [
+      0.921,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 9.557
+    },
+    {
+     "battery_kw": -4.735,
+     "keep": [
+      0.934,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 8.311
+    },
+    {
+     "battery_kw": -4.137,
+     "keep": [
+      0.943,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 7.222
+    },
+    {
+     "battery_kw": -3.932,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.187
+    },
+    {
+     "battery_kw": -0.712,
+     "keep": [
+      0.813,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 0.823,
+     "keep": [
+      0.737,
+      0.881,
+      1.0
+     ],
+     "energy_kwh": 6.196
+    },
+    {
+     "battery_kw": 10.454,
+     "keep": [
+      0.85,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 8.678
+    },
+    {
+     "battery_kw": 8.782,
+     "keep": [
+      0.705,
+      0.729,
+      0.857
+     ],
+     "energy_kwh": 10.764
+    },
+    {
+     "battery_kw": 2.046,
+     "keep": [
+      0.307,
+      0.149,
+      0.474
+     ],
+     "energy_kwh": 11.25
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.169,
+      0.0,
+      0.451
+     ],
+     "energy_kwh": 18.375
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.122,
+      0.0,
+      0.47
+     ],
+     "energy_kwh": 25.5
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.0,
+      0.042,
+      0.124
+     ],
+     "energy_kwh": 32.625
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.03,
+      0.0,
+      0.428
+     ],
+     "energy_kwh": 39.75
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.365,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 46.875
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.476,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 60,
+   "time": "15:00",
+   "energy_before_kwh": 11.6805,
+   "energy_after_kwh": 9.0939,
+   "soc_before": 0.1947,
+   "soc_after": 0.1516,
+   "action": {
+    "battery_kw": -9.829,
+    "keep": [
+     0.944,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.7032
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4977,
+      "objective": 6092.5944,
+      "prediction_miss_v": 0.476,
+      "worst_severity": 5.578,
+      "predicted_infeasible_steps": [
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4748,
+      "objective": 6056.4211,
+      "prediction_miss_v": 0.037,
+      "worst_severity": 5.578,
+      "predicted_infeasible_steps": [
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4736,
+      "objective": 6055.5293,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 5.578,
+      "predicted_infeasible_steps": [
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 4736,
+      "objective": 6055.5293,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 5.578,
+      "predicted_infeasible_steps": [
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "curtailed_kwh": 92.496,
+    "seconds": 1.9,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 249.68,
+    "v_min_v": 235.5,
+    "line_max_pct": 29.0,
+    "trafo_pct": 43.2,
+    "vuf_pct": 0.59,
+    "margin_v": 3.32,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 252.0,
+    "v_min_v": 235.57,
+    "line_max_pct": 31.6,
+    "trafo_pct": 45.6,
+    "vuf_pct": 0.39,
+    "margin_v": 1.0,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.5109426961553302,
+     "load_kw": 47.86375331146357,
+     "upstream_pu": 1.0280918866362854
+    },
+    "observed": {
+     "pv_per_kwp": 0.5079788047441821,
+     "load_kw": 43.259394241727875,
+     "upstream_pu": 1.023004407939862
+    },
+    "residual": {
+     "pv": -0.012,
+     "load": -0.0905,
+     "upstream_pu": -0.00807
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": -9.829,
+     "keep": [
+      0.944,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 9.094
+    },
+    {
+     "battery_kw": -5.147,
+     "keep": [
+      0.861,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 7.739
+    },
+    {
+     "battery_kw": -4.547,
+     "keep": [
+      0.869,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.543
+    },
+    {
+     "battery_kw": -2.062,
+     "keep": [
+      0.965,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 3.134,
+     "keep": [
+      0.799,
+      0.978,
+      1.0
+     ],
+     "energy_kwh": 6.744
+    },
+    {
+     "battery_kw": -2.828,
+     "keep": [
+      0.623,
+      0.674,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 0.351,
+     "keep": [
+      0.601,
+      0.578,
+      0.931
+     ],
+     "energy_kwh": 6.083
+    },
+    {
+     "battery_kw": -0.317,
+     "keep": [
+      0.359,
+      0.275,
+      0.45
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 22.105,
+     "keep": [
+      0.124,
+      0.0,
+      0.376
+     ],
+     "energy_kwh": 11.25
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.166,
+      0.0,
+      0.442
+     ],
+     "energy_kwh": 18.375
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.119,
+      0.0,
+      0.461
+     ],
+     "energy_kwh": 25.5
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.0,
+      0.042,
+      0.121
+     ],
+     "energy_kwh": 32.625
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.03,
+      0.0,
+      0.421
+     ],
+     "energy_kwh": 39.75
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.359,
+      0.0,
+      0.985
+     ],
+     "energy_kwh": 46.875
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.0,
+      0.0,
+      0.156
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      0.21,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 61,
+   "time": "15:15",
+   "energy_before_kwh": 9.0939,
+   "energy_after_kwh": 6.0,
+   "soc_before": 0.1516,
+   "soc_after": 0.1,
+   "action": {
+    "battery_kw": -11.757,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual -4.9 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 3582,
+      "objective": 3566.4372,
+      "prediction_miss_v": 1.053,
+      "worst_severity": 3.815,
+      "predicted_infeasible_steps": [
+       9,
+       10,
+       11,
+       12,
+       13,
+       14
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 2349,
+      "objective": 3537.6117,
+      "prediction_miss_v": 0.087,
+      "worst_severity": 3.815,
+      "predicted_infeasible_steps": [
+       9,
+       10,
+       11,
+       12,
+       13,
+       14
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 2399,
+      "objective": 3513.6537,
+      "prediction_miss_v": 0.099,
+      "worst_severity": 3.815,
+      "predicted_infeasible_steps": [
+       9,
+       10,
+       11,
+       12,
+       13,
+       14
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 2394,
+      "objective": 3512.4301,
+      "prediction_miss_v": 0.001,
+      "worst_severity": 3.815,
+      "predicted_infeasible_steps": [
+       9,
+       10,
+       11,
+       12,
+       13,
+       14
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     9,
+     10,
+     11,
+     12,
+     13,
+     14
+    ],
+    "curtailed_kwh": 51.169,
+    "seconds": 1.458,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 245.25,
+    "v_min_v": 232.03,
+    "line_max_pct": 27.4,
+    "trafo_pct": 41.1,
+    "vuf_pct": 0.55,
+    "margin_v": 7.75,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 249.82,
+    "v_min_v": 232.12,
+    "line_max_pct": 32.9,
+    "trafo_pct": 45.2,
+    "vuf_pct": 0.49,
+    "margin_v": 3.18,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.48286373785559317,
+     "load_kw": 46.728142561633284,
+     "upstream_pu": 1.034736811117995
+    },
+    "observed": {
+     "pv_per_kwp": 0.4802509935409636,
+     "load_kw": 41.5478964041156,
+     "upstream_pu": 1.0080044222449767
+    },
+    "residual": {
+     "pv": -0.0074,
+     "load": -0.1047,
+     "upstream_pu": -0.02113
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": -11.757,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      0.882,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": -0.0,
+     "keep": [
+      0.787,
+      0.976,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 5.638,
+     "keep": [
+      0.837,
+      0.984,
+      1.0
+     ],
+     "energy_kwh": 7.339
+    },
+    {
+     "battery_kw": 6.995,
+     "keep": [
+      0.78,
+      0.869,
+      1.0
+     ],
+     "energy_kwh": 9.0
+    },
+    {
+     "battery_kw": 6.194,
+     "keep": [
+      0.725,
+      0.74,
+      0.924
+     ],
+     "energy_kwh": 10.472
+    },
+    {
+     "battery_kw": 3.277,
+     "keep": [
+      0.422,
+      0.233,
+      0.6
+     ],
+     "energy_kwh": 11.25
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.118,
+      0.0,
+      0.454
+     ],
+     "energy_kwh": 18.375
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.0,
+      0.041,
+      0.12
+     ],
+     "energy_kwh": 25.5
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.03,
+      0.0,
+      0.416
+     ],
+     "energy_kwh": 32.625
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.354,
+      0.0,
+      0.971
+     ],
+     "energy_kwh": 39.75
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.47,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 46.875
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.236,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 62,
+   "time": "15:30",
+   "energy_before_kwh": 6.0,
+   "energy_after_kwh": 6.0,
+   "soc_before": 0.1,
+   "soc_after": 0.1,
+   "action": {
+    "battery_kw": 0.0,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual -7.2 V"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2700,
+      "objective": 1749.9795,
+      "prediction_miss_v": 0.265,
+      "worst_severity": 2.26,
+      "predicted_infeasible_steps": [
+       8,
+       9,
+       10,
+       11,
+       12
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2843,
+      "objective": 1748.468,
+      "prediction_miss_v": 0.087,
+      "worst_severity": 2.26,
+      "predicted_infeasible_steps": [
+       8,
+       9,
+       10,
+       11,
+       12
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2883,
+      "objective": 1748.4658,
+      "prediction_miss_v": 0.056,
+      "worst_severity": 2.26,
+      "predicted_infeasible_steps": [
+       8,
+       9,
+       10,
+       11,
+       12
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2896,
+      "objective": 1748.4716,
+      "prediction_miss_v": 0.049,
+      "worst_severity": 2.26,
+      "predicted_infeasible_steps": [
+       8,
+       9,
+       10,
+       11,
+       12
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "curtailed_kwh": 32.713,
+    "seconds": 1.433,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 244.04,
+    "v_min_v": 230.71,
+    "line_max_pct": 26.5,
+    "trafo_pct": 36.3,
+    "vuf_pct": 0.69,
+    "margin_v": 8.96,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 244.04,
+    "v_min_v": 230.71,
+    "line_max_pct": 26.5,
+    "trafo_pct": 36.3,
+    "vuf_pct": 0.69,
+    "margin_v": 8.96,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.4493596056714846,
+     "load_kw": 46.567612898539295,
+     "upstream_pu": 1.0394831687178894
+    },
+    "observed": {
+     "pv_per_kwp": 0.44789507985039057,
+     "load_kw": 47.30688398117204,
+     "upstream_pu": 1.0040478659247862
+    },
+    "residual": {
+     "pv": -0.0045,
+     "load": -0.0203,
+     "upstream_pu": -0.03114
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      0.914,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 4.272,
+     "keep": [
+      0.952,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 7.014
+    },
+    {
+     "battery_kw": 10.785,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 9.576
+    },
+    {
+     "battery_kw": 10.102,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 11.975
+    },
+    {
+     "battery_kw": 11.05,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 14.599
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.124,
+      0.0,
+      0.478
+     ],
+     "energy_kwh": 21.724
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.0,
+      0.043,
+      0.126
+     ],
+     "energy_kwh": 28.849
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.031,
+      0.0,
+      0.436
+     ],
+     "energy_kwh": 35.974
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.371,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 43.099
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.48,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 50.224
+    },
+    {
+     "battery_kw": 15.897,
+     "keep": [
+      0.222,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 63,
+   "time": "15:45",
+   "energy_before_kwh": 6.0,
+   "energy_after_kwh": 6.0,
+   "soc_before": 0.1,
+   "soc_after": 0.1,
+   "action": {
+    "battery_kw": 0.0,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual -6.5 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2975,
+      "objective": 1949.9415,
+      "prediction_miss_v": 0.163,
+      "worst_severity": 2.428,
+      "predicted_infeasible_steps": [
+       7,
+       8,
+       9,
+       10,
+       11
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2915,
+      "objective": 1949.8766,
+      "prediction_miss_v": 0.001,
+      "worst_severity": 2.428,
+      "predicted_infeasible_steps": [
+       7,
+       8,
+       9,
+       10,
+       11
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2904,
+      "objective": 1949.876,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 2.428,
+      "predicted_infeasible_steps": [
+       7,
+       8,
+       9,
+       10,
+       11
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2904,
+      "objective": 1949.876,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 2.428,
+      "predicted_infeasible_steps": [
+       7,
+       8,
+       9,
+       10,
+       11
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     7,
+     8,
+     9,
+     10,
+     11
+    ],
+    "curtailed_kwh": 35.392,
+    "seconds": 1.463,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 243.63,
+    "v_min_v": 232.34,
+    "line_max_pct": 23.5,
+    "trafo_pct": 34.3,
+    "vuf_pct": 0.52,
+    "margin_v": 9.37,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 243.63,
+    "v_min_v": 232.34,
+    "line_max_pct": 23.5,
+    "trafo_pct": 34.3,
+    "vuf_pct": 0.52,
+    "margin_v": 9.37,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.4204062953368912,
+     "load_kw": 46.243514406128575,
+     "upstream_pu": 1.0395266801085754
+    },
+    "observed": {
+     "pv_per_kwp": 0.42696001245385584,
+     "load_kw": 44.23850884242079,
+     "upstream_pu": 1.0121999931907164
+    },
+    "residual": {
+     "pv": 0.0096,
+     "load": -0.0364,
+     "upstream_pu": -0.02847
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 1.196,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.284
+    },
+    {
+     "battery_kw": -1.079,
+     "keep": [
+      0.875,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      0.857,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 4.546,
+     "keep": [
+      0.857,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 7.08
+    },
+    {
+     "battery_kw": 10.126,
+     "keep": [
+      0.972,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 9.485
+    },
+    {
+     "battery_kw": 12.152,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 12.371
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.121,
+      0.0,
+      0.468
+     ],
+     "energy_kwh": 19.496
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.0,
+      0.042,
+      0.123
+     ],
+     "energy_kwh": 26.621
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.031,
+      0.0,
+      0.427
+     ],
+     "energy_kwh": 33.746
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.364,
+      0.0,
+      0.995
+     ],
+     "energy_kwh": 40.871
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.476,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 47.996
+    },
+    {
+     "battery_kw": 25.281,
+     "keep": [
+      0.232,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    }
+   ]
+  },
+  {
+   "step": 64,
+   "time": "16:00",
+   "energy_before_kwh": 6.0,
+   "energy_after_kwh": 6.0,
+   "soc_before": 0.1,
+   "soc_after": 0.1,
+   "action": {
+    "battery_kw": 0.0,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual -6.9 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2442,
+      "objective": 1510.6288,
+      "prediction_miss_v": 0.468,
+      "worst_severity": 1.961,
+      "predicted_infeasible_steps": [
+       6,
+       7,
+       8,
+       9,
+       10
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2588,
+      "objective": 1510.0872,
+      "prediction_miss_v": 0.001,
+      "worst_severity": 1.961,
+      "predicted_infeasible_steps": [
+       6,
+       7,
+       8,
+       9,
+       10
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2605,
+      "objective": 1510.0872,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 1.961,
+      "predicted_infeasible_steps": [
+       6,
+       7,
+       8,
+       9,
+       10
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2605,
+      "objective": 1510.0872,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 1.961,
+      "predicted_infeasible_steps": [
+       6,
+       7,
+       8,
+       9,
+       10
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "curtailed_kwh": 30.508,
+    "seconds": 1.457,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 242.87,
+    "v_min_v": 233.6,
+    "line_max_pct": 20.1,
+    "trafo_pct": 30.3,
+    "vuf_pct": 0.38,
+    "margin_v": 10.13,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 242.87,
+    "v_min_v": 233.6,
+    "line_max_pct": 20.1,
+    "trafo_pct": 30.3,
+    "vuf_pct": 0.38,
+    "margin_v": 10.13,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.3948094384859493,
+     "load_kw": 43.87174113612685,
+     "upstream_pu": 1.0468527664707783
+    },
+    "observed": {
+     "pv_per_kwp": 0.39530717568182033,
+     "load_kw": 43.69569810511357,
+     "upstream_pu": 1.0161348534202086
+    },
+    "residual": {
+     "pv": 0.0038,
+     "load": -0.0137,
+     "upstream_pu": -0.03004
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 4.712,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 7.119
+    },
+    {
+     "battery_kw": 5.986,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 8.541
+    },
+    {
+     "battery_kw": 9.612,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 10.824
+    },
+    {
+     "battery_kw": 8.953,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 12.95
+    },
+    {
+     "battery_kw": 9.94,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 15.311
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.123,
+      0.0,
+      0.477
+     ],
+     "energy_kwh": 22.436
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.0,
+      0.043,
+      0.125
+     ],
+     "energy_kwh": 29.561
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.031,
+      0.0,
+      0.435
+     ],
+     "energy_kwh": 36.686
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.37,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 43.811
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.479,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 50.936
+    },
+    {
+     "battery_kw": 10.534,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 53.438
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 53.438
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 53.438
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 53.438
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 53.438
+    }
+   ]
+  },
+  {
+   "step": 65,
+   "time": "16:15",
+   "energy_before_kwh": 6.0,
+   "energy_after_kwh": 6.0,
+   "soc_before": 0.1,
+   "soc_after": 0.1,
+   "action": {
+    "battery_kw": 0.0,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual -6.0 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2672,
+      "objective": 1885.9049,
+      "prediction_miss_v": 0.399,
+      "worst_severity": 2.304,
+      "predicted_infeasible_steps": [
+       5,
+       6,
+       7,
+       8,
+       9,
+       10
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2530,
+      "objective": 1884.1243,
+      "prediction_miss_v": 0.079,
+      "worst_severity": 2.304,
+      "predicted_infeasible_steps": [
+       5,
+       6,
+       7,
+       8,
+       9
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2525,
+      "objective": 1884.0975,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 2.304,
+      "predicted_infeasible_steps": [
+       5,
+       6,
+       7,
+       8,
+       9
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2525,
+      "objective": 1884.0974,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 2.304,
+      "predicted_infeasible_steps": [
+       5,
+       6,
+       7,
+       8,
+       9
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     5,
+     6,
+     7,
+     8,
+     9
+    ],
+    "curtailed_kwh": 32.729,
+    "seconds": 1.402,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 246.8,
+    "v_min_v": 236.84,
+    "line_max_pct": 19.8,
+    "trafo_pct": 27.3,
+    "vuf_pct": 0.55,
+    "margin_v": 6.2,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 246.8,
+    "v_min_v": 236.84,
+    "line_max_pct": 19.8,
+    "trafo_pct": 27.3,
+    "vuf_pct": 0.55,
+    "margin_v": 6.2,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.35642570492078,
+     "load_kw": 40.538947011761465,
+     "upstream_pu": 1.0558165500528298
+    },
+    "observed": {
+     "pv_per_kwp": 0.36443532435162024,
+     "load_kw": 43.68243328692111,
+     "upstream_pu": 1.031156535205792
+    },
+    "residual": {
+     "pv": 0.0169,
+     "load": 0.0502,
+     "upstream_pu": -0.02628
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 0.977,
+     "keep": [
+      0.893,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.232
+    },
+    {
+     "battery_kw": 10.947,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 8.832
+    },
+    {
+     "battery_kw": 10.196,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 11.253
+    },
+    {
+     "battery_kw": 11.186,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 13.91
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.128,
+      0.0,
+      0.496
+     ],
+     "energy_kwh": 21.035
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.0,
+      0.044,
+      0.13
+     ],
+     "energy_kwh": 28.16
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.032,
+      0.0,
+      0.45
+     ],
+     "energy_kwh": 35.285
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.383,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 42.41
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.486,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 49.535
+    },
+    {
+     "battery_kw": 18.8,
+     "keep": [
+      0.224,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": -7.985,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 51.899
+    }
+   ]
+  },
+  {
+   "step": 66,
+   "time": "16:30",
+   "energy_before_kwh": 6.0,
+   "energy_after_kwh": 6.0,
+   "soc_before": 0.1,
+   "soc_after": 0.1,
+   "action": {
+    "battery_kw": 0.0,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual -7.1 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 1911,
+      "objective": 1031.6499,
+      "prediction_miss_v": 0.426,
+      "worst_severity": 1.32,
+      "predicted_infeasible_steps": [
+       5,
+       6,
+       7,
+       8
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2139,
+      "objective": 1030.9782,
+      "prediction_miss_v": 0.027,
+      "worst_severity": 1.32,
+      "predicted_infeasible_steps": [
+       5,
+       6,
+       7,
+       8
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2153,
+      "objective": 1030.9782,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 1.32,
+      "predicted_infeasible_steps": [
+       5,
+       6,
+       7,
+       8
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 2153,
+      "objective": 1030.9782,
+      "prediction_miss_v": 0.0,
+      "worst_severity": 1.32,
+      "predicted_infeasible_steps": [
+       5,
+       6,
+       7,
+       8
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     5,
+     6,
+     7,
+     8
+    ],
+    "curtailed_kwh": 25.586,
+    "seconds": 1.484,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 245.34,
+    "v_min_v": 237.52,
+    "line_max_pct": 16.7,
+    "trafo_pct": 25.0,
+    "vuf_pct": 0.36,
+    "margin_v": 7.66,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 245.34,
+    "v_min_v": 237.52,
+    "line_max_pct": 16.7,
+    "trafo_pct": 25.0,
+    "vuf_pct": 0.36,
+    "margin_v": 7.66,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.31650099757598216,
+     "load_kw": 38.572898527582105,
+     "upstream_pu": 1.066352783636916
+    },
+    "observed": {
+     "pv_per_kwp": 0.33197665315126246,
+     "load_kw": 38.99403077520866,
+     "upstream_pu": 1.0335913849448668
+    },
+    "residual": {
+     "pv": 0.0393,
+     "load": 0.0227,
+     "upstream_pu": -0.03082
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 7.547,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 7.792
+    },
+    {
+     "battery_kw": 6.812,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 9.41
+    },
+    {
+     "battery_kw": 7.829,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 11.27
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.641,
+      0.464,
+      0.828
+     ],
+     "energy_kwh": 18.395
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.0,
+      0.043,
+      0.125
+     ],
+     "energy_kwh": 25.52
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.031,
+      0.0,
+      0.435
+     ],
+     "energy_kwh": 32.645
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.37,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 39.77
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.479,
+      0.0,
+      1.0
+     ],
+     "energy_kwh": 46.895
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 46.895
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 46.895
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 46.895
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 46.895
+    },
+    {
+     "battery_kw": -0.734,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 46.702
+    },
+    {
+     "battery_kw": -9.156,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 44.292
+    },
+    {
+     "battery_kw": -11.777,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 41.193
+    }
+   ]
+  },
+  {
+   "step": 67,
+   "time": "16:45",
+   "energy_before_kwh": 6.0,
+   "energy_after_kwh": 6.0,
+   "soc_before": 0.1,
+   "soc_after": 0.1,
+   "action": {
+    "battery_kw": 0.0,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual -8.7 V",
+    "near a voltage limit in the next half hour"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "verified_safe",
+    "verified": true,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 1358,
+      "objective": 985.5235,
+      "prediction_miss_v": 0.692,
+      "worst_severity": 3.527,
+      "predicted_infeasible_steps": [
+       5,
+       6,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 1688,
+      "objective": 180.979,
+      "prediction_miss_v": 0.356,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [
+       5,
+       6
+      ],
+      "safe": true
+     },
+     {
+      "round": 2,
+      "trust_kw": 30.0,
+      "trust_keep": 1.0,
+      "rows": 3194,
+      "objective": 180.9815,
+      "prediction_miss_v": 0.001,
+      "worst_severity": 0.0,
+      "predicted_infeasible_steps": [
+       5,
+       6
+      ],
+      "safe": true
+     }
+    ],
+    "predicted_infeasible_steps": [
+     5,
+     6
+    ],
+    "curtailed_kwh": 17.27,
+    "seconds": 1.037,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 245.11,
+    "v_min_v": 237.51,
+    "line_max_pct": 15.7,
+    "trafo_pct": 23.1,
+    "vuf_pct": 0.37,
+    "margin_v": 7.89,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 245.11,
+    "v_min_v": 237.51,
+    "line_max_pct": 15.7,
+    "trafo_pct": 23.1,
+    "vuf_pct": 0.37,
+    "margin_v": 7.89,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.2812065406206972,
+     "load_kw": 38.70125714957259,
+     "upstream_pu": 1.073983211315342
+    },
+    "observed": {
+     "pv_per_kwp": 0.29490463618156815,
+     "load_kw": 32.09349035985008,
+     "upstream_pu": 1.0331348133658873
+    },
+    "residual": {
+     "pv": 0.0459,
+     "load": -0.1127,
+     "upstream_pu": -0.03784
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.0
+    },
+    {
+     "battery_kw": 2.027,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 6.481
+    },
+    {
+     "battery_kw": 2.962,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 7.185
+    },
+    {
+     "battery_kw": 9.722,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 9.494
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.266,
+      0.281,
+      0.272
+     ],
+     "energy_kwh": 16.619
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.028,
+      0.0,
+      0.388
+     ],
+     "energy_kwh": 23.744
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      0.332,
+      0.0,
+      0.907
+     ],
+     "energy_kwh": 30.869
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 30.869
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 30.869
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 30.869
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 30.869
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 30.869
+    },
+    {
+     "battery_kw": -0.065,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 30.852
+    },
+    {
+     "battery_kw": -7.978,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 28.752
+    },
+    {
+     "battery_kw": -10.442,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 26.004
+    },
+    {
+     "battery_kw": -26.353,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 19.069
+    }
+   ]
+  },
+  {
+   "step": 68,
+   "time": "17:00",
+   "energy_before_kwh": 6.0,
+   "energy_after_kwh": 9.5625,
+   "soc_before": 0.1,
+   "soc_after": 0.1594,
+   "action": {
+    "battery_kw": 15.0,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual -12.8 V"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 555,
+      "objective": 2145.8888,
+      "prediction_miss_v": 0.891,
+      "worst_severity": 9.358,
+      "predicted_infeasible_steps": [
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 630,
+      "objective": 913.2963,
+      "prediction_miss_v": 0.587,
+      "worst_severity": 2.808,
+      "predicted_infeasible_steps": [
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 588,
+      "objective": 1000.0659,
+      "prediction_miss_v": 0.294,
+      "worst_severity": 2.808,
+      "predicted_infeasible_steps": [
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 636,
+      "objective": 1000.0659,
+      "prediction_miss_v": 0.273,
+      "worst_severity": 2.808,
+      "predicted_infeasible_steps": [
+       14,
+       15
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     14,
+     15
+    ],
+    "curtailed_kwh": 0.0,
+    "seconds": 1.235,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 240.42,
+    "v_min_v": 234.26,
+    "line_max_pct": 12.5,
+    "trafo_pct": 17.9,
+    "vuf_pct": 0.32,
+    "margin_v": 12.58,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 236.14,
+    "v_min_v": 227.96,
+    "line_max_pct": 8.1,
+    "trafo_pct": 12.3,
+    "vuf_pct": 0.37,
+    "margin_v": 16.86,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.2394661012900865,
+     "load_kw": 36.02321789277674,
+     "upstream_pu": 1.08374406794376
+    },
+    "observed": {
+     "pv_per_kwp": 0.25253848375121873,
+     "load_kw": 33.46557083887756,
+     "upstream_pu": 1.020547862110089
+    },
+    "residual": {
+     "pv": 0.052,
+     "load": -0.0835,
+     "upstream_pu": -0.05559
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 15.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 9.562
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 9.562
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 9.562
+    },
+    {
+     "battery_kw": 14.822,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 13.083
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 20.208
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 27.333
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 27.333
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 27.333
+    },
+    {
+     "battery_kw": 23.429,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 32.897
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 32.897
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 32.897
+    },
+    {
+     "battery_kw": -8.273,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 30.72
+    },
+    {
+     "battery_kw": -15.898,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 26.536
+    },
+    {
+     "battery_kw": -18.038,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 21.789
+    },
+    {
+     "battery_kw": -30.0,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 13.895
+    },
+    {
+     "battery_kw": -30.0,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 6.0
+    }
+   ]
+  },
+  {
+   "step": 69,
+   "time": "17:15",
+   "energy_before_kwh": 9.5625,
+   "energy_after_kwh": 10.8622,
+   "soc_before": 0.1594,
+   "soc_after": 0.181,
+   "action": {
+    "battery_kw": 5.472,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual -14.2 V"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 528,
+      "objective": 4286.2792,
+      "prediction_miss_v": 1.037,
+      "worst_severity": 12.379,
+      "predicted_infeasible_steps": [
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 250,
+      "objective": 3608.5887,
+      "prediction_miss_v": 0.175,
+      "worst_severity": 8.149,
+      "predicted_infeasible_steps": [
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 265,
+      "objective": 3001.9519,
+      "prediction_miss_v": 0.145,
+      "worst_severity": 5.093,
+      "predicted_infeasible_steps": [
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 262,
+      "objective": 3023.4915,
+      "prediction_miss_v": 0.091,
+      "worst_severity": 5.093,
+      "predicted_infeasible_steps": [
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     13,
+     14,
+     15
+    ],
+    "curtailed_kwh": 0.0,
+    "seconds": 1.206,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 240.05,
+    "v_min_v": 235.65,
+    "line_max_pct": 10.1,
+    "trafo_pct": 14.1,
+    "vuf_pct": 0.16,
+    "margin_v": 12.95,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 238.49,
+    "v_min_v": 233.93,
+    "line_max_pct": 7.5,
+    "trafo_pct": 12.1,
+    "vuf_pct": 0.17,
+    "margin_v": 14.51,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.20238549934110295,
+     "load_kw": 31.84368936111667,
+     "upstream_pu": 1.0914397428400002
+    },
+    "observed": {
+     "pv_per_kwp": 0.2209516974365115,
+     "load_kw": 31.993035937581652,
+     "upstream_pu": 1.0272217941855895
+    },
+    "residual": {
+     "pv": 0.0798,
+     "load": -0.0218,
+     "upstream_pu": -0.06163
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 5.472,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 10.862
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 10.862
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 17.987
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 25.112
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 32.237
+    },
+    {
+     "battery_kw": 15.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 35.8
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 42.925
+    },
+    {
+     "battery_kw": 19.586,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 47.576
+    },
+    {
+     "battery_kw": 4.932,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 48.748
+    },
+    {
+     "battery_kw": -0.445,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 48.631
+    },
+    {
+     "battery_kw": -13.739,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 45.015
+    },
+    {
+     "battery_kw": -21.366,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 39.393
+    },
+    {
+     "battery_kw": -23.354,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 33.247
+    },
+    {
+     "battery_kw": -30.0,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 25.352
+    },
+    {
+     "battery_kw": -30.0,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 17.457
+    },
+    {
+     "battery_kw": -30.0,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 9.562
+    }
+   ]
+  },
+  {
+   "step": 70,
+   "time": "17:30",
+   "energy_before_kwh": 10.8622,
+   "energy_after_kwh": 14.1997,
+   "soc_before": 0.181,
+   "soc_after": 0.2367,
+   "action": {
+    "battery_kw": 14.052,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual -14.7 V"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 421,
+      "objective": 6861.3414,
+      "prediction_miss_v": 1.212,
+      "worst_severity": 16.39,
+      "predicted_infeasible_steps": [
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 263,
+      "objective": 6166.819,
+      "prediction_miss_v": 0.197,
+      "worst_severity": 11.855,
+      "predicted_infeasible_steps": [
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 266,
+      "objective": 6043.7075,
+      "prediction_miss_v": 0.16,
+      "worst_severity": 8.575,
+      "predicted_infeasible_steps": [
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 268,
+      "objective": 6053.4581,
+      "prediction_miss_v": 0.097,
+      "worst_severity": 8.575,
+      "predicted_infeasible_steps": [
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "curtailed_kwh": 0.056,
+    "seconds": 1.216,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 240.38,
+    "v_min_v": 236.66,
+    "line_max_pct": 6.8,
+    "trafo_pct": 10.4,
+    "vuf_pct": 0.13,
+    "margin_v": 12.62,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 237.84,
+    "v_min_v": 230.15,
+    "line_max_pct": 7.5,
+    "trafo_pct": 5.7,
+    "vuf_pct": 0.15,
+    "margin_v": 15.16,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.16913557116236907,
+     "load_kw": 30.73769456722013,
+     "upstream_pu": 1.097359994050531
+    },
+    "observed": {
+     "pv_per_kwp": 0.18192216830764218,
+     "load_kw": 30.759399619680973,
+     "upstream_pu": 1.0323086929893004
+    },
+    "residual": {
+     "pv": 0.0769,
+     "load": -0.006,
+     "upstream_pu": -0.06402
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 14.052,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 14.2
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 21.325
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.45
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 35.575
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 42.7
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 49.825
+    },
+    {
+     "battery_kw": 17.58,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 54.0
+    },
+    {
+     "battery_kw": -3.274,
+     "keep": [
+      1.0,
+      1.0,
+      0.5
+     ],
+     "energy_kwh": 53.139
+    },
+    {
+     "battery_kw": -16.636,
+     "keep": [
+      1.0,
+      1.0,
+      0.5
+     ],
+     "energy_kwh": 48.761
+    },
+    {
+     "battery_kw": -16.705,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 44.364
+    },
+    {
+     "battery_kw": -25.785,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 37.579
+    },
+    {
+     "battery_kw": -30.0,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 29.684
+    },
+    {
+     "battery_kw": -30.0,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 21.789
+    },
+    {
+     "battery_kw": -30.0,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 13.895
+    },
+    {
+     "battery_kw": -30.0,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 6.0
+    }
+   ]
+  },
+  {
+   "step": 71,
+   "time": "17:45",
+   "energy_before_kwh": 14.1997,
+   "energy_after_kwh": 21.3247,
+   "soc_before": 0.2367,
+   "soc_after": 0.3554,
+   "action": {
+    "battery_kw": 30.0,
+    "keep": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "topology_id": "base",
+    "source": "plan",
+    "curtailed_kwh": 0.0
+   },
+   "status": "verified_safe",
+   "reason": "planned action verified at the observed step",
+   "replan_triggers": [
+    "every quarter hour",
+    "grid voltage residual -14.0 V"
+   ],
+   "topology_before": "base",
+   "topology_after": "base",
+   "operations_used": 0,
+   "operations_left": 2,
+   "planner": {
+    "status": "horizon_unsafe",
+    "verified": false,
+    "rounds": [
+     {
+      "round": 0,
+      "trust_kw": 15.0,
+      "trust_keep": 0.5,
+      "rows": 488,
+      "objective": 12861.8224,
+      "prediction_miss_v": 1.084,
+      "worst_severity": 15.485,
+      "predicted_infeasible_steps": [
+       7,
+       8,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 1,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 362,
+      "objective": 12931.5953,
+      "prediction_miss_v": 0.18,
+      "worst_severity": 12.113,
+      "predicted_infeasible_steps": [
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 2,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 367,
+      "objective": 12876.5888,
+      "prediction_miss_v": 0.148,
+      "worst_severity": 10.485,
+      "predicted_infeasible_steps": [
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     },
+     {
+      "round": 3,
+      "trust_kw": 7.5,
+      "trust_keep": 0.25,
+      "rows": 356,
+      "objective": 12913.1893,
+      "prediction_miss_v": 0.125,
+      "worst_severity": 10.485,
+      "predicted_infeasible_steps": [
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "safe": false
+     }
+    ],
+    "predicted_infeasible_steps": [
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "curtailed_kwh": 0.442,
+    "seconds": 1.232,
+    "horizon": 16,
+    "switching_options": []
+   },
+   "before": {
+    "safe": true,
+    "v_max_v": 241.27,
+    "v_min_v": 238.72,
+    "line_max_pct": 4.1,
+    "trafo_pct": 5.6,
+    "vuf_pct": 0.08,
+    "margin_v": 11.73,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "after": {
+    "safe": true,
+    "v_max_v": 238.99,
+    "v_min_v": 224.29,
+    "line_max_pct": 16.6,
+    "trafo_pct": 10.4,
+    "vuf_pct": 0.14,
+    "margin_v": 14.01,
+    "severity": 0.0,
+    "reasons": []
+   },
+   "forecast": {
+    "forecast": {
+     "pv_per_kwp": 0.13498427571861416,
+     "load_kw": 28.82703835721551,
+     "upstream_pu": 1.1003672867980285
+    },
+    "observed": {
+     "pv_per_kwp": 0.14141190153637948,
+     "load_kw": 32.905359485972475,
+     "upstream_pu": 1.0410044146155821
+    },
+    "residual": {
+     "pv": 0.0564,
+     "load": 0.0972,
+     "upstream_pu": -0.06076
+    }
+   },
+   "plan_horizon": [
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 21.325
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 28.45
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 35.575
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 42.7
+    },
+    {
+     "battery_kw": 30.0,
+     "keep": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "energy_kwh": 49.825
+    },
+    {
+     "battery_kw": 15.898,
+     "keep": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 53.6
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      0.0
+     ],
+     "energy_kwh": 53.6
+    },
+    {
+     "battery_kw": 0.0,
+     "keep": [
+      1.0,
+      1.0,
+      0.0
+     ],
+     "energy_kwh": 53.6
+    },
+    {
+     "battery_kw": -7.362,
+     "keep": [
+      1.0,
+      1.0,
+      0.0
+     ],
+     "energy_kwh": 51.663
+    },
+    {
+     "battery_kw": -12.734,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 48.312
+    },
+    {
+     "battery_kw": -10.785,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 45.474
+    },
+    {
+     "battery_kw": -30.0,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 37.579
+    },
+    {
+     "battery_kw": -30.0,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 29.684
+    },
+    {
+     "battery_kw": -30.0,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 21.789
+    },
+    {
+     "battery_kw": -30.0,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 13.895
+    },
+    {
+     "battery_kw": -30.0,
+     "keep": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "energy_kwh": 6.0
+    }
+   ]
+  }
+ ],
+ "baseline": {
+  "name": "reactive battery rule (engine.fixes.battery), same observations",
+  "battery_kw": [
+   0.0,
+   30.0,
+   4.433,
+   30.0,
+   3.98,
+   24.825,
+   1.023,
+   6.791,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "energy_kwh": [
+   30.0,
+   30.0,
+   37.125,
+   38.1779,
+   45.3029,
+   46.2482,
+   52.1442,
+   52.3871,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0,
+   54.0
+  ],
+  "safe": [
+   false,
+   true,
+   false,
+   true,
+   false,
+   true,
+   false,
+   false,
+   false,
+   false,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   false,
+   false,
+   false,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "v_max_v": [
+   257.35,
+   249.72,
+   258.85,
+   249.58,
+   255.78,
+   248.7,
+   259.37,
+   259.09,
+   261.44,
+   260.51,
+   248.52,
+   249.45,
+   249.93,
+   249.15,
+   248.24,
+   249.4,
+   252.26,
+   249.15,
+   259.91,
+   261.31,
+   258.39,
+   250.95,
+   247.57,
+   248.06,
+   249.68,
+   245.25,
+   244.04,
+   243.63,
+   242.87,
+   246.8,
+   245.34,
+   245.11,
+   240.42,
+   240.05,
+   240.38,
+   241.27
+  ],
+  "v_min_v": [
+   247.86,
+   235.42,
+   246.75,
+   233.25,
+   239.68,
+   230.97,
+   242.0,
+   243.48,
+   242.74,
+   241.86,
+   240.79,
+   240.99,
+   241.22,
+   240.45,
+   237.64,
+   239.07,
+   241.41,
+   240.04,
+   241.46,
+   242.26,
+   239.5,
+   233.22,
+   232.02,
+   233.48,
+   235.5,
+   232.03,
+   230.71,
+   232.34,
+   233.6,
+   236.84,
+   237.52,
+   237.51,
+   234.26,
+   235.65,
+   236.66,
+   238.72
+  ],
+  "severity": [
+   4.346,
+   0.0,
+   5.851,
+   0.0,
+   2.776,
+   0.0,
+   6.367,
+   6.094,
+   8.44,
+   7.508,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   6.906,
+   8.308,
+   5.386,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "unsafe_steps": 10,
+  "curtailed_kwh": 0.0,
+  "throughput_kwh": 25.263,
+  "seconds": 0.071
+ },
+ "summary": {
+  "steps": 36,
+  "horizon": 16,
+  "statuses": {
+   "verified_safe": 36,
+   "optimiser_infeasible": 0,
+   "search_exhausted": 0,
+   "solver_failed": 0,
+   "unsafe_fallback": 0,
+   "invalid_action": 0
+  },
+  "unsafe_steps": 0,
+  "baseline_unsafe_steps": 10,
+  "unsafe_steps_without_control": 13,
+  "curtailed_kwh": 61.536,
+  "throughput_kwh": 51.972,
+  "baseline_throughput_kwh": 25.263,
+  "soc_min": 0.1,
+  "soc_max": 0.5579,
+  "soc_final": 0.3554,
+  "operations_used": 0,
+  "fallbacks": 0,
+  "replans": 36,
+  "infeasible_periods": [],
+  "worst_after_severity": 0.0
+ },
+ "timing": {
+  "total_s": 61.6,
+  "step_p50_s": 1.421,
+  "step_p95_s": 4.155,
+  "plan_p50_s": 1.417,
+  "baseline_s": 0.071
+ },
+ "issued_forecast": {
+  "pv_per_kwp": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0239,
+   0.0484,
+   0.0726,
+   0.0973,
+   0.1344,
+   0.1724,
+   0.2091,
+   0.2462,
+   0.2849,
+   0.3212,
+   0.3598,
+   0.3966,
+   0.4262,
+   0.4535,
+   0.4821,
+   0.5107,
+   0.5316,
+   0.5526,
+   0.5702,
+   0.5938,
+   0.6018,
+   0.6115,
+   0.62,
+   0.6258,
+   0.6243,
+   0.6261,
+   0.6218,
+   0.6228,
+   0.6143,
+   0.6081,
+   0.5981,
+   0.5936,
+   0.5728,
+   0.5534,
+   0.5345,
+   0.5109,
+   0.4829,
+   0.4494,
+   0.4204,
+   0.3948,
+   0.3564,
+   0.3165,
+   0.2812,
+   0.2395,
+   0.2024,
+   0.1691,
+   0.135,
+   0.0972,
+   0.0726,
+   0.0505,
+   0.0285,
+   0.0045,
+   0.0038,
+   0.0029,
+   0.0014,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "observed_pv_per_kwp": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.023,
+   0.0454,
+   0.0685,
+   0.0918,
+   0.1314,
+   0.1722,
+   0.211,
+   0.2522,
+   0.2902,
+   0.3262,
+   0.3632,
+   0.4004,
+   0.4298,
+   0.4569,
+   0.485,
+   0.5133,
+   0.5326,
+   0.5549,
+   0.5763,
+   0.5988,
+   0.6058,
+   0.3082,
+   0.3103,
+   0.3122,
+   0.3101,
+   0.31,
+   0.3119,
+   0.3107,
+   0.3055,
+   0.6016,
+   0.5959,
+   0.5852,
+   0.5643,
+   0.5398,
+   0.5196,
+   0.508,
+   0.4803,
+   0.4479,
+   0.427,
+   0.3953,
+   0.3644,
+   0.332,
+   0.2949,
+   0.2525,
+   0.221,
+   0.1819,
+   0.1414,
+   0.1032,
+   0.0803,
+   0.0579,
+   0.0332,
+   0.0097,
+   0.0061,
+   0.0043,
+   0.0021,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "load_kw": [
+   73.394,
+   74.907,
+   68.242,
+   68.391,
+   64.807,
+   64.755,
+   61.525,
+   61.212,
+   58.269,
+   58.753,
+   57.838,
+   55.133,
+   52.285,
+   51.934,
+   50.481,
+   51.668,
+   48.356,
+   47.399,
+   46.436,
+   44.642,
+   43.481,
+   41.358,
+   39.344,
+   38.138,
+   39.362,
+   37.717,
+   35.062,
+   30.487,
+   31.497,
+   36.033,
+   33.735,
+   33.946,
+   33.56,
+   31.184,
+   28.485,
+   31.161,
+   33.294,
+   37.32,
+   35.763,
+   35.035,
+   35.886,
+   35.102,
+   33.586,
+   33.873,
+   34.236,
+   33.917,
+   33.723,
+   32.791,
+   30.346,
+   32.312,
+   32.329,
+   35.206,
+   33.61,
+   35.892,
+   38.972,
+   40.258,
+   39.368,
+   42.931,
+   43.709,
+   45.543,
+   47.864,
+   46.728,
+   46.568,
+   46.244,
+   43.872,
+   40.539,
+   38.573,
+   38.701,
+   36.023,
+   31.844,
+   30.738,
+   28.827,
+   28.12,
+   30.829,
+   29.941,
+   27.18,
+   30.359,
+   33.41,
+   34.583,
+   36.454,
+   40.971,
+   41.815,
+   49.111,
+   50.12,
+   53.717,
+   57.382,
+   63.365,
+   66.348,
+   68.638,
+   80.138,
+   76.678,
+   76.924,
+   74.494,
+   73.504,
+   75.185,
+   71.719
+  ],
+  "observed_load_kw": [
+   68.84,
+   71.057,
+   67.805,
+   68.389,
+   67.256,
+   66.65,
+   64.188,
+   61.888,
+   66.743,
+   65.305,
+   64.906,
+   60.098,
+   64.857,
+   66.907,
+   62.613,
+   65.579,
+   63.713,
+   54.744,
+   53.121,
+   51.018,
+   48.546,
+   45.976,
+   45.617,
+   37.718,
+   36.202,
+   37.299,
+   35.971,
+   36.429,
+   41.4,
+   45.596,
+   39.684,
+   36.881,
+   34.472,
+   34.066,
+   32.504,
+   34.096,
+   34.51,
+   35.457,
+   34.382,
+   33.064,
+   34.476,
+   33.08,
+   32.578,
+   34.046,
+   33.051,
+   33.581,
+   33.751,
+   34.839,
+   33.264,
+   34.195,
+   39.366,
+   39.145,
+   40.73,
+   37.949,
+   38.861,
+   33.377,
+   34.085,
+   37.927,
+   40.593,
+   42.198,
+   43.259,
+   41.548,
+   47.307,
+   44.239,
+   43.696,
+   43.682,
+   38.994,
+   32.093,
+   33.466,
+   31.993,
+   30.759,
+   32.905,
+   30.146,
+   29.85,
+   31.324,
+   30.104,
+   31.521,
+   34.457,
+   37.058,
+   39.008,
+   43.446,
+   45.711,
+   50.734,
+   53.619,
+   57.589,
+   63.61,
+   68.134,
+   66.99,
+   63.838,
+   67.188,
+   71.89,
+   75.661,
+   74.278,
+   72.934,
+   74.084,
+   71.7
+  ],
+  "upstream_v": [
+   236.86,
+   237.72,
+   238.38,
+   238.85,
+   238.72,
+   239.67,
+   241.05,
+   241.67,
+   242.09,
+   242.55,
+   243.29,
+   244.12,
+   244.22,
+   244.76,
+   245.26,
+   246.27,
+   247.32,
+   247.03,
+   247.18,
+   247.63,
+   248.95,
+   251.26,
+   253.2,
+   255.25,
+   253.99,
+   252.47,
+   253.26,
+   253.54,
+   253.38,
+   250.25,
+   249.69,
+   249.81,
+   249.05,
+   247.74,
+   247.2,
+   246.26,
+   244.52,
+   241.95,
+   241.49,
+   238.34,
+   237.77,
+   240.72,
+   239.98,
+   240.44,
+   241.66,
+   241.48,
+   240.25,
+   240.53,
+   240.43,
+   237.85,
+   237.08,
+   236.74,
+   237.89,
+   238.39,
+   238.91,
+   237.84,
+   237.81,
+   236.96,
+   236.67,
+   236.32,
+   236.46,
+   237.99,
+   239.08,
+   239.09,
+   240.78,
+   242.84,
+   245.26,
+   247.02,
+   249.26,
+   251.03,
+   252.39,
+   253.08,
+   254.27,
+   252.79,
+   253.35,
+   250.79,
+   245.9,
+   238.8,
+   235.58,
+   234.55,
+   233.82,
+   231.76,
+   230.26,
+   230.61,
+   230.54,
+   228.92,
+   228.2,
+   228.98,
+   229.23,
+   228.35,
+   229.41,
+   230.88,
+   231.94,
+   232.38,
+   233.79,
+   234.46
+  ],
+  "observed_upstream_v": [
+   229.91,
+   231.03,
+   231.18,
+   232.2,
+   232.08,
+   234.42,
+   236.65,
+   238.77,
+   238.32,
+   238.75,
+   238.74,
+   237.74,
+   238.17,
+   239.07,
+   240.04,
+   239.64,
+   240.47,
+   241.81,
+   242.58,
+   243.08,
+   242.98,
+   243.17,
+   244.13,
+   245.16,
+   248.54,
+   249.69,
+   249.48,
+   249.25,
+   250.18,
+   251.34,
+   252.61,
+   252.76,
+   251.09,
+   249.82,
+   249.55,
+   249.3,
+   247.63,
+   245.99,
+   246.37,
+   242.32,
+   239.35,
+   237.81,
+   241.31,
+   242.81,
+   241.95,
+   241.03,
+   240.78,
+   241.05,
+   241.26,
+   240.55,
+   239.1,
+   240.31,
+   243.13,
+   240.71,
+   240.84,
+   241.56,
+   238.85,
+   232.72,
+   231.62,
+   233.21,
+   235.29,
+   231.84,
+   230.93,
+   232.81,
+   233.71,
+   237.17,
+   237.73,
+   237.62,
+   234.73,
+   236.26,
+   237.43,
+   239.43,
+   242.22,
+   240.54,
+   238.77,
+   237.41,
+   235.17,
+   236.76,
+   240.63,
+   246.94,
+   244.56,
+   260.55,
+   264.36,
+   246.01,
+   251.32,
+   251.21,
+   250.39,
+   248.57,
+   242.72,
+   243.06,
+   240.38,
+   236.1,
+   234.41,
+   232.05,
+   230.9,
+   231.71
+  ],
+  "t": [
+   "00:00",
+   "00:15",
+   "00:30",
+   "00:45",
+   "01:00",
+   "01:15",
+   "01:30",
+   "01:45",
+   "02:00",
+   "02:15",
+   "02:30",
+   "02:45",
+   "03:00",
+   "03:15",
+   "03:30",
+   "03:45",
+   "04:00",
+   "04:15",
+   "04:30",
+   "04:45",
+   "05:00",
+   "05:15",
+   "05:30",
+   "05:45",
+   "06:00",
+   "06:15",
+   "06:30",
+   "06:45",
+   "07:00",
+   "07:15",
+   "07:30",
+   "07:45",
+   "08:00",
+   "08:15",
+   "08:30",
+   "08:45",
+   "09:00",
+   "09:15",
+   "09:30",
+   "09:45",
+   "10:00",
+   "10:15",
+   "10:30",
+   "10:45",
+   "11:00",
+   "11:15",
+   "11:30",
+   "11:45",
+   "12:00",
+   "12:15",
+   "12:30",
+   "12:45",
+   "13:00",
+   "13:15",
+   "13:30",
+   "13:45",
+   "14:00",
+   "14:15",
+   "14:30",
+   "14:45",
+   "15:00",
+   "15:15",
+   "15:30",
+   "15:45",
+   "16:00",
+   "16:15",
+   "16:30",
+   "16:45",
+   "17:00",
+   "17:15",
+   "17:30",
+   "17:45",
+   "18:00",
+   "18:15",
+   "18:30",
+   "18:45",
+   "19:00",
+   "19:15",
+   "19:30",
+   "19:45",
+   "20:00",
+   "20:15",
+   "20:30",
+   "20:45",
+   "21:00",
+   "21:15",
+   "21:30",
+   "21:45",
+   "22:00",
+   "22:15",
+   "22:30",
+   "22:45",
+   "23:00",
+   "23:15",
+   "23:30",
+   "23:45"
+  ]
+ },
+ "limits_v": {
+  "min": 207.0,
+  "max": 253.0
+ }
+}

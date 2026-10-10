@@ -8,8 +8,15 @@ import rules from '../fixtures/v2/rules_sample.json'
 // The file GET /results serves (written by python -m scripts.evaluate), read directly so tests never check a copy.
 export const results: Results = JSON.parse(readFileSync(resolve(import.meta.dirname, '../../../data/results/results.json'), 'utf-8'))
 
+/** Tomorrow in India (UTC+5:30), as the API computes it, so a test never goes stale at midnight. */
+function tomorrowIst(): string {
+  const now = new Date(Date.now() + 5.5 * 3600 * 1000)
+  now.setUTCDate(now.getUTCDate() + 1)
+  return now.toISOString().slice(0, 10)
+}
+
 export const CALENDAR: Calendar = {
-  tomorrow: '2026-10-11', archive: { first: '2025-01-01', last: '2025-12-31' },
+  tomorrow: tomorrowIst(), archive: { first: '2025-01-01', last: '2025-12-31' },
   ready: ['2025-05-15', '2025-08-05', '2025-11-19'], offline: false,
 }
 

@@ -7,7 +7,7 @@ import meterSites from '../fixtures/v2/meter_sites_sample.json'
 import rxMap from '../fixtures/v2/rx_map_sample.json'
 import transformers from '../fixtures/v2/transformers_sample.json'
 import { LangProvider } from '../i18n'
-import { makeStreet, serve as serveBase, settle } from '../test/server'
+import { CALENDAR, makeStreet, serve as serveBase, settle } from '../test/server'
 import Planning from './Planning'
 
 type Decision = 'approve' | 'approve_with_conditions' | 'refuse'
@@ -100,7 +100,7 @@ describe('Planning: connection check on the map', () => {
     fireEvent.click(screen.getByRole('button', { name: 'B' }))
     await check()
     const post = m.mock.calls.find((c) => c[1]?.method === 'POST')!
-    expect(JSON.parse(String(post[1]!.body))).toMatchObject({ node: 2, kw: 5, count: 1, phase: 'B', rule: 'up_2005', date: '2026-10-11' })
+    expect(JSON.parse(String(post[1]!.body))).toMatchObject({ node: 2, kw: 5, count: 1, phase: 'B', rule: 'up_2005', date: CALENDAR.tomorrow })
   })
 
   it('the three decisions render distinct wording', async () => {

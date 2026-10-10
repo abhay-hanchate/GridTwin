@@ -1,0 +1,5159 @@
+{
+ "pre_registration": "docs/DECISIONS.md, 'Addition 2', round 4",
+ "provenance": "simulated states labelled by the power-grid-model solver; selection on tune only",
+ "rules": [
+  "up_2005",
+  "pm10"
+ ],
+ "streets": {
+  "urban_short_160": {
+   "round": 4,
+   "selected": "ridge",
+   "reason": "lowest (unsafe-as-safe, false-rejection rate, latency) on tune",
+   "selected_at_utc": "2026-10-10T18:09:17+00:00",
+   "failure_model": {
+    "train_failures": 0,
+    "model": null,
+    "note": "fewer than 20 solver failures in train: no failure model"
+   },
+   "novelty": {
+    "components": 178,
+    "threshold": 43.354187719837775,
+    "calibrate_share_inside": 0.999
+   },
+   "states": {
+    "train": {
+     "total": 59648,
+     "boundary": 13568,
+     "solver_failures": 0
+    },
+    "tune": {
+     "total": 14879,
+     "boundary": 3359,
+     "solver_failures": 0
+    },
+    "calibrate": {
+     "total": 14948,
+     "boundary": 3428,
+     "solver_failures": 0
+    }
+   },
+   "candidates": {
+    "ridge": {
+     "fit_seconds": 6.5,
+     "fit": {
+      "alpha": 10.0,
+      "tune_mse_standardised": {
+       "0.01": 1.2869819335071455,
+       "0.1": 1.1748829054703203,
+       "1.0": 0.8677106397218766,
+       "10.0": 0.599014662244066
+      }
+     },
+     "guard": {
+      "at_limits": {
+       "up_2005": {
+        "v_max_v": 8.597,
+        "v_min_v": 7.095
+       },
+       "pm10": {
+        "v_max_v": 7.558,
+        "v_min_v": 7.095
+       },
+       "line_pts": 51.749,
+       "trafo_pts": 102.212,
+       "vuf_pts_at_2pct": 1.012
+      },
+      "edges": [
+       [
+        0.955,
+        1.045,
+        1.075,
+        1.085
+       ],
+       [
+        0.955,
+        1.045,
+        1.075
+       ],
+       [],
+       [],
+       [
+        0.05636988843247074,
+        0.10926652127068244,
+        0.15371826751260023,
+        0.2072308667163975,
+        0.2577825923037442,
+        0.31259446257716084,
+        0.39539776005425514
+       ],
+       [
+        3.509639339920303,
+        7.303227152237005,
+        10.293128936371183,
+        14.106305256428183,
+        18.218355838166737,
+        23.18811953128974,
+        31.41201741018351
+       ],
+       [
+        -55.35414506942299,
+        -20.666557191715967,
+        5.3865278501869245,
+        10.890583200931633,
+        16.31212045200734,
+        30.057364397114096,
+        48.793702729893646
+       ]
+      ],
+      "bin_counts": [
+       [
+        1611,
+        5956,
+        4500,
+        1211,
+        1670
+       ],
+       [
+        1830,
+        6960,
+        4255,
+        1903
+       ],
+       [
+        14948
+       ],
+       [
+        14948
+       ],
+       [
+        1869,
+        1868,
+        1869,
+        1868,
+        1868,
+        1869,
+        1868,
+        1869
+       ],
+       [
+        1869,
+        1868,
+        1869,
+        1868,
+        1868,
+        1869,
+        1868,
+        1869
+       ],
+       [
+        1869,
+        1868,
+        1869,
+        1868,
+        1868,
+        1869,
+        1868,
+        1869
+       ]
+      ],
+      "level": 0.99875,
+      "n": 14948
+     },
+     "tune": {
+      "regression": {
+       "converged_states": 14879,
+       "v_max_v": {
+        "n": 14879,
+        "mae": 2.8891,
+        "p99": 7.6862,
+        "max": 10.2046
+       },
+       "v_min_v": {
+        "n": 14879,
+        "mae": 2.8148,
+        "p99": 7.53,
+        "max": 11.4515
+       },
+       "max_line_loading_pts": {
+        "n": 14879,
+        "mae": 8.3932,
+        "p99": 48.151,
+        "max": 68.6853
+       },
+       "trafo_loading_pts": {
+        "n": 14879,
+        "mae": 15.7392,
+        "p99": 84.1042,
+        "max": 154.6543
+       },
+       "vuf_pts": {
+        "n": 14879,
+        "mae": 0.2265,
+        "p99": 1.6838,
+        "max": 2.228
+       },
+       "neutral_a": {
+        "n": 14879,
+        "mae": 23.3549,
+        "p99": 141.9217,
+        "max": 252.3186
+       },
+       "trafo_p_kw": {
+        "n": 14879,
+        "mae": 1.3978,
+        "p99": 16.8401,
+        "max": 36.1173
+       },
+       "node_voltage_v": {
+        "n": 4285152,
+        "mae": 2.8358,
+        "p99": 7.5676,
+        "max": 13.101
+       },
+       "line_loading_pts": {
+        "n": 1413505,
+        "mae": 4.2173,
+        "p99": 40.8864,
+        "max": 102.7881
+       }
+      },
+      "rules": {
+       "up_2005": {
+        "guarded": {
+         "states": 14879,
+         "truly_unsafe": 5952,
+         "truly_safe": 8927,
+         "screened_safe": 40,
+         "screened_risky": 14839,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0005032,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 8887,
+         "false_rejection_rate": 0.99552,
+         "precision": 0.40111,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14879,
+         "truly_unsafe": 5952,
+         "truly_safe": 8927,
+         "screened_safe": 8886,
+         "screened_risky": 5993,
+         "unsafe_as_safe": 1146,
+         "unsafe_miss_rate": 0.19254,
+         "miss_rate_upper95": 0.2011417,
+         "unsafe_among_screened_safe": 0.12897,
+         "false_rejections": 1187,
+         "false_rejection_rate": 0.13297,
+         "precision": 0.80194,
+         "recall": 0.80746
+        },
+        "boundary_guarded": {
+         "states": 3359,
+         "truly_unsafe": 2496,
+         "truly_safe": 863,
+         "screened_safe": 0,
+         "screened_risky": 3359,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0011995,
+         "unsafe_among_screened_safe": null,
+         "false_rejections": 863,
+         "false_rejection_rate": 1.0,
+         "precision": 0.74308,
+         "recall": 1.0
+        }
+       },
+       "pm10": {
+        "guarded": {
+         "states": 14879,
+         "truly_unsafe": 1255,
+         "truly_safe": 13624,
+         "screened_safe": 90,
+         "screened_risky": 14789,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0023842,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 13534,
+         "false_rejection_rate": 0.99339,
+         "precision": 0.08486,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14879,
+         "truly_unsafe": 1255,
+         "truly_safe": 13624,
+         "screened_safe": 13836,
+         "screened_risky": 1043,
+         "unsafe_as_safe": 684,
+         "unsafe_miss_rate": 0.54502,
+         "miss_rate_upper95": 0.5684435,
+         "unsafe_among_screened_safe": 0.04944,
+         "false_rejections": 472,
+         "false_rejection_rate": 0.03464,
+         "precision": 0.54746,
+         "recall": 0.45498
+        },
+        "boundary_guarded": {
+         "states": 3359,
+         "truly_unsafe": 768,
+         "truly_safe": 2591,
+         "screened_safe": 10,
+         "screened_risky": 3349,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0038931,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 2581,
+         "false_rejection_rate": 0.99614,
+         "precision": 0.22932,
+         "recall": 1.0
+        }
+       }
+      }
+     },
+     "selection": {
+      "false_safe": 0,
+      "false_rejection_rate": 0.99445,
+      "latency_s": 2.0005273441370264e-05
+     }
+    },
+    "lgbm": {
+     "fit_seconds": 342.5,
+     "fit": {
+      "v_max_pu": {
+       "trees": 1376
+      },
+      "v_min_pu": {
+       "trees": 1597
+      },
+      "max_line_loading_pct": {
+       "trees": 1150
+      },
+      "max_trafo_loading_pct": {
+       "trees": 742
+      },
+      "vuf_pct": {
+       "trees": 32
+      },
+      "neutral_a": {
+       "trees": 24
+      },
+      "trafo_p_kw": {
+       "trees": 2000
+      }
+     },
+     "guard": {
+      "at_limits": {
+       "up_2005": {
+        "v_max_v": 3.282,
+        "v_min_v": 5.04
+       },
+       "pm10": {
+        "v_max_v": 4.843,
+        "v_min_v": 5.04
+       },
+       "line_pts": 14.2,
+       "trafo_pts": 34.258,
+       "vuf_pts_at_2pct": 0.97
+      },
+      "edges": [
+       [
+        0.955,
+        1.045,
+        1.075
+       ],
+       [
+        0.955,
+        1.045,
+        1.075
+       ],
+       [],
+       [],
+       [
+        0.13601639308777572,
+        0.17152265344168144,
+        0.19823485663328907,
+        0.23053348658204945,
+        0.2667668253242118,
+        0.31248344787979065,
+        0.3966788181485739
+       ],
+       [
+        10.43666413133405,
+        11.980384680373922,
+        14.652915799302896,
+        16.795661547587898,
+        18.98079034648532,
+        22.77632412847404,
+        31.422068787086566
+       ],
+       [
+        -53.887009266170644,
+        -17.975898052261048,
+        5.620250561637754,
+        11.072410201986946,
+        16.71063684867356,
+        29.994189119398257,
+        48.06607124700881
+       ]
+      ],
+      "bin_counts": [
+       [
+        1759,
+        5086,
+        4310,
+        3793
+       ],
+       [
+        2016,
+        5958,
+        4029,
+        2945
+       ],
+       [
+        14948
+       ],
+       [
+        14948
+       ],
+       [
+        1868,
+        1869,
+        1869,
+        1867,
+        1869,
+        1869,
+        1868,
+        1869
+       ],
+       [
+        1803,
+        1927,
+        1876,
+        1867,
+        1869,
+        1869,
+        1868,
+        1869
+       ],
+       [
+        1869,
+        1868,
+        1869,
+        1868,
+        1868,
+        1869,
+        1868,
+        1869
+       ]
+      ],
+      "level": 0.99875,
+      "n": 14948
+     },
+     "tune": {
+      "regression": {
+       "converged_states": 14879,
+       "v_max_v": {
+        "n": 14879,
+        "mae": 0.6211,
+        "p99": 3.2093,
+        "max": 6.9887
+       },
+       "v_min_v": {
+        "n": 14879,
+        "mae": 0.7297,
+        "p99": 4.0813,
+        "max": 7.2118
+       },
+       "max_line_loading_pts": {
+        "n": 14879,
+        "mae": 2.3319,
+        "p99": 10.2674,
+        "max": 19.6023
+       },
+       "trafo_loading_pts": {
+        "n": 14879,
+        "mae": 6.7502,
+        "p99": 25.2,
+        "max": 54.2086
+       },
+       "vuf_pts": {
+        "n": 14879,
+        "mae": 0.1016,
+        "p99": 0.4859,
+        "max": 1.2182
+       },
+       "neutral_a": {
+        "n": 14879,
+        "mae": 9.9703,
+        "p99": 48.6134,
+        "max": 116.178
+       },
+       "trafo_p_kw": {
+        "n": 14879,
+        "mae": 5.2154,
+        "p99": 32.1789,
+        "max": 83.0396
+       }
+      },
+      "rules": {
+       "up_2005": {
+        "guarded": {
+         "states": 14879,
+         "truly_unsafe": 5952,
+         "truly_safe": 8927,
+         "screened_safe": 5677,
+         "screened_risky": 9202,
+         "unsafe_as_safe": 1,
+         "unsafe_miss_rate": 0.00017,
+         "miss_rate_upper95": 0.0007968,
+         "unsafe_among_screened_safe": 0.00018,
+         "false_rejections": 3251,
+         "false_rejection_rate": 0.36418,
+         "precision": 0.64671,
+         "recall": 0.99983
+        },
+        "point": {
+         "states": 14879,
+         "truly_unsafe": 5952,
+         "truly_safe": 8927,
+         "screened_safe": 9083,
+         "screened_risky": 5796,
+         "unsafe_as_safe": 432,
+         "unsafe_miss_rate": 0.07258,
+         "miss_rate_upper95": 0.078353,
+         "unsafe_among_screened_safe": 0.04756,
+         "false_rejections": 276,
+         "false_rejection_rate": 0.03092,
+         "precision": 0.95238,
+         "recall": 0.92742
+        },
+        "boundary_guarded": {
+         "states": 3359,
+         "truly_unsafe": 2496,
+         "truly_safe": 863,
+         "screened_safe": 7,
+         "screened_risky": 3352,
+         "unsafe_as_safe": 1,
+         "unsafe_miss_rate": 0.0004,
+         "miss_rate_upper95": 0.0018992,
+         "unsafe_among_screened_safe": 0.14286,
+         "false_rejections": 857,
+         "false_rejection_rate": 0.99305,
+         "precision": 0.74433,
+         "recall": 0.9996
+        }
+       },
+       "pm10": {
+        "guarded": {
+         "states": 14879,
+         "truly_unsafe": 1255,
+         "truly_safe": 13624,
+         "screened_safe": 11214,
+         "screened_risky": 3665,
+         "unsafe_as_safe": 2,
+         "unsafe_miss_rate": 0.00159,
+         "miss_rate_upper95": 0.005008,
+         "unsafe_among_screened_safe": 0.00018,
+         "false_rejections": 2412,
+         "false_rejection_rate": 0.17704,
+         "precision": 0.34188,
+         "recall": 0.99841
+        },
+        "point": {
+         "states": 14879,
+         "truly_unsafe": 1255,
+         "truly_safe": 13624,
+         "screened_safe": 13728,
+         "screened_risky": 1151,
+         "unsafe_as_safe": 423,
+         "unsafe_miss_rate": 0.33705,
+         "miss_rate_upper95": 0.3596659,
+         "unsafe_among_screened_safe": 0.03081,
+         "false_rejections": 319,
+         "false_rejection_rate": 0.02341,
+         "precision": 0.72285,
+         "recall": 0.66295
+        },
+        "boundary_guarded": {
+         "states": 3359,
+         "truly_unsafe": 768,
+         "truly_safe": 2591,
+         "screened_safe": 1679,
+         "screened_risky": 1680,
+         "unsafe_as_safe": 2,
+         "unsafe_miss_rate": 0.0026,
+         "miss_rate_upper95": 0.0081748,
+         "unsafe_among_screened_safe": 0.00119,
+         "false_rejections": 914,
+         "false_rejection_rate": 0.35276,
+         "precision": 0.45595,
+         "recall": 0.9974
+        }
+       }
+      }
+     },
+     "selection": {
+      "false_safe": 3,
+      "false_rejection_rate": 0.27061,
+      "latency_s": 0.0016488340820330905
+     }
+    },
+    "mlp": {
+     "fit_seconds": 666.5,
+     "fit": {
+      "best_epoch": 55,
+      "epochs_run": 75,
+      "tune_mse_standardised": 0.24380509442646342,
+      "seconds": 665.6,
+      "device": "cpu",
+      "hidden": [
+       512,
+       256,
+       256
+      ],
+      "stopped_early": true,
+      "tune_history": [
+       0.357769,
+       0.328213,
+       0.31978,
+       0.309438,
+       0.301669,
+       0.29676,
+       0.292779,
+       0.289233,
+       0.284834,
+       0.280483,
+       0.27892,
+       0.27629,
+       0.274394,
+       0.273218,
+       0.273249,
+       0.271812,
+       0.270884,
+       0.269283,
+       0.267922,
+       0.266936,
+       0.266197,
+       0.265658,
+       0.265008,
+       0.263902,
+       0.263417,
+       0.261445,
+       0.260158,
+       0.259552,
+       0.259369,
+       0.257716,
+       0.257711,
+       0.255258,
+       0.255877,
+       0.254562,
+       0.255326,
+       0.255441,
+       0.254313,
+       0.252643,
+       0.251514,
+       0.251208,
+       0.251067,
+       0.250721,
+       0.250397,
+       0.251266,
+       0.252846,
+       0.251105,
+       0.250139,
+       0.251632,
+       0.250214,
+       0.249321,
+       0.24861,
+       0.247703,
+       0.246335,
+       0.244547,
+       0.243805,
+       0.245412,
+       0.245618,
+       0.244669,
+       0.244907,
+       0.244783,
+       0.244251,
+       0.245011,
+       0.245938,
+       0.246787,
+       0.246632,
+       0.245504,
+       0.246099,
+       0.247751,
+       0.245713,
+       0.245532,
+       0.244785,
+       0.244934,
+       0.244102,
+       0.245878,
+       0.245565
+      ]
+     },
+     "guard": {
+      "at_limits": {
+       "up_2005": {
+        "v_max_v": 3.989,
+        "v_min_v": 5.055
+       },
+       "pm10": {
+        "v_max_v": 4.239,
+        "v_min_v": 5.055
+       },
+       "line_pts": 16.394,
+       "trafo_pts": 22.145,
+       "vuf_pts_at_2pct": 0.277
+      },
+      "edges": [
+       [
+        0.955,
+        1.045,
+        1.075
+       ],
+       [
+        0.955,
+        1.045,
+        1.075
+       ],
+       [],
+       [],
+       [
+        0.10546185191393131,
+        0.14650203513444085,
+        0.18427561121540234,
+        0.22066552265992204,
+        0.2700806661040521,
+        0.3458680058756375,
+        0.48585203398242305
+       ],
+       [
+        5.887671297265828,
+        8.368375073715523,
+        10.952574934608188,
+        14.559992003109077,
+        19.4443852282565,
+        26.424859644623854,
+        38.813772628235306
+       ],
+       [
+        -55.23913952841286,
+        -20.996090316068653,
+        4.323530129132075,
+        12.457357829655566,
+        17.719018196647482,
+        28.31046539827765,
+        47.00864727327168
+       ]
+      ],
+      "bin_counts": [
+       [
+        1632,
+        5692,
+        4402,
+        3222
+       ],
+       [
+        1949,
+        6695,
+        3785,
+        2519
+       ],
+       [
+        14948
+       ],
+       [
+        14948
+       ],
+       [
+        1869,
+        1868,
+        1869,
+        1868,
+        1868,
+        1869,
+        1868,
+        1869
+       ],
+       [
+        1869,
+        1868,
+        1869,
+        1868,
+        1868,
+        1869,
+        1868,
+        1869
+       ],
+       [
+        1869,
+        1868,
+        1869,
+        1868,
+        1868,
+        1869,
+        1868,
+        1869
+       ]
+      ],
+      "level": 0.99875,
+      "n": 14948
+     },
+     "tune": {
+      "regression": {
+       "converged_states": 14879,
+       "v_max_v": {
+        "n": 14879,
+        "mae": 1.1276,
+        "p99": 3.8148,
+        "max": 9.2042
+       },
+       "v_min_v": {
+        "n": 14879,
+        "mae": 1.1316,
+        "p99": 3.7121,
+        "max": 7.3698
+       },
+       "max_line_loading_pts": {
+        "n": 14879,
+        "mae": 2.3175,
+        "p99": 11.5186,
+        "max": 44.3544
+       },
+       "trafo_loading_pts": {
+        "n": 14879,
+        "mae": 4.3941,
+        "p99": 18.0146,
+        "max": 44.8342
+       },
+       "vuf_pts": {
+        "n": 14879,
+        "mae": 0.0662,
+        "p99": 0.2705,
+        "max": 0.6944
+       },
+       "neutral_a": {
+        "n": 14879,
+        "mae": 5.8625,
+        "p99": 21.9539,
+        "max": 52.0135
+       },
+       "trafo_p_kw": {
+        "n": 14879,
+        "mae": 5.5179,
+        "p99": 25.2184,
+        "max": 53.2961
+       },
+       "node_voltage_v": {
+        "n": 4285152,
+        "mae": 1.1276,
+        "p99": 3.5897,
+        "max": 11.6374
+       },
+       "line_loading_pts": {
+        "n": 1413505,
+        "mae": 1.6144,
+        "p99": 16.5098,
+        "max": 79.2902
+       }
+      },
+      "rules": {
+       "up_2005": {
+        "guarded": {
+         "states": 14879,
+         "truly_unsafe": 5952,
+         "truly_safe": 8927,
+         "screened_safe": 5431,
+         "screened_risky": 9448,
+         "unsafe_as_safe": 3,
+         "unsafe_miss_rate": 0.0005,
+         "miss_rate_upper95": 0.0013022,
+         "unsafe_among_screened_safe": 0.00055,
+         "false_rejections": 3499,
+         "false_rejection_rate": 0.39196,
+         "precision": 0.62966,
+         "recall": 0.9995
+        },
+        "point": {
+         "states": 14879,
+         "truly_unsafe": 5952,
+         "truly_safe": 8927,
+         "screened_safe": 9248,
+         "screened_risky": 5631,
+         "unsafe_as_safe": 746,
+         "unsafe_miss_rate": 0.12534,
+         "miss_rate_upper95": 0.1326154,
+         "unsafe_among_screened_safe": 0.08067,
+         "false_rejections": 425,
+         "false_rejection_rate": 0.04761,
+         "precision": 0.92452,
+         "recall": 0.87466
+        },
+        "boundary_guarded": {
+         "states": 3359,
+         "truly_unsafe": 2496,
+         "truly_safe": 863,
+         "screened_safe": 36,
+         "screened_risky": 3323,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0011995,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 827,
+         "false_rejection_rate": 0.95829,
+         "precision": 0.75113,
+         "recall": 1.0
+        }
+       },
+       "pm10": {
+        "guarded": {
+         "states": 14879,
+         "truly_unsafe": 1255,
+         "truly_safe": 13624,
+         "screened_safe": 11736,
+         "screened_risky": 3143,
+         "unsafe_as_safe": 1,
+         "unsafe_miss_rate": 0.0008,
+         "miss_rate_upper95": 0.0037743,
+         "unsafe_among_screened_safe": 9e-05,
+         "false_rejections": 1889,
+         "false_rejection_rate": 0.13865,
+         "precision": 0.39898,
+         "recall": 0.9992
+        },
+        "point": {
+         "states": 14879,
+         "truly_unsafe": 1255,
+         "truly_safe": 13624,
+         "screened_safe": 13885,
+         "screened_risky": 994,
+         "unsafe_as_safe": 471,
+         "unsafe_miss_rate": 0.3753,
+         "miss_rate_upper95": 0.3983792,
+         "unsafe_among_screened_safe": 0.03392,
+         "false_rejections": 210,
+         "false_rejection_rate": 0.01541,
+         "precision": 0.78873,
+         "recall": 0.6247
+        },
+        "boundary_guarded": {
+         "states": 3359,
+         "truly_unsafe": 768,
+         "truly_safe": 2591,
+         "screened_safe": 1753,
+         "screened_risky": 1606,
+         "unsafe_as_safe": 1,
+         "unsafe_miss_rate": 0.0013,
+         "miss_rate_upper95": 0.0061619,
+         "unsafe_among_screened_safe": 0.00057,
+         "false_rejections": 839,
+         "false_rejection_rate": 0.32381,
+         "precision": 0.47758,
+         "recall": 0.9987
+        }
+       }
+      }
+     },
+     "selection": {
+      "false_safe": 4,
+      "false_rejection_rate": 0.26531,
+      "latency_s": 4.498828125321097e-05
+     }
+    }
+   },
+   "seconds": 1126.3
+  },
+  "benchmark_250": {
+   "round": 4,
+   "selected": "mlp",
+   "reason": "lowest (unsafe-as-safe, false-rejection rate, latency) on tune",
+   "selected_at_utc": "2026-10-10T18:12:23+00:00",
+   "failure_model": {
+    "train_failures": 43,
+    "model": "lightgbm"
+   },
+   "novelty": {
+    "components": 197,
+    "threshold": 33.445207088800466,
+    "calibrate_share_inside": 0.99893
+   },
+   "states": {
+    "train": {
+     "total": 59716,
+     "boundary": 13636,
+     "solver_failures": 43
+    },
+    "tune": {
+     "total": 14799,
+     "boundary": 3279,
+     "solver_failures": 18
+    },
+    "calibrate": {
+     "total": 15021,
+     "boundary": 3501,
+     "solver_failures": 14
+    }
+   },
+   "candidates": {
+    "ridge": {
+     "fit_seconds": 6.6,
+     "fit": {
+      "alpha": 10.0,
+      "tune_mse_standardised": {
+       "0.01": 0.3898938887731803,
+       "0.1": 0.3884144676840828,
+       "1.0": 0.3769097566155271,
+       "10.0": 0.3420828298794504
+      }
+     },
+     "guard": {
+      "at_limits": {
+       "up_2005": {
+        "v_max_v": 6.168,
+        "v_min_v": 22.586
+       },
+       "pm10": {
+        "v_max_v": 8.061,
+        "v_min_v": 52.544
+       },
+       "line_pts": 51.354,
+       "trafo_pts": 64.649,
+       "vuf_pts_at_2pct": 4.22
+      },
+      "edges": [
+       [
+        0.955,
+        1.045,
+        1.075,
+        1.085
+       ],
+       [
+        0.925,
+        0.955,
+        1.045
+       ],
+       [],
+       [],
+       [
+        0.048188357321887976,
+        0.24013380849626795,
+        0.3617754471531631,
+        0.49065679104998844,
+        0.6522041392634559,
+        0.86496884355902,
+        1.1329632727717303
+       ],
+       [
+        1.997680868086686,
+        7.51664503295689,
+        12.16600063565171,
+        16.369024540024547,
+        20.386232219644334,
+        24.13130250260553,
+        32.553906177725274
+       ],
+       [
+        -46.22335018475162,
+        -8.825589813407284,
+        9.900271536091914,
+        15.676912224580269,
+        23.312603029736835,
+        40.76331959074678,
+        65.0217019324459
+       ]
+      ],
+      "bin_counts": [
+       [
+        1002,
+        5401,
+        4518,
+        1297,
+        2789
+       ],
+       [
+        1462,
+        1529,
+        8545,
+        3471
+       ],
+       [
+        15007
+       ],
+       [
+        15007
+       ],
+       [
+        1876,
+        1876,
+        1876,
+        1875,
+        1876,
+        1876,
+        1876,
+        1876
+       ],
+       [
+        1876,
+        1876,
+        1876,
+        1875,
+        1876,
+        1876,
+        1876,
+        1876
+       ],
+       [
+        1876,
+        1876,
+        1876,
+        1875,
+        1876,
+        1876,
+        1876,
+        1876
+       ]
+      ],
+      "level": 0.99875,
+      "n": 15007
+     },
+     "tune": {
+      "regression": {
+       "converged_states": 14781,
+       "v_max_v": {
+        "n": 14781,
+        "mae": 1.6758,
+        "p99": 7.5253,
+        "max": 15.1881
+       },
+       "v_min_v": {
+        "n": 14781,
+        "mae": 2.0473,
+        "p99": 9.5564,
+        "max": 95.4321
+       },
+       "max_line_loading_pts": {
+        "n": 14781,
+        "mae": 8.6476,
+        "p99": 41.1753,
+        "max": 97.8767
+       },
+       "trafo_loading_pts": {
+        "n": 14781,
+        "mae": 10.9659,
+        "p99": 45.4299,
+        "max": 71.6276
+       },
+       "vuf_pts": {
+        "n": 14781,
+        "mae": 0.4389,
+        "p99": 2.781,
+        "max": 15.5024
+       },
+       "neutral_a": {
+        "n": 14781,
+        "mae": 22.7449,
+        "p99": 137.006,
+        "max": 261.6091
+       },
+       "trafo_p_kw": {
+        "n": 14781,
+        "mae": 2.652,
+        "p99": 15.5833,
+        "max": 95.2975
+       },
+       "node_voltage_v": {
+        "n": 4256928,
+        "mae": 1.523,
+        "p99": 6.5526,
+        "max": 111.3162
+       },
+       "line_loading_pts": {
+        "n": 1404195,
+        "mae": 4.4541,
+        "p99": 36.4895,
+        "max": 125.6626
+       }
+      },
+      "rules": {
+       "up_2005": {
+        "guarded": {
+         "states": 14799,
+         "truly_unsafe": 8152,
+         "truly_safe": 6647,
+         "screened_safe": 449,
+         "screened_risky": 14350,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0003674,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 6198,
+         "false_rejection_rate": 0.93245,
+         "precision": 0.56808,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14799,
+         "truly_unsafe": 8152,
+         "truly_safe": 6647,
+         "screened_safe": 6270,
+         "screened_risky": 8529,
+         "unsafe_as_safe": 522,
+         "unsafe_miss_rate": 0.06403,
+         "miss_rate_upper95": 0.0686713,
+         "unsafe_among_screened_safe": 0.08325,
+         "false_rejections": 899,
+         "false_rejection_rate": 0.13525,
+         "precision": 0.89459,
+         "recall": 0.93597
+        },
+        "boundary_guarded": {
+         "states": 3279,
+         "truly_unsafe": 2397,
+         "truly_safe": 882,
+         "screened_safe": 0,
+         "screened_risky": 3279,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.001249,
+         "unsafe_among_screened_safe": null,
+         "false_rejections": 882,
+         "false_rejection_rate": 1.0,
+         "precision": 0.73102,
+         "recall": 1.0
+        }
+       },
+       "pm10": {
+        "guarded": {
+         "states": 14799,
+         "truly_unsafe": 2461,
+         "truly_safe": 12338,
+         "screened_safe": 6338,
+         "screened_risky": 8461,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0012165,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 6000,
+         "false_rejection_rate": 0.4863,
+         "precision": 0.29086,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14799,
+         "truly_unsafe": 2461,
+         "truly_safe": 12338,
+         "screened_safe": 12065,
+         "screened_risky": 2734,
+         "unsafe_as_safe": 338,
+         "unsafe_miss_rate": 0.13734,
+         "miss_rate_upper95": 0.1492786,
+         "unsafe_among_screened_safe": 0.02801,
+         "false_rejections": 611,
+         "false_rejection_rate": 0.04952,
+         "precision": 0.77652,
+         "recall": 0.86266
+        },
+        "boundary_guarded": {
+         "states": 3279,
+         "truly_unsafe": 660,
+         "truly_safe": 2619,
+         "screened_safe": 713,
+         "screened_risky": 2566,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0045287,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 1906,
+         "false_rejection_rate": 0.72776,
+         "precision": 0.25721,
+         "recall": 1.0
+        }
+       }
+      }
+     },
+     "selection": {
+      "false_safe": 0,
+      "false_rejection_rate": 0.70937,
+      "latency_s": 1.3707617192437738e-05
+     }
+    },
+    "lgbm": {
+     "fit_seconds": 397.2,
+     "fit": {
+      "v_max_pu": {
+       "trees": 767
+      },
+      "v_min_pu": {
+       "trees": 1179
+      },
+      "max_line_loading_pct": {
+       "trees": 1863
+      },
+      "max_trafo_loading_pct": {
+       "trees": 1201
+      },
+      "vuf_pct": {
+       "trees": 119
+      },
+      "neutral_a": {
+       "trees": 30
+      },
+      "trafo_p_kw": {
+       "trees": 1991
+      }
+     },
+     "guard": {
+      "at_limits": {
+       "up_2005": {
+        "v_max_v": 7.502,
+        "v_min_v": 22.534
+       },
+       "pm10": {
+        "v_max_v": 11.397,
+        "v_min_v": 20.109
+       },
+       "line_pts": 16.026,
+       "trafo_pts": 25.05,
+       "vuf_pts_at_2pct": 2.844
+      },
+      "edges": [
+       [
+        1.045,
+        1.075,
+        1.085
+       ],
+       [
+        0.925,
+        0.955,
+        1.045
+       ],
+       [],
+       [],
+       [
+        0.24265981898642358,
+        0.3450638299299385,
+        0.45970123316978345,
+        0.6072663778520091,
+        0.766682144316048,
+        0.9622864977505707,
+        1.236342510711737
+       ],
+       [
+        14.064915306626046,
+        15.791178198426232,
+        17.47773703713545,
+        20.22070864635962,
+        23.836842505765112,
+        28.561404696496822,
+        37.5700528537377
+       ],
+       [
+        -35.4188609231378,
+        -6.125413830975225,
+        10.419634411904397,
+        16.172718558092228,
+        24.54967268266293,
+        41.54435419672508,
+        63.882327002507964
+       ]
+      ],
+      "bin_counts": [
+       [
+        5480,
+        4544,
+        1102,
+        3881
+       ],
+       [
+        1626,
+        1437,
+        7615,
+        4329
+       ],
+       [
+        15007
+       ],
+       [
+        15007
+       ],
+       [
+        1876,
+        1876,
+        1876,
+        1875,
+        1876,
+        1876,
+        1876,
+        1876
+       ],
+       [
+        1854,
+        1898,
+        1876,
+        1875,
+        1876,
+        1876,
+        1848,
+        1904
+       ],
+       [
+        1876,
+        1876,
+        1876,
+        1875,
+        1876,
+        1876,
+        1876,
+        1876
+       ]
+      ],
+      "level": 0.99875,
+      "n": 15007
+     },
+     "tune": {
+      "regression": {
+       "converged_states": 14781,
+       "v_max_v": {
+        "n": 14781,
+        "mae": 1.1739,
+        "p99": 7.4387,
+        "max": 13.5223
+       },
+       "v_min_v": {
+        "n": 14781,
+        "mae": 1.5378,
+        "p99": 7.7862,
+        "max": 99.9857
+       },
+       "max_line_loading_pts": {
+        "n": 14781,
+        "mae": 2.3892,
+        "p99": 11.3681,
+        "max": 53.5996
+       },
+       "trafo_loading_pts": {
+        "n": 14781,
+        "mae": 3.8003,
+        "p99": 17.3901,
+        "max": 40.1303
+       },
+       "vuf_pts": {
+        "n": 14781,
+        "mae": 0.2398,
+        "p99": 1.2658,
+        "max": 14.1349
+       },
+       "neutral_a": {
+        "n": 14781,
+        "mae": 11.9068,
+        "p99": 58.1628,
+        "max": 139.1358
+       },
+       "trafo_p_kw": {
+        "n": 14781,
+        "mae": 6.3119,
+        "p99": 49.1835,
+        "max": 77.5581
+       }
+      },
+      "rules": {
+       "up_2005": {
+        "guarded": {
+         "states": 14799,
+         "truly_unsafe": 8152,
+         "truly_safe": 6647,
+         "screened_safe": 194,
+         "screened_risky": 14605,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0003674,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 6453,
+         "false_rejection_rate": 0.97081,
+         "precision": 0.55817,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14799,
+         "truly_unsafe": 8152,
+         "truly_safe": 6647,
+         "screened_safe": 6298,
+         "screened_risky": 8501,
+         "unsafe_as_safe": 415,
+         "unsafe_miss_rate": 0.05091,
+         "miss_rate_upper95": 0.0550941,
+         "unsafe_among_screened_safe": 0.06589,
+         "false_rejections": 764,
+         "false_rejection_rate": 0.11494,
+         "precision": 0.91013,
+         "recall": 0.94909
+        },
+        "boundary_guarded": {
+         "states": 3279,
+         "truly_unsafe": 2397,
+         "truly_safe": 882,
+         "screened_safe": 0,
+         "screened_risky": 3279,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.001249,
+         "unsafe_among_screened_safe": null,
+         "false_rejections": 882,
+         "false_rejection_rate": 1.0,
+         "precision": 0.73102,
+         "recall": 1.0
+        }
+       },
+       "pm10": {
+        "guarded": {
+         "states": 14799,
+         "truly_unsafe": 2461,
+         "truly_safe": 12338,
+         "screened_safe": 6585,
+         "screened_risky": 8214,
+         "unsafe_as_safe": 2,
+         "unsafe_miss_rate": 0.00081,
+         "miss_rate_upper95": 0.002556,
+         "unsafe_among_screened_safe": 0.0003,
+         "false_rejections": 5755,
+         "false_rejection_rate": 0.46645,
+         "precision": 0.29937,
+         "recall": 0.99919
+        },
+        "point": {
+         "states": 14799,
+         "truly_unsafe": 2461,
+         "truly_safe": 12338,
+         "screened_safe": 12406,
+         "screened_risky": 2393,
+         "unsafe_as_safe": 496,
+         "unsafe_miss_rate": 0.20154,
+         "miss_rate_upper95": 0.2153086,
+         "unsafe_among_screened_safe": 0.03998,
+         "false_rejections": 428,
+         "false_rejection_rate": 0.03469,
+         "precision": 0.82115,
+         "recall": 0.79846
+        },
+        "boundary_guarded": {
+         "states": 3279,
+         "truly_unsafe": 660,
+         "truly_safe": 2619,
+         "screened_safe": 726,
+         "screened_risky": 2553,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0045287,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 1893,
+         "false_rejection_rate": 0.72279,
+         "precision": 0.25852,
+         "recall": 1.0
+        }
+       }
+      }
+     },
+     "selection": {
+      "false_safe": 2,
+      "false_rejection_rate": 0.71863,
+      "latency_s": 0.0012430952148463348
+     }
+    },
+    "mlp": {
+     "fit_seconds": 1566.7,
+     "fit": {
+      "best_epoch": 157,
+      "epochs_run": 177,
+      "tune_mse_standardised": 0.027152542465001966,
+      "seconds": 1565.9,
+      "device": "cpu",
+      "hidden": [
+       512,
+       256,
+       256
+      ],
+      "stopped_early": true,
+      "tune_history": [
+       0.198062,
+       0.144944,
+       0.130233,
+       0.118871,
+       0.108934,
+       0.102575,
+       0.098225,
+       0.101987,
+       0.098082,
+       0.084324,
+       0.083212,
+       0.081793,
+       0.081416,
+       0.081381,
+       0.072545,
+       0.07022,
+       0.067582,
+       0.068297,
+       0.066339,
+       0.062478,
+       0.062175,
+       0.05916,
+       0.060106,
+       0.056695,
+       0.058788,
+       0.061387,
+       0.059703,
+       0.057968,
+       0.058591,
+       0.054661,
+       0.061867,
+       0.054828,
+       0.053912,
+       0.05233,
+       0.053334,
+       0.053327,
+       0.055706,
+       0.052651,
+       0.053426,
+       0.048634,
+       0.050941,
+       0.049025,
+       0.048627,
+       0.048618,
+       0.048403,
+       0.048603,
+       0.045765,
+       0.044897,
+       0.0489,
+       0.046344,
+       0.046525,
+       0.043683,
+       0.045704,
+       0.042973,
+       0.044921,
+       0.042444,
+       0.044231,
+       0.04403,
+       0.041905,
+       0.04097,
+       0.044542,
+       0.045083,
+       0.043284,
+       0.043679,
+       0.043772,
+       0.045013,
+       0.042766,
+       0.041495,
+       0.039157,
+       0.040586,
+       0.040597,
+       0.047407,
+       0.039309,
+       0.040929,
+       0.038674,
+       0.041367,
+       0.039844,
+       0.045169,
+       0.039839,
+       0.040556,
+       0.039643,
+       0.041492,
+       0.037882,
+       0.038174,
+       0.040947,
+       0.037155,
+       0.036418,
+       0.038211,
+       0.037252,
+       0.041216,
+       0.040237,
+       0.035894,
+       0.034721,
+       0.036505,
+       0.037666,
+       0.03601,
+       0.034132,
+       0.036242,
+       0.034667,
+       0.036957,
+       0.03335,
+       0.0333,
+       0.034388,
+       0.035069,
+       0.035111,
+       0.034578,
+       0.034452,
+       0.03391,
+       0.036089,
+       0.034235,
+       0.035883,
+       0.034654,
+       0.032048,
+       0.033069,
+       0.034644,
+       0.032001,
+       0.033168,
+       0.034745,
+       0.031254,
+       0.039729,
+       0.033661,
+       0.033171,
+       0.036127,
+       0.033351,
+       0.033968,
+       0.033878,
+       0.033143,
+       0.031876,
+       0.03217,
+       0.031715,
+       0.031438,
+       0.030505,
+       0.029817,
+       0.030627,
+       0.03102,
+       0.031005,
+       0.030886,
+       0.031549,
+       0.031474,
+       0.029595,
+       0.03107,
+       0.029438,
+       0.030293,
+       0.031927,
+       0.028541,
+       0.028863,
+       0.028947,
+       0.030362,
+       0.030923,
+       0.030649,
+       0.02852,
+       0.028268,
+       0.028126,
+       0.029005,
+       0.030444,
+       0.032952,
+       0.027153,
+       0.032254,
+       0.032164,
+       0.030343,
+       0.031965,
+       0.02934,
+       0.029584,
+       0.029943,
+       0.030518,
+       0.031093,
+       0.03108,
+       0.032233,
+       0.030182,
+       0.029747,
+       0.029937,
+       0.029942,
+       0.031892,
+       0.030466,
+       0.03135,
+       0.029045,
+       0.030293
+      ]
+     },
+     "guard": {
+      "at_limits": {
+       "up_2005": {
+        "v_max_v": 7.327,
+        "v_min_v": 11.333
+       },
+       "pm10": {
+        "v_max_v": 12.63,
+        "v_min_v": 19.353
+       },
+       "line_pts": 18.323,
+       "trafo_pts": 14.922,
+       "vuf_pts_at_2pct": 1.052
+      },
+      "edges": [
+       [
+        1.045,
+        1.075,
+        1.085
+       ],
+       [
+        0.925,
+        0.955,
+        1.045,
+        1.075
+       ],
+       [],
+       [],
+       [
+        0.20755458813478744,
+        0.3004634172519347,
+        0.39103602457034914,
+        0.493748936085309,
+        0.6308120371196003,
+        0.8468510526479662,
+        1.2065589901473186
+       ],
+       [
+        6.821077901180448,
+        10.04279032503856,
+        13.58348775113235,
+        17.807923361539174,
+        22.35723547351222,
+        28.484419844120893,
+        38.99237281846963
+       ],
+       [
+        -44.80581045513857,
+        -7.459665302181406,
+        8.462221951233069,
+        15.402393533521936,
+        21.900504811695626,
+        36.126646970699554,
+        60.613331357534435
+       ]
+      ],
+      "bin_counts": [
+       [
+        5904,
+        4513,
+        1153,
+        3437
+       ],
+       [
+        1520,
+        1474,
+        7779,
+        3019,
+        1215
+       ],
+       [
+        15007
+       ],
+       [
+        15007
+       ],
+       [
+        1876,
+        1876,
+        1876,
+        1875,
+        1876,
+        1876,
+        1876,
+        1876
+       ],
+       [
+        1876,
+        1876,
+        1876,
+        1875,
+        1876,
+        1876,
+        1876,
+        1876
+       ],
+       [
+        1876,
+        1876,
+        1876,
+        1875,
+        1876,
+        1876,
+        1876,
+        1876
+       ]
+      ],
+      "level": 0.99875,
+      "n": 15007
+     },
+     "tune": {
+      "regression": {
+       "converged_states": 14781,
+       "v_max_v": {
+        "n": 14781,
+        "mae": 0.7992,
+        "p99": 4.5269,
+        "max": 9.6766
+       },
+       "v_min_v": {
+        "n": 14781,
+        "mae": 0.8325,
+        "p99": 3.9732,
+        "max": 70.0419
+       },
+       "max_line_loading_pts": {
+        "n": 14781,
+        "mae": 1.5212,
+        "p99": 7.9666,
+        "max": 48.8975
+       },
+       "trafo_loading_pts": {
+        "n": 14781,
+        "mae": 2.1177,
+        "p99": 9.621,
+        "max": 22.2176
+       },
+       "vuf_pts": {
+        "n": 14781,
+        "mae": 0.1332,
+        "p99": 0.7953,
+        "max": 12.6624
+       },
+       "neutral_a": {
+        "n": 14781,
+        "mae": 4.5861,
+        "p99": 20.7469,
+        "max": 47.2733
+       },
+       "trafo_p_kw": {
+        "n": 14781,
+        "mae": 4.1973,
+        "p99": 15.8264,
+        "max": 39.0893
+       },
+       "node_voltage_v": {
+        "n": 4256928,
+        "mae": 0.6666,
+        "p99": 3.1774,
+        "max": 94.0442
+       },
+       "line_loading_pts": {
+        "n": 1404195,
+        "mae": 1.08,
+        "p99": 7.8106,
+        "max": 83.8387
+       }
+      },
+      "rules": {
+       "up_2005": {
+        "guarded": {
+         "states": 14799,
+         "truly_unsafe": 8152,
+         "truly_safe": 6647,
+         "screened_safe": 1932,
+         "screened_risky": 12867,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0003674,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 4715,
+         "false_rejection_rate": 0.70934,
+         "precision": 0.63356,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14799,
+         "truly_unsafe": 8152,
+         "truly_safe": 6647,
+         "screened_safe": 6687,
+         "screened_risky": 8112,
+         "unsafe_as_safe": 413,
+         "unsafe_miss_rate": 0.05066,
+         "miss_rate_upper95": 0.0548397,
+         "unsafe_among_screened_safe": 0.06176,
+         "false_rejections": 373,
+         "false_rejection_rate": 0.05612,
+         "precision": 0.95402,
+         "recall": 0.94934
+        },
+        "boundary_guarded": {
+         "states": 3279,
+         "truly_unsafe": 2397,
+         "truly_safe": 882,
+         "screened_safe": 0,
+         "screened_risky": 3279,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.001249,
+         "unsafe_among_screened_safe": null,
+         "false_rejections": 882,
+         "false_rejection_rate": 1.0,
+         "precision": 0.73102,
+         "recall": 1.0
+        }
+       },
+       "pm10": {
+        "guarded": {
+         "states": 14799,
+         "truly_unsafe": 2461,
+         "truly_safe": 12338,
+         "screened_safe": 7332,
+         "screened_risky": 7467,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0012165,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 5006,
+         "false_rejection_rate": 0.40574,
+         "precision": 0.32958,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14799,
+         "truly_unsafe": 2461,
+         "truly_safe": 12338,
+         "screened_safe": 12443,
+         "screened_risky": 2356,
+         "unsafe_as_safe": 328,
+         "unsafe_miss_rate": 0.13328,
+         "miss_rate_upper95": 0.1450754,
+         "unsafe_among_screened_safe": 0.02636,
+         "false_rejections": 223,
+         "false_rejection_rate": 0.01807,
+         "precision": 0.90535,
+         "recall": 0.86672
+        },
+        "boundary_guarded": {
+         "states": 3279,
+         "truly_unsafe": 660,
+         "truly_safe": 2619,
+         "screened_safe": 879,
+         "screened_risky": 2400,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0045287,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 1740,
+         "false_rejection_rate": 0.66438,
+         "precision": 0.275,
+         "recall": 1.0
+        }
+       }
+      }
+     },
+     "selection": {
+      "false_safe": 0,
+      "false_rejection_rate": 0.55754,
+      "latency_s": 2.089101562319229e-05
+     }
+    }
+   },
+   "seconds": 2066.5
+  },
+  "suburban_100": {
+   "round": 4,
+   "selected": "ridge",
+   "reason": "lowest (unsafe-as-safe, false-rejection rate, latency) on tune",
+   "selected_at_utc": "2026-10-10T18:46:56+00:00",
+   "failure_model": {
+    "train_failures": 0,
+    "model": null,
+    "note": "fewer than 20 solver failures in train: no failure model"
+   },
+   "novelty": {
+    "components": 167,
+    "threshold": 30.755442599484105,
+    "calibrate_share_inside": 0.999
+   },
+   "states": {
+    "train": {
+     "total": 59702,
+     "boundary": 13622,
+     "solver_failures": 0
+    },
+    "tune": {
+     "total": 14910,
+     "boundary": 3390,
+     "solver_failures": 0
+    },
+    "calibrate": {
+     "total": 14956,
+     "boundary": 3436,
+     "solver_failures": 0
+    }
+   },
+   "candidates": {
+    "ridge": {
+     "fit_seconds": 9.2,
+     "fit": {
+      "alpha": 10.0,
+      "tune_mse_standardised": {
+       "0.01": 0.7867960145287919,
+       "0.1": 0.7695979970366341,
+       "1.0": 0.663357789134977,
+       "10.0": 0.49105052825384393
+      }
+     },
+     "guard": {
+      "at_limits": {
+       "up_2005": {
+        "v_max_v": 5.509,
+        "v_min_v": 5.84
+       },
+       "pm10": {
+        "v_max_v": 7.095,
+        "v_min_v": 5.84
+       },
+       "line_pts": 15.535,
+       "trafo_pts": 90.678,
+       "vuf_pts_at_2pct": 1.098
+      },
+      "edges": [
+       [
+        0.955,
+        1.045,
+        1.075,
+        1.085
+       ],
+       [
+        0.955,
+        1.045
+       ],
+       [],
+       [],
+       [
+        0.07475630148378748,
+        0.17572889780767526,
+        0.2505927344448524,
+        0.33695127633727395,
+        0.43202258628316625,
+        0.5287885350178081,
+        0.7167073107121169
+       ],
+       [
+        1.6127603231509116,
+        6.249307134089484,
+        9.202637078818373,
+        12.329650199991356,
+        15.732679383251352,
+        20.906289829644216,
+        32.33681403884129
+       ],
+       [
+        -26.191249417490422,
+        -2.3244502742703324,
+        6.719621641727013,
+        10.920364738126583,
+        15.177393312517344,
+        25.82074466843771,
+        39.300555949614825
+       ]
+      ],
+      "bin_counts": [
+       [
+        1399,
+        6031,
+        5025,
+        1276,
+        1225
+       ],
+       [
+        1986,
+        8272,
+        4698
+       ],
+       [
+        14956
+       ],
+       [
+        14956
+       ],
+       [
+        1870,
+        1869,
+        1870,
+        1869,
+        1869,
+        1870,
+        1869,
+        1870
+       ],
+       [
+        1870,
+        1869,
+        1870,
+        1869,
+        1869,
+        1870,
+        1869,
+        1870
+       ],
+       [
+        1870,
+        1869,
+        1870,
+        1869,
+        1869,
+        1870,
+        1869,
+        1870
+       ]
+      ],
+      "level": 0.99875,
+      "n": 14956
+     },
+     "tune": {
+      "regression": {
+       "converged_states": 14910,
+       "v_max_v": {
+        "n": 14910,
+        "mae": 1.4497,
+        "p99": 6.0742,
+        "max": 12.0417
+       },
+       "v_min_v": {
+        "n": 14910,
+        "mae": 1.7137,
+        "p99": 7.1055,
+        "max": 20.7243
+       },
+       "max_line_loading_pts": {
+        "n": 14910,
+        "mae": 13.3072,
+        "p99": 60.8989,
+        "max": 96.5582
+       },
+       "trafo_loading_pts": {
+        "n": 14910,
+        "mae": 24.3674,
+        "p99": 92.9979,
+        "max": 163.5228
+       },
+       "vuf_pts": {
+        "n": 14910,
+        "mae": 0.2514,
+        "p99": 1.8745,
+        "max": 3.0415
+       },
+       "neutral_a": {
+        "n": 14910,
+        "mae": 15.6595,
+        "p99": 122.1559,
+        "max": 210.166
+       },
+       "trafo_p_kw": {
+        "n": 14910,
+        "mae": 1.8211,
+        "p99": 10.1748,
+        "max": 79.4542
+       },
+       "node_voltage_v": {
+        "n": 4294080,
+        "mae": 1.4893,
+        "p99": 6.1722,
+        "max": 20.7243
+       },
+       "line_loading_pts": {
+        "n": 1416450,
+        "mae": 5.4434,
+        "p99": 55.4614,
+        "max": 110.4595
+       }
+      },
+      "rules": {
+       "up_2005": {
+        "guarded": {
+         "states": 14910,
+         "truly_unsafe": 7144,
+         "truly_safe": 7766,
+         "screened_safe": 5,
+         "screened_risky": 14905,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0004192,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 7761,
+         "false_rejection_rate": 0.99936,
+         "precision": 0.4793,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14910,
+         "truly_unsafe": 7144,
+         "truly_safe": 7766,
+         "screened_safe": 7675,
+         "screened_risky": 7235,
+         "unsafe_as_safe": 846,
+         "unsafe_miss_rate": 0.11842,
+         "miss_rate_upper95": 0.1248944,
+         "unsafe_among_screened_safe": 0.11023,
+         "false_rejections": 937,
+         "false_rejection_rate": 0.12065,
+         "precision": 0.87049,
+         "recall": 0.88158
+        },
+        "boundary_guarded": {
+         "states": 3390,
+         "truly_unsafe": 2521,
+         "truly_safe": 869,
+         "screened_safe": 5,
+         "screened_risky": 3385,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0011876,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 864,
+         "false_rejection_rate": 0.99425,
+         "precision": 0.74476,
+         "recall": 1.0
+        }
+       },
+       "pm10": {
+        "guarded": {
+         "states": 14910,
+         "truly_unsafe": 2866,
+         "truly_safe": 12044,
+         "screened_safe": 94,
+         "screened_risky": 14816,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0010447,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 11950,
+         "false_rejection_rate": 0.9922,
+         "precision": 0.19344,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14910,
+         "truly_unsafe": 2866,
+         "truly_safe": 12044,
+         "screened_safe": 12477,
+         "screened_risky": 2433,
+         "unsafe_as_safe": 1195,
+         "unsafe_miss_rate": 0.41696,
+         "miss_rate_upper95": 0.4323388,
+         "unsafe_among_screened_safe": 0.09578,
+         "false_rejections": 762,
+         "false_rejection_rate": 0.06327,
+         "precision": 0.68681,
+         "recall": 0.58304
+        },
+        "boundary_guarded": {
+         "states": 3390,
+         "truly_unsafe": 1032,
+         "truly_safe": 2358,
+         "screened_safe": 12,
+         "screened_risky": 3378,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0028986,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 2346,
+         "false_rejection_rate": 0.99491,
+         "precision": 0.30551,
+         "recall": 1.0
+        }
+       }
+      }
+     },
+     "selection": {
+      "false_safe": 0,
+      "false_rejection_rate": 0.99578,
+      "latency_s": 1.7378125001243916e-05
+     }
+    },
+    "lgbm": {
+     "fit_seconds": 417.4,
+     "fit": {
+      "v_max_pu": {
+       "trees": 2000
+      },
+      "v_min_pu": {
+       "trees": 2000
+      },
+      "max_line_loading_pct": {
+       "trees": 1600
+      },
+      "max_trafo_loading_pct": {
+       "trees": 2000
+      },
+      "vuf_pct": {
+       "trees": 75
+      },
+      "neutral_a": {
+       "trees": 135
+      },
+      "trafo_p_kw": {
+       "trees": 1996
+      }
+     },
+     "guard": {
+      "at_limits": {
+       "up_2005": {
+        "v_max_v": 4.231,
+        "v_min_v": 3.785
+       },
+       "pm10": {
+        "v_max_v": 4.066,
+        "v_min_v": 3.784
+       },
+       "line_pts": 10.46,
+       "trafo_pts": 24.794,
+       "vuf_pts_at_2pct": 1.197
+      },
+      "edges": [
+       [
+        0.955,
+        1.045,
+        1.075
+       ],
+       [
+        0.925,
+        0.955,
+        1.045,
+        1.075
+       ],
+       [],
+       [],
+       [
+        0.17380321498973716,
+        0.22483012619331014,
+        0.2761219137326363,
+        0.34834735181520027,
+        0.4236833724502337,
+        0.5152419501775367,
+        0.6697544035092413
+       ],
+       [
+        6.272607307219188,
+        8.734786042058733,
+        10.899880327386681,
+        13.902324661914824,
+        17.71614286635441,
+        22.493405344449943,
+        33.41874772779406
+       ],
+       [
+        -23.461152177603488,
+        -0.9033725208549669,
+        7.004099863020217,
+        11.120302443221036,
+        15.288747675847617,
+        25.61069616657074,
+        39.27338569470511
+       ]
+      ],
+      "bin_counts": [
+       [
+        1663,
+        5572,
+        4591,
+        3130
+       ],
+       [
+        1002,
+        1314,
+        6916,
+        3745,
+        1979
+       ],
+       [
+        14956
+       ],
+       [
+        14956
+       ],
+       [
+        1870,
+        1869,
+        1870,
+        1869,
+        1869,
+        1870,
+        1868,
+        1871
+       ],
+       [
+        1870,
+        1869,
+        1870,
+        1869,
+        1869,
+        1870,
+        1869,
+        1870
+       ],
+       [
+        1870,
+        1869,
+        1870,
+        1869,
+        1869,
+        1870,
+        1869,
+        1870
+       ]
+      ],
+      "level": 0.99875,
+      "n": 14956
+     },
+     "tune": {
+      "regression": {
+       "converged_states": 14910,
+       "v_max_v": {
+        "n": 14910,
+        "mae": 0.929,
+        "p99": 4.2044,
+        "max": 8.5409
+       },
+       "v_min_v": {
+        "n": 14910,
+        "mae": 1.1164,
+        "p99": 5.0023,
+        "max": 20.75
+       },
+       "max_line_loading_pts": {
+        "n": 14910,
+        "mae": 2.1373,
+        "p99": 10.6465,
+        "max": 18.9509
+       },
+       "trafo_loading_pts": {
+        "n": 14910,
+        "mae": 7.2536,
+        "p99": 35.296,
+        "max": 76.952
+       },
+       "vuf_pts": {
+        "n": 14910,
+        "mae": 0.1276,
+        "p99": 0.5632,
+        "max": 1.3537
+       },
+       "neutral_a": {
+        "n": 14910,
+        "mae": 7.8015,
+        "p99": 41.8303,
+        "max": 65.7966
+       },
+       "trafo_p_kw": {
+        "n": 14910,
+        "mae": 4.7407,
+        "p99": 31.5971,
+        "max": 72.364
+       }
+      },
+      "rules": {
+       "up_2005": {
+        "guarded": {
+         "states": 14910,
+         "truly_unsafe": 7144,
+         "truly_safe": 7766,
+         "screened_safe": 4583,
+         "screened_risky": 10327,
+         "unsafe_as_safe": 11,
+         "unsafe_miss_rate": 0.00154,
+         "miss_rate_upper95": 0.0025474,
+         "unsafe_among_screened_safe": 0.0024,
+         "false_rejections": 3194,
+         "false_rejection_rate": 0.41128,
+         "precision": 0.69071,
+         "recall": 0.99846
+        },
+        "point": {
+         "states": 14910,
+         "truly_unsafe": 7144,
+         "truly_safe": 7766,
+         "screened_safe": 8252,
+         "screened_risky": 6658,
+         "unsafe_as_safe": 754,
+         "unsafe_miss_rate": 0.10554,
+         "miss_rate_upper95": 0.1117121,
+         "unsafe_among_screened_safe": 0.09137,
+         "false_rejections": 268,
+         "false_rejection_rate": 0.03451,
+         "precision": 0.95975,
+         "recall": 0.89446
+        },
+        "boundary_guarded": {
+         "states": 3390,
+         "truly_unsafe": 2521,
+         "truly_safe": 869,
+         "screened_safe": 26,
+         "screened_risky": 3364,
+         "unsafe_as_safe": 5,
+         "unsafe_miss_rate": 0.00198,
+         "miss_rate_upper95": 0.0041656,
+         "unsafe_among_screened_safe": 0.19231,
+         "false_rejections": 848,
+         "false_rejection_rate": 0.97583,
+         "precision": 0.74792,
+         "recall": 0.99802
+        }
+       },
+       "pm10": {
+        "guarded": {
+         "states": 14910,
+         "truly_unsafe": 2866,
+         "truly_safe": 12044,
+         "screened_safe": 9827,
+         "screened_risky": 5083,
+         "unsafe_as_safe": 36,
+         "unsafe_miss_rate": 0.01256,
+         "miss_rate_upper95": 0.0165544,
+         "unsafe_among_screened_safe": 0.00366,
+         "false_rejections": 2253,
+         "false_rejection_rate": 0.18706,
+         "precision": 0.55676,
+         "recall": 0.98744
+        },
+        "point": {
+         "states": 14910,
+         "truly_unsafe": 2866,
+         "truly_safe": 12044,
+         "screened_safe": 12735,
+         "screened_risky": 2175,
+         "unsafe_as_safe": 864,
+         "unsafe_miss_rate": 0.30147,
+         "miss_rate_upper95": 0.3158854,
+         "unsafe_among_screened_safe": 0.06784,
+         "false_rejections": 173,
+         "false_rejection_rate": 0.01436,
+         "precision": 0.92046,
+         "recall": 0.69853
+        },
+        "boundary_guarded": {
+         "states": 3390,
+         "truly_unsafe": 1032,
+         "truly_safe": 2358,
+         "screened_safe": 1588,
+         "screened_risky": 1802,
+         "unsafe_as_safe": 17,
+         "unsafe_miss_rate": 0.01647,
+         "miss_rate_upper95": 0.0246067,
+         "unsafe_among_screened_safe": 0.01071,
+         "false_rejections": 787,
+         "false_rejection_rate": 0.33376,
+         "precision": 0.56326,
+         "recall": 0.98353
+        }
+       }
+      }
+     },
+     "selection": {
+      "false_safe": 47,
+      "false_rejection_rate": 0.29917,
+      "latency_s": 0.0015747041015643504
+     }
+    },
+    "mlp": {
+     "fit_seconds": 1812.5,
+     "fit": {
+      "best_epoch": 145,
+      "epochs_run": 165,
+      "tune_mse_standardised": 0.016044168409981872,
+      "seconds": 1811.7,
+      "device": "cpu",
+      "hidden": [
+       512,
+       256,
+       256
+      ],
+      "stopped_early": true,
+      "tune_history": [
+       0.101051,
+       0.074222,
+       0.065558,
+       0.059497,
+       0.05413,
+       0.050385,
+       0.048099,
+       0.046294,
+       0.042957,
+       0.041634,
+       0.039502,
+       0.037352,
+       0.034972,
+       0.034205,
+       0.033879,
+       0.032604,
+       0.031822,
+       0.030952,
+       0.02931,
+       0.031013,
+       0.033357,
+       0.029415,
+       0.032013,
+       0.027602,
+       0.027345,
+       0.026831,
+       0.027446,
+       0.025857,
+       0.025522,
+       0.026515,
+       0.025244,
+       0.025394,
+       0.024993,
+       0.024672,
+       0.026227,
+       0.02411,
+       0.02433,
+       0.023171,
+       0.023354,
+       0.023319,
+       0.023662,
+       0.024938,
+       0.024926,
+       0.024345,
+       0.022907,
+       0.023642,
+       0.024295,
+       0.025119,
+       0.024225,
+       0.022923,
+       0.021935,
+       0.022552,
+       0.021556,
+       0.02132,
+       0.021466,
+       0.021979,
+       0.022946,
+       0.024012,
+       0.021834,
+       0.022773,
+       0.020317,
+       0.020768,
+       0.020403,
+       0.020828,
+       0.019997,
+       0.020817,
+       0.021689,
+       0.021319,
+       0.021224,
+       0.021179,
+       0.020185,
+       0.020474,
+       0.020723,
+       0.019908,
+       0.019952,
+       0.0197,
+       0.01987,
+       0.020129,
+       0.02035,
+       0.020896,
+       0.019132,
+       0.019911,
+       0.019652,
+       0.019326,
+       0.019304,
+       0.019179,
+       0.01926,
+       0.017988,
+       0.018106,
+       0.018257,
+       0.019391,
+       0.020124,
+       0.01901,
+       0.019041,
+       0.019546,
+       0.019051,
+       0.021844,
+       0.020125,
+       0.01966,
+       0.018375,
+       0.018455,
+       0.017847,
+       0.017758,
+       0.018194,
+       0.018622,
+       0.018431,
+       0.017865,
+       0.017898,
+       0.017973,
+       0.017943,
+       0.019093,
+       0.018107,
+       0.017871,
+       0.018531,
+       0.018465,
+       0.018369,
+       0.018631,
+       0.01852,
+       0.017567,
+       0.01718,
+       0.016887,
+       0.017006,
+       0.017,
+       0.017312,
+       0.017509,
+       0.018892,
+       0.017264,
+       0.016697,
+       0.01656,
+       0.017638,
+       0.018211,
+       0.017272,
+       0.017452,
+       0.017299,
+       0.017019,
+       0.01687,
+       0.016389,
+       0.016549,
+       0.017271,
+       0.016092,
+       0.017716,
+       0.016312,
+       0.016339,
+       0.016104,
+       0.016044,
+       0.017249,
+       0.017256,
+       0.01731,
+       0.016575,
+       0.017042,
+       0.016479,
+       0.017554,
+       0.017615,
+       0.017217,
+       0.017012,
+       0.017035,
+       0.017964,
+       0.017899,
+       0.017691,
+       0.018079,
+       0.017101,
+       0.016357,
+       0.016156,
+       0.016312,
+       0.016546
+      ]
+     },
+     "guard": {
+      "at_limits": {
+       "up_2005": {
+        "v_max_v": 2.082,
+        "v_min_v": 4.586
+       },
+       "pm10": {
+        "v_max_v": 2.078,
+        "v_min_v": 4.586
+       },
+       "line_pts": 11.7,
+       "trafo_pts": 26.127,
+       "vuf_pts_at_2pct": 0.504
+      },
+      "edges": [
+       [
+        0.955,
+        1.045,
+        1.075
+       ],
+       [
+        0.955,
+        1.045,
+        1.075
+       ],
+       [],
+       [],
+       [
+        0.15021915110043543,
+        0.20839616880099754,
+        0.2617337604645316,
+        0.32573753177118814,
+        0.39967882962821616,
+        0.5011041414843861,
+        0.6553338320402066
+       ],
+       [
+        4.423223898513086,
+        6.637237953048463,
+        9.219055064240424,
+        12.602859046889213,
+        16.382606365473425,
+        22.354473977984863,
+        30.92458871469094
+       ],
+       [
+        -24.58352673376574,
+        -0.48774743558009104,
+        7.660444747455698,
+        10.890667600905447,
+        15.185460261886723,
+        26.219558458477557,
+        39.67923589633901
+       ]
+      ],
+      "bin_counts": [
+       [
+        1511,
+        5910,
+        4357,
+        3178
+       ],
+       [
+        2143,
+        6931,
+        3762,
+        2120
+       ],
+       [
+        14956
+       ],
+       [
+        14956
+       ],
+       [
+        1870,
+        1869,
+        1870,
+        1869,
+        1869,
+        1870,
+        1869,
+        1870
+       ],
+       [
+        1870,
+        1869,
+        1870,
+        1869,
+        1869,
+        1870,
+        1869,
+        1870
+       ],
+       [
+        1870,
+        1869,
+        1870,
+        1869,
+        1869,
+        1870,
+        1869,
+        1870
+       ]
+      ],
+      "level": 0.99875,
+      "n": 14956
+     },
+     "tune": {
+      "regression": {
+       "converged_states": 14910,
+       "v_max_v": {
+        "n": 14910,
+        "mae": 0.8239,
+        "p99": 3.8985,
+        "max": 6.6958
+       },
+       "v_min_v": {
+        "n": 14910,
+        "mae": 0.8708,
+        "p99": 4.7811,
+        "max": 9.1062
+       },
+       "max_line_loading_pts": {
+        "n": 14910,
+        "mae": 1.4767,
+        "p99": 8.1845,
+        "max": 27.9398
+       },
+       "trafo_loading_pts": {
+        "n": 14910,
+        "mae": 4.5148,
+        "p99": 23.7692,
+        "max": 97.7407
+       },
+       "vuf_pts": {
+        "n": 14910,
+        "mae": 0.0634,
+        "p99": 0.2918,
+        "max": 1.1438
+       },
+       "neutral_a": {
+        "n": 14910,
+        "mae": 2.8193,
+        "p99": 13.5033,
+        "max": 58.3539
+       },
+       "trafo_p_kw": {
+        "n": 14910,
+        "mae": 2.8499,
+        "p99": 13.9006,
+        "max": 87.6206
+       },
+       "node_voltage_v": {
+        "n": 4294080,
+        "mae": 0.8119,
+        "p99": 3.9795,
+        "max": 12.2681
+       },
+       "line_loading_pts": {
+        "n": 1416450,
+        "mae": 0.8346,
+        "p99": 5.4471,
+        "max": 30.35
+       }
+      },
+      "rules": {
+       "up_2005": {
+        "guarded": {
+         "states": 14910,
+         "truly_unsafe": 7144,
+         "truly_safe": 7766,
+         "screened_safe": 5641,
+         "screened_risky": 9269,
+         "unsafe_as_safe": 13,
+         "unsafe_miss_rate": 0.00182,
+         "miss_rate_upper95": 0.0028916,
+         "unsafe_among_screened_safe": 0.0023,
+         "false_rejections": 2138,
+         "false_rejection_rate": 0.2753,
+         "precision": 0.76934,
+         "recall": 0.99818
+        },
+        "point": {
+         "states": 14910,
+         "truly_unsafe": 7144,
+         "truly_safe": 7766,
+         "screened_safe": 8351,
+         "screened_risky": 6559,
+         "unsafe_as_safe": 752,
+         "unsafe_miss_rate": 0.10526,
+         "miss_rate_upper95": 0.1114252,
+         "unsafe_among_screened_safe": 0.09005,
+         "false_rejections": 167,
+         "false_rejection_rate": 0.0215,
+         "precision": 0.97454,
+         "recall": 0.89474
+        },
+        "boundary_guarded": {
+         "states": 3390,
+         "truly_unsafe": 2521,
+         "truly_safe": 869,
+         "screened_safe": 149,
+         "screened_risky": 3241,
+         "unsafe_as_safe": 6,
+         "unsafe_miss_rate": 0.00238,
+         "miss_rate_upper95": 0.0046921,
+         "unsafe_among_screened_safe": 0.04027,
+         "false_rejections": 726,
+         "false_rejection_rate": 0.83544,
+         "precision": 0.776,
+         "recall": 0.99762
+        }
+       },
+       "pm10": {
+        "guarded": {
+         "states": 14910,
+         "truly_unsafe": 2866,
+         "truly_safe": 12044,
+         "screened_safe": 9979,
+         "screened_risky": 4931,
+         "unsafe_as_safe": 21,
+         "unsafe_miss_rate": 0.00733,
+         "miss_rate_upper95": 0.0105344,
+         "unsafe_among_screened_safe": 0.0021,
+         "false_rejections": 2086,
+         "false_rejection_rate": 0.1732,
+         "precision": 0.57696,
+         "recall": 0.99267
+        },
+        "point": {
+         "states": 14910,
+         "truly_unsafe": 2866,
+         "truly_safe": 12044,
+         "screened_safe": 12291,
+         "screened_risky": 2619,
+         "unsafe_as_safe": 477,
+         "unsafe_miss_rate": 0.16643,
+         "miss_rate_upper95": 0.1783038,
+         "unsafe_among_screened_safe": 0.03881,
+         "false_rejections": 230,
+         "false_rejection_rate": 0.0191,
+         "precision": 0.91218,
+         "recall": 0.83357
+        },
+        "boundary_guarded": {
+         "states": 3390,
+         "truly_unsafe": 1032,
+         "truly_safe": 2358,
+         "screened_safe": 1606,
+         "screened_risky": 1784,
+         "unsafe_as_safe": 17,
+         "unsafe_miss_rate": 0.01647,
+         "miss_rate_upper95": 0.0246067,
+         "unsafe_among_screened_safe": 0.01059,
+         "false_rejections": 769,
+         "false_rejection_rate": 0.32612,
+         "precision": 0.56895,
+         "recall": 0.98353
+        }
+       }
+      }
+     },
+     "selection": {
+      "false_safe": 34,
+      "false_rejection_rate": 0.22425,
+      "latency_s": 3.3976269534718995e-05
+     }
+    }
+   },
+   "seconds": 2355.2
+  },
+  "rural_long_100": {
+   "round": 4,
+   "selected": "mlp",
+   "reason": "lowest (unsafe-as-safe, false-rejection rate, latency) on tune",
+   "selected_at_utc": "2026-10-10T18:53:51+00:00",
+   "failure_model": {
+    "train_failures": 172,
+    "model": "lightgbm"
+   },
+   "novelty": {
+    "components": 150,
+    "threshold": 31.75648749202599,
+    "calibrate_share_inside": 0.999
+   },
+   "states": {
+    "train": {
+     "total": 59651,
+     "boundary": 13571,
+     "solver_failures": 172
+    },
+    "tune": {
+     "total": 14768,
+     "boundary": 3248,
+     "solver_failures": 47
+    },
+    "calibrate": {
+     "total": 14941,
+     "boundary": 3421,
+     "solver_failures": 47
+    }
+   },
+   "candidates": {
+    "ridge": {
+     "fit_seconds": 6.9,
+     "fit": {
+      "alpha": 10.0,
+      "tune_mse_standardised": {
+       "0.01": 0.8075166729572754,
+       "0.1": 0.500821291147277,
+       "1.0": 0.3539534980324555,
+       "10.0": 0.2701663953114941
+      }
+     },
+     "guard": {
+      "at_limits": {
+       "up_2005": {
+        "v_max_v": 4.422,
+        "v_min_v": 20.281
+       },
+       "pm10": {
+        "v_max_v": 4.954,
+        "v_min_v": 66.61
+       },
+       "line_pts": 97.815,
+       "trafo_pts": 110.82,
+       "vuf_pts_at_2pct": 7.831
+      },
+      "edges": [
+       [
+        0.955,
+        1.045,
+        1.075,
+        1.085,
+        1.115
+       ],
+       [
+        0.925,
+        0.955,
+        1.045,
+        1.075
+       ],
+       [],
+       [],
+       [
+        0.02923601505417258,
+        0.14536841742703543,
+        0.21353108246507418,
+        0.2846381649042481,
+        0.3672505353105857,
+        0.4689320788685105,
+        0.6086699315088995
+       ],
+       [
+        -0.6619855206001599,
+        4.009800331562156,
+        6.221707126921336,
+        8.73201287687173,
+        11.825718304225372,
+        15.333492550327861,
+        19.843554872833348
+       ],
+       [
+        -43.35728002730936,
+        -15.598120417322086,
+        3.5284998289005105,
+        9.046963680708389,
+        13.858452959942161,
+        25.264758268678875,
+        41.916340168541616
+       ]
+      ],
+      "bin_counts": [
+       [
+        1132,
+        5168,
+        4577,
+        1200,
+        1771,
+        1046
+       ],
+       [
+        1322,
+        1221,
+        7269,
+        3810,
+        1272
+       ],
+       [
+        14894
+       ],
+       [
+        14894
+       ],
+       [
+        1862,
+        1862,
+        1861,
+        1862,
+        1862,
+        1861,
+        1862,
+        1862
+       ],
+       [
+        1862,
+        1862,
+        1861,
+        1862,
+        1862,
+        1861,
+        1862,
+        1862
+       ],
+       [
+        1862,
+        1862,
+        1861,
+        1862,
+        1862,
+        1861,
+        1862,
+        1862
+       ]
+      ],
+      "level": 0.99875,
+      "n": 14894
+     },
+     "tune": {
+      "regression": {
+       "converged_states": 14721,
+       "v_max_v": {
+        "n": 14721,
+        "mae": 1.5567,
+        "p99": 7.2033,
+        "max": 15.9532
+       },
+       "v_min_v": {
+        "n": 14721,
+        "mae": 1.9656,
+        "p99": 9.8684,
+        "max": 61.4954
+       },
+       "max_line_loading_pts": {
+        "n": 14721,
+        "mae": 10.1215,
+        "p99": 59.9203,
+        "max": 126.5864
+       },
+       "trafo_loading_pts": {
+        "n": 14721,
+        "mae": 21.3464,
+        "p99": 97.3345,
+        "max": 184.4081
+       },
+       "vuf_pts": {
+        "n": 14721,
+        "mae": 0.3462,
+        "p99": 1.7829,
+        "max": 7.8539
+       },
+       "neutral_a": {
+        "n": 14721,
+        "mae": 19.6286,
+        "p99": 108.5336,
+        "max": 166.0615
+       },
+       "trafo_p_kw": {
+        "n": 14721,
+        "mae": 2.0437,
+        "p99": 20.4841,
+        "max": 59.0884
+       },
+       "node_voltage_v": {
+        "n": 4239648,
+        "mae": 1.5095,
+        "p99": 6.681,
+        "max": 63.7045
+       },
+       "line_loading_pts": {
+        "n": 1398495,
+        "mae": 3.9194,
+        "p99": 35.7029,
+        "max": 169.6048
+       }
+      },
+      "rules": {
+       "up_2005": {
+        "guarded": {
+         "states": 14768,
+         "truly_unsafe": 6576,
+         "truly_safe": 8192,
+         "screened_safe": 0,
+         "screened_risky": 14768,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0004555,
+         "unsafe_among_screened_safe": null,
+         "false_rejections": 8192,
+         "false_rejection_rate": 1.0,
+         "precision": 0.44529,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14768,
+         "truly_unsafe": 6576,
+         "truly_safe": 8192,
+         "screened_safe": 7570,
+         "screened_risky": 7198,
+         "unsafe_as_safe": 538,
+         "unsafe_miss_rate": 0.08181,
+         "miss_rate_upper95": 0.0875865,
+         "unsafe_among_screened_safe": 0.07107,
+         "false_rejections": 1160,
+         "false_rejection_rate": 0.1416,
+         "precision": 0.83884,
+         "recall": 0.91819
+        },
+        "boundary_guarded": {
+         "states": 3248,
+         "truly_unsafe": 2347,
+         "truly_safe": 901,
+         "screened_safe": 0,
+         "screened_risky": 3248,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0012756,
+         "unsafe_among_screened_safe": null,
+         "false_rejections": 901,
+         "false_rejection_rate": 1.0,
+         "precision": 0.7226,
+         "recall": 1.0
+        }
+       },
+       "pm10": {
+        "guarded": {
+         "states": 14768,
+         "truly_unsafe": 2325,
+         "truly_safe": 12443,
+         "screened_safe": 0,
+         "screened_risky": 14768,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0012877,
+         "unsafe_among_screened_safe": null,
+         "false_rejections": 12443,
+         "false_rejection_rate": 1.0,
+         "precision": 0.15743,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14768,
+         "truly_unsafe": 2325,
+         "truly_safe": 12443,
+         "screened_safe": 12404,
+         "screened_risky": 2364,
+         "unsafe_as_safe": 890,
+         "unsafe_miss_rate": 0.3828,
+         "miss_rate_upper95": 0.3996947,
+         "unsafe_among_screened_safe": 0.07175,
+         "false_rejections": 929,
+         "false_rejection_rate": 0.07466,
+         "precision": 0.60702,
+         "recall": 0.6172
+        },
+        "boundary_guarded": {
+         "states": 3248,
+         "truly_unsafe": 822,
+         "truly_safe": 2426,
+         "screened_safe": 0,
+         "screened_risky": 3248,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0036378,
+         "unsafe_among_screened_safe": null,
+         "false_rejections": 2426,
+         "false_rejection_rate": 1.0,
+         "precision": 0.25308,
+         "recall": 1.0
+        }
+       }
+      }
+     },
+     "selection": {
+      "false_safe": 0,
+      "false_rejection_rate": 1.0,
+      "latency_s": 8.066699216158213e-06
+     }
+    },
+    "lgbm": {
+     "fit_seconds": 374.9,
+     "fit": {
+      "v_max_pu": {
+       "trees": 1597
+      },
+      "v_min_pu": {
+       "trees": 361
+      },
+      "max_line_loading_pct": {
+       "trees": 497
+      },
+      "max_trafo_loading_pct": {
+       "trees": 612
+      },
+      "vuf_pct": {
+       "trees": 96
+      },
+      "neutral_a": {
+       "trees": 59
+      },
+      "trafo_p_kw": {
+       "trees": 1998
+      }
+     },
+     "guard": {
+      "at_limits": {
+       "up_2005": {
+        "v_max_v": 8.923,
+        "v_min_v": 16.048
+       },
+       "pm10": {
+        "v_max_v": 12.367,
+        "v_min_v": 49.302
+       },
+       "line_pts": 16.488,
+       "trafo_pts": 43.942,
+       "vuf_pts_at_2pct": 3.916
+      },
+      "edges": [
+       [
+        0.955,
+        1.045,
+        1.075
+       ],
+       [
+        0.925,
+        0.955,
+        1.045,
+        1.075
+       ],
+       [],
+       [],
+       [
+        0.19264361910923505,
+        0.24531696873702796,
+        0.3047331144750616,
+        0.3908434842033241,
+        0.47206675229681105,
+        0.578936463060579,
+        0.7583661985564318
+       ],
+       [
+        6.667712492671545,
+        9.655918732352154,
+        12.136698412721909,
+        14.048849134019441,
+        16.35136504975407,
+        19.612290837928754,
+        26.370547842225168
+       ],
+       [
+        -40.77724410169898,
+        -14.603269535775931,
+        2.9503129854913697,
+        8.210518059521398,
+        12.85582848727258,
+        24.074376141430157,
+        41.012904260389945
+       ]
+      ],
+      "bin_counts": [
+       [
+        1249,
+        5445,
+        4531,
+        3669
+       ],
+       [
+        1289,
+        1393,
+        7141,
+        3620,
+        1451
+       ],
+       [
+        14894
+       ],
+       [
+        14894
+       ],
+       [
+        1862,
+        1857,
+        1866,
+        1862,
+        1862,
+        1861,
+        1862,
+        1862
+       ],
+       [
+        1862,
+        1853,
+        1870,
+        1862,
+        1862,
+        1861,
+        1862,
+        1862
+       ],
+       [
+        1862,
+        1862,
+        1861,
+        1862,
+        1862,
+        1861,
+        1862,
+        1862
+       ]
+      ],
+      "level": 0.99875,
+      "n": 14894
+     },
+     "tune": {
+      "regression": {
+       "converged_states": 14721,
+       "v_max_v": {
+        "n": 14721,
+        "mae": 1.0083,
+        "p99": 5.0918,
+        "max": 16.7626
+       },
+       "v_min_v": {
+        "n": 14721,
+        "mae": 1.4581,
+        "p99": 8.6344,
+        "max": 52.7661
+       },
+       "max_line_loading_pts": {
+        "n": 14721,
+        "mae": 2.8615,
+        "p99": 12.5278,
+        "max": 55.3652
+       },
+       "trafo_loading_pts": {
+        "n": 14721,
+        "mae": 6.9215,
+        "p99": 35.7049,
+        "max": 71.9788
+       },
+       "vuf_pts": {
+        "n": 14721,
+        "mae": 0.171,
+        "p99": 0.7794,
+        "max": 5.8245
+       },
+       "neutral_a": {
+        "n": 14721,
+        "mae": 9.1525,
+        "p99": 45.6436,
+        "max": 68.6865
+       },
+       "trafo_p_kw": {
+        "n": 14721,
+        "mae": 4.1153,
+        "p99": 30.6922,
+        "max": 49.538
+       }
+      },
+      "rules": {
+       "up_2005": {
+        "guarded": {
+         "states": 14768,
+         "truly_unsafe": 6576,
+         "truly_safe": 8192,
+         "screened_safe": 654,
+         "screened_risky": 14114,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0004555,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 7538,
+         "false_rejection_rate": 0.92017,
+         "precision": 0.46592,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14768,
+         "truly_unsafe": 6576,
+         "truly_safe": 8192,
+         "screened_safe": 7805,
+         "screened_risky": 6963,
+         "unsafe_as_safe": 373,
+         "unsafe_miss_rate": 0.05672,
+         "miss_rate_upper95": 0.0616369,
+         "unsafe_among_screened_safe": 0.04779,
+         "false_rejections": 760,
+         "false_rejection_rate": 0.09277,
+         "precision": 0.89085,
+         "recall": 0.94328
+        },
+        "boundary_guarded": {
+         "states": 3248,
+         "truly_unsafe": 2347,
+         "truly_safe": 901,
+         "screened_safe": 0,
+         "screened_risky": 3248,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0012756,
+         "unsafe_among_screened_safe": null,
+         "false_rejections": 901,
+         "false_rejection_rate": 1.0,
+         "precision": 0.7226,
+         "recall": 1.0
+        }
+       },
+       "pm10": {
+        "guarded": {
+         "states": 14768,
+         "truly_unsafe": 2325,
+         "truly_safe": 12443,
+         "screened_safe": 5896,
+         "screened_risky": 8872,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0012877,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 6547,
+         "false_rejection_rate": 0.52616,
+         "precision": 0.26206,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14768,
+         "truly_unsafe": 2325,
+         "truly_safe": 12443,
+         "screened_safe": 12799,
+         "screened_risky": 1969,
+         "unsafe_as_safe": 651,
+         "unsafe_miss_rate": 0.28,
+         "miss_rate_upper95": 0.2957318,
+         "unsafe_among_screened_safe": 0.05086,
+         "false_rejections": 295,
+         "false_rejection_rate": 0.02371,
+         "precision": 0.85018,
+         "recall": 0.72
+        },
+        "boundary_guarded": {
+         "states": 3248,
+         "truly_unsafe": 822,
+         "truly_safe": 2426,
+         "screened_safe": 366,
+         "screened_risky": 2882,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0036378,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 2060,
+         "false_rejection_rate": 0.84913,
+         "precision": 0.28522,
+         "recall": 1.0
+        }
+       }
+      }
+     },
+     "selection": {
+      "false_safe": 0,
+      "false_rejection_rate": 0.72317,
+      "latency_s": 0.0008039908203087975
+     }
+    },
+    "mlp": {
+     "fit_seconds": 1336.0,
+     "fit": {
+      "best_epoch": 114,
+      "epochs_run": 134,
+      "tune_mse_standardised": 0.02013183867880038,
+      "seconds": 1335.0,
+      "device": "cpu",
+      "hidden": [
+       512,
+       256,
+       256
+      ],
+      "stopped_early": true,
+      "tune_history": [
+       0.168649,
+       0.105761,
+       0.078128,
+       0.068876,
+       0.064982,
+       0.059258,
+       0.057968,
+       0.054628,
+       0.052065,
+       0.051262,
+       0.049799,
+       0.048174,
+       0.046444,
+       0.045501,
+       0.044263,
+       0.042137,
+       0.041659,
+       0.042073,
+       0.041416,
+       0.037291,
+       0.036281,
+       0.035946,
+       0.034323,
+       0.037488,
+       0.036166,
+       0.03817,
+       0.035237,
+       0.034452,
+       0.03397,
+       0.032846,
+       0.031705,
+       0.031626,
+       0.034275,
+       0.033676,
+       0.032838,
+       0.030761,
+       0.030737,
+       0.031746,
+       0.030443,
+       0.033526,
+       0.030485,
+       0.029343,
+       0.028491,
+       0.031476,
+       0.027832,
+       0.029404,
+       0.025932,
+       0.029314,
+       0.026681,
+       0.02804,
+       0.026907,
+       0.027183,
+       0.026418,
+       0.026224,
+       0.02389,
+       0.027733,
+       0.032419,
+       0.025221,
+       0.02515,
+       0.025833,
+       0.023516,
+       0.028093,
+       0.022557,
+       0.023269,
+       0.023205,
+       0.023116,
+       0.023168,
+       0.022109,
+       0.023588,
+       0.023456,
+       0.021923,
+       0.024069,
+       0.022686,
+       0.022584,
+       0.023285,
+       0.023212,
+       0.023291,
+       0.02545,
+       0.025946,
+       0.022459,
+       0.022053,
+       0.022181,
+       0.022675,
+       0.021743,
+       0.02209,
+       0.022364,
+       0.021213,
+       0.021129,
+       0.021614,
+       0.022039,
+       0.02185,
+       0.021946,
+       0.021402,
+       0.021747,
+       0.020977,
+       0.021085,
+       0.021156,
+       0.020782,
+       0.021735,
+       0.020648,
+       0.021105,
+       0.021709,
+       0.022163,
+       0.021301,
+       0.024093,
+       0.022542,
+       0.021436,
+       0.021562,
+       0.020807,
+       0.022246,
+       0.02229,
+       0.021167,
+       0.020418,
+       0.020132,
+       0.020584,
+       0.021026,
+       0.020225,
+       0.020559,
+       0.020698,
+       0.020857,
+       0.022904,
+       0.022248,
+       0.021883,
+       0.022336,
+       0.022568,
+       0.022777,
+       0.022184,
+       0.021012,
+       0.021823,
+       0.021464,
+       0.022155,
+       0.022193,
+       0.021783,
+       0.021791
+      ]
+     },
+     "guard": {
+      "at_limits": {
+       "up_2005": {
+        "v_max_v": 3.041,
+        "v_min_v": 9.151
+       },
+       "pm10": {
+        "v_max_v": 8.173,
+        "v_min_v": 43.092
+       },
+       "line_pts": 14.907,
+       "trafo_pts": 36.908,
+       "vuf_pts_at_2pct": 7.886
+      },
+      "edges": [
+       [
+        0.955,
+        1.045,
+        1.075
+       ],
+       [
+        0.925,
+        0.955,
+        1.045,
+        1.075
+       ],
+       [],
+       [],
+       [
+        0.14857606618357053,
+        0.20261818197724268,
+        0.27472431738258984,
+        0.3475292552995187,
+        0.4322157474056312,
+        0.5425032039768545,
+        0.7478163953918817
+       ],
+       [
+        4.443073784871336,
+        6.554645022111341,
+        8.695150552852215,
+        11.244674767628702,
+        14.799954159784875,
+        20.11161235799971,
+        29.47851552291857
+       ],
+       [
+        -42.87503297553827,
+        -16.59563019501813,
+        2.0959438791966765,
+        7.910664482958755,
+        13.245914007084341,
+        23.233742505768753,
+        40.11417447840099
+       ]
+      ],
+      "bin_counts": [
+       [
+        1233,
+        5266,
+        4565,
+        3830
+       ],
+       [
+        1324,
+        1365,
+        6912,
+        3440,
+        1853
+       ],
+       [
+        14894
+       ],
+       [
+        14894
+       ],
+       [
+        1862,
+        1862,
+        1861,
+        1862,
+        1862,
+        1861,
+        1862,
+        1862
+       ],
+       [
+        1862,
+        1862,
+        1861,
+        1862,
+        1862,
+        1861,
+        1862,
+        1862
+       ],
+       [
+        1862,
+        1862,
+        1861,
+        1862,
+        1862,
+        1861,
+        1862,
+        1862
+       ]
+      ],
+      "level": 0.99875,
+      "n": 14894
+     },
+     "tune": {
+      "regression": {
+       "converged_states": 14721,
+       "v_max_v": {
+        "n": 14721,
+        "mae": 0.9854,
+        "p99": 3.5351,
+        "max": 7.6233
+       },
+       "v_min_v": {
+        "n": 14721,
+        "mae": 1.0373,
+        "p99": 3.8159,
+        "max": 36.7166
+       },
+       "max_line_loading_pts": {
+        "n": 14721,
+        "mae": 2.2728,
+        "p99": 12.6898,
+        "max": 50.9236
+       },
+       "trafo_loading_pts": {
+        "n": 14721,
+        "mae": 4.9086,
+        "p99": 22.7158,
+        "max": 52.4574
+       },
+       "vuf_pts": {
+        "n": 14721,
+        "mae": 0.0939,
+        "p99": 0.3949,
+        "max": 5.9034
+       },
+       "neutral_a": {
+        "n": 14721,
+        "mae": 3.9499,
+        "p99": 16.9649,
+        "max": 47.5927
+       },
+       "trafo_p_kw": {
+        "n": 14721,
+        "mae": 3.5891,
+        "p99": 15.181,
+        "max": 36.2829
+       },
+       "node_voltage_v": {
+        "n": 4239648,
+        "mae": 0.9469,
+        "p99": 3.6848,
+        "max": 45.7483
+       },
+       "line_loading_pts": {
+        "n": 1398495,
+        "mae": 1.0363,
+        "p99": 7.2817,
+        "max": 106.8598
+       }
+      },
+      "rules": {
+       "up_2005": {
+        "guarded": {
+         "states": 14768,
+         "truly_unsafe": 6576,
+         "truly_safe": 8192,
+         "screened_safe": 4337,
+         "screened_risky": 10431,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0004555,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 3855,
+         "false_rejection_rate": 0.47058,
+         "precision": 0.63043,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14768,
+         "truly_unsafe": 6576,
+         "truly_safe": 8192,
+         "screened_safe": 7772,
+         "screened_risky": 6996,
+         "unsafe_as_safe": 298,
+         "unsafe_miss_rate": 0.04532,
+         "miss_rate_upper95": 0.0497633,
+         "unsafe_among_screened_safe": 0.03834,
+         "false_rejections": 718,
+         "false_rejection_rate": 0.08765,
+         "precision": 0.89737,
+         "recall": 0.95468
+        },
+        "boundary_guarded": {
+         "states": 3248,
+         "truly_unsafe": 2347,
+         "truly_safe": 901,
+         "screened_safe": 5,
+         "screened_risky": 3243,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0012756,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 896,
+         "false_rejection_rate": 0.99445,
+         "precision": 0.72371,
+         "recall": 1.0
+        }
+       },
+       "pm10": {
+        "guarded": {
+         "states": 14768,
+         "truly_unsafe": 2325,
+         "truly_safe": 12443,
+         "screened_safe": 8391,
+         "screened_risky": 6377,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0012877,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 4052,
+         "false_rejection_rate": 0.32564,
+         "precision": 0.36459,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14768,
+         "truly_unsafe": 2325,
+         "truly_safe": 12443,
+         "screened_safe": 12453,
+         "screened_risky": 2315,
+         "unsafe_as_safe": 393,
+         "unsafe_miss_rate": 0.16903,
+         "miss_rate_upper95": 0.1823395,
+         "unsafe_among_screened_safe": 0.03156,
+         "false_rejections": 383,
+         "false_rejection_rate": 0.03078,
+         "precision": 0.83456,
+         "recall": 0.83097
+        },
+        "boundary_guarded": {
+         "states": 3248,
+         "truly_unsafe": 822,
+         "truly_safe": 2426,
+         "screened_safe": 1074,
+         "screened_risky": 2174,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0036378,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 1352,
+         "false_rejection_rate": 0.5573,
+         "precision": 0.3781,
+         "recall": 1.0
+        }
+       }
+      }
+     },
+     "selection": {
+      "false_safe": 0,
+      "false_rejection_rate": 0.39811,
+      "latency_s": 1.913281250409682e-05
+     }
+    }
+   },
+   "seconds": 1784.1
+  },
+  "rural_weak_63": {
+   "round": 4,
+   "selected": "mlp",
+   "reason": "lowest (unsafe-as-safe, false-rejection rate, latency) on tune",
+   "selected_at_utc": "2026-10-10T19:02:09+00:00",
+   "failure_model": {
+    "train_failures": 511,
+    "model": "lightgbm"
+   },
+   "novelty": {
+    "components": 114,
+    "threshold": 24.908569092369152,
+    "calibrate_share_inside": 0.99898
+   },
+   "states": {
+    "train": {
+     "total": 59574,
+     "boundary": 13494,
+     "solver_failures": 511
+    },
+    "tune": {
+     "total": 14945,
+     "boundary": 3425,
+     "solver_failures": 54
+    },
+    "calibrate": {
+     "total": 14752,
+     "boundary": 3232,
+     "solver_failures": 199
+    }
+   },
+   "candidates": {
+    "ridge": {
+     "fit_seconds": 5.6,
+     "fit": {
+      "alpha": 10.0,
+      "tune_mse_standardised": {
+       "0.01": 0.4434624689437065,
+       "0.1": 0.405993423646199,
+       "1.0": 0.3002694617417038,
+       "10.0": 0.23742786993514706
+      }
+     },
+     "guard": {
+      "at_limits": {
+       "up_2005": {
+        "v_max_v": 7.445,
+        "v_min_v": 20.164
+       },
+       "pm10": {
+        "v_max_v": 8.234,
+        "v_min_v": 96.755
+       },
+       "line_pts": 137.974,
+       "trafo_pts": 161.609,
+       "vuf_pts_at_2pct": 7.08
+      },
+      "edges": [
+       [
+        0.955,
+        1.045,
+        1.075,
+        1.085
+       ],
+       [
+        0.925,
+        0.955,
+        1.045
+       ],
+       [],
+       [],
+       [
+        -0.03477045030246784,
+        0.1495351742024461,
+        0.2546120140786821,
+        0.3831923738532858,
+        0.5291762045874135,
+        0.6590854941540384,
+        0.8615173951847976
+       ],
+       [
+        -3.383914190916901,
+        1.917721941414797,
+        4.90758162070788,
+        8.177019885931163,
+        11.811909310047351,
+        15.662444344863417,
+        20.86501520589087
+       ],
+       [
+        -31.4679821296182,
+        -6.6818587015663,
+        3.6757594056300915,
+        6.883087796530818,
+        10.835652305662313,
+        19.45221525559869,
+        30.332562120042432
+       ]
+      ],
+      "bin_counts": [
+       [
+        1102,
+        6126,
+        3950,
+        1104,
+        2271
+       ],
+       [
+        1491,
+        1296,
+        7800,
+        3966
+       ],
+       [
+        14553
+       ],
+       [
+        14553
+       ],
+       [
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1820
+       ],
+       [
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1820
+       ],
+       [
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1820
+       ]
+      ],
+      "level": 0.99875,
+      "n": 14553
+     },
+     "tune": {
+      "regression": {
+       "converged_states": 14891,
+       "v_max_v": {
+        "n": 14891,
+        "mae": 2.4972,
+        "p99": 9.2536,
+        "max": 32.6383
+       },
+       "v_min_v": {
+        "n": 14891,
+        "mae": 2.533,
+        "p99": 7.1414,
+        "max": 59.102
+       },
+       "max_line_loading_pts": {
+        "n": 14891,
+        "mae": 8.75,
+        "p99": 89.1883,
+        "max": 209.5189
+       },
+       "trafo_loading_pts": {
+        "n": 14891,
+        "mae": 19.4383,
+        "p99": 109.4419,
+        "max": 229.4974
+       },
+       "vuf_pts": {
+        "n": 14891,
+        "mae": 0.3308,
+        "p99": 2.5603,
+        "max": 6.7267
+       },
+       "neutral_a": {
+        "n": 14891,
+        "mae": 11.7409,
+        "p99": 83.8582,
+        "max": 136.0551
+       },
+       "trafo_p_kw": {
+        "n": 14891,
+        "mae": 2.1205,
+        "p99": 16.9276,
+        "max": 66.9865
+       },
+       "node_voltage_v": {
+        "n": 4288608,
+        "mae": 2.2313,
+        "p99": 6.4642,
+        "max": 63.3851
+       },
+       "line_loading_pts": {
+        "n": 1414645,
+        "mae": 3.5012,
+        "p99": 36.3552,
+        "max": 240.4192
+       }
+      },
+      "rules": {
+       "up_2005": {
+        "guarded": {
+         "states": 14945,
+         "truly_unsafe": 7867,
+         "truly_safe": 7078,
+         "screened_safe": 0,
+         "screened_risky": 14945,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0003807,
+         "unsafe_among_screened_safe": null,
+         "false_rejections": 7078,
+         "false_rejection_rate": 1.0,
+         "precision": 0.5264,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14945,
+         "truly_unsafe": 7867,
+         "truly_safe": 7078,
+         "screened_safe": 6991,
+         "screened_risky": 7954,
+         "unsafe_as_safe": 1026,
+         "unsafe_miss_rate": 0.13042,
+         "miss_rate_upper95": 0.1368284,
+         "unsafe_among_screened_safe": 0.14676,
+         "false_rejections": 1113,
+         "false_rejection_rate": 0.15725,
+         "precision": 0.86007,
+         "recall": 0.86958
+        },
+        "boundary_guarded": {
+         "states": 3425,
+         "truly_unsafe": 2587,
+         "truly_safe": 838,
+         "screened_safe": 0,
+         "screened_risky": 3425,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0011573,
+         "unsafe_among_screened_safe": null,
+         "false_rejections": 838,
+         "false_rejection_rate": 1.0,
+         "precision": 0.75533,
+         "recall": 1.0
+        }
+       },
+       "pm10": {
+        "guarded": {
+         "states": 14945,
+         "truly_unsafe": 2832,
+         "truly_safe": 12113,
+         "screened_safe": 0,
+         "screened_risky": 14945,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0010573,
+         "unsafe_among_screened_safe": null,
+         "false_rejections": 12113,
+         "false_rejection_rate": 1.0,
+         "precision": 0.18949,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14945,
+         "truly_unsafe": 2832,
+         "truly_safe": 12113,
+         "screened_safe": 12874,
+         "screened_risky": 2071,
+         "unsafe_as_safe": 1234,
+         "unsafe_miss_rate": 0.43573,
+         "miss_rate_upper95": 0.4512813,
+         "unsafe_among_screened_safe": 0.09585,
+         "false_rejections": 473,
+         "false_rejection_rate": 0.03905,
+         "precision": 0.77161,
+         "recall": 0.56427
+        },
+        "boundary_guarded": {
+         "states": 3425,
+         "truly_unsafe": 960,
+         "truly_safe": 2465,
+         "screened_safe": 0,
+         "screened_risky": 3425,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0031157,
+         "unsafe_among_screened_safe": null,
+         "false_rejections": 2465,
+         "false_rejection_rate": 1.0,
+         "precision": 0.28029,
+         "recall": 1.0
+        }
+       }
+      }
+     },
+     "selection": {
+      "false_safe": 0,
+      "false_rejection_rate": 1.0,
+      "latency_s": 5.514355471802901e-06
+     }
+    },
+    "lgbm": {
+     "fit_seconds": 153.2,
+     "fit": {
+      "v_max_pu": {
+       "trees": 1781
+      },
+      "v_min_pu": {
+       "trees": 1240
+      },
+      "max_line_loading_pct": {
+       "trees": 1578
+      },
+      "max_trafo_loading_pct": {
+       "trees": 1502
+      },
+      "vuf_pct": {
+       "trees": 136
+      },
+      "neutral_a": {
+       "trees": 250
+      },
+      "trafo_p_kw": {
+       "trees": 1999
+      }
+     },
+     "guard": {
+      "at_limits": {
+       "up_2005": {
+        "v_max_v": 4.953,
+        "v_min_v": 12.675
+       },
+       "pm10": {
+        "v_max_v": 9.56,
+        "v_min_v": 60.41
+       },
+       "line_pts": 21.074,
+       "trafo_pts": 80.498,
+       "vuf_pts_at_2pct": 18.309
+      },
+      "edges": [
+       [
+        0.955,
+        1.045,
+        1.075
+       ],
+       [
+        0.925,
+        0.955,
+        1.045,
+        1.075
+       ],
+       [],
+       [
+        90.0
+       ],
+       [
+        0.20098474484243078,
+        0.27148037434984756,
+        0.36947233779663646,
+        0.4585920864862459,
+        0.545738881424809,
+        0.6560817523874587,
+        0.8256208260963893
+       ],
+       [
+        4.417313358055303,
+        6.392917210087658,
+        8.973966814255093,
+        11.795261367520077,
+        14.971890625346038,
+        18.881059299584084,
+        24.25779342690238
+       ],
+       [
+        -30.550540765806442,
+        -8.098421425415106,
+        2.8292826898309493,
+        5.575345400334135,
+        8.882092409801702,
+        18.204359941298843,
+        29.526998468352765
+       ]
+      ],
+      "bin_counts": [
+       [
+        1218,
+        5783,
+        4309,
+        3243
+       ],
+       [
+        1606,
+        1462,
+        7412,
+        3027,
+        1046
+       ],
+       [
+        14553
+       ],
+       [
+        12859,
+        1694
+       ],
+       [
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1820
+       ],
+       [
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1820
+       ],
+       [
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1820
+       ]
+      ],
+      "level": 0.99875,
+      "n": 14553
+     },
+     "tune": {
+      "regression": {
+       "converged_states": 14891,
+       "v_max_v": {
+        "n": 14891,
+        "mae": 0.7587,
+        "p99": 3.6857,
+        "max": 12.3334
+       },
+       "v_min_v": {
+        "n": 14891,
+        "mae": 1.0642,
+        "p99": 4.9246,
+        "max": 28.3723
+       },
+       "max_line_loading_pts": {
+        "n": 14891,
+        "mae": 2.5589,
+        "p99": 12.9782,
+        "max": 41.6362
+       },
+       "trafo_loading_pts": {
+        "n": 14891,
+        "mae": 7.2209,
+        "p99": 32.0199,
+        "max": 65.8703
+       },
+       "vuf_pts": {
+        "n": 14891,
+        "mae": 0.1766,
+        "p99": 0.9032,
+        "max": 5.6625
+       },
+       "neutral_a": {
+        "n": 14891,
+        "mae": 5.5492,
+        "p99": 26.1622,
+        "max": 80.9024
+       },
+       "trafo_p_kw": {
+        "n": 14891,
+        "mae": 1.9138,
+        "p99": 13.0167,
+        "max": 39.0166
+       }
+      },
+      "rules": {
+       "up_2005": {
+        "guarded": {
+         "states": 14945,
+         "truly_unsafe": 7867,
+         "truly_safe": 7078,
+         "screened_safe": 3224,
+         "screened_risky": 11721,
+         "unsafe_as_safe": 1,
+         "unsafe_miss_rate": 0.00013,
+         "miss_rate_upper95": 0.0006029,
+         "unsafe_among_screened_safe": 0.00031,
+         "false_rejections": 3855,
+         "false_rejection_rate": 0.54465,
+         "precision": 0.6711,
+         "recall": 0.99987
+        },
+        "point": {
+         "states": 14945,
+         "truly_unsafe": 7867,
+         "truly_safe": 7078,
+         "screened_safe": 7162,
+         "screened_risky": 7783,
+         "unsafe_as_safe": 469,
+         "unsafe_miss_rate": 0.05962,
+         "miss_rate_upper95": 0.0641929,
+         "unsafe_among_screened_safe": 0.06548,
+         "false_rejections": 385,
+         "false_rejection_rate": 0.05439,
+         "precision": 0.95053,
+         "recall": 0.94038
+        },
+        "boundary_guarded": {
+         "states": 3425,
+         "truly_unsafe": 2587,
+         "truly_safe": 838,
+         "screened_safe": 3,
+         "screened_risky": 3422,
+         "unsafe_as_safe": 1,
+         "unsafe_miss_rate": 0.00039,
+         "miss_rate_upper95": 0.0018324,
+         "unsafe_among_screened_safe": 0.33333,
+         "false_rejections": 836,
+         "false_rejection_rate": 0.99761,
+         "precision": 0.7557,
+         "recall": 0.99961
+        }
+       },
+       "pm10": {
+        "guarded": {
+         "states": 14945,
+         "truly_unsafe": 2832,
+         "truly_safe": 12113,
+         "screened_safe": 7454,
+         "screened_risky": 7491,
+         "unsafe_as_safe": 1,
+         "unsafe_miss_rate": 0.00035,
+         "miss_rate_upper95": 0.001674,
+         "unsafe_among_screened_safe": 0.00013,
+         "false_rejections": 4660,
+         "false_rejection_rate": 0.38471,
+         "precision": 0.37792,
+         "recall": 0.99965
+        },
+        "point": {
+         "states": 14945,
+         "truly_unsafe": 2832,
+         "truly_safe": 12113,
+         "screened_safe": 12573,
+         "screened_risky": 2372,
+         "unsafe_as_safe": 721,
+         "unsafe_miss_rate": 0.25459,
+         "miss_rate_upper95": 0.2684162,
+         "unsafe_among_screened_safe": 0.05735,
+         "false_rejections": 261,
+         "false_rejection_rate": 0.02155,
+         "precision": 0.88997,
+         "recall": 0.74541
+        },
+        "boundary_guarded": {
+         "states": 3425,
+         "truly_unsafe": 960,
+         "truly_safe": 2465,
+         "screened_safe": 743,
+         "screened_risky": 2682,
+         "unsafe_as_safe": 1,
+         "unsafe_miss_rate": 0.00104,
+         "miss_rate_upper95": 0.0049319,
+         "unsafe_among_screened_safe": 0.00135,
+         "false_rejections": 1723,
+         "false_rejection_rate": 0.69899,
+         "precision": 0.35757,
+         "recall": 0.99896
+        }
+       }
+      }
+     },
+     "selection": {
+      "false_safe": 2,
+      "false_rejection_rate": 0.46468,
+      "latency_s": 0.0010708322265600145
+     }
+    },
+    "mlp": {
+     "fit_seconds": 703.9,
+     "fit": {
+      "best_epoch": 131,
+      "epochs_run": 151,
+      "tune_mse_standardised": 0.026626215384629164,
+      "seconds": 703.4,
+      "device": "cpu",
+      "hidden": [
+       512,
+       256,
+       256
+      ],
+      "stopped_early": true,
+      "tune_history": [
+       0.106973,
+       0.071355,
+       0.068151,
+       0.065189,
+       0.06266,
+       0.061168,
+       0.059839,
+       0.058619,
+       0.058328,
+       0.058859,
+       0.056787,
+       0.054883,
+       0.053017,
+       0.052496,
+       0.051963,
+       0.050067,
+       0.048713,
+       0.04886,
+       0.046914,
+       0.047668,
+       0.046921,
+       0.047249,
+       0.046633,
+       0.044244,
+       0.043789,
+       0.044532,
+       0.041237,
+       0.045575,
+       0.042629,
+       0.042053,
+       0.040648,
+       0.039547,
+       0.041064,
+       0.038022,
+       0.040039,
+       0.038675,
+       0.038774,
+       0.039868,
+       0.039005,
+       0.039654,
+       0.036953,
+       0.038986,
+       0.035957,
+       0.040458,
+       0.037276,
+       0.038072,
+       0.036643,
+       0.03777,
+       0.035386,
+       0.038044,
+       0.036681,
+       0.037333,
+       0.035824,
+       0.03277,
+       0.032673,
+       0.035306,
+       0.034979,
+       0.033534,
+       0.034192,
+       0.033443,
+       0.034612,
+       0.032557,
+       0.033058,
+       0.033534,
+       0.03247,
+       0.032313,
+       0.033999,
+       0.033564,
+       0.033989,
+       0.030471,
+       0.032433,
+       0.031686,
+       0.031728,
+       0.031758,
+       0.031007,
+       0.030709,
+       0.032276,
+       0.033054,
+       0.032026,
+       0.032124,
+       0.033213,
+       0.034004,
+       0.031611,
+       0.02937,
+       0.033678,
+       0.032341,
+       0.031249,
+       0.033291,
+       0.029619,
+       0.031882,
+       0.033302,
+       0.031451,
+       0.032175,
+       0.033236,
+       0.030531,
+       0.0291,
+       0.029915,
+       0.034026,
+       0.030394,
+       0.03524,
+       0.030951,
+       0.031826,
+       0.030003,
+       0.032121,
+       0.030366,
+       0.032466,
+       0.031723,
+       0.032369,
+       0.035494,
+       0.031052,
+       0.031594,
+       0.0307,
+       0.032368,
+       0.028761,
+       0.030614,
+       0.03402,
+       0.030571,
+       0.031026,
+       0.029786,
+       0.030601,
+       0.030318,
+       0.030125,
+       0.031243,
+       0.031611,
+       0.029636,
+       0.030046,
+       0.032248,
+       0.029437,
+       0.027359,
+       0.029089,
+       0.026626,
+       0.030086,
+       0.02765,
+       0.029274,
+       0.029664,
+       0.027361,
+       0.028799,
+       0.028554,
+       0.027548,
+       0.030633,
+       0.032088,
+       0.029738,
+       0.030988,
+       0.029428,
+       0.03056,
+       0.028977,
+       0.028799,
+       0.031742,
+       0.031655,
+       0.0307,
+       0.029125
+      ]
+     },
+     "guard": {
+      "at_limits": {
+       "up_2005": {
+        "v_max_v": 3.152,
+        "v_min_v": 7.071
+       },
+       "pm10": {
+        "v_max_v": 6.821,
+        "v_min_v": 64.402
+       },
+       "line_pts": 21.145,
+       "trafo_pts": 102.579,
+       "vuf_pts_at_2pct": 17.17
+      },
+      "edges": [
+       [
+        0.955,
+        1.045,
+        1.075
+       ],
+       [
+        0.925,
+        0.955,
+        1.045,
+        1.075
+       ],
+       [],
+       [
+        90.0
+       ],
+       [
+        0.14533931317274046,
+        0.23603054599007423,
+        0.3276676877135124,
+        0.4236041959355581,
+        0.5237595580399957,
+        0.6480656306940245,
+        0.8641712759618863
+       ],
+       [
+        3.0809153016210598,
+        4.944589981513994,
+        7.050435157193055,
+        9.811480862580847,
+        13.084364787278556,
+        17.09630948177733,
+        24.32236191282508
+       ],
+       [
+        -30.740130736359518,
+        -7.81882094764396,
+        3.190583525868159,
+        6.133356666465133,
+        9.078341587231055,
+        17.673164806487172,
+        29.562052086410702
+       ]
+      ],
+      "bin_counts": [
+       [
+        1188,
+        6113,
+        4053,
+        3199
+       ],
+       [
+        1560,
+        1501,
+        7525,
+        2749,
+        1218
+       ],
+       [
+        14553
+       ],
+       [
+        12956,
+        1597
+       ],
+       [
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1820
+       ],
+       [
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1820
+       ],
+       [
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1819,
+        1820
+       ]
+      ],
+      "level": 0.99875,
+      "n": 14553
+     },
+     "tune": {
+      "regression": {
+       "converged_states": 14891,
+       "v_max_v": {
+        "n": 14891,
+        "mae": 0.88,
+        "p99": 3.8135,
+        "max": 12.3979
+       },
+       "v_min_v": {
+        "n": 14891,
+        "mae": 0.9124,
+        "p99": 5.2595,
+        "max": 29.9666
+       },
+       "max_line_loading_pts": {
+        "n": 14891,
+        "mae": 2.4392,
+        "p99": 18.1588,
+        "max": 59.9632
+       },
+       "trafo_loading_pts": {
+        "n": 14891,
+        "mae": 5.6103,
+        "p99": 27.9649,
+        "max": 55.2144
+       },
+       "vuf_pts": {
+        "n": 14891,
+        "mae": 0.1016,
+        "p99": 0.6899,
+        "max": 6.3859
+       },
+       "neutral_a": {
+        "n": 14891,
+        "mae": 2.7096,
+        "p99": 15.107,
+        "max": 45.2884
+       },
+       "trafo_p_kw": {
+        "n": 14891,
+        "mae": 2.4924,
+        "p99": 12.9794,
+        "max": 40.9099
+       },
+       "node_voltage_v": {
+        "n": 4288608,
+        "mae": 0.8355,
+        "p99": 3.2535,
+        "max": 40.9636
+       },
+       "line_loading_pts": {
+        "n": 1414645,
+        "mae": 0.9974,
+        "p99": 9.8667,
+        "max": 99.4038
+       }
+      },
+      "rules": {
+       "up_2005": {
+        "guarded": {
+         "states": 14945,
+         "truly_unsafe": 7867,
+         "truly_safe": 7078,
+         "screened_safe": 2932,
+         "screened_risky": 12013,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0003807,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 4146,
+         "false_rejection_rate": 0.58576,
+         "precision": 0.65487,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14945,
+         "truly_unsafe": 7867,
+         "truly_safe": 7078,
+         "screened_safe": 7042,
+         "screened_risky": 7903,
+         "unsafe_as_safe": 462,
+         "unsafe_miss_rate": 0.05873,
+         "miss_rate_upper95": 0.0632725,
+         "unsafe_among_screened_safe": 0.06561,
+         "false_rejections": 498,
+         "false_rejection_rate": 0.07036,
+         "precision": 0.93699,
+         "recall": 0.94127
+        },
+        "boundary_guarded": {
+         "states": 3425,
+         "truly_unsafe": 2587,
+         "truly_safe": 838,
+         "screened_safe": 0,
+         "screened_risky": 3425,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0011573,
+         "unsafe_among_screened_safe": null,
+         "false_rejections": 838,
+         "false_rejection_rate": 1.0,
+         "precision": 0.75533,
+         "recall": 1.0
+        }
+       },
+       "pm10": {
+        "guarded": {
+         "states": 14945,
+         "truly_unsafe": 2832,
+         "truly_safe": 12113,
+         "screened_safe": 8028,
+         "screened_risky": 6917,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0010573,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 4085,
+         "false_rejection_rate": 0.33724,
+         "precision": 0.40943,
+         "recall": 1.0
+        },
+        "point": {
+         "states": 14945,
+         "truly_unsafe": 2832,
+         "truly_safe": 12113,
+         "screened_safe": 12357,
+         "screened_risky": 2588,
+         "unsafe_as_safe": 567,
+         "unsafe_miss_rate": 0.20021,
+         "miss_rate_upper95": 0.2129841,
+         "unsafe_among_screened_safe": 0.04588,
+         "false_rejections": 323,
+         "false_rejection_rate": 0.02667,
+         "precision": 0.87519,
+         "recall": 0.79979
+        },
+        "boundary_guarded": {
+         "states": 3425,
+         "truly_unsafe": 960,
+         "truly_safe": 2465,
+         "screened_safe": 1295,
+         "screened_risky": 2130,
+         "unsafe_as_safe": 0,
+         "unsafe_miss_rate": 0.0,
+         "miss_rate_upper95": 0.0031157,
+         "unsafe_among_screened_safe": 0.0,
+         "false_rejections": 1170,
+         "false_rejection_rate": 0.47465,
+         "precision": 0.4507,
+         "recall": 1.0
+        }
+       }
+      }
+     },
+     "selection": {
+      "false_safe": 0,
+      "false_rejection_rate": 0.4615,
+      "latency_s": 1.1991992188598033e-05
+     }
+    }
+   },
+   "seconds": 930.7
+  }
+ }
+}
