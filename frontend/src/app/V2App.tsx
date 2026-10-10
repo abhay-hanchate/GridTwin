@@ -8,6 +8,7 @@ import type { ViewProps } from './view'
 const pages = {
   overview: () => import('../pages/Overview'), forecast: () => import('../pages/Forecast'), fixes: () => import('../pages/Fixes'),
   try: () => import('../pages/TryChange'), planning: () => import('../pages/Planning'), proof: () => import('../pages/Proof'),
+  control: () => import('../pages/Control'),
 }
 const Overview = lazy(pages.overview)
 const Forecast = lazy(pages.forecast)
@@ -15,6 +16,7 @@ const Fixes = lazy(pages.fixes)
 const TryChange = lazy(pages.try)
 const Planning = lazy(pages.planning)
 const Proof = lazy(pages.proof)
+const Control = lazy(pages.control)
 
 /** After the first page shows, fetch the other pages' code in the background so every step opens at once. */
 function usePreloadPages() {
@@ -33,6 +35,7 @@ function Page({ area, view, go }: { area: Area; view: ViewProps; go: (area: Area
     case 'fixes': return <Fixes {...view} go={go} />
     case 'planning': return <Planning {...view} go={go} />
     case 'proof': return <Proof go={go} />
+    case 'control': return <Control go={go} />
   }
 }
 

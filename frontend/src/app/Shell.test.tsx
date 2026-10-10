@@ -37,7 +37,7 @@ describe('Shell', () => {
     expect(screen.getByRole('tab', { name: en['area.forecast'] }).getAttribute('aria-selected')).toBe('true')
     expect(screen.getByText('page forecast')).toBeTruthy()
     fireEvent.keyDown(screen.getByRole('tab', { name: en['area.forecast'] }), { key: 'End' })
-    expect(screen.getByText('page proof')).toBeTruthy()
+    expect(screen.getByText('page control')).toBeTruthy()                 // the last step: control the day
   })
 
   it('opens the area named in the URL hash and keeps the hash in step', () => {

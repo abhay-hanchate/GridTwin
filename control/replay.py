@@ -85,6 +85,7 @@ class Replay:
     summary: dict
     timing: dict
     issued_forecast: dict = field(default_factory=dict)
+    limits_v: dict = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         out = asdict(self)
@@ -286,7 +287,8 @@ def run(cfg: ReplayConfig) -> Replay:
               "upstream_v": [_r(x * 230, 2) for x in world.forecast.upstream_pu.mean(0)],
               "observed_upstream_v": [_r(x * 230, 2) for x in world.observed.upstream_pu[0]],
               "t": [x.strftime("%H:%M") for x in world.all.t]}
-    return Replay(cfg.to_dict(), provenance, descs, records, base, summary, timing, issued)
+    return Replay(cfg.to_dict(), provenance, descs, records, base, summary, timing, issued,
+                  {"min": rule.vmin_v, "max": rule.vmax_v})
 
 
 def _rank(p: PlanResult, operation_cost: float) -> tuple:
