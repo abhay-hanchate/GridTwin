@@ -53,6 +53,9 @@ class Settings(BaseSettings):
     offline: bool = False                                  # serve only the bundled precomputed results
     log_level: str = "INFO"
     rule_default: str = "up_2005"
+    # Days after today the live day-ahead forecast can cover. Checked 10 Oct 2026: the five-model Open-Meteo request
+    # had the three models it needs up to 8 days ahead and failed from 10; 7 keeps a margin.
+    live_horizon_days: int = 7
     code_version: str = Field(default_factory=results_version)  # part of every cache key
     max_body_bytes: int = 1_000_000
     rate_limit_per_minute: int = 30
