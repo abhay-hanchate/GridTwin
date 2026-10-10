@@ -25,3 +25,4 @@ F23,Operations: evening precompute and drift monitor and metrics and runbooks an
 F24,Risk reliability on both districts (gate G8),Risk,Team,v2/finish,In progress,,
 F25,Solar yield checked against a measured plant (gate G7: needs data access),ML,Team,,Planned,,
 F26,Live deployment with a public link,DevOps,Team,,Planned,,
+F27,Keep labels explainer on Overview only,,ieafraazzz,codex/overview-explainer-cleanup,Done,28,2026-10-10
