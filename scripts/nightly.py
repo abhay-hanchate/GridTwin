@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import time
+from pathlib import Path
 from datetime import datetime, timedelta, timezone
 
 import pandas as pd
@@ -110,6 +111,18 @@ def precompute(settings: Settings, networks: list[str], rules: list[str], force:
     return entries
 
 
+def prune(out_dir: Path, entries: list[dict]) -> list[str]:
+    """Delete cached results the index does not name (older code versions nothing can reach) and return their names.
+
+    A file of the current code version that is not indexed (a result computed on demand) is deleted too, so this only
+    runs on request (--prune), after a full precompute."""
+    keep = {f"{e['key']}.json" for e in entries} | {"index.json"}
+    removed = sorted(f.name for f in out_dir.glob("*.json") if f.name not in keep)
+    for name in removed:
+        (out_dir / name).unlink()
+    return removed
+
+
 def planning_summary(headroom: dict, hosting: dict) -> dict:
     """Headline planning numbers of one archetype and rule: headroom per location and phase, hosting P10/P50/P90."""
     return {"baseline_unsafe_steps": headroom.get("baseline_unsafe_steps"),
@@ -167,10 +180,13 @@ def main() -> None:
     ap.add_argument("--rules", nargs="+", default=["pm10", "up_2005"])
     ap.add_argument("--force", action="store_true", help="recompute even when a cached result exists")
     ap.add_argument("--no-live", action="store_true", help="skip the live forecast (no network)")
+    ap.add_argument("--prune", action="store_true", help="delete cached results the new index does not name")
     args = ap.parse_args()
     settings = Settings()
     entries = precompute(settings, args.networks, args.rules, args.force, args.planning_networks, live=not args.no_live)
     print(f"{len(entries)} results precomputed, code version {settings.code_version}")
+    if args.prune:
+        print(f"pruned {len(prune(settings.results_dir / 'v2', entries))} unindexed cached results")
     if not args.no_live:
         try:
             print(log_live_forecast())

@@ -34,3 +34,13 @@ def test_planning_summary_keeps_headroom_per_location_and_phase_and_the_hosting_
     out = planning_summary(headroom, hosting)
     assert out["headroom_kw"] == {"near": {"A": 4.5}, "far": {"A": 1.0}} and out["baseline_unsafe_steps"] == 3
     assert out["hosting_share"]["without_fix"]["p50"] == 0.2 and out["hosting_share"]["with_volt_var"] is None
+
+
+def test_prune_keeps_only_the_files_the_index_names(tmp_path):
+    from scripts.nightly import prune
+    for name in ("risk_new", "risk_old", "fixes_old", "index"):
+        (tmp_path / f"{name}.json").write_text("{}")
+    (tmp_path / "notes.txt").write_text("kept: not a cached result")
+    removed = prune(tmp_path, [{"key": "risk_new"}])
+    assert sorted(removed) == ["fixes_old.json", "risk_old.json"]
+    assert sorted(p.name for p in tmp_path.iterdir()) == ["index.json", "notes.txt", "risk_new.json"]

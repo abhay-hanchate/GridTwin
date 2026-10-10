@@ -98,7 +98,6 @@ main:focus, main:focus-visible, [role='tabpanel']:focus-visible { outline: none;
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand-mark { width: 32px; height: 32px; }
 .brand h1 { margin: 0; font-size: 1.3rem; font-weight: 700; }
-.brand p { display: none; }
 .areas { order: 2; flex: 1; min-width: 0; }
 .lang-switch { order: 3; margin-left: auto; }
 .lang-switch .seg { padding: 5px 11px; font-size: var(--fs-xs); }
