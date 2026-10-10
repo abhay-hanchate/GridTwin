@@ -46,7 +46,10 @@ describe('every precomputed result renders', () => {
 
   it.each(entries('street'))('Street: %s', async (_, key) => {
     const street: Street = read(`${key}.json`)
-    serve({ '/street': street, '/risk': {}, '/fixes': {} })
+    // the overview also draws that day's risk, so serve the precomputed one for the same day and rule
+    const risk = index.entries.find((e) => e.route === 'risk' && e.date === street.date && e.rule === street.rule)
+    expect(risk).toBeDefined()
+    serve({ '/street': street, '/risk': read(`${risk!.key}.json`), '/fixes': {} })
     render(<LangProvider><Overview rule={street.rule} onRule={() => {}} date={street.date} /></LangProvider>)
     await settle()
     const map = screen.getByRole('img', { name: /the street at/i })
