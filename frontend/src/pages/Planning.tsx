@@ -6,7 +6,7 @@ import { DEFAULT_NETWORK } from '../app/defaults'
 import { useView, type ViewProps } from '../app/view'
 import ConnectionPanel from '../components/ConnectionPanel'
 import Controls from '../components/Controls'
-import Explainer, { NextStep } from '../components/Explainer'
+import { NextStep } from '../components/Explainer'
 import Prov from '../components/Prov'
 import Status from '../components/Status'
 import type { HomeView, Marker } from '../components/street/geometry'
@@ -63,7 +63,6 @@ export default function Planning({ network = DEFAULT_NETWORK, go, ...props }: Vi
       </Question>
 
       {headroom.data && <Caps headroom={headroom.data} />}
-      <Explainer groups={['decision', 'phases', 'range', 'prov']} />
       <NextStep to="try" go={go} />
     </div>
   )

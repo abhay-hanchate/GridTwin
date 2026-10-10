@@ -4,7 +4,7 @@ import type { Area } from '../app/areas'
 import { DEFAULT_NETWORK } from '../app/defaults'
 import { useView, type ViewProps } from '../app/view'
 import Controls from '../components/Controls'
-import Explainer, { NextStep } from '../components/Explainer'
+import { NextStep } from '../components/Explainer'
 import Prov from '../components/Prov'
 import RiskStrip from '../components/RiskStrip'
 import Status from '../components/Status'
@@ -47,7 +47,6 @@ export default function Forecast({ network = DEFAULT_NETWORK, go, ...props }: Vi
         <p className="note" role="note">{t(risk.data.calibration?.reliable ? 'home.calibrated' : 'home.uncalibrated')}</p>
       )}
       {report && <p><a className="btn btn-ghost report-link" href={report} target="_blank" rel="noopener">{t('home.report')}</a></p>}
-      <Explainer groups={['levels', 'cause', 'range', 'prov']} />
       <NextStep to="fixes" go={go} />
     </div>
   )
