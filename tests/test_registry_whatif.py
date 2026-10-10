@@ -96,3 +96,13 @@ def test_nightly_and_route_compute_the_same_whatif_key(tmp_path):
     a = normalise(WhatIf(date="2025-05-15", rule="10", fixes=[{"id": "fix.tap"}]), s, store)[1]
     b = normalise(WhatIf(date="2025-05-15", rule="pm10", fixes=[{"id": "fix.tap", "params": {"tap_pos": 1}}]), s, store)[1]
     assert a == b                                                   # alias and filled-in defaults give one key
+
+
+def test_a_change_is_compared_with_todays_street():
+    # Evening EV charging must show up against the street as it is today, even with no fix chosen.
+    out = routes_whatif.whatif_payload(date="2025-05-15", network="benchmark_250", rule="pm10", fixes=[],
+                                       changes=[{"id": "change.ev_charging", "params": {"share_of_homes": 0.3, "kw": 3.3}}])
+    assert out["before"] == out["after"]                         # no fix: the changed street, twice
+    today, changed = out["today"]["summary"], out["before"]["summary"]
+    assert changed["max_trafo_loading_pct"] > today["max_trafo_loading_pct"]
+    assert changed["min_vm_pu"] < today["min_vm_pu"]

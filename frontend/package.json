@@ -11,6 +11,9 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "5.2.9",
+    "@fontsource-variable/figtree": "5.2.9",
+    "@fontsource-variable/jetbrains-mono": "5.2.7",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },

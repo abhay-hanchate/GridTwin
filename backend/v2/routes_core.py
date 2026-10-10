@@ -35,7 +35,7 @@ def networks() -> list[dict]:
                     "conductor_ampacity_a": cond["i_a"],
                     "provenance": {"topology": "benchmark: SimBench 1-LV-rural2 scaled in length, not a surveyed Indian feeder",
                                    "conductor": "IS 398 Part II (1996) ACSR table",
-                                   "reactance": "Round 1 assumption" if row["id"] == "benchmark_250" else "estimate, not from the standard"}})
+                                   "reactance": "benchmark assumption" if row["id"] == "benchmark_250" else "estimate, not from the standard"}})
     return out
 
 
@@ -63,7 +63,8 @@ def readiness_checks(s: Settings) -> dict[str, bool]:
         "voltage_rules": rules_ok,
         "legacy_profiles": all((s.data_dir / f"{name}.parquet").is_file()
                                for name in ("load_kw", "pv_kw_per_kwp", "upstream_vm_pu")),
-        "district_profiles": (s.data_dir / "v2" / "upstream_vm_pu_mathura.parquet").is_file(),
+        "district_profiles": all((s.data_dir / "v2" / f"{name}_mathura.parquet").is_file()
+                                 for name in ("load_kw", "pv_kw_per_kwp", "upstream_vm_pu")),
         "solar_model": (s.model_dir / "solar_v2_manifest.json").is_file(),
     }
 

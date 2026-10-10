@@ -7,6 +7,7 @@ nightly results are served. Omitting `date` means the latest date the nightly ru
 from __future__ import annotations
 
 from datetime import date as Date
+from datetime import timedelta
 
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
@@ -36,7 +37,8 @@ def default_date(store: JobStore, route: str) -> str:
 
 def _serve(request: Request, route: str, params: dict, fn) -> object:
     s, store = _settings(request), _store(request)
-    compute.check_network(params["network"])                 # validate before any work: 404 on unknown ids
+    if "network" in params:                                  # a portfolio route has none
+        compute.check_network(params["network"])             # validate before any work: 404 on unknown ids
     params["rule"] = compute.rule(params["rule"]).id
     from backend.v2.live_inputs import is_live, today_ist
     if is_live(params["date"]):
@@ -68,6 +70,29 @@ def fixes(request: Request, date: Date | None = None, network: str = DEFAULT_NET
     params = {"date": date.isoformat() if date else default_date(_store(request), "fixes"), "network": network,
               "rule": rule or _settings(request).rule_default}
     return _serve(request, "fixes", params, lambda **p: compute.fixes_payload(p["date"], p["network"], p["rule"]))
+
+
+@router.get("/street")
+def street(request: Request, date: Date | None = None, network: str = DEFAULT_NETWORK, rule: str | None = None,
+           fix: str = "none"):
+    """The street as a schematic and the design day quarter hour by quarter hour: each home's voltage on its phase,
+    per-phase power and neutral current on every wire, without and (with `fix`) with a fix from the tournament."""
+    params = {"date": date.isoformat() if date else default_date(_store(request), "risk"), "network": network,
+              "rule": rule or _settings(request).rule_default, "fix": fix}
+    return _serve(request, "street", params,
+                  lambda **p: compute.street_payload(p["date"], p["network"], p["rule"], p["fix"]))
+
+
+@router.get("/calendar")
+def calendar(request: Request):
+    """The days that can be asked for: tomorrow (live forecast) and every day of the solar forecast archive, plus
+    the days already computed (instant, and the only ones served offline)."""
+    from backend.v2.live_inputs import today_ist
+    fc = compute._solar_table()
+    tomorrow = (today_ist() + timedelta(days=1)).isoformat()
+    ready = sorted({e["date"] for e in _store(request).index().get("entries", []) if e.get("route") == "risk"})
+    return {"tomorrow": tomorrow, "archive": {"first": fc.index.min().date().isoformat(), "last": fc.index.max().date().isoformat()},
+            "ready": ready, "offline": _settings(request).offline}
 
 
 @router.get("/simulate")

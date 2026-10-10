@@ -1,30 +1,27 @@
 id,feature,area,owner,branch,status,pull_request,merged_on
-F01,Project scaffold: README and requirements,Repo,P1,main,Done,,2026-09-28
-F02,Data pipeline: real CEEW demand and voltage and pvlib solar profiles,Data,P1,feature/data-pipeline,Done,1,2026-09-28
-F03,Grid engine: street model and full-day power flow and scenarios,Engine,P1,feature/grid-engine,Done,2,2026-09-28
-F04,Seven corrective actions and all-day ranking with honest no-safe-action,Engine,P1,feature/fixes-ranking,Done,3,2026-09-28
-F05,Solar and demand forecasts with calibrated ranges and early warning,ML,P2,feature/forecasting,Done,4,2026-09-28
-F06,FastAPI service with precomputed results,API,P2,feature/api,Done,5,2026-09-28
-F07,Dashboard: feeder map and fixes and forecast screens,Frontend,P4,feature/dashboard,Done,6,2026-09-28
-F08,Docs and CI: README and assumptions and GitHub Actions,Quality,P3,feature/docs-ci,Done,7,2026-09-28
-F09,Plain-language story view and simpler wording,Frontend,P4,feature/plain-language-story,Done,8,2026-09-28
-F10,Fix simulator and prediction-vs-reality simulator,Engine + Frontend,P4,feature/show-the-simulation,Done,9,2026-09-28
-F11,Automatic feature tracker (this file and the README table),Quality,P1,feature/feature-tracker,Done,10,2026-09-28
-F12,Solar model feature-importance report,ML,P2,person2,Done,,2026-09-29
-F13,Cloudy-day early warning and docs/ml.md,ML,P2,person2,Done,,2026-09-29
-F14,README setup fixes from a fresh-clone test,Quality,P3,P3,Done,11,2026-09-29
-F15,Test plan and bug issues,Quality,P3,P3,Done,11,2026-09-29
-F16,Edge-case tests,Quality,P3,P3,Done,11,2026-09-29
-F17,Demo script for the video,Docs,P3,P3,Done,11,2026-09-29
-F18,Hosting capacity: how much solar the street can take,Engine + Frontend,P3,P3,Done,11,2026-09-29
-F19,Faster dashboard: load each tab only when opened,Frontend,P4,feature/ui-code-split,Done,13,2026-09-29
-F20,Phone layout and accessibility,Frontend,P4,feature/ui-responsive,Done,14,2026-09-29
-F21,Live deployment with a public link,DevOps,P4,feature/deploy,Planned,,
-F22,Feeder reconfiguration (switching) as a fix,Engine,Team,,Finale,,
-F23,Machine-learning shortcut model of the power flow,ML,Team,,Finale,,
-F24,AI assistant that explains each recommendation,ML,Team,,Finale,,
-F25,Final project document and PDF for the PPT and video,Docs,P4,P4,Done,15,2026-09-29
-F26,Live warning: separate solar-caused risk from the grid's own voltage,,Tabsirshaikh,fix/live-warning-attribution,Done,17,2026-09-29
-F27,Docs: hosting capacity is built  not roadmap,,abhay-hanchate,docs/readme-final,Done,18,2026-09-29
-F28,GridTwin v2.0.0: tomorrow's risk  verified fixes  planning and proof,,Tabsirshaikh,v2/build,Done,26,2026-10-09
-F29,P10.12: remove the Round 1 path; the dashboard and API are v2 only,,Tabsirshaikh,v2/remove-legacy,Done,27,2026-10-09
+F01,Data: all six CEEW meter files from two districts with outage and surge checks,Data,Team,v2/build,Done,26,2026-10-09
+F02,Grid-side voltage for tomorrow: whole-day paths chosen by a bake-off,Data,Team,v2/build,Done,26,2026-10-09
+F03,Five Indian street types with IS 398 conductors,Engine,Team,v2/build,Done,26,2026-10-09
+F04,Phase-aware batch power flow with a pandapower cross-check,Engine,Team,v2/build,Done,26,2026-10-09
+F05,Voltage-rule library with sources and verification status,Engine,Team,v2/build,Done,26,2026-10-09
+F06,IEEE 1547 smart-inverter curves (Volt/VAR and Volt/Watt),Engine,Team,v2/build,Done,26,2026-10-09
+F07,Solar forecast v2 on five weather models with conformal ranges,ML,Team,v2/build,Done,26,2026-10-09
+F08,Demand forecast v2 (gate G4 not met: no AI-improvement claim),ML,Team,v2/finish,In progress,,
+F09,Live day-ahead demand and grid voltage for tomorrow,ML,Team,v2/build,Done,26,2026-10-09
+F10,Correlated scenarios of sun and demand and grid voltage,ML,Team,v2/build,Done,26,2026-10-09
+F11,Risk: chance of unsafe voltage per 15 minutes and expected unsafe hours,Risk,Team,v2/build,Done,26,2026-10-09
+F12,Fix tournament: tap and inverters and export limits and phase moves and switching and battery,Risk,Team,v2/build,Done,26,2026-10-09
+F13,Honest no-safe-action verdict with the binding limit,Risk,Team,v2/build,Done,26,2026-10-09
+F14,Planning: headroom per phase and probabilistic hosting capacity,Planning,Team,v2/build,Done,26,2026-10-09
+F15,Connection check: approve or approve with conditions or refuse,Planning,Team,v2/build,Done,26,2026-10-09
+F16,Planning: where to meter first and Volt/VAR sensitivity and transformer ranking,Planning,Team,v2/finish,In progress,,
+F17,What-if catalogue: any mix of changes and fixes,API,Team,v2/build,Done,26,2026-10-09
+F18,API v2 with cached results and background jobs and offline mode,API,Team,v2/build,Done,26,2026-10-09
+F19,Dashboard: five areas in English and Hindi on a phone,Frontend,Team,v2/build,Done,26,2026-10-09
+F20,Evening report and explanations that keep every number,Frontend,Team,v2/build,Done,26,2026-10-09
+F21,Utility onboarding: feeder and homes and meter CSV checks,Data,Team,v2/build,Done,26,2026-10-09
+F22,Evaluation of every gate into results.json and the Proof page,Quality,Team,v2/build,Done,26,2026-10-09
+F23,Operations: evening precompute and drift monitor and metrics and runbooks and Docker,Quality,Team,v2/build,Done,26,2026-10-09
+F24,Risk reliability on both districts (gate G8),Risk,Team,v2/finish,In progress,,
+F25,Solar yield checked against a measured plant (gate G7: needs data access),ML,Team,,Planned,,
+F26,Live deployment with a public link,DevOps,Team,,Planned,,

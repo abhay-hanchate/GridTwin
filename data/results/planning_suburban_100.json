@@ -1,0 +1,61 @@
+{
+ "network": "suburban_100",
+ "label": "Suburban feeder: 70 homes, 100 kVA, Racoon",
+ "date": "2025-05-15",
+ "rules": {
+  "pm10": {
+   "baseline_unsafe_steps": 3,
+   "headroom_kw": {
+    "near": {
+     "A": 15.0,
+     "B": 7.5,
+     "C": 34.2
+    },
+    "far": {
+     "A": 5.6,
+     "B": 0.9,
+     "C": 7.0
+    }
+   },
+   "hosting_share": {
+    "without_fix": {
+     "p10": 0.0,
+     "p50": 0.1,
+     "p90": 0.2
+    },
+    "with_volt_var": {
+     "p10": 0.6,
+     "p50": 0.7,
+     "p90": 0.8
+    }
+   }
+  },
+  "up_2005": {
+   "baseline_unsafe_steps": 43,
+   "headroom_kw": {
+    "near": {
+     "A": 9.8,
+     "B": 6.6,
+     "C": 14.1
+    },
+    "far": {
+     "A": 1.9,
+     "B": 1.9,
+     "C": 4.7
+    }
+   },
+   "hosting_share": {
+    "without_fix": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 0.0
+    },
+    "with_volt_var": {
+     "p10": 0.5,
+     "p50": 0.65,
+     "p90": 0.71
+    }
+   }
+  }
+ }
+}

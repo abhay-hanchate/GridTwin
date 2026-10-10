@@ -135,7 +135,8 @@ def build() -> str:
         "",
         f"- Engine checked against pandapower: {raw(g1['max_voltage_diff_v'])} V apart, {raw(g1['speedup'])} times faster (G1).",
         f"- Risk calibration (G8): +/-10% calibrated skill {raw(g8['pm10']['brier_skill_calibrated'])}; "
-        f"UP +/-6% {raw(g8['up_2005']['brier_skill_calibrated'])} - shown as failed, not hidden.",
+        f"UP +/-6% {raw(g8['up_2005']['brier_skill_calibrated'])}, on held-out days of both districts - "
+        + ("passed." if gates["G8"]["status"] == "pass" else "shown as failed, not hidden."),
         "- Gates: " + ", ".join(f"{k} {v['status']}" for k, v in gates.items()) + ".",
         "- Say: a failed gate is a result, not a bug to hide.",
         "",

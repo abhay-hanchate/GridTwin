@@ -41,8 +41,12 @@ ml/models/*
 .env
 research/.env
 
-# derived per-district profiles (about 30 MB; rebuilt by scripts/build_data.py)
-data/processed/v2/
+# derived per-district profiles (about 30 MB; rebuilt by scripts/build_data.py). Three small Mathura files are
+# committed: the live scenario generator trains on them, so a fresh checkout and the Docker image have every month.
+data/processed/v2/*
+!data/processed/v2/load_kw_mathura.parquet
+!data/processed/v2/pv_kw_per_kwp_mathura.parquet
+!data/processed/v2/upstream_vm_pu_mathura.parquet
 
 # drift-monitor runtime state (forecast log, conformal width, WARN); written by scripts/monitor.py
 data/monitor/

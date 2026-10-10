@@ -34,9 +34,9 @@ describe('Shell', () => {
     const home = screen.getByRole('tab', { name: en['area.home'] })
     expect(screen.getByText('page home')).toBeTruthy()
     fireEvent.keyDown(home, { key: 'ArrowRight' })
-    expect(screen.getByRole('tab', { name: en['area.try'] }).getAttribute('aria-selected')).toBe('true')
-    expect(screen.getByText('page try')).toBeTruthy()
-    fireEvent.keyDown(screen.getByRole('tab', { name: en['area.try'] }), { key: 'End' })
+    expect(screen.getByRole('tab', { name: en['area.forecast'] }).getAttribute('aria-selected')).toBe('true')
+    expect(screen.getByText('page forecast')).toBeTruthy()
+    fireEvent.keyDown(screen.getByRole('tab', { name: en['area.forecast'] }), { key: 'End' })
     expect(screen.getByText('page proof')).toBeTruthy()
   })
 

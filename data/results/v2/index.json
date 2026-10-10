@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-10-09T19:56:25.260627+00:00",
- "code_version": "cdc278fc9b87",
+ "generated_at": "2026-10-10T08:37:48.584870+00:00",
+ "code_version": "bcbc6d62e99c",
  "demo_dates": {
   "sunny": "2025-05-15",
   "mixed": "2025-11-19",
@@ -11,7 +11,7 @@
    "route": "risk",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "risk_23eabad536f8beca7f1d",
+   "key": "risk_99b483c7e87925b4cc83",
    "network": "benchmark_250",
    "rule": "pm10",
    "fix": "none"
@@ -20,15 +20,208 @@
    "route": "fixes",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "fixes_10fb2d8c71bad274825a",
+   "key": "fixes_a5855e13d4dd15d21ac1",
    "network": "benchmark_250",
    "rule": "pm10"
+  },
+  {
+   "route": "street",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "street_a788f824d15cd5f6c431",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "fix": "none"
+  },
+  {
+   "route": "street",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "street_2fb4b04e7c877657a7c9",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "fix": "volt_var"
+  },
+  {
+   "route": "risk",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "risk_c5b7d21791198019d91d",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "fixes_98f0a9c0c06e0bee3456",
+   "network": "benchmark_250",
+   "rule": "up_2005"
+  },
+  {
+   "route": "street",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "street_84ec4eb46afcea78ba25",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "fix": "none"
+  },
+  {
+   "route": "street",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "street_9356160b15b363255017",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "fix": "tap1_volt_var_envelope"
+  },
+  {
+   "route": "risk",
+   "date": "2025-11-19",
+   "day_type": "mixed",
+   "key": "risk_bb5aae42e7910c912af8",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-11-19",
+   "day_type": "mixed",
+   "key": "fixes_ea5083ef204b6948f02b",
+   "network": "benchmark_250",
+   "rule": "pm10"
+  },
+  {
+   "route": "street",
+   "date": "2025-11-19",
+   "day_type": "mixed",
+   "key": "street_a8d97c12e052897e60a9",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "fix": "none"
+  },
+  {
+   "route": "street",
+   "date": "2025-11-19",
+   "day_type": "mixed",
+   "key": "street_76ca4e128240f1306546",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "fix": "tap2_volt_var"
+  },
+  {
+   "route": "risk",
+   "date": "2025-11-19",
+   "day_type": "mixed",
+   "key": "risk_7e77c1726aaa9a6424f6",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-11-19",
+   "day_type": "mixed",
+   "key": "fixes_16fe804eaaa4f9f9f4c6",
+   "network": "benchmark_250",
+   "rule": "up_2005"
+  },
+  {
+   "route": "street",
+   "date": "2025-11-19",
+   "day_type": "mixed",
+   "key": "street_0994685446aec6857169",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "fix": "none"
+  },
+  {
+   "route": "street",
+   "date": "2025-11-19",
+   "day_type": "mixed",
+   "key": "street_d02d039ad221f55df6bf",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "fix": "tap2_volt_var"
+  },
+  {
+   "route": "risk",
+   "date": "2025-08-05",
+   "day_type": "cloudy",
+   "key": "risk_7cab90eceeba4449bc15",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-08-05",
+   "day_type": "cloudy",
+   "key": "fixes_95b4caa120eb5afe2aa7",
+   "network": "benchmark_250",
+   "rule": "pm10"
+  },
+  {
+   "route": "street",
+   "date": "2025-08-05",
+   "day_type": "cloudy",
+   "key": "street_b72b19e8b12bcd595165",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "fix": "none"
+  },
+  {
+   "route": "street",
+   "date": "2025-08-05",
+   "day_type": "cloudy",
+   "key": "street_1e066bf6f6bf0a279d1f",
+   "network": "benchmark_250",
+   "rule": "pm10",
+   "fix": "tap1_volt_var"
+  },
+  {
+   "route": "risk",
+   "date": "2025-08-05",
+   "day_type": "cloudy",
+   "key": "risk_b547ab9521d26785933a",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "fix": "none"
+  },
+  {
+   "route": "fixes",
+   "date": "2025-08-05",
+   "day_type": "cloudy",
+   "key": "fixes_f3ed6fec835d9b8c7732",
+   "network": "benchmark_250",
+   "rule": "up_2005"
+  },
+  {
+   "route": "street",
+   "date": "2025-08-05",
+   "day_type": "cloudy",
+   "key": "street_309644b4ae54cac76600",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "fix": "none"
+  },
+  {
+   "route": "street",
+   "date": "2025-08-05",
+   "day_type": "cloudy",
+   "key": "street_c6a2ff865fafb805542d",
+   "network": "benchmark_250",
+   "rule": "up_2005",
+   "fix": "phase_tap1_volt_var"
   },
   {
    "route": "headroom",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "headroom_60ef6c2a85281a9367ae",
+   "key": "headroom_d13229c019128901a957",
    "network": "benchmark_250",
    "rule": "pm10",
    "adoption": 0.3
@@ -37,32 +230,33 @@
    "route": "hosting",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "hosting_e88ddc7e8b5840e2c43a",
+   "key": "hosting_fb4cb2dbd14d5541e4c5",
    "network": "benchmark_250",
    "rule": "pm10"
   },
   {
-   "route": "risk",
+   "route": "meter-sites",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "risk_a05f75801c7d3565f62a",
+   "key": "meter-sites_2fd0401548784feedfd5",
    "network": "benchmark_250",
-   "rule": "up_2005",
-   "fix": "none"
+   "rule": "pm10",
+   "adoption": 0.3
   },
   {
-   "route": "fixes",
+   "route": "rx-map",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "fixes_4a21a007fd100263a2a5",
+   "key": "rx-map_6f03bb29859ca755ed9a",
    "network": "benchmark_250",
-   "rule": "up_2005"
+   "rule": "pm10",
+   "adoption": 0.3
   },
   {
    "route": "headroom",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "headroom_9129045300fb9a2d1cfe",
+   "key": "headroom_f46b324ad14d0e367aec",
    "network": "benchmark_250",
    "rule": "up_2005",
    "adoption": 0.3
@@ -71,83 +265,329 @@
    "route": "hosting",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "hosting_1e0f9275758e3bf7c7e1",
+   "key": "hosting_8da303b26c90754f24db",
    "network": "benchmark_250",
    "rule": "up_2005"
   },
   {
-   "route": "risk",
-   "date": "2025-11-19",
-   "day_type": "mixed",
-   "key": "risk_5850112f3ebdc3fce91b",
+   "route": "meter-sites",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "meter-sites_8d71c935d1173bca55bd",
    "network": "benchmark_250",
-   "rule": "pm10",
-   "fix": "none"
+   "rule": "up_2005",
+   "adoption": 0.3
   },
   {
-   "route": "fixes",
-   "date": "2025-11-19",
-   "day_type": "mixed",
-   "key": "fixes_ecf8f75bd7178fc9037b",
+   "route": "rx-map",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "rx-map_88ad4518d045451386bf",
    "network": "benchmark_250",
+   "rule": "up_2005",
+   "adoption": 0.3
+  },
+  {
+   "route": "headroom",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "headroom_d09f48b74c81e8bcc623",
+   "network": "urban_short_160",
+   "rule": "pm10",
+   "adoption": 0.3
+  },
+  {
+   "route": "hosting",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "hosting_c5f6d6e09bb6eb04465d",
+   "network": "urban_short_160",
    "rule": "pm10"
   },
   {
-   "route": "risk",
-   "date": "2025-11-19",
-   "day_type": "mixed",
-   "key": "risk_1a7e33d592c7621e2923",
-   "network": "benchmark_250",
-   "rule": "up_2005",
-   "fix": "none"
+   "route": "meter-sites",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "meter-sites_c7306be8f55aa5e0cd1b",
+   "network": "urban_short_160",
+   "rule": "pm10",
+   "adoption": 0.3
   },
   {
-   "route": "fixes",
-   "date": "2025-11-19",
-   "day_type": "mixed",
-   "key": "fixes_6029f35f20a26700f8b7",
-   "network": "benchmark_250",
+   "route": "rx-map",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "rx-map_ffe6476f798787863859",
+   "network": "urban_short_160",
+   "rule": "pm10",
+   "adoption": 0.3
+  },
+  {
+   "route": "headroom",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "headroom_87980528f9f85cf1b911",
+   "network": "urban_short_160",
+   "rule": "up_2005",
+   "adoption": 0.3
+  },
+  {
+   "route": "hosting",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "hosting_ddc10b855ae4e3edb8ce",
+   "network": "urban_short_160",
    "rule": "up_2005"
   },
   {
-   "route": "risk",
-   "date": "2025-08-05",
-   "day_type": "cloudy",
-   "key": "risk_e15e8b9ba2fae4593fdc",
-   "network": "benchmark_250",
-   "rule": "pm10",
-   "fix": "none"
+   "route": "meter-sites",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "meter-sites_20b476b821b42c4fd790",
+   "network": "urban_short_160",
+   "rule": "up_2005",
+   "adoption": 0.3
   },
   {
-   "route": "fixes",
-   "date": "2025-08-05",
-   "day_type": "cloudy",
-   "key": "fixes_f8df030860ec2be6f510",
-   "network": "benchmark_250",
+   "route": "rx-map",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "rx-map_44d76af972bcf83e8be1",
+   "network": "urban_short_160",
+   "rule": "up_2005",
+   "adoption": 0.3
+  },
+  {
+   "route": "headroom",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "headroom_2823bbbbccf15ecb9870",
+   "network": "suburban_100",
+   "rule": "pm10",
+   "adoption": 0.3
+  },
+  {
+   "route": "hosting",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "hosting_fb4c308812295c585cd7",
+   "network": "suburban_100",
    "rule": "pm10"
   },
   {
-   "route": "risk",
-   "date": "2025-08-05",
-   "day_type": "cloudy",
-   "key": "risk_170ad4a05e69c75af9c7",
-   "network": "benchmark_250",
-   "rule": "up_2005",
-   "fix": "none"
+   "route": "meter-sites",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "meter-sites_81b5ad2c6c9c96ab8635",
+   "network": "suburban_100",
+   "rule": "pm10",
+   "adoption": 0.3
   },
   {
-   "route": "fixes",
-   "date": "2025-08-05",
-   "day_type": "cloudy",
-   "key": "fixes_a90bb28097413b8194a3",
-   "network": "benchmark_250",
+   "route": "rx-map",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "rx-map_955de6d6003da8daface",
+   "network": "suburban_100",
+   "rule": "pm10",
+   "adoption": 0.3
+  },
+  {
+   "route": "headroom",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "headroom_36b3db71b8d00023c9b0",
+   "network": "suburban_100",
+   "rule": "up_2005",
+   "adoption": 0.3
+  },
+  {
+   "route": "hosting",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "hosting_e4c2711a778b402ca52a",
+   "network": "suburban_100",
    "rule": "up_2005"
+  },
+  {
+   "route": "meter-sites",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "meter-sites_4c37baae153010d66e65",
+   "network": "suburban_100",
+   "rule": "up_2005",
+   "adoption": 0.3
+  },
+  {
+   "route": "rx-map",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "rx-map_56e4a3ff3ec0485819d2",
+   "network": "suburban_100",
+   "rule": "up_2005",
+   "adoption": 0.3
+  },
+  {
+   "route": "headroom",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "headroom_ec00429419cd9c1d0eac",
+   "network": "rural_long_100",
+   "rule": "pm10",
+   "adoption": 0.3
+  },
+  {
+   "route": "hosting",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "hosting_87abb72aa1b4bdad3c89",
+   "network": "rural_long_100",
+   "rule": "pm10"
+  },
+  {
+   "route": "meter-sites",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "meter-sites_3a6ce0d6c0198b917cc1",
+   "network": "rural_long_100",
+   "rule": "pm10",
+   "adoption": 0.3
+  },
+  {
+   "route": "rx-map",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "rx-map_0d499801730a9675a5b8",
+   "network": "rural_long_100",
+   "rule": "pm10",
+   "adoption": 0.3
+  },
+  {
+   "route": "headroom",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "headroom_7a9b85851e61217cff2b",
+   "network": "rural_long_100",
+   "rule": "up_2005",
+   "adoption": 0.3
+  },
+  {
+   "route": "hosting",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "hosting_ae3606fef9e6f54f6f5c",
+   "network": "rural_long_100",
+   "rule": "up_2005"
+  },
+  {
+   "route": "meter-sites",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "meter-sites_56204a4f49ffecd68527",
+   "network": "rural_long_100",
+   "rule": "up_2005",
+   "adoption": 0.3
+  },
+  {
+   "route": "rx-map",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "rx-map_ddf72950730969096a2b",
+   "network": "rural_long_100",
+   "rule": "up_2005",
+   "adoption": 0.3
+  },
+  {
+   "route": "headroom",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "headroom_f39eab5d251257abb8d8",
+   "network": "rural_weak_63",
+   "rule": "pm10",
+   "adoption": 0.3
+  },
+  {
+   "route": "hosting",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "hosting_df26d48c1815f0946613",
+   "network": "rural_weak_63",
+   "rule": "pm10"
+  },
+  {
+   "route": "meter-sites",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "meter-sites_552d5c201ff159a8a69a",
+   "network": "rural_weak_63",
+   "rule": "pm10",
+   "adoption": 0.3
+  },
+  {
+   "route": "rx-map",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "rx-map_d45d2a27c951ebee0508",
+   "network": "rural_weak_63",
+   "rule": "pm10",
+   "adoption": 0.3
+  },
+  {
+   "route": "headroom",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "headroom_35fc1ef93b89d0679315",
+   "network": "rural_weak_63",
+   "rule": "up_2005",
+   "adoption": 0.3
+  },
+  {
+   "route": "hosting",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "hosting_466fe2e5ac1f927653bc",
+   "network": "rural_weak_63",
+   "rule": "up_2005"
+  },
+  {
+   "route": "meter-sites",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "meter-sites_f8077612b7d05c4c41d4",
+   "network": "rural_weak_63",
+   "rule": "up_2005",
+   "adoption": 0.3
+  },
+  {
+   "route": "rx-map",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "rx-map_8fa2ef41528683d8a4ad",
+   "network": "rural_weak_63",
+   "rule": "up_2005",
+   "adoption": 0.3
+  },
+  {
+   "route": "transformers",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "transformers_2d4695a1bdf0bd7ad380",
+   "rule": "pm10",
+   "adoption": 0.3
+  },
+  {
+   "route": "transformers",
+   "date": "2025-05-15",
+   "day_type": "sunny",
+   "key": "transformers_f204cbfbf3b2cc545444",
+   "rule": "up_2005",
+   "adoption": 0.3
   },
   {
    "route": "whatif",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "whatif_7195e381264c02616b28",
+   "key": "whatif_34f30809100c037cc53a",
    "label": "Standard smart inverters (IEEE 1547 Volt/VAR)",
    "network": "benchmark_250",
    "rule": "pm10",
@@ -168,7 +608,7 @@
    "route": "whatif",
    "date": "2025-05-15",
    "day_type": "sunny",
-   "key": "whatif_9d49289c6e9e884de308",
+   "key": "whatif_fc14edea8d1fae02fb65",
    "label": "Evening EV charging at 20% of homes, with transformer tap +1",
    "network": "benchmark_250",
    "rule": "pm10",

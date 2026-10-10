@@ -24,3 +24,13 @@ def test_results_version_ignores_line_endings(tmp_path):
     assert results_version(tmp_path) == unix
     (tmp_path / "engine" / "a.py").write_bytes(b"a = 2\n")
     assert results_version(tmp_path) != unix
+
+
+def test_planning_summary_keeps_headroom_per_location_and_phase_and_the_hosting_range():
+    from scripts.nightly import planning_summary
+    headroom = {"baseline_unsafe_steps": 3, "locations": {"near": {"node": 1, "phases": {"A": {"no_worse_kw": 4.5}}},
+                                                          "far": {"node": 9, "phases": {"A": {"no_worse_kw": 1.0}}}}}
+    hosting = {"without_fix": {"adoption_share": {"p10": 0.1, "p50": 0.2, "p90": 0.3}}, "with_volt_var": {}}
+    out = planning_summary(headroom, hosting)
+    assert out["headroom_kw"] == {"near": {"A": 4.5}, "far": {"A": 1.0}} and out["baseline_unsafe_steps"] == 3
+    assert out["hosting_share"]["without_fix"]["p50"] == 0.2 and out["hosting_share"]["with_volt_var"] is None

@@ -1,0 +1,87 @@
+{
+ "_note": "Real /api/v2 output captured on 10 Oct 2026 (benchmark street, 15 May 2025, UP rule) to test the dashboard. Tests only.",
+ "date": "2025-05-15",
+ "network": "benchmark_250",
+ "rule": "up_2005",
+ "adoption": 0.3,
+ "sites": [
+  {
+   "node": 92,
+   "dv_per_kw_v": 0.272,
+   "homes_downstream": 43,
+   "distance_m": 80.5,
+   "score": 11.675
+  },
+  {
+   "node": 6,
+   "dv_per_kw_v": 0.277,
+   "homes_downstream": 42,
+   "distance_m": 83.9,
+   "score": 11.644
+  },
+  {
+   "node": 35,
+   "dv_per_kw_v": 0.275,
+   "homes_downstream": 41,
+   "distance_m": 89.0,
+   "score": 11.26
+  },
+  {
+   "node": 36,
+   "dv_per_kw_v": 0.258,
+   "homes_downstream": 40,
+   "distance_m": 95.0,
+   "score": 10.334
+  },
+  {
+   "node": 41,
+   "dv_per_kw_v": 0.247,
+   "homes_downstream": 39,
+   "distance_m": 96.9,
+   "score": 9.646
+  },
+  {
+   "node": 66,
+   "dv_per_kw_v": 0.202,
+   "homes_downstream": 44,
+   "distance_m": 56.1,
+   "score": 8.875
+  },
+  {
+   "node": 60,
+   "dv_per_kw_v": 0.222,
+   "homes_downstream": 37,
+   "distance_m": 99.9,
+   "score": 8.208
+  },
+  {
+   "node": 61,
+   "dv_per_kw_v": 0.134,
+   "homes_downstream": 45,
+   "distance_m": 35.3,
+   "score": 6.049
+  },
+  {
+   "node": 40,
+   "dv_per_kw_v": 0.503,
+   "homes_downstream": 12,
+   "distance_m": 95.6,
+   "score": 6.037
+  },
+  {
+   "node": 19,
+   "dv_per_kw_v": 0.585,
+   "homes_downstream": 10,
+   "distance_m": 114.3,
+   "score": 5.851
+  }
+ ],
+ "n_candidates": 93,
+ "probe_kw": 1.0,
+ "provenance": {
+  "solar": "modeled: solar v2 day-ahead forecast (five weather models, LightGBM, conformal)",
+  "demand": "modeled: CEEW 2019-2021 climatology by month and day type; homes from analog days",
+  "voltage": "modeled: upstream-voltage model; yesterday's mean from the same date of 2019 (proxy)",
+  "grid": "benchmark: SimBench topology with IS 398 conductors; homes on single phases"
+ }
+}

@@ -33,14 +33,14 @@ from engine.violations import evaluate, summarise
 N_SCENARIOS = 100
 SEED = 42
 NOMINAL_V = 230.0
-PROXY_YEAR = 2019
+PROXY_YEARS = (2019, 2020, 2021)            # which year's "yesterday" stands in for a 2025 date, first with data
 PHASE = ("A", "B", "C")
 WINDOW_KEYS = {"15 min": "15min", "1 h": "1h", "3 h": "3h", "24 h": "24h"}
 SHARE_KEYS = {"over": "overvoltage", "under": "undervoltage", "line": "line_overload", "trafo": "trafo_overload",
               "solver": "solver_failure"}
 PROVENANCE = {"solar": "modeled: solar v2 day-ahead forecast (five weather models, LightGBM, conformal)",
               "demand": "modeled: CEEW 2019-2021 climatology by month and day type; homes from analog days",
-              "voltage": "modeled: upstream-voltage model; yesterday's mean from the same date of 2019 (proxy)",
+              "voltage": "modeled: upstream-voltage model; yesterday's mean from the same date of an earlier year (proxy)",
               "grid": "benchmark: SimBench topology with IS 398 conductors; homes on single phases"}
 
 _VV, _VW = VoltVarCurve(), VoltWattCurve()
@@ -57,12 +57,24 @@ SIMPLE_FIXES = {
 
 # ---- inputs ----------------------------------------------------------------------------------------------------
 
+def _history_files() -> tuple[pd.DataFrame, pd.Series, pd.Series, str]:
+    """Mathura's demand, solar and grid voltage for the scenario generator.
+
+    The full record (May 2019 to February 2021, every month of the year) when `data/processed/v2` has it. The older
+    committed files miss March and April and most of 2020, which left those months with no voltage history; they are
+    only a fallback for a checkout that does not have the full files."""
+    v2, base = config.PROCESSED_DIR / "v2", config.PROCESSED_DIR
+    names = ("load_kw_mathura", "pv_kw_per_kwp_mathura", "upstream_vm_pu_mathura")
+    if all((v2 / f"{n}.parquet").is_file() for n in names):
+        return (pd.read_parquet(v2 / f"{names[0]}.parquet"), pd.read_parquet(v2 / f"{names[1]}.parquet")["pv_kw_per_kwp"],
+                pd.read_parquet(v2 / f"{names[2]}.parquet")["upstream_vm_pu"], "full")
+    return (pd.read_parquet(base / "load_kw.parquet"), pd.read_parquet(base / "pv_kw_per_kwp.parquet")["pv_kw_per_kwp"],
+            pd.read_parquet(base / "upstream_vm_pu.parquet")["upstream_vm_pu"], "legacy")
+
+
 @lru_cache(maxsize=1)
 def _history():
-    base = config.PROCESSED_DIR
-    load = pd.read_parquet(base / "load_kw.parquet")
-    pv = pd.read_parquet(base / "pv_kw_per_kwp.parquet")["pv_kw_per_kwp"]
-    up = pd.read_parquet(base / "upstream_vm_pu.parquet")["upstream_vm_pu"]
+    load, pv, up, _ = _history_files()
     table = day_table(load, pv, up)
     generator = ScenarioGenerator(fit_copula(table), UpstreamModel.fit(up), AnalogPool.build(load))
     return generator, Climatology.build(table, pv, load), up
@@ -87,12 +99,20 @@ def solar_forecast(date: str) -> pd.DataFrame:
 
 
 def yesterday_upstream_mean(date: pd.Timestamp, up: pd.Series) -> float:
-    proxy = pd.Timestamp(PROXY_YEAR, date.month, date.day) - pd.Timedelta(days=1)
-    window = up.loc[proxy:proxy + pd.Timedelta(hours=23, minutes=45)]
-    if window.notna().sum() >= 80:
-        return float(window.mean())
-    same_month = up[up.index.month == date.month]
-    return float(same_month.mean() if len(same_month) else up.mean())
+    """Mean grid voltage (pu) of the day before `date` in an earlier year: the same calendar day of 2019, else of 2020
+    or 2021, whichever has the record (the data runs May 2019 to February 2021, so Januarys and Februarys come from
+    2020 and 2021 and March and April from 2020). Failing that, the mean of that month in the record, then of all of it.
+    Never NaN: a missing value would reach the voltage model silently."""
+    for year in PROXY_YEARS:
+        try:
+            proxy = pd.Timestamp(year, date.month, date.day) - pd.Timedelta(days=1)
+        except ValueError:                                         # 29 February in a non-leap year
+            continue
+        window = up.loc[proxy:proxy + pd.Timedelta(hours=23, minutes=45)]
+        if window.notna().sum() >= 80:
+            return float(window.mean())
+    month = up[up.index.month == date.month].dropna()
+    return float(month.mean() if len(month) else up.mean())
 
 
 def check_network(network_id: str) -> str:
@@ -157,11 +177,15 @@ def risk_payload(date: str, network_id: str, rule_id: str, fix: str | None = Non
                  watch: float = 0.20, act: float = 0.50) -> dict:
     net, r = network(network_id), rule(rule_id)
     scn = scenarios(date, net, n)
-    res = assess_risk(DaySolver(net, asymmetric=True), scn, _controls(fix), r, watch=watch, act=act)
+    solver, controls = DaySolver(net, asymmetric=True), _controls(fix)
+    res = assess_risk(solver, scn, controls, r, watch=watch, act=act)
     p = [round(float(x), 3) for x in res.p_unsafe]
+    # The same scenarios with every panel off: what stays unsafe is the grid's own voltage (or demand), not solar.
+    dark = DayScenarioBatch(scn.t, scn.load_kw, np.zeros_like(scn.pv_per_kwp), scn.upstream_pu, scn.load_pf, scn.labels)
+    p_dark = [round(float(x), 3) for x in evaluate(solver.solve(dark, controls), r).unsafe.mean(axis=0)]
     return {
         "date": date, "network": network_id, "rule": r.id, "fix": fix or "none", "level": res.level,
-        "p_unsafe": p, "t": _labels(res.t), "thresholds": {"watch": watch, "act": act},
+        "p_unsafe": p, "p_unsafe_without_solar": p_dark, "t": _labels(res.t), "thresholds": {"watch": watch, "act": act},
         "expected_unsafe_hours": {"mean": round(res.expected_unsafe_hours, 2), "p10": round(res.unsafe_hours_p10, 2),
                                   "p90": round(res.unsafe_hours_p90, 2)},
         "first_watch": res.first_watch, "first_act": res.first_act,
@@ -312,3 +336,105 @@ def hosting_payload(date: str, network_id: str, rule_id: str, draws: int = 30) -
             "without_fix": hosting_capacity(net, design, r, draws=draws),
             "with_volt_var": hosting_capacity(net, design, r, draws=draws, controls=Controls(volt_var=_VV)),
             "provenance": provenance(date)}
+
+
+# ---- planning extras (/meter-sites, /rx-map, /transformers) -----------------------------------------------------
+
+METER_SITES_SHOWN = 10
+HEADROOM_SEARCH_KW = 60.0                  # engine.headroom.headroom's max_kw default
+
+
+def meter_sites_payload(date: str, network_id: str, rule_id: str, adoption: float = DEFAULT_ADOPTION) -> dict:
+    """E4: where one smart meter reveals the most (voltage rise per kW at the peak step x homes downstream)."""
+    from engine.planning_extra import PROBE_KW, rank_meter_sites
+    net, design = planning_street(date, network_id, adoption)
+    rows = rank_meter_sites(net, design)
+    return {"date": date, "network": network_id, "rule": rule(rule_id).id, "adoption": adoption,
+            "sites": rows[:METER_SITES_SHOWN], "n_candidates": len(rows), "probe_kw": PROBE_KW, "provenance": provenance(date)}
+
+
+def rx_map_payload(date: str, network_id: str, rule_id: str, adoption: float = DEFAULT_ADOPTION) -> dict:
+    """E6: peak voltage with and without standard Volt/VAR as line resistance and reactance are scaled."""
+    from engine.planning_extra import rx_map
+    net, design = planning_street(date, network_id, adoption)
+    r = rule(rule_id)
+    return {"date": date, "network": network_id, "adoption": adoption, "vmax_v": r.vmax_v,
+            **rx_map(net, design, r), "provenance": provenance(date)}
+
+
+def transformers_payload(date: str, rule_id: str, adoption: float = DEFAULT_ADOPTION) -> dict:
+    """P7.7: the street archetypes as a demo portfolio, ordered by the share of their safe room already used.
+
+    Connected kW is the solar each street has at `adoption`. Whether a transformer is metered is not known for the
+    archetypes, so all are treated as unmetered; a utility's own list sets it (docs/ONBOARDING.md)."""
+    from engine.planning_extra import rank_transformers
+    portfolio = []
+    for archetype_id in ARCHETYPES:
+        net, design = planning_street(date, archetype_id, adoption)
+        portfolio.append({"id": archetype_id, "network": net, "scenarios": design,
+                          "connected_kw": round(float(net.house_kwp.sum()), 1), "metered": False})
+    rows = rank_transformers(portfolio, rule(rule_id))
+    for row in rows:
+        row["label"] = ARCHETYPES[row["id"]].label
+        row["at_search_limit"] = row["headroom_kw"] >= HEADROOM_SEARCH_KW     # the bisection stops at this size
+    return {"date": date, "rule": rule(rule_id).id, "adoption": adoption, "transformers": rows,
+            "search_limit_kw": HEADROOM_SEARCH_KW,
+            "metering": "unknown for the archetypes: all treated as unmetered", "provenance": provenance(date)}
+
+
+# ---- /street: the street as a picture, quarter hour by quarter hour ---------------------------------------------
+
+def _candidate(fix: str, net, scn, r):
+    """The fix as a tournament candidate: a simple setting directly, anything else from the catalogue."""
+    from engine.fixes.base import Candidate
+    from engine.fixes.catalog import build as build_catalog
+    if fix in SIMPLE_FIXES:
+        return Candidate(fix, fix, "simple", net, controls=SIMPLE_FIXES[fix])
+    for c in build_catalog(net, scn, r):
+        if c.id == fix:
+            return c
+    raise ApiError(404, f"unknown fix {fix!r}", details={"simple": sorted(SIMPLE_FIXES)})
+
+
+def _street_run(candidate, design, r) -> dict:
+    from engine.street import home_net_kw, line_flows
+    res = _solve(candidate, design, r)
+    v = evaluate(res, r)
+    net = candidate.network
+    flows = line_flows(net, home_net_kw(net, design, candidate.controls))
+    lv = list(net.lv_nodes)
+    home_v = res.u_pu[0][:, [lv.index(int(n)) for n in net.house_node], net.house_phase] * NOMINAL_V   # (T, H)
+    return {
+        "home_v": np.round(home_v, 1).tolist(),
+        "home_phase": [PHASE[p] for p in net.house_phase],
+        "line_phase_kw": np.round(flows["phase_kw"].transpose(1, 0, 2), 1).tolist(),     # (T, L, 3)
+        "line_neutral_a": np.round(flows["neutral_a"].T, 1).tolist(),                     # (T, L)
+        "line_loading_pct": np.round(res.line_loading_pct[0], 1).tolist(),
+        "trafo_kw": [round(float(x), 1) for x in res.trafo_p_kw[0]],
+        "trafo_loading_pct": [round(float(x), 1) for x in res.trafo_loading_pct[0]],
+        "solar_kw": [round(float(x), 1) for x in res.pv_kw[0]],
+        "neutral_a": [round(float(x), 1) for x in res.neutral_a[0]],
+        "unsafe": [bool(x) for x in v.unsafe[0]],
+        "summary": summarise(res, v),
+    }
+
+
+def street_payload(date: str, network_id: str, rule_id: str, fix: str = "none", *, n: int = N_SCENARIOS) -> dict:
+    """The design day (highest-sun case of tomorrow's scenarios) on a schematic of the street, without and with a fix."""
+    from engine.street import layout
+    from engine.fixes.base import Candidate
+    net, r = network(network_id), rule(rule_id)
+    scn = robust_set(scenarios(date, net, n))
+    design = _design(scn)
+    base = Candidate("none", "none", "none", net)
+    out = {"date": date, "network": network_id, "rule": r.id, "fix": fix, "t": _labels(design.t),
+           "limits_v": {"min": r.vmin_v, "max": r.vmax_v}, "layout": layout(net),
+           "homes": [{"node": int(nd), "kwp": round(float(k), 2)} for nd, k in zip(net.house_node, net.house_kwp)],
+           "trafo_kva": round(net.trafo.sn_va / 1000, 1), "before": _street_run(base, design, r),
+           "flow_method": "estimated from each home's net power (demand minus delivered solar); losses ignored",
+           "provenance": provenance(date)}
+    if fix != "none":
+        c = _candidate(fix, net, scn, r)
+        out["fix_label"] = c.label
+        out["after"] = _street_run(c, design, r)
+    return out

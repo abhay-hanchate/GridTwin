@@ -121,6 +121,35 @@ file ends on 20 Feb 2021, so this protocol covers 51 winter days only. On the he
 skill is +11.6% but coverage is 76.6% (monsoon 73.0%). The oracle-weather variant changes skill by under 1.5
 points. Details: `docs/generated/data_v2.md`.
 
+### Demand v2, second run (pre-registered 10 Oct 2026, before the 2021 test was scored)
+
+Gate G4 and its threshold are unchanged. The first run above stays on record.
+
+- **Selection window, not the test:** train before 2020-11-01, validate on Mathura 2020-11-01 to 2020-12-31. 2021 was
+  not loaded while choosing.
+- **Candidates and validation results (skill vs best baseline, P10 to P90 coverage):** as shipped, fixed 60-day
+  window 13.0%, 88.4%; rolling 30-day window 13.0%, 82.2%; rolling 60-day 13.0%, 84.2%; extra features + rolling 30
+  15.4%, 83.1%; pooled districts + rolling 30 13.9%, 81.7%; extra features + pooled + rolling 30 15.9%, 82.7%;
+  the same with a slower learner 15.6%, 82.1%; extra features + pooled + rolling 21 15.9%, 82.2%;
+  **extra features + pooled + rolling 14: 15.9%, 82.0%**.
+- **Rule:** the highest validation skill among candidates whose validation coverage is inside 78 to 82%. Winner:
+  extra features + pooled + rolling 14-day conformal window.
+  - *Extra features* (all known at the end of the day before): same-slot lag 2 and 14 days, yesterday's and the last
+    week's mean level, a trailing smooth of yesterday around the slot, yesterday's mean temperature.
+  - *Pooled:* Bareilly's training-period rows are added to Mathura's, with a district flag (protocol (a) only;
+    protocol (b) keeps Bareilly fully held out).
+  - *Rolling window:* each test day is widened with the conformal amount from the 14 days before it, which a
+    day-ahead forecast has already observed.
+- **Then:** the winner is run once on 2021 with `python -m ml.demand_v2`, and the result is recorded below whether
+  or not it passes.
+
+**Result (run 10 Oct 2026, once):** strict variant, Mathura 2021: skill **+9.0%** (needs 10%), coverage **78.8%**
+(inside 78 to 82%). **Gate G4 still fails**, now on skill only. The 2021 test was not used for any choice and no
+further variant is tried against it. On the held-out district (Bareilly, January to October 2021) the same method
+scores +15.3% and 79.8% coverage, with every season inside the band (winter 12.5%, 79.4%; summer 15.4%, 79.9%;
+monsoon 15.5%, 80.0%; post-monsoon 16.9%, 80.0%). The second-run model replaces the first in `ml/demand_v2.py`
+because it is better on both protocols; demand is still not described as an AI improvement, as the rule requires.
+
 ---
 
 ## Foundation-model benchmark: Chronos-2 (P4.3, owner: Person B)
@@ -338,3 +367,29 @@ with the true history it would gain 3.3%, below the 5% bar. Solar v2 stays.
 - **The UP recorder is not scheduled.** `scripts/record_up_demand.py` runs only when started by hand, so the live
   forecast normally runs without the UP anchor: voltage uses its pattern-only model (36.0% better than climatology
   in round 2, against 37.1% with the anchor) and every forecast says which model it used.
+
+---
+
+## Gate G8 on both districts (pre-registered 10 Oct 2026, before the run)
+
+The first G8 run replayed only Mathura's 2021 days, and that file ends on 20 February 2021. Task P5.3 of the plan
+defines G8 on **both districts**: train on the earlier years, test on the later year. This run follows that protocol.
+Nothing else changes: the threshold, the models, and the reference.
+
+- **Calibration fit:** each district's risk model is fitted before 2020-05-01 and predicts 40 days spread over
+  2020-05-01 to 2020-12-31. One isotonic map per rule is fitted on the pooled (predicted, observed) steps of both
+  districts.
+- **Held-out test:** each district's model is fitted before 2021-01-01 and predicts its 2021 days: Mathura 40 days
+  (January to February), Bareilly 60 days (January to October). The fixed map is applied.
+- **Reference:** the base rate of the pooled test steps themselves. This is a strict reference because it knows the
+  test outcome; it is kept on purpose.
+- **Gate:** the calibrated Brier skill against that reference is above 0 on the pooled test, for each rule. The
+  per-district skills are reported next to it, whether or not they pass.
+- **Then:** the API serves the new map, and the result is recorded below whether or not it passes.
+
+**Result (run 10 Oct 2026):** calibrated Brier skill on the pooled held-out test: **±10%: +0.51** (raw +0.50),
+**UP ±6%: +0.45** (raw +0.44). **Gate G8 passes on both rules.** Per district: Bareilly (60 days, January to
+October) +0.41 and +0.36; Mathura (40 days, January to February) +0.009 and **-3.90**. Mathura's 2021 window under
+±6% is 99.7% unsafe, so a constant forecast is nearly unbeatable there, and that sub-result stays reported as below
+the base rate. The pooled reference is a single rate for both districts, so part of the pooled skill comes from
+telling the districts apart; Bareilly alone, a single district with every season, also passes.

@@ -26,6 +26,7 @@ SLOTS_PER_DAY = 96
 EPS = 0.05
 QUANTILES = {"p10": 0.1, "p50": 0.5, "p90": 0.9}
 BASES = ("lag1d", "lag7d", "mean_1d_7d")
+WINDOW_DAYS = 14                 # rolling conformal window, chosen on 2020 validation (docs/DECISIONS.md)
 REPORT = Path(__file__).resolve().parent / "reports" / "demand_v2.json"
 SEASON = {12: "DJF", 1: "DJF", 2: "DJF", 3: "MAM", 4: "MAM", 5: "MAM", 6: "JJA", 7: "JJA", 8: "JJA",
           9: "SON", 10: "SON", 11: "SON"}
@@ -44,6 +45,11 @@ def baselines(y: pd.Series) -> dict[str, pd.Series]:
 
 def holiday_set(years, subdiv: str = "UP") -> set[date]:
     return set(holidays.country_holidays("IN", subdiv=subdiv, years=list(years)).keys())
+
+
+def _at_issue(trailing: pd.Series, idx: pd.DatetimeIndex) -> np.ndarray:
+    """The value of a trailing statistic at the end of the day before each step (when tomorrow's forecast is made)."""
+    return trailing.reindex(idx.floor("D") - pd.Timedelta(minutes=15)).to_numpy()
 
 
 def build_features(y: pd.Series, temp: pd.Series, hol: set, oracle_temp: pd.Series | None = None) -> pd.DataFrame:
@@ -67,6 +73,13 @@ def build_features(y: pd.Series, temp: pd.Series, hol: set, oracle_temp: pd.Seri
         "is_holiday_prev": prev_day.isin(hol).astype(int),
         "temp_lag_1d": temp.shift(SLOTS_PER_DAY),
         "temp_change_lagged": temp.shift(SLOTS_PER_DAY) - temp.shift(2 * SLOTS_PER_DAY),
+        "ratio_2d_1d": np.log((y.shift(2 * SLOTS_PER_DAY) + EPS) / (b["lag1d"] + EPS)),
+        "ratio_14d_1d": np.log((y.shift(14 * SLOTS_PER_DAY) + EPS) / (b["lag1d"] + EPS)),
+        "yday_mean_ratio": np.log((_at_issue(y.rolling(SLOTS_PER_DAY, min_periods=80).mean(), idx) + EPS) / (b["lag1d"] + EPS)),
+        "week_mean_ratio": np.log((_at_issue(y.rolling(7 * SLOTS_PER_DAY, min_periods=500).mean(), idx) + EPS)
+                                  / (b["lag1d"] + EPS)),
+        "smooth_ratio": np.log((y.rolling(5, min_periods=3).mean().shift(SLOTS_PER_DAY) + EPS) / (b["lag1d"] + EPS)),
+        "temp_yday_mean": _at_issue(temp.rolling(SLOTS_PER_DAY, min_periods=80).mean(), idx),
     }, index=idx)
     if oracle_temp is not None:
         X["temp_target"] = oracle_temp.reindex(idx)
@@ -79,24 +92,37 @@ def choose_base(y: pd.Series, upto: pd.Timestamp) -> str:
     return min(BASES, key=lambda n: float((b[n][mask] - y[mask]).abs().mean()))
 
 
-def fit_model(y: pd.Series, temp: pd.Series, hol: set, base_name: str, train_end: pd.Timestamp,
-              calib_days: int = 60, params: dict | None = None, oracle: bool = False) -> dict:
-    X = build_features(y, temp, hol, oracle_temp=temp if oracle else None)
+def _rows(y: pd.Series, temp: pd.Series, hol: set, base_name: str, oracle: bool, district: int):
+    X = build_features(y, temp, hol, oracle_temp=temp if oracle else None).assign(district=district)
     base = baselines(y)[base_name]
     target = np.log((y + EPS) / (base + EPS))
     ok = X.notna().all(axis=1) & target.notna() & base.notna()
-    X, target, base, yy = X[ok], target[ok], base[ok], y[ok]
+    return X[ok], target[ok], base[ok], y[ok]
+
+
+def fit_model(y: pd.Series, temp: pd.Series, hol: set, base_name: str, train_end: pd.Timestamp,
+              calib_days: int = 60, params: dict | None = None, oracle: bool = False,
+              pool: list[tuple[pd.Series, pd.Series]] = (), window_days: int | None = WINDOW_DAYS) -> dict:
+    """Quantile LightGBM on the log-ratio to `base_name`. `pool` adds other districts' rows before the calibration window to the
+    training set (district flag 1, 2, ...); calibration always uses `y`'s own last `calib_days`. With `window_days`,
+    `predict` widens each day with the conformal amount of the `window_days` before it (rolling window)."""
+    X, target, base, yy = _rows(y, temp, hol, base_name, oracle, 0)
     calib_start = train_end - pd.Timedelta(days=calib_days)
     train = X.index < calib_start
     calib = (X.index >= calib_start) & (X.index < train_end)
+    Xs, ts = [X[train]], [target[train]]
+    for k, (py, pt) in enumerate(pool, start=1):
+        PX, ptarget, _, _ = _rows(py, pt, hol, base_name, oracle, k)
+        Xs.append(PX[PX.index < calib_start]); ts.append(ptarget[ptarget.index < calib_start])
+    Xtr, ttr = pd.concat(Xs), pd.concat(ts)
     p = dict(PARAMS if params is None else params)
-    models = {q: lgb.LGBMRegressor(objective="quantile", alpha=a, **p).fit(X[train], target[train])
+    models = {q: lgb.LGBMRegressor(objective="quantile", alpha=a, **p).fit(Xtr, ttr)
               for q, a in QUANTILES.items()}
     model = {"models": models, "base_name": base_name, "oracle": oracle, "columns": list(X.columns),
-             "train_end": train_end, "q": 0.0}
+             "train_end": train_end, "q": 0.0, "window_days": window_days}
     cal = _predict_level(model, X[calib], base[calib])
     model["q"] = conformal_q(cal, yy[calib])
-    model["n_train"] = int(train.sum())
+    model["n_train"] = int(len(Xtr))
     return model
 
 
@@ -107,13 +133,27 @@ def _predict_level(model: dict, X: pd.DataFrame, base: pd.Series) -> pd.DataFram
     return level
 
 
+def _rolling_conformal(level: pd.DataFrame, actual: pd.Series, window_days: int, q_fixed: float) -> pd.DataFrame:
+    """Widen each day by the conformal amount of the `window_days` before it; the fixed amount until enough history."""
+    days = level.index.normalize()
+    out = []
+    for day in days.unique():
+        cal = (level.index >= day - pd.Timedelta(days=window_days)) & (level.index < day)
+        q = conformal_q(level[cal], actual[cal]) if cal.sum() >= 200 else q_fixed
+        out.append(apply_conformal(level[days == day], q, floor=0.0))
+    return pd.concat(out)
+
+
 def predict(model: dict, y: pd.Series, temp: pd.Series, hol: set) -> pd.DataFrame:
-    X = build_features(y, temp, hol, oracle_temp=temp if model["oracle"] else None)
+    X = build_features(y, temp, hol, oracle_temp=temp if model["oracle"] else None).assign(district=0)
     b = baselines(y)
     ok = X.notna().all(axis=1) & y.notna() & b["lag1d"].notna() & b["lag7d"].notna()
     X, yy = X[ok], y[ok]
     level = _predict_level(model, X, b[model["base_name"]][ok])
-    out = apply_conformal(level, model["q"], floor=0.0)
+    if model.get("window_days"):
+        out = _rolling_conformal(level, yy, model["window_days"], model["q"])
+    else:
+        out = apply_conformal(level, model["q"], floor=0.0)
     out["actual"] = yy
     for n in BASES:
         out[n] = b[n][ok]
@@ -154,8 +194,8 @@ def main() -> None:
               "protocols": {}, "gate_g4": {}}
     for variant, oracle in (("strict", False), ("oracle_weather", True)):
         base_name = choose_base(y_m, train_end)
-        # Protocol 1: train Mathura before 2021, test Mathura 2021
-        m1 = fit_model(y_m, t_m, hol, base_name, train_end, oracle=oracle)
+        # Protocol 1: train Mathura (plus Bareilly's rows) before 2021, test Mathura 2021
+        m1 = fit_model(y_m, t_m, hol, base_name, train_end, oracle=oracle, pool=[(y_b, t_b)])
         f1 = predict(m1, y_m, t_m, hol)
         test1 = f1[f1.index >= train_end]
         # Protocol 2: train all Mathura, test Bareilly (held-out district)

@@ -9,9 +9,7 @@ GridTwin is a day-ahead guard for low-voltage streets with rooftop solar. For to
 voltage every 15 minutes**, **ranks the fixes that physics confirms are safe** (or says honestly that none is), and
 tells a planner **how much more solar each part of the street and each phase can take**. Every number comes from a
 power-flow run on real Indian smart-meter data and weather forecasts, and carries its provenance: observed, modeled or
-benchmark.
-
-This is **version 2**. What changed since Round 1, including what did not work, is in [CHANGELOG.md](CHANGELOG.md).
+benchmark. What changed in each release, including what did not work, is in [CHANGELOG.md](CHANGELOG.md).
 
 ## The problem, in real data
 
@@ -52,8 +50,8 @@ dashboard's Proof page shows them, failed ones included.
 | --- | --- | --- |
 | G1 | Engine matches pandapower (0.001 V apart) and is far faster (403.6 times in the latest run; the factor varies with machine load) | pass |
 | G2 | At least three weather models available (five used) | pass |
-| G3 | Solar forecast error 0.0329 against Round 1's 0.0396 | pass |
-| G4 | Demand v2: 8.4% skill, needed 10% | **fail** (Round 1's demand model stays) |
+| G3 | Solar forecast error 0.0329 against the first solar model's 0.0396 | pass |
+| G4 | Demand v2: 9.0% skill on the Mathura 2021 winter days, needed 10% (coverage 78.8%, inside 78 to 82%); on the held-out district 15.3% and 79.8% | **fail** (no AI-improvement claim for demand) |
 | G5 | Phase-aware engine converges; peak 268.4 to 272.6 V across zero-sequence assumptions | pass |
 | G6 | Licences: Open-Meteo's free API is non-commercial only | conditional |
 | G7 | Solar yield checked against a measured plant | not run (data needs an IEEE DataPort login) |
@@ -61,17 +59,28 @@ dashboard's Proof page shows them, failed ones included.
 
 ## The dashboard
 
-Five areas, in English and Hindi, usable on a phone:
+An overview and five steps, in English and Hindi, usable on a phone. Each step answers one question and ends by
+explaining every label it used and pointing to the next step.
 
-1. **Home** — tomorrow's risk strip, the one-line answer, expected unsafe hours, the peak voltage against the rule, a
-   rule and demo-day selector, and a printable evening report.
-2. **Try a change** — any mix of changes (panel size, grid voltage, EV charging, heatwave) and fixes, run through the
-   engine; the form is generated from the API's catalogue.
-3. **Fixes** — the ranked tournament with costs, phase moves and per-home export limits, or the honest "No safe
-   action" with the limit that stops it and what it would still need.
-4. **Planning** — headroom per phase and place beside the flat state caps, hosting capacity, and a connection check
-   that approves, approves with conditions or refuses.
-5. **Proof** — every gate, every method bake-off, and what was deliberately not built.
+- **Overview** — what GridTwin does, and the street playing out a whole day: press ▶ and watch power flow along
+  phases A, B and C and the neutral, homes change colour with their voltage, and solar flow back to the
+  transformer at midday. Then the day in plain words with four numbers.
+1. **Tomorrow** — will the voltage be safe? The chance of unsafe voltage every quarter hour, split into what rooftop
+   solar adds and what is the grid's own voltage (still unsafe with every panel switched off), the expected unsafe
+   hours, the street replaying that day, and a printable evening report.
+2. **Fixes** — which fix keeps the street safe? Every fix tried, ranked, or an honest "no safe fix" with the limit
+   that stops it. Clicking a fix explains what it is, how it helps, who does it and what it costs, and plays the day
+   on the street with and without it.
+3. **Planning** — can the street take more solar? Hosting capacity, room per phase on a map of the street, a
+   connection check by clicking any point, where to put a smart meter first, which transformers need attention
+   first, and whether smart inverters help on these wires.
+4. **Try a change** — what happens if things change? Ready-made futures (electric cars, twice the solar, a hot
+   summer, a high grid voltage) or any mix of changes and fixes with sliders, compared with today's street.
+5. **Proof** — how far can you trust it? Every check grouped by the question it answers, failed ones included.
+
+The day is the real tomorrow (from today's live weather forecast) or any day of 2025 from the calendar. Days the
+evening run computed open instantly; a new day takes a few minutes the first time. Offline, only computed days are
+offered.
 
 ## How it works
 
@@ -101,7 +110,7 @@ flowchart TD
 | Violations and verdict | `engine/violations.py`, `engine/verdict.py` | Voltage, loading, neutral, unbalance, solver failure; the binding limit |
 | Risk | `engine/risk.py`, `scripts/calibrate_risk.py` | Watch at 20%, act at 50%; isotonic recalibration |
 | Fixes | `engine/fixes/` | Tap, inverters, export limits, phase moves (CP-SAT), switching, battery |
-| Planning | `engine/headroom.py`, `engine/hosting.py` | Per-phase headroom, probabilistic hosting capacity, connection check |
+| Planning | `engine/headroom.py`, `engine/hosting.py`, `engine/planning_extra.py` | Per-phase headroom, probabilistic hosting capacity, connection check, meter-first ranking, R/X map, transformer ranking |
 | API v2 | `backend/v2/` | Cached results or a background job; offline mode; error model, metrics |
 | Dashboard | `frontend/src/` | React, lazy-loaded pages, English and Hindi |
 | Operations | `scripts/nightly.py`, `scripts/monitor.py`, `.github/workflows/` | Evening precompute, drift monitor, CI |
@@ -116,17 +125,18 @@ poll `/jobs/{id}`. Errors are always `{"error": {"code", "message", "details"}}`
 
 | Route | Returns |
 | --- | --- |
-| `GET /risk` | Chance of an unsafe step per 15 minutes, expected unsafe hours, level, calibration |
+| `GET /risk` | Chance of an unsafe step per 15 minutes (and the same with every panel off), expected unsafe hours, level, calibration |
 | `GET /fixes` | The tournament: ranked safe fixes, or the no-safe-action verdict with the binding limit |
 | `GET /simulate` | The design day without and with one fix |
+| `GET /street` | The street as a schematic and the design day quarter hour by quarter hour: each home's voltage on its phase, per-phase power and neutral current on every wire, without and with any fix |
+| `GET /calendar` | The days that can be shown: tomorrow, the forecast archive, and the days already computed |
 | `GET /headroom`, `GET /hosting`, `POST /connection-check` | Planning |
-| `GET /catalog`, `POST /whatif` | Every change and fix with its parameter schema; run any combination |
+| `GET /meter-sites`, `GET /rx-map`, `GET /transformers` | Where to meter first, Volt/VAR sensitivity to the wires, transformers by share of safe room used |
+| `GET /catalog`, `POST /whatif` | Every change and fix with its parameter schema; run any combination against today's street |
 | `GET /rules`, `GET /networks` | Voltage rules with source and verification; street archetypes |
 | `GET /results` | Every gate (`results.json`) |
 | `GET /report?lang=en\|hi` | The printable evening report |
 | `GET /health`, `GET /readiness`, `GET /metrics` | Operations |
-
-The Round 1 API and dashboard were removed after the `v2.0.0` release; that tag still contains them.
 
 ## Run it
 
@@ -194,39 +204,36 @@ For frontend development, run `npm run dev` in `frontend/` alongside `uvicorn ba
 ## Features
 
 <!-- FEATURES:START -->
-**25 of 29 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
+**21 of 26 features done.** Updated automatically when a pull request is merged; source: [features.csv](features.csv).
 
 | ID | Feature | Area | Owner | Status | Pull request |
 | --- | --- | --- | --- | --- | --- |
-| F01 | Project scaffold: README and requirements | Repo | P1 | ✅ Done |  |
-| F02 | Data pipeline: real CEEW demand and voltage and pvlib solar profiles | Data | P1 | ✅ Done | [#1](https://github.com/abhay-hanchate/GridTwin/pull/1) |
-| F03 | Grid engine: street model and full-day power flow and scenarios | Engine | P1 | ✅ Done | [#2](https://github.com/abhay-hanchate/GridTwin/pull/2) |
-| F04 | Seven corrective actions and all-day ranking with honest no-safe-action | Engine | P1 | ✅ Done | [#3](https://github.com/abhay-hanchate/GridTwin/pull/3) |
-| F05 | Solar and demand forecasts with calibrated ranges and early warning | ML | P2 | ✅ Done | [#4](https://github.com/abhay-hanchate/GridTwin/pull/4) |
-| F06 | FastAPI service with precomputed results | API | P2 | ✅ Done | [#5](https://github.com/abhay-hanchate/GridTwin/pull/5) |
-| F07 | Dashboard: feeder map and fixes and forecast screens | Frontend | P4 | ✅ Done | [#6](https://github.com/abhay-hanchate/GridTwin/pull/6) |
-| F08 | Docs and CI: README and assumptions and GitHub Actions | Quality | P3 | ✅ Done | [#7](https://github.com/abhay-hanchate/GridTwin/pull/7) |
-| F09 | Plain-language story view and simpler wording | Frontend | P4 | ✅ Done | [#8](https://github.com/abhay-hanchate/GridTwin/pull/8) |
-| F10 | Fix simulator and prediction-vs-reality simulator | Engine + Frontend | P4 | ✅ Done | [#9](https://github.com/abhay-hanchate/GridTwin/pull/9) |
-| F11 | Automatic feature tracker (this file and the README table) | Quality | P1 | ✅ Done | [#10](https://github.com/abhay-hanchate/GridTwin/pull/10) |
-| F12 | Solar model feature-importance report | ML | P2 | ✅ Done |  |
-| F13 | Cloudy-day early warning and docs/ml.md | ML | P2 | ✅ Done |  |
-| F14 | README setup fixes from a fresh-clone test | Quality | P3 | ✅ Done | [#11](https://github.com/abhay-hanchate/GridTwin/pull/11) |
-| F15 | Test plan and bug issues | Quality | P3 | ✅ Done | [#11](https://github.com/abhay-hanchate/GridTwin/pull/11) |
-| F16 | Edge-case tests | Quality | P3 | ✅ Done | [#11](https://github.com/abhay-hanchate/GridTwin/pull/11) |
-| F17 | Demo script for the video | Docs | P3 | ✅ Done | [#11](https://github.com/abhay-hanchate/GridTwin/pull/11) |
-| F18 | Hosting capacity: how much solar the street can take | Engine + Frontend | P3 | ✅ Done | [#11](https://github.com/abhay-hanchate/GridTwin/pull/11) |
-| F19 | Faster dashboard: load each tab only when opened | Frontend | P4 | ✅ Done | [#13](https://github.com/abhay-hanchate/GridTwin/pull/13) |
-| F20 | Phone layout and accessibility | Frontend | P4 | ✅ Done | [#14](https://github.com/abhay-hanchate/GridTwin/pull/14) |
-| F21 | Live deployment with a public link | DevOps | P4 | ⏳ Planned |  |
-| F22 | Feeder reconfiguration (switching) as a fix | Engine | Team | 🏁 Finale |  |
-| F23 | Machine-learning shortcut model of the power flow | ML | Team | 🏁 Finale |  |
-| F24 | AI assistant that explains each recommendation | ML | Team | 🏁 Finale |  |
-| F25 | Final project document and PDF for the PPT and video | Docs | P4 | ✅ Done | [#15](https://github.com/abhay-hanchate/GridTwin/pull/15) |
-| F26 | Live warning: separate solar-caused risk from the grid's own voltage |  | Tabsirshaikh | ✅ Done | [#17](https://github.com/abhay-hanchate/GridTwin/pull/17) |
-| F27 | Docs: hosting capacity is built  not roadmap |  | abhay-hanchate | ✅ Done | [#18](https://github.com/abhay-hanchate/GridTwin/pull/18) |
-| F28 | GridTwin v2.0.0: tomorrow's risk  verified fixes  planning and proof |  | Tabsirshaikh | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
-| F29 | P10.12: remove the Round 1 path; the dashboard and API are v2 only |  | Tabsirshaikh | ✅ Done | [#27](https://github.com/abhay-hanchate/GridTwin/pull/27) |
+| F01 | Data: all six CEEW meter files from two districts with outage and surge checks | Data | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F02 | Grid-side voltage for tomorrow: whole-day paths chosen by a bake-off | Data | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F03 | Five Indian street types with IS 398 conductors | Engine | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F04 | Phase-aware batch power flow with a pandapower cross-check | Engine | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F05 | Voltage-rule library with sources and verification status | Engine | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F06 | IEEE 1547 smart-inverter curves (Volt/VAR and Volt/Watt) | Engine | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F07 | Solar forecast v2 on five weather models with conformal ranges | ML | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F08 | Demand forecast v2 (gate G4 not met: no AI-improvement claim) | ML | Team | 🔄 In progress |  |
+| F09 | Live day-ahead demand and grid voltage for tomorrow | ML | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F10 | Correlated scenarios of sun and demand and grid voltage | ML | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F11 | Risk: chance of unsafe voltage per 15 minutes and expected unsafe hours | Risk | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F12 | Fix tournament: tap and inverters and export limits and phase moves and switching and battery | Risk | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F13 | Honest no-safe-action verdict with the binding limit | Risk | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F14 | Planning: headroom per phase and probabilistic hosting capacity | Planning | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F15 | Connection check: approve or approve with conditions or refuse | Planning | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F16 | Planning: where to meter first and Volt/VAR sensitivity and transformer ranking | Planning | Team | 🔄 In progress |  |
+| F17 | What-if catalogue: any mix of changes and fixes | API | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F18 | API v2 with cached results and background jobs and offline mode | API | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F19 | Dashboard: five areas in English and Hindi on a phone | Frontend | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F20 | Evening report and explanations that keep every number | Frontend | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F21 | Utility onboarding: feeder and homes and meter CSV checks | Data | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F22 | Evaluation of every gate into results.json and the Proof page | Quality | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F23 | Operations: evening precompute and drift monitor and metrics and runbooks and Docker | Quality | Team | ✅ Done | [#26](https://github.com/abhay-hanchate/GridTwin/pull/26) |
+| F24 | Risk reliability on both districts (gate G8) | Risk | Team | 🔄 In progress |  |
+| F25 | Solar yield checked against a measured plant (gate G7: needs data access) | ML | Team | ⏳ Planned |  |
+| F26 | Live deployment with a public link | DevOps | Team | ⏳ Planned |  |
 <!-- FEATURES:END -->
 
 ## Team

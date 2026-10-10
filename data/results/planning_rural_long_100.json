@@ -1,0 +1,61 @@
+{
+ "network": "rural_long_100",
+ "label": "Rural long feeder: 60 homes, 100 kVA, Rabbit",
+ "date": "2025-05-15",
+ "rules": {
+  "pm10": {
+   "baseline_unsafe_steps": 1,
+   "headroom_kw": {
+    "near": {
+     "A": 33.3,
+     "B": 19.2,
+     "C": 45.9
+    },
+    "far": {
+     "A": 2.3,
+     "B": 5.6,
+     "C": 11.2
+    }
+   },
+   "hosting_share": {
+    "without_fix": {
+     "p10": 0.1,
+     "p50": 0.4,
+     "p90": 0.6
+    },
+    "with_volt_var": {
+     "p10": 0.6,
+     "p50": 0.8,
+     "p90": 1.0
+    }
+   }
+  },
+  "up_2005": {
+   "baseline_unsafe_steps": 53,
+   "headroom_kw": {
+    "near": {
+     "A": 28.1,
+     "B": 6.6,
+     "C": 25.8
+    },
+    "far": {
+     "A": 2.3,
+     "B": 3.3,
+     "C": 6.1
+    }
+   },
+   "hosting_share": {
+    "without_fix": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 0.0
+    },
+    "with_volt_var": {
+     "p10": 0.0,
+     "p50": 0.0,
+     "p90": 0.41
+    }
+   }
+  }
+ }
+}

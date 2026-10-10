@@ -1,89 +1,93 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import connections from '../fixtures/v2/connection_samples.json'
 import headroom from '../fixtures/v2/headroom_sample.json'
 import hosting from '../fixtures/v2/hosting_sample.json'
-import rules from '../fixtures/v2/rules_sample.json'
+import meterSites from '../fixtures/v2/meter_sites_sample.json'
+import rxMap from '../fixtures/v2/rx_map_sample.json'
+import transformers from '../fixtures/v2/transformers_sample.json'
 import { LangProvider } from '../i18n'
+import { makeStreet, serve as serveBase, settle } from '../test/server'
 import Planning from './Planning'
-import type { Results } from '../api/v2types'
-
-// The file GET /results serves (written by python -m scripts.evaluate), read directly so the test never checks a copy.
-const results: Results = JSON.parse(readFileSync(resolve(import.meta.dirname, '../../../data/results/results.json'), 'utf-8'))
 
 type Decision = 'approve' | 'approve_with_conditions' | 'refuse'
-const json = (body: unknown) => Promise.resolve(new Response(JSON.stringify(body), { status: 200 }))
+
+// The test street, with the probe points and meter sites of the fixtures added as nodes so their markers have a place.
+const extra = [...new Set([headroom.locations.near.node, headroom.locations.far.node, ...meterSites.sites.map((m) => m.node)])].filter((n) => n > 2)
+const street = () => {
+  const s = makeStreet()
+  return { ...s, layout: { ...s.layout, rows: 2, nodes: [...s.layout.nodes, ...extra.map((id, i) => ({ id, x: i, y: 1 }))] } }
+}
 
 function serve(decision: Decision = 'approve') {
-  return vi.spyOn(globalThis, 'fetch').mockImplementation((input, init) => {
-    const url = new URL(String(input), 'http://x')
-    if (url.pathname === '/api/v2/rules') return json(rules.rules)
-    if (url.pathname === '/api/v2/results') return json(results)
-    if (url.pathname === '/api/v2/headroom') return json(headroom)
-    if (url.pathname === '/api/v2/hosting') return json(hosting)
-    if (url.pathname === '/api/v2/connection-check' && init?.method === 'POST') return json(connections[decision])
-    return Promise.resolve(new Response('{}', { status: 503 }))
+  return serveBase({
+    '/street': street,
+    '/headroom': headroom, '/hosting': hosting, '/meter-sites': meterSites, '/rx-map': rxMap, '/transformers': transformers,
+    '/connection-check': (_: URL, init?: RequestInit) => (init?.method === 'POST' ? connections[decision] : {}),
   })
 }
-const settle = () => act(async () => { await new Promise((r) => setTimeout(r, 0)) })
 const show = async () => { render(<LangProvider><Planning rule="up_2005" onRule={() => {}} /></LangProvider>); await settle() }
-const check = async () => { fireEvent.click(screen.getByRole('button', { name: /check/i })); await settle() }
+const layer = (name: RegExp) => { fireEvent.click(screen.getByRole('tab', { name })); return settle() }
+const pickNode = async (node: number) => {
+  fireEvent.click([...document.querySelectorAll('.node-pick')].find((c) => c.querySelector('title')?.textContent === String(node))!)
+  await settle()
+}
+const check = async () => { fireEvent.click(screen.getByRole('button', { name: /check this request/i })); await settle() }
 const decisionText = () => screen.getByRole('region', { name: /decision/i }).textContent ?? ''
 
 beforeEach(() => localStorage.clear())
-afterEach(cleanup)
+afterEach(() => { cleanup(); vi.restoreAllMocks() })
 
-describe('Planning: headroom and hosting capacity', () => {
-  it('shows headroom per location and phase beside the flat state caps, each cap marked as not verified', async () => {
+describe('Planning: the four questions', () => {
+  it('asks the questions in order, each with its own answer', async () => {
     serve()
     await show()
-    const table = screen.getByRole('table', { name: /headroom/i })
-    expect(table.querySelectorAll('tbody tr').length).toBe(2 * 3)
-    expect(table.textContent).toContain(String(headroom.locations.near.phases.B.no_worse_kw))
-    const caps = screen.getByRole('table', { name: /state caps/i })
-    expect(caps.querySelectorAll('tbody tr').length).toBe(Object.keys(headroom.flat_caps).length)
-    expect(caps.textContent).toContain('not verified')
+    const titles = [...document.querySelectorAll('.q-head h3')].map((h) => h.textContent)
+    expect(titles.length).toBe(4)
+    expect(titles[0]).toMatch(/how much solar/i)
   })
 
   it('shows hosting capacity P10, P50 and P90 without a fix and with Volt/VAR', async () => {
     serve()
     await show()
-    const card = screen.getByRole('region', { name: /hosting capacity/i })
-    const bars = card.querySelectorAll('[data-hosting]')
-    expect(bars.length).toBe(2)
-    expect(bars[0].textContent).toContain(`${Math.round(hosting.without_fix.adoption_share.p50 * 100)}%`)
-    expect(bars[1].textContent).toContain(`${Math.round(hosting.with_volt_var.adoption_share.p50 * 100)}%`)
+    const rows = document.querySelectorAll('[data-hosting]')
+    expect(rows.length).toBe(2)
+    expect(rows[0].textContent).toContain(`${Math.round(hosting.without_fix.adoption_share.p50 * 100)}%`)
+    expect(rows[1].textContent).toContain(`${Math.round(hosting.with_volt_var.adoption_share.p50 * 100)}%`)
   })
-})
 
-describe('Planning: which day', () => {
-  const planningDays = [...new Set(results.headlines.demo!.results.filter((r) => r.route === 'headroom').map((r) => r.date))]
-
-  it('asks only for a day the planning results were precomputed for, even when another day is chosen elsewhere', async () => {
-    const fetchMock = serve()
-    render(<LangProvider><Planning rule="up_2005" onRule={() => {}} date="2025-08-05" onDate={() => {}} /></LangProvider>)
-    await settle()
-    await settle()
-    const asked = fetchMock.mock.calls.map((c) => String(c[0])).filter((u) => u.includes('/headroom') || u.includes('/hosting'))
-    expect(asked.length).toBeGreaterThan(0)
-    expect(asked.at(-1)).toContain(`date=${planningDays[0]}`)
-    const days = screen.getByRole('group', { name: /day/i })
-    expect(days.querySelectorAll('button').length).toBe(planningDays.length)
-  })
-})
-
-describe('Planning: connection check', () => {
-  it('sends the request with node, size, count, phase, rule and day', async () => {
-    const fetchMock = serve()
+  it('the map shows the room per phase at both probe points', async () => {
+    serve()
     await show()
-    fireEvent.change(screen.getByLabelText(/size/i), { target: { value: '5' } })
-    fireEvent.change(screen.getByLabelText(/^phase$/i), { target: { value: 'B' } })
+    const map = screen.getByRole('img', { name: /schematic of the street/i })
+    const labels = [...map.querySelectorAll('.probe-label')].map((t) => t.textContent ?? '')
+    expect(labels.length).toBe(2)
+    expect(labels.join(' ')).toContain(String(headroom.locations.near.phases.B.no_worse_kw))
+    const cells = document.querySelectorAll('.phase-cell')
+    expect(cells.length).toBe(6)
+  })
+
+  it('the state caps are listed, each marked as not verified', async () => {
+    serve()
+    await show()
+    const caps = screen.getByRole('table', { name: /state caps/i })
+    expect(caps.querySelectorAll('tbody tr').length).toBe(Object.keys(headroom.flat_caps).length)
+    expect(caps.textContent).toContain('not verified')
+  })
+})
+
+describe('Planning: connection check on the map', () => {
+  it('needs a point on the map, then sends node, size, count, phase, rule and day', async () => {
+    const m = serve()
+    await show()
+    await layer(/check a connection/i)
+    expect((screen.getByRole('button', { name: /check this request/i }) as HTMLButtonElement).disabled).toBe(true)
+    await pickNode(2)
+    fireEvent.change(screen.getByLabelText(/size of each system/i), { target: { value: '5' } })
+    fireEvent.click(screen.getByRole('button', { name: 'B' }))
     await check()
-    const post = fetchMock.mock.calls.find((c) => c[1]?.method === 'POST')!
-    const body = JSON.parse(String(post[1]!.body))
-    expect(body).toMatchObject({ node: headroom.locations.far.node, kw: 5, count: 1, phase: 'B', rule: 'up_2005' })
+    const post = m.mock.calls.find((c) => c[1]?.method === 'POST')!
+    expect(JSON.parse(String(post[1]!.body))).toMatchObject({ node: 2, kw: 5, count: 1, phase: 'B', rule: 'up_2005', date: '2026-10-11' })
   })
 
   it('the three decisions render distinct wording', async () => {
@@ -91,6 +95,8 @@ describe('Planning: connection check', () => {
     for (const d of ['approve', 'approve_with_conditions', 'refuse'] as const) {
       serve(d)
       await show()
+      await layer(/check a connection/i)
+      await pickNode(1)
       await check()
       texts.push(decisionText())
       cleanup()
@@ -103,18 +109,38 @@ describe('Planning: connection check', () => {
   it('a refusal shows the binding limit and the largest size that passes', async () => {
     serve('refuse')
     await show()
+    await layer(/check a connection/i)
+    await pickNode(1)
     await check()
     const text = decisionText()
     expect(text).toContain('over-voltage')
     expect(text).toContain(String(Math.round(connections.refuse.binding_limit!.worst.value * 230)))
     expect(text).toContain(String(connections.refuse.largest_kw_that_passes))
   })
+})
 
-  it('a size outside 0 to 50 kW is blocked before the request', async () => {
-    const fetchMock = serve()
+describe('Planning: meters, transformers, Volt/VAR', () => {
+  it('numbers the best meter sites on the map in the order the API ranked them', async () => {
+    serve()
     await show()
-    fireEvent.change(screen.getByLabelText(/size/i), { target: { value: '80' } })
-    expect((screen.getByRole('button', { name: /check/i }) as HTMLButtonElement).disabled).toBe(true)
-    expect(fetchMock.mock.calls.some((c) => c[1]?.method === 'POST')).toBe(false)
+    await layer(/where to meter/i)
+    const items = within(screen.getByRole('list', { name: /smart meter/i })).getAllByRole('listitem').filter((li) => li.querySelector('.pos'))
+    expect(items.length).toBe(Math.min(5, meterSites.sites.length))
+    expect(items[0].textContent).toContain(String(meterSites.sites[0].node))
+  })
+
+  it('ranks the transformers and marks headroom found at the search limit as "at least"', async () => {
+    serve()
+    await show()
+    const rows = [...document.querySelectorAll('[data-transformer]')]
+    expect(rows.map((r) => r.getAttribute('data-transformer'))).toEqual(transformers.transformers.map((r) => r.id))
+    const capped = transformers.transformers.findIndex((r) => r.at_search_limit)
+    if (capped >= 0) expect(rows[capped].textContent).toContain('at least')
+  })
+
+  it('shows the Volt/VAR reduction for every resistance and reactance scale', async () => {
+    serve()
+    await show()
+    expect(document.querySelectorAll('.rx-cell').length).toBe(rxMap.cells.length)
   })
 })
