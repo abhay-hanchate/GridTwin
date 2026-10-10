@@ -26,3 +26,4 @@ F24,Risk reliability on both districts (gate G8),Risk,Team,v2/finish,In progress
 F25,Solar yield checked against a measured plant (gate G7: needs data access),ML,Team,,Planned,,
 F26,Live deployment with a public link,DevOps,Team,,Planned,,
 F27,Keep labels explainer on Overview only,,ieafraazzz,codex/overview-explainer-cleanup,Done,28,2026-10-10
+F28,Fix brief 10 Oct 2026: F1-F10  results regenerated on the fixed code,,Tabsirshaikh,v2/fixes-2026-10,Done,29,2026-10-10
