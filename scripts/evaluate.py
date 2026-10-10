@@ -79,15 +79,19 @@ def g2_g3(root: Path) -> list[dict]:
     avail = {a["model"]: a["passes"] for a in d["availability"]}
     used = d["nwp_models_used"]
     s = d["scores_2025"]
+    from ml import solar_v2
+    table = root / "data" / "processed" / "solar_forecast_2025.parquet"
+    round1 = solar_v2.first_model_mae(table) if table.is_file() else None     # None: the first model's table is absent
     return [
         gate("G2", "Weather-model availability", "pass" if used and all(avail[m] for m in used) else "fail",
              measured={"models_used": used, "dropped": sorted(m for m, ok in avail.items() if not ok)},
              threshold=">= 95% non-null hours from the first valid hour and in the test year, per model",
              provenance="observed: Open-Meteo previous-runs API", source=rel, command="python -m ml.solar_v2"),
         gate("G3", "Solar v2 beats the first solar model", "pass" if s["gate_g3_passes"] else "fail",
-             measured={"mae_p50": s["mae_p50"], "round1_mae": 0.0396, "coverage_80": s["p10_p90_coverage"],
+             measured={"mae_p50": s["mae_p50"], "round1_mae": round1, "coverage_80": s["p10_p90_coverage"],
                        "wis": s.get("wis")},
-             threshold="MAE below 0.0396 kW/kWp on the identical 2025 daylight mask",
+             threshold=f"MAE below {round1} kW/kWp on the identical 2025 daylight mask (recomputed from the first "
+                       "model's committed table: ml.solar_v2.first_model_mae)",
              provenance="modeled vs an ERA5-driven PV proxy (not rooftop meters)", source=rel,
              command="python -m ml.solar_v2"),
     ]
