@@ -71,7 +71,8 @@ def test_no_single_source_or_unverified_research_claim_reaches_a_user(path):
 
 def test_hand_made_samples_are_test_inputs_only():
     src = ROOT / "frontend" / "src"
-    shipped = [p for p in src.rglob("*.ts*") if ".test." not in p.name]
+    # src/test holds the dashboard tests' shared helpers: test code, never shipped (tsconfig.app excludes it)
+    shipped = [p for p in src.rglob("*.ts*") if ".test." not in p.name and "test" not in p.relative_to(src).parts[:1]]
     leaks = [p.relative_to(ROOT).as_posix() for p in shipped if "fixtures/" in p.read_text(encoding="utf-8")]
     assert not leaks, f"production code imports sample data: {leaks}"
     for sample in (src / "fixtures" / "v2").glob("*_sample*.json"):

@@ -1,6 +1,8 @@
 """One error shape for every v2 response: {"error": {"code", "message", "details"}}. Never a stack trace."""
 from __future__ import annotations
 
+import math
+
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
@@ -45,3 +47,21 @@ def install(app: FastAPI) -> None:
         fields = [{"loc": [str(p) for p in e.get("loc", ())], "msg": e.get("msg", "")} for e in exc.errors()]
         return error_response(422, "the request is not valid", details={"fields": fields})
     # Anything else is caught by backend.v2.middleware.GuardMiddleware: logged with the request id, 500 to the client.
+
+
+def finite(obj):
+    """NaN and infinity become null: a step the power flow could not solve has no voltage, and JSON has no NaN."""
+    if isinstance(obj, float):
+        return obj if math.isfinite(obj) else None
+    if isinstance(obj, dict):
+        return {k: finite(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [finite(v) for v in obj]
+    return obj
+
+
+class FiniteJSONResponse(JSONResponse):
+    """The v2 response class: JSON with every non-finite number written as null instead of failing the request."""
+
+    def render(self, content) -> bytes:
+        return super().render(finite(content))

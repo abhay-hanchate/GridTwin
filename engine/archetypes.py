@@ -44,8 +44,8 @@ class Archetype:
 
 
 ARCHETYPES = {a.id: a for a in (
-    Archetype("benchmark_250", "Benchmark street (Round 1): 99 homes, 250 kVA, Rabbit", "rabbit", 1.0, 250.0, 99,
-              BENCHMARK_X_OHM_PER_KM, "Unchanged from Round 1 so earlier results stay comparable."),
+    Archetype("benchmark_250", "Benchmark street: 99 homes, 250 kVA, Rabbit", "rabbit", 1.0, 250.0, 99,
+              BENCHMARK_X_OHM_PER_KM, "Kept unchanged so results stay comparable over time."),
     Archetype("urban_short_160", "Urban short feeder: 80 homes, 160 kVA, Dog", "dog", 0.6, 160.0, 80),
     Archetype("suburban_100", "Suburban feeder: 70 homes, 100 kVA, Racoon", "racoon", 1.0, 100.0, 70),
     Archetype("rural_long_100", "Rural long feeder: 60 homes, 100 kVA, Rabbit", "rabbit", 1.5, 100.0, 60),
@@ -96,6 +96,6 @@ def build(archetype_id: str, phases: str | np.ndarray = "random", seed: int = 42
         **net.provenance,
         "archetype": a.id,
         "conductor": f"IS 398 Part II ACSR {a.conductor}: R {cond['r_ohm_per_km']} ohm/km at 20 C, {cond['i_a']} A at 75 C (IS 398 Part II 1996 table)",
-        "reactance": f"{a.x_ohm_per_km} ohm/km: " + ("Round 1 assumption" if archetype_id == "benchmark_250" else "estimate, not from the standard"),
+        "reactance": f"{a.x_ohm_per_km} ohm/km: " + ("benchmark assumption" if archetype_id == "benchmark_250" else "estimate, not from the standard"),
         "topology": "benchmark: SimBench 1-LV-rural2 topology scaled in length; not a surveyed Indian feeder",
     })

@@ -108,9 +108,26 @@ def test_cors_allows_only_configured_origins():
     assert "access-control-allow-origin" not in bad.headers
 
 
-def test_v2_is_mounted_without_changing_the_legacy_error_shape():
+def test_v2_is_mounted_and_unknown_api_paths_are_json_404s():
     from backend.main import app
     c = TestClient(app)
     assert c.get("/api/v2/health").json()["status"] == "ok"
     assert "error" in c.get("/api/v2/nope").json()
-    assert "detail" in c.get("/api/run", params={"scenario": "S9"}).json()        # legacy keeps {"detail": ...}
+    r = c.get("/api/run", params={"scenario": "S9"})                           # removed route: a JSON 404, never the page
+    assert r.status_code == 404 and r.headers["content-type"].startswith("application/json")
+
+
+def test_a_step_without_a_power_flow_solution_is_null_not_a_500(tmp_path, monkeypatch):
+    from backend.v2 import compute
+    from backend.v2.app import create_app
+    from backend.v2.settings import Settings
+    monkeypatch.setattr(compute, "street_payload", lambda *a: {"before": {"home_v": [[231.0, float("nan")]]}})
+    c = TestClient(create_app(Settings(code_version="nan1", results_dir=tmp_path)), raise_server_exceptions=False)
+    job = c.get("/street", params={"date": "2025-05-15"}).json()["job_id"]
+    import time
+    for _ in range(100):
+        r = c.get(f"/jobs/{job}")
+        if r.json().get("status") == "done":
+            break
+        time.sleep(0.05)
+    assert r.status_code == 200 and r.json()["result"]["before"]["home_v"] == [[231.0, None]]

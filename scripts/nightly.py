@@ -2,9 +2,11 @@
 
 Usage:  python -m scripts.nightly [--networks benchmark_250] [--rules pm10 up_2005] [--force] [--no-live]
 
-Writes data/results/v2/<cache key>.json for /risk and /fixes on three demo dates (and /headroom and
-/hosting on the sunny one) (sunny, mixed, cloudy, picked from
-the solar v2 2025 forecast) and data/results/v2/index.json. These files are what GRIDTWIN_OFFLINE=1 serves.
+Writes data/results/v2/<cache key>.json for /risk and /fixes on three demo dates (sunny, mixed, cloudy, picked from
+the solar v2 2025 forecast); on the sunny one also the planning routes (/headroom, /hosting, /meter-sites, /rx-map)
+for every street archetype and /transformers for the portfolio; and data/results/v2/index.json. These files are what
+GRIDTWIN_OFFLINE=1 serves. One data/results/planning_<archetype>.json per archetype summarises headroom and hosting
+capacity under each rule.
 Then fetches tomorrow's multi-model solar forecast and records it with scripts.monitor.log_forecast; a network
 failure there is reported and does not fail the run.
 """
@@ -13,7 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import pandas as pd
 
@@ -21,6 +23,7 @@ from backend.cache import load_or_compute
 from backend.v2 import compute
 from backend.v2.jobs import cache_key
 from backend.v2.settings import Settings
+from engine.archetypes import ARCHETYPES
 
 SUNNY = "2025-05-15"          # the documented demo day (the Round 1 early-warning date)
 
@@ -35,37 +38,84 @@ def demo_dates(forecast: pd.DataFrame) -> dict[str, str]:
     return {"sunny": SUNNY, "mixed": mixed.strftime("%Y-%m-%d"), "cloudy": cloudy.strftime("%Y-%m-%d")}
 
 
-def precompute(settings: Settings, networks: list[str], rules: list[str], force: bool = False) -> list[dict]:
+def precompute(settings: Settings, networks: list[str], rules: list[str], force: bool = False,
+               planning_networks: list[str] | None = None, live: bool = False) -> list[dict]:
+    """`live` adds the real tomorrow (live weather forecast) to the archive days, so the dashboard opens instantly."""
+    from backend.v2.live_inputs import is_live, today_ist
     out_dir = settings.results_dir / "v2"
+    planning_networks = list(ARCHETYPES) if planning_networks is None else planning_networks
     dates = demo_dates(compute._solar_table())
+    if live:
+        dates = {"tomorrow": (today_ist() + timedelta(days=1)).isoformat(), **dates}
     entries = []
     jobs = [("risk", lambda d, n, r: compute.risk_payload(d, n, r, "none"), {"fix": "none"}),
             ("fixes", lambda d, n, r: compute.fixes_payload(d, n, r), {})]
-    planning = [("headroom", lambda d, n, r: compute.headroom_payload(d, n, r, compute.DEFAULT_ADOPTION),
-                 {"adoption": compute.DEFAULT_ADOPTION}),
-                ("hosting", lambda d, n, r: compute.hosting_payload(d, n, r), {})]
+    adoption = {"adoption": compute.DEFAULT_ADOPTION}
+    planning = [("headroom", lambda d, n, r: compute.headroom_payload(d, n, r, compute.DEFAULT_ADOPTION), adoption),
+                ("hosting", lambda d, n, r: compute.hosting_payload(d, n, r), {}),
+                ("meter-sites", lambda d, n, r: compute.meter_sites_payload(d, n, r, compute.DEFAULT_ADOPTION), adoption),
+                ("rx-map", lambda d, n, r: compute.rx_map_payload(d, n, r, compute.DEFAULT_ADOPTION), adoption)]
+
+    def run(route, fn, kind, day, rule_id, network=None, **extra):
+        params = {"date": day, **({"network": network} if network else {}), "rule": rule_id, **extra}
+        if is_live(day):
+            params["issued"] = today_ist().isoformat()         # the key the API uses for a live day
+        key = cache_key(route, settings.code_version, **params)
+        path = out_dir / f"{key}.json"
+        if force and path.exists():
+            path.unlink()
+        started = time.perf_counter()
+        result = load_or_compute(out_dir, key, fn)
+        seconds = round(time.perf_counter() - started, 1)
+        summary = (result.get("level") or result.get("verdict", {}).get("message")
+                   or result.get("without_fix", {}).get("adoption_share") or "")
+        print(f"{route:12s} {kind:6s} {day} {network or 'portfolio'} {rule_id:8s} {seconds:6.1f}s  {summary}", flush=True)
+        entries.append({"route": route, "date": day, "day_type": kind, "key": key, **params})
+        return result
+
     for kind, day in dates.items():
         for network in networks:
             for rule in rules:
                 rule_id = compute.rule(rule).id
-                for route, fn, extra in jobs + (planning if kind == "sunny" else []):
-                    params = {"date": day, "network": network, "rule": rule_id, **extra}
-                    key = cache_key(route, settings.code_version, **params)
-                    path = out_dir / f"{key}.json"
-                    if force and path.exists():
-                        path.unlink()
-                    started = time.perf_counter()
-                    result = load_or_compute(out_dir, key, lambda: fn(day, network, rule_id))
-                    seconds = round(time.perf_counter() - started, 1)
-                    summary = (result.get("level") or result.get("verdict", {}).get("message")
-                               or result.get("without_fix", {}).get("adoption_share") or "")
-                    print(f"{route:5s} {kind:6s} {day} {network} {rule_id:8s} {seconds:6.1f}s  {summary}", flush=True)
-                    entries.append({"route": route, "date": day, "day_type": kind, "key": key, **params})
+                out = {route: run(route, lambda fn=fn: fn(day, network, rule_id), kind, day, rule_id, network, **extra)
+                       for route, fn, extra in jobs}
+                # the street animation: the day as it is, and with the fix the Fixes page opens first
+                verdict = out["fixes"].get("verdict", {})
+                for fix in dict.fromkeys(["none", verdict.get("recommended") or verdict.get("closest") or "none"]):
+                    run("street", lambda fix=fix: compute.street_payload(day, network, rule_id, fix), kind, day, rule_id, network, fix=fix)
+    for network in networks if "tomorrow" in dates else []:
+        for rule in rules:
+            rule_id = compute.rule(rule).id
+            for route, fn, extra in planning:
+                run(route, lambda fn=fn: fn(dates["tomorrow"], network, rule_id), "tomorrow", dates["tomorrow"], rule_id, network, **extra)
+            run("transformers", lambda: compute.transformers_payload(dates["tomorrow"], rule_id, compute.DEFAULT_ADOPTION), "tomorrow",
+                dates["tomorrow"], rule_id, adoption=compute.DEFAULT_ADOPTION)
+    day = dates["sunny"]
+    for network in planning_networks:
+        summary = {"network": network, "label": ARCHETYPES[network].label, "date": day, "rules": {}}
+        for rule in rules:
+            rule_id = compute.rule(rule).id
+            out = {route: run(route, lambda fn=fn: fn(day, network, rule_id), "sunny", day, rule_id, network, **extra)
+                   for route, fn, extra in planning}
+            summary["rules"][rule_id] = planning_summary(out["headroom"], out["hosting"])
+        (settings.results_dir / f"planning_{network}.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
+    for rule in rules:
+        rule_id = compute.rule(rule).id
+        run("transformers", lambda: compute.transformers_payload(day, rule_id, compute.DEFAULT_ADOPTION), "sunny", day,
+            rule_id, **adoption)
     entries += precompute_whatif(settings, dates["sunny"], networks[0], force)
     index = {"generated_at": datetime.now(timezone.utc).isoformat(), "code_version": settings.code_version,
              "demo_dates": dates, "entries": entries}
     (out_dir / "index.json").write_text(json.dumps(index, indent=1), encoding="utf-8")
     return entries
+
+
+def planning_summary(headroom: dict, hosting: dict) -> dict:
+    """Headline planning numbers of one archetype and rule: headroom per location and phase, hosting P10/P50/P90."""
+    return {"baseline_unsafe_steps": headroom.get("baseline_unsafe_steps"),
+            "headroom_kw": {where: {ph: v["no_worse_kw"] for ph, v in loc["phases"].items()}
+                            for where, loc in headroom.get("locations", {}).items()},
+            "hosting_share": {case: hosting.get(case, {}).get("adoption_share") for case in ("without_fix", "with_volt_var")}}
 
 
 # Two example changes for the "Try a change" page, so it can show something with GRIDTWIN_OFFLINE=1.
@@ -113,12 +163,13 @@ def log_live_forecast() -> str:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--networks", nargs="+", default=["benchmark_250"])
+    ap.add_argument("--planning-networks", nargs="+", default=None, help="default: every archetype")
     ap.add_argument("--rules", nargs="+", default=["pm10", "up_2005"])
     ap.add_argument("--force", action="store_true", help="recompute even when a cached result exists")
     ap.add_argument("--no-live", action="store_true", help="skip the live forecast (no network)")
     args = ap.parse_args()
     settings = Settings()
-    entries = precompute(settings, args.networks, args.rules, args.force)
+    entries = precompute(settings, args.networks, args.rules, args.force, args.planning_networks, live=not args.no_live)
     print(f"{len(entries)} results precomputed, code version {settings.code_version}")
     if not args.no_live:
         try:

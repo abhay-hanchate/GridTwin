@@ -80,3 +80,37 @@ def test_planning_defaults_to_its_own_precomputed_date(tmp_path, monkeypatch):
                 break
             time.sleep(0.05)
     assert sorted(seen) == [("headroom", "2025-05-15"), ("hosting", "2025-05-15")]      # not the latest risk date
+
+
+def _job_result(client, response):
+    assert response.status_code == 202, response.text
+    for _ in range(100):
+        body = client.get(f"/jobs/{response.json()['job_id']}").json()
+        if body["status"] == "done":
+            return body["result"]
+        time.sleep(0.05)
+    raise AssertionError("job did not finish")
+
+
+def test_meter_sites_and_rx_map_run_as_jobs_on_the_chosen_street(client, monkeypatch):
+    monkeypatch.setattr(compute, "meter_sites_payload", lambda d, n, r, a: {"network": n, "rule": r, "sites": []})
+    monkeypatch.setattr(compute, "rx_map_payload", lambda d, n, r, a: {"network": n, "cells": []})
+    out = _job_result(client, client.get("/meter-sites", params={"date": "2025-05-15", "network": "rural_weak_63"}))
+    assert out["network"] == "rural_weak_63"
+    assert _job_result(client, client.get("/rx-map", params={"date": "2025-05-15"}))["network"] == "benchmark_250"
+    assert client.get("/meter-sites", params={"network": "nope"}).status_code == 404
+    assert client.get("/rx-map", params={"adoption": -1}).status_code == 422
+
+
+def test_transformers_rank_the_whole_portfolio_without_a_network(client, monkeypatch):
+    monkeypatch.setattr(compute, "transformers_payload", lambda d, r, a: {"rule": r, "transformers": [], "adoption": a})
+    out = _job_result(client, client.get("/transformers", params={"date": "2025-05-15", "rule": "6", "adoption": 0.4}))
+    assert out == {"rule": "up_2005", "transformers": [], "adoption": 0.4}
+
+
+def test_planning_extras_on_the_real_street():
+    meters = compute.meter_sites_payload("2025-05-15", "benchmark_250", "pm10")
+    assert 0 < len(meters["sites"]) <= compute.METER_SITES_SHOWN <= meters["n_candidates"]
+    assert [s["score"] for s in meters["sites"]] == sorted((s["score"] for s in meters["sites"]), reverse=True)
+    rx = compute.rx_map_payload("2025-05-15", "benchmark_250", "pm10")
+    assert len(rx["cells"]) == 16 and all(c["peak_v_volt_var"] <= c["peak_v_without"] + 0.05 for c in rx["cells"])

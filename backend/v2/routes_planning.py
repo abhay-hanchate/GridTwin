@@ -1,4 +1,5 @@
-"""Planning routes: per-phase headroom (cached or a job) and the connection check (computed live, rate-limited)."""
+"""Planning routes: per-phase headroom, hosting capacity, where to meter first, the R/X map and the transformer ranking
+(cached or a job), and the connection check (computed live, rate-limited)."""
 from __future__ import annotations
 
 from datetime import date as Date
@@ -49,3 +50,37 @@ def hosting(request: Request, date: Date | None = None, network: str = DEFAULT_N
     params = {"date": date.isoformat() if date else default_date(_store(request), "hosting"), "network": network,
               "rule": rule or _settings(request).rule_default}
     return _serve(request, "hosting", params, lambda **p: compute.hosting_payload(p["date"], p["network"], p["rule"]))
+
+
+def _planning_params(request: Request, route: str, date: Date | None, network: str | None, rule: str | None,
+                     adoption: float) -> dict:
+    params = {"date": date.isoformat() if date else default_date(_store(request), route),
+              "rule": rule or _settings(request).rule_default, "adoption": adoption}
+    return params if network is None else {**params, "network": network}
+
+
+@router.get("/meter-sites")
+def meter_sites(request: Request, date: Date | None = None, network: str = DEFAULT_NETWORK, rule: str | None = None,
+                adoption: float = Query(compute.DEFAULT_ADOPTION, ge=0, le=1)):
+    """Where one smart meter reveals the most: voltage rise per kW at the peak step times the homes downstream."""
+    params = _planning_params(request, "meter-sites", date, network, rule, adoption)
+    return _serve(request, "meter-sites", params,
+                  lambda **p: compute.meter_sites_payload(p["date"], p["network"], p["rule"], p["adoption"]))
+
+
+@router.get("/rx-map")
+def rx_map(request: Request, date: Date | None = None, network: str = DEFAULT_NETWORK, rule: str | None = None,
+           adoption: float = Query(compute.DEFAULT_ADOPTION, ge=0, le=1)):
+    """Peak voltage with and without standard Volt/VAR as line R and X are scaled: where Volt/VAR helps."""
+    params = _planning_params(request, "rx-map", date, network, rule, adoption)
+    return _serve(request, "rx-map", params,
+                  lambda **p: compute.rx_map_payload(p["date"], p["network"], p["rule"], p["adoption"]))
+
+
+@router.get("/transformers")
+def transformers(request: Request, date: Date | None = None, rule: str | None = None,
+                 adoption: float = Query(compute.DEFAULT_ADOPTION, ge=0, le=1)):
+    """The street archetypes as a portfolio, ordered by how much of their safe room is already used."""
+    params = _planning_params(request, "transformers", date, None, rule, adoption)
+    return _serve(request, "transformers", params,
+                  lambda **p: compute.transformers_payload(p["date"], p["rule"], p["adoption"]))

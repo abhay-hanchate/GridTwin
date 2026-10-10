@@ -29,7 +29,8 @@ WHATIF_CODE = (ROOT / "engine" / "registry.py", Path(__file__))     # their hash
 
 def whatif_payload(date: str, network: str, rule: str, changes: list[dict], fixes: list[dict],
                    adoption: float = 1.0) -> dict:
-    """Apply registered changes to the street and day, then compare no fix against the registered fixes."""
+    """Three runs of the same day: `today` (the street as it is), `before` (with the changes, no fix) and `after`
+    (with the changes and the fixes). A what-if compares `after` with `today`; `before` shows the changes alone."""
     from engine.fixes.catalog import worst_node
     from engine.registry import REGISTRY, Battery, battery_spec
     r = compute.rule(rule)
@@ -38,6 +39,7 @@ def whatif_payload(date: str, network: str, rule: str, changes: list[dict], fixe
         net, design = compute.planning_street(date, network, adoption)
     else:
         design = compute._design(compute.robust_set(compute.scenarios(date, net)))
+    today_net, today_design = net, design
     applied = []
     for item in changes:
         entry = REGISTRY[item["id"]]
@@ -51,12 +53,13 @@ def whatif_payload(date: str, network: str, rule: str, changes: list[dict], fixe
         if isinstance(params, Battery):
             battery = battery_spec(params, worst_node(net, design))
     before = DaySolver(net, asymmetric=True).solve(design)
+    today = DaySolver(today_net, asymmetric=True).solve(today_design) if applied else before
     after = solve_with_battery(net, design, battery, r, controls) if battery else \
         DaySolver(net, asymmetric=True).solve(design, controls)
     out = {"date": date, "network": network, "rule": r.id, "changes": applied, "fixes": [f["id"] for f in fixes],
            "t": compute._labels(design.t), "limits_v": {"min": r.vmin_v, "max": r.vmax_v},
            "nodes": [int(n) for n in net.lv_nodes], "provenance": compute.PROVENANCE}
-    for key, res in (("before", before), ("after", after)):
+    for key, res in (("today", today), ("before", before), ("after", after)):
         v = evaluate(res, r)
         out[key] = {"summary": summarise(res, v), "unsafe": [bool(x) for x in v.unsafe[0]],
                     "max_v": compute._peak_v(res),
