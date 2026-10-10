@@ -107,9 +107,11 @@ def score_heldout(street: str, models_root: Path, data_root: Path, selected: str
                 continue
             model, failure = predict.load(cand_dir / f"{kind}.npz")
             guard = json.loads(gpath.read_text(encoding="utf-8"))
+            subs = {**subsets, "base_supported": subsets["base"] & supported, "boundary_supported": subsets["boundary"] & supported}
             res = {name: _score(model, failure, guard, data.x[m], _take(test.labels, m), supported=supported[m])
-                   for name, m in subsets.items() if m.any()}
+                   for name, m in subs.items() if m.any()}
             res["gates_on_base"] = gates(res["base"]["regression"])
+            res["gates_on_supported"] = gates(res["base_supported"]["regression"])     # the states the screen accepts
             res["margins_at_limits"] = calibrate.limit_margins(guard)
             out["rounds"].setdefault(str(rnd), {})[kind] = res
             if kind == selected and rnd == shipped_round:

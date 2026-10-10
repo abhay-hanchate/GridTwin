@@ -87,6 +87,19 @@ def test_summary_has_every_section_and_says_the_screener_is_off_without_an_artif
     assert "simulated" in body["provenance"]
 
 
+def test_accuracy_and_targets_use_the_states_the_screen_accepts(tmp_path):
+    _write_reports(tmp_path)
+    path = tmp_path / "reports" / "surrogate_evaluation.json"
+    ev = json.loads(path.read_text())
+    fresh = ev["streets"]["benchmark_250"]["heldout_fresh"]["candidates"]["mlp"]
+    fresh["base_supported"] = {"regression": {"node_voltage_v": {"mae": 0.15, "p99": 0.9}, "line_loading_pts": {"mae": 0.2, "p99": 1.0}}}
+    fresh["gates_on_supported"] = {"voltage_mae_v": {"value": 0.15, "target": 0.5, "passed": True}}
+    path.write_text(json.dumps(ev))
+    st = _client(tmp_path).get("/surrogate").json()["streets"][0]
+    mlp = next(c for c in st["candidates"] if c["kind"] == "mlp")
+    assert mlp["voltage_mae_v"] == 0.15 and st["gates"] == [{"name": "voltage_mae_v", "value": 0.15, "target": 0.5, "passed": True}]
+
+
 def test_a_section_not_run_is_null_not_invented(tmp_path):
     _write_reports(tmp_path, e2=False)
     st = _client(tmp_path).get("/surrogate").json()["streets"][0]

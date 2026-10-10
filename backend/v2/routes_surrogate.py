@@ -42,11 +42,13 @@ def _screener_status(model_dir: Path) -> dict:
 
 
 def _candidate(kind: str, res: dict, selected: str) -> dict:
-    base, boundary = res.get("base", {}).get("regression", {}), res.get("boundary", {}).get("regression", {})
+    # Accuracy on the states the screen accepts (refused ones go to the solver and are never predicted).
+    base = (res.get("base_supported") or res.get("base", {})).get("regression", {})
+    boundary = (res.get("boundary_supported") or res.get("boundary", {})).get("regression", {})
     v = base.get("node_voltage_v") or base.get("v_max_v") or {}
     ld = base.get("line_loading_pts") or base.get("max_line_loading_pts") or {}
     bv = boundary.get("node_voltage_v") or boundary.get("v_max_v") or {}
-    gates = res.get("gates_on_base", {})
+    gates = res.get("gates_on_supported") or res.get("gates_on_base", {})
     return {"kind": kind, "selected": kind == selected, "node_level": "node_voltage_v" in base,
             "voltage_mae_v": v.get("mae"), "voltage_p99_v": v.get("p99"), "loading_mae_pts": ld.get("mae"),
             "loading_p99_pts": ld.get("p99"), "boundary_voltage_p99_v": bv.get("p99"),
@@ -105,7 +107,8 @@ def _street(sid: str, ev: dict, bake: dict) -> dict:
         "guard_loading_pts": [at.get("line_pts"), at.get("trafo_pts")],
         "rounds": _rounds(ev, selected),
         "candidates": [_candidate(k, cands[k], selected) for k in ("ridge", "lgbm", "mlp") if k in cands],
-        "gates": [{"name": k, **v} for k, v in cands.get(selected, {}).get("gates_on_base", {}).items()],
+        "gates": [{"name": k, **v} for k, v in (cands.get(selected, {}).get("gates_on_supported")
+                                                 or cands.get(selected, {}).get("gates_on_base", {})).items()],
         "screening": _screening(cands.get(selected, {})),
         "out_of_range": [{"kind": k, "states": v["states"], "unsupported": v["unsupported"]} for k, v in ev.get("out_of_range", {}).items()],
         "latency": [{"mode": mode, "batch": int(b), "screen_ms_per_state": row.get("screen_ms_per_state"),

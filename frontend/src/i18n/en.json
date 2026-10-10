@@ -613,7 +613,7 @@
   "surrogate.guard": "Safety margin at the limits",
   "surrogate.guard_value": "{v} V at the upper voltage limit, {l} points at full line loading",
   "surrogate.q_accuracy": "How close is it to the solver?",
-  "surrogate.q_accuracy_intro": "Errors on months, solar levels and settings it never trained on. Three models were compared on the same data.",
+  "surrogate.q_accuracy_intro": "Errors on months and settings it never trained on, for the states it accepts (the rest go to the solver). Three models were compared on the same data.",
   "surrogate.col_model": "Model",
   "surrogate.col_v_mae": "Voltage error, average (V)",
   "surrogate.col_v_p99": "Voltage error, worst in a hundred (V)",
