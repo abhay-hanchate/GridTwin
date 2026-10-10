@@ -38,8 +38,9 @@ def test_candidate_states_reproduce_the_day_solver(scn):
         arr = StateArrays(np.stack([s.load_kw for s in states]), np.stack([s.pv_kw for s in states]),
                           np.stack([s.pv_kwp for s in states]), np.array([s.upstream_pu for s in states]),
                           np.zeros(len(states)), np.array([s.tap_pos for s in states]),
-                          np.array([schema.MODES.index(s.inverter_mode) for s in states]))
-        got = solve_states(net, arr, battery_node=schema.battery_node(STREET))
+                          np.array([schema.MODES.index(s.inverter_mode) for s in states]), np.full(len(states), -1),
+                          np.zeros(len(states), int))
+        got = solve_states(net, arr)
         ref = DaySolver(net).solve(scn, controls)
         np.testing.assert_allclose(got.u_pu, ref.u_pu.reshape(got.u_pu.shape), atol=2e-4)
 
@@ -53,17 +54,20 @@ def test_candidates_the_screen_cannot_describe_are_unsupported(scn, make, reason
     assert states is None and reason in why
 
 
-def test_phase_moves_and_switching_are_described_but_refused_by_the_screener(built, scn):  # noqa: F811
+def test_phase_moves_and_untrained_switching_are_described_but_refused_by_the_screener(built, scn):  # noqa: F811
     from engine.fixes import switching
     root, net, _ = built
     screener = load_screener(root)
-    switched = next(n for rec in switching.candidates(net) if (n := switching.apply(net, rec)).is_radial())
+    untrained = switching.apply(net, switching.candidates(net)[schema.N_SWITCHED])
     for cand, reason in ((Candidate("p", "p", "phase", net.with_phases(np.roll(net.house_phase, 1))), "phase map"),
-                         (Candidate("s", "s", "switching", switched), "layout")):
+                         (Candidate("s", "s", "switching", untrained), "layout")):
         states, why = fixes.candidate_states(cand, scn, STREET)
         assert why == ""
         screens = screener.screen(states, RULE)
         assert all(s.status == "unsupported" and reason in s.reason for s in screens)
+    trained = schema.topologies(net)[1]                     # the first switching candidate was trained (round 4)
+    states, _ = fixes.candidate_states(Candidate("t", "t", "switching", trained), scn, STREET)
+    assert not any("layout" in s.reason for s in screener.screen(states, RULE))
 
 
 def test_assisted_tournament_only_skips_clearly_unsafe_and_verifies_the_rest(built, scn):  # noqa: F811

@@ -1,14 +1,17 @@
 """The screening contract with Addition 1 (control): batched, CPU, and never a verdict.
 
 A Screen is a prediction. Only the physical solver may call anything safe. Anything the artifact was not trained on
-(another street, a switched layout, a moved phase, an ambient correction, an unknown inverter mode, a battery
-elsewhere, a tap or an input outside the trained range, non-finite numbers) comes back "unsupported" and risky,
-with the reason, so the caller sends it to the solver. Nothing is extrapolated.
+(another street, a line layout beyond the trained ones, a moved phase, an ambient correction, an unknown inverter mode,
+a battery at an untrained node, a tap or an input outside the trained range, a state unlike the training states,
+non-finite numbers) comes back "unsupported" and risky, with the reason, so the caller sends it to the solver.
 
-Agreed additions to the original contract (approved 10 Oct 2026; all optional, so existing calls keep working):
-`screen(states, rule=...)`, and `house_phase`, `pv_kwp` and `ambient_c` on OperatingState.
+Agreed additions to the original contract (all optional, so existing calls keep working):
+- 10 Oct 2026: `screen(states, rule=...)`, and `house_phase`, `pv_kwp` and `ambient_c` on OperatingState.
+- Round 4: `screen(..., vuf_limit=...)`; Screen also carries `vuf_pct`, `neutral_a` and `trafo_p_kw` (guarded;
+  negative transformer power = reverse flow); the first three switched layouts of each street are supported.
 Conventions: the battery is three-phase balanced at unity power factor; homes are at power factor 0.95;
-"fixed_pf" is unity power factor; under Volt/Watt, `pv_kw` is the solar before the Volt/Watt cut.
+"fixed_pf" is unity power factor; under Volt/Watt, `pv_kw` is the solar before the Volt/Watt cut; `pv_kwp=None` means
+the street as built.
 """
 from __future__ import annotations
 
@@ -55,6 +58,9 @@ class Screen:
     max_line_loading_pct: float = nan
     max_trafo_loading_pct: float = nan
     risky: bool = True           # conservative: True whenever unsupported or uncertain
+    vuf_pct: float = nan         # round 4: worst voltage unbalance, guarded upward
+    neutral_a: float = nan       # neutral current at the transformer, guarded upward
+    trafo_p_kw: float = nan      # transformer power, guarded downward (negative: reverse flow possible)
 
 
 @lru_cache(maxsize=8)
@@ -63,15 +69,19 @@ def _street_hash(street: str) -> str:
     return schema.street_hash(build(street, phases="round_robin"))       # what backend.v2.compute.network builds
 
 
+def _ends(line_ends) -> tuple:
+    return tuple(tuple(int(v) for v in e) for e in line_ends)
+
+
 class StreetModel:
-    def __init__(self, street: str, manifest: dict, model, failure):
-        self.street, self.manifest, self.model, self.failure = street, manifest, model, failure
+    def __init__(self, street: str, manifest: dict, model, failure, novelty):
+        self.street, self.manifest, self.model, self.failure, self.novelty = street, manifest, model, failure, novelty
         self.n_homes = int(manifest["n_homes"])
-        self.line_ends = tuple(tuple(int(v) for v in e) for e in manifest["line_ends"])
+        self.layouts = {_ends(ends): int(k) for ends, k in zip(manifest["line_layouts"], manifest["line_layout_index"])}
         self.house_phase = tuple(int(p) for p in manifest["house_phase"])
         self.default_kwp = np.asarray(manifest["default_pv_kwp"], float)
+        self.battery_nodes = [int(n) for n in manifest["battery_nodes"]]
         self.box_min, self.box_max = np.asarray(manifest["box"]["min"]), np.asarray(manifest["box"]["max"])
-        self.layouts = np.asarray(manifest.get("solar_layouts", []), float).reshape(-1, self.n_homes)
         self.names = manifest["feature_names"]
         self.guard = manifest["guard"]
         self._street_ok: bool | None = None
@@ -83,39 +93,44 @@ class StreetModel:
                 log.warning("surrogate for %s disabled: the street definition changed since training", self.street)
         return self._street_ok
 
-    def check(self, s: OperatingState, layouts: bool = True) -> tuple[str, np.ndarray | None]:
-        """('', features) when supported, else (reason, None). `layouts=False` applies the per-feature box alone
-        (round 2's support, kept for the evaluation of the original test split)."""
+    def check(self, s: OperatingState) -> tuple[str, np.ndarray | None]:
+        """('', features) when supported, else (reason, None)."""
         m = self.manifest
-        if tuple(tuple(int(v) for v in e) for e in s.line_ends) != self.line_ends:
-            return "the layout differs from the trained street (switching changes it)", None
+        layout = self.layouts.get(_ends(s.line_ends))
+        if layout is None:
+            return "the line layout is not one the screen was trained on (switching beyond the trained layouts)", None
         if s.house_phase is not None and tuple(int(p) for p in s.house_phase) != self.house_phase:
             return "the phase map differs from the trained street", None
         if s.ambient_c is not None:
             return "an ambient temperature correction was not trained", None
         if s.inverter_mode not in m["modes"]:
             return f"inverter mode {s.inverter_mode!r} is not supported (trained: {', '.join(m['modes'])})", None
-        if s.battery_kw != 0 and s.battery_node != m["battery_node"]:
-            return f"a battery at node {s.battery_node} was not trained (only node {m['battery_node']})", None
+        slot = -1
+        if s.battery_kw != 0:
+            if s.battery_node not in self.battery_nodes:
+                return f"a battery at node {s.battery_node} was not trained (trained nodes: {self.battery_nodes})", None
+            slot = self.battery_nodes.index(int(s.battery_node))
         if int(s.tap_pos) not in m["taps"] or int(s.tap_pos) != s.tap_pos:
             return f"tap {s.tap_pos} was not trained (trained: {m['taps']})", None
         kwp = self.default_kwp if s.pv_kwp is None else np.asarray(s.pv_kwp, float)
         load, pv = np.asarray(s.load_kw, float), np.asarray(s.pv_kw, float)
         if not (load.shape == pv.shape == kwp.shape == (self.n_homes,)):
             return f"expected {self.n_homes} homes", None
-        x = schema.features(load[None], pv[None], kwp[None], [s.upstream_pu], [s.tap_pos], [s.battery_kw],
-                            [schema.MODES.index(s.inverter_mode)])[0]
+        x = schema.features(load[None], pv[None], kwp[None], [s.upstream_pu], [s.tap_pos], [s.battery_kw], [slot],
+                            [schema.MODES.index(s.inverter_mode)], [layout], len(self.battery_nodes))[0]
         if not np.isfinite(x).all():
             return "inputs must be finite", None
         if np.any(pv > kwp + 1e-6):
             return "delivered solar exceeds the installed kWp", None
-        if layouts and len(self.layouts) and not np.any(np.all(np.abs(self.layouts - kwp[None, :]) <= 1e-6, axis=1)):
-            return "this solar layout (which homes have panels, and their sizes) was not trained", None
         bad = np.flatnonzero((x < self.box_min - 1e-9) | (x > self.box_max + 1e-9))
         if len(bad):
             k = bad[0]
             return (f"{self.names[k]} = {x[k]:.4g} is outside the trained range {self.box_min[k]:.4g} to "
                     f"{self.box_max[k]:.4g}"), None
+        if self.novelty is not None:
+            d = float(self.novelty.distance(x[None])[0])
+            if d > self.novelty.threshold:
+                return f"the state is unlike the training states (novelty {d:.3g} above {self.novelty.threshold:.3g})", None
         return "", x
 
 
@@ -127,12 +142,13 @@ class Screener:
     def streets(self) -> list[str]:
         return sorted(self.models)
 
-    def screen_detail(self, states: Sequence[OperatingState], rule: str | VoltageRule = "up_2005") -> dict:
-        """Arrays for evaluation: status, reason, point / guarded / optimistic extremes, risky, clearly_unsafe."""
+    def screen_detail(self, states: Sequence[OperatingState], rule: str | VoltageRule = "up_2005",
+                      vuf_limit: float | None = None) -> dict:
+        """Arrays for evaluation: supported, reason, point / guarded / optimistic outputs, risky, clearly_unsafe."""
         r = get_rule(rule) if isinstance(rule, str) else rule
-        n = len(states)
-        out = {"supported": np.zeros(n, bool), "reason": [""] * n, "point": np.full((n, 4), nan),
-               "guarded": np.full((n, 4), nan), "optimistic": np.full((n, 4), nan), "risky": np.ones(n, bool),
+        n, k_out = len(states), len(schema.EXTREMES + schema.EXTRAS)
+        out = {"supported": np.zeros(n, bool), "reason": [""] * n, "point": np.full((n, k_out), nan),
+               "guarded": np.full((n, k_out), nan), "optimistic": np.full((n, k_out), nan), "risky": np.ones(n, bool),
                "clearly_unsafe": np.zeros(n, bool), "p_fail": np.full(n, nan)}
         rows: dict[str, list[tuple[int, np.ndarray]]] = {}
         for i, s in enumerate(states):
@@ -152,9 +168,9 @@ class Screener:
             sm = self.models[street]
             idx = np.array([i for i, _ in items])
             x = np.stack([x for _, x in items])
-            pred = sm.model.extremes(x)
+            pred = sm.model.outputs(x)
             p_fail = sm.failure.proba(x) if sm.failure is not None else None
-            d = calibrate.decide(pred, sm.guard, r.vmin_pu, r.vmax_pu, p_fail, sm.manifest["failure_threshold"])
+            d = calibrate.decide(pred, sm.guard, r.vmin_pu, r.vmax_pu, p_fail, sm.manifest["failure_threshold"], vuf_limit)
             finite = np.isfinite(pred).all(axis=1)
             for j, i in enumerate(idx):
                 if not finite[j]:
@@ -167,15 +183,16 @@ class Screener:
                     out["p_fail"][i] = p_fail[j]
         return out
 
-    def screen(self, states: Sequence[OperatingState], rule: str | VoltageRule = "up_2005") -> list[Screen]:
-        d = self.screen_detail(states, rule)
+    def screen(self, states: Sequence[OperatingState], rule: str | VoltageRule = "up_2005",
+               vuf_limit: float | None = None) -> list[Screen]:
+        d = self.screen_detail(states, rule, vuf_limit)
         result = []
         for i in range(len(states)):
             if not d["supported"][i]:
                 result.append(Screen("unsupported", d["reason"][i]))
                 continue
-            g = d["guarded"][i]
-            result.append(Screen("supported", "", float(g[0]), float(g[1]), float(g[2]), float(g[3]), bool(d["risky"][i])))
+            g = [float(v) for v in d["guarded"][i]]
+            result.append(Screen("supported", "", g[0], g[1], g[2], g[3], bool(d["risky"][i]), g[4], g[5], g[6]))
         return result
 
 
@@ -191,14 +208,17 @@ def load_screener(model_dir: Path | None = None) -> Screener | None:
     for path in manifests:
         manifest = json.loads(path.read_text(encoding="utf-8"))
         street, model_path = manifest["street"], path.parent / manifest["model_file"]
+        if manifest.get("round") != 4:
+            log.warning("surrogate for %s refused: an artifact from an earlier round", street)
+            continue
         if not model_path.is_file() or schema.file_sha256(model_path) != manifest["model_sha256"]:
             log.warning("surrogate for %s refused: model file missing or sha256 mismatch", street)
             continue
         if manifest["solver_hash"] != solver:
             log.warning("surrogate for %s refused: the solver code changed since training", street)
             continue
-        model, failure = predict.load(model_path)
-        models[street] = StreetModel(street, manifest, model, failure)
+        model, failure, novelty = predict.load(model_path)
+        models[street] = StreetModel(street, manifest, model, failure, novelty)
     if not models:
         log.warning("no usable surrogate artifact in %s: physical-only evaluation", root)
         return None
