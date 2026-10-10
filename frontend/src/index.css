@@ -941,3 +941,29 @@ details.more[open] summary { margin-bottom: 12px; }
 .sv-pin.pick .sv-pin-box { fill: var(--ok); }
 .sv-pin.pick .sv-pin-stem, .sv-pin.pick .sv-pin-ring { stroke: var(--ok); }
 .sv-pin.pick .sv-pin-ring { stroke-dasharray: none; stroke-width: 3; }
+
+/* Control the day (Addition 1) */
+.control-picker .seg { text-align: left; }
+.control-chart { display: block; width: 100%; height: auto; background: var(--surface-2); border-radius: var(--r-m); }
+.control-chart .grid { stroke: var(--line); stroke-dasharray: 2 4; }
+.control-chart text { font: 11px var(--mono); fill: var(--ink-3); }
+.control-chart .line { fill: none; stroke-width: 2.2; stroke-linejoin: round; }
+.control-chart .line.ours { stroke: var(--brand); }
+.control-chart .line.baseline { stroke: var(--ink-3); stroke-dasharray: 6 4; }
+.control-chart .line.curtail { stroke: var(--sun); }
+.control-chart .line.after { stroke: var(--brand); }
+.control-chart .line.before { stroke: var(--ink-3); stroke-opacity: 0.45; }
+.control-chart .soc-band { fill: var(--ok-soft); }
+.control-chart .bar.charge { fill: var(--brand); fill-opacity: 0.75; }
+.control-chart .bar.discharge { fill: var(--watch); fill-opacity: 0.8; }
+.control-chart .status-tick.ok { fill: var(--ok); }
+.control-chart .status-tick.bad { fill: var(--act); }
+.control-chart .ours-t, .control-chart .charge-t, .control-chart .after-t { fill: var(--brand); font-weight: 700; }
+.control-chart .curtail-t { fill: var(--sun); font-weight: 700; }
+.control-steps table, .control-page table { width: 100%; border-collapse: collapse; font-size: var(--fs-s); }
+.control-page th, .control-page td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.control-page tr.unsafe td { background: var(--act-soft); }
+.control-page .table-wrap { overflow-x: auto; }
+.control-page .periods { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.rerun .field { display: grid; gap: 6px; max-width: 420px; }
+.rerun .check { display: flex; gap: 8px; align-items: center; margin-top: 8px; }

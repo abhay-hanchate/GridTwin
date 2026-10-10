@@ -423,3 +423,68 @@ telling the districts apart; Bareilly alone, a single district with every season
   2021, then the month's mean, then the record's mean: never missing. Readiness requires the three files.
 - **Open:** the generator still trains on Mathura only, because the benchmark street and the solar forecast are
   Mathura's. Adding Bareilly is a separate decision.
+
+## Addition 1: control across multiple time steps (pre-registered 10 Oct 2026, before any run)
+
+Starting point: `GridTwin_Final_Round_Feature_Research.md` (research blueprint, W1 to W4 and W8). Checked against the
+code before building; where the check disagreed with the blueprint, the check wins.
+
+- **Checked facts.** The battery is three pseudo-homes that inherit the homes' 0.95 power factor; at 20 kW of charge
+  that shifts voltages by 2.2 V on the benchmark street and 4.3 to 5.0 V on the weak street, so the controller gives
+  the battery explicit unity power factor (a per-home power-factor array; no engine change). A single linearisation of
+  the voltages in battery power is accurate to 0.2 to 0.3 V at +/-15 kW on the benchmark street but off by 8 to 12 V
+  at +/-30 kW on the weak street (15 May 2025, noon and 20:00, central differences, real solver as truth).
+- **Planner (changed from the blueprint):** sequential linear programming, not one linearisation. Each round
+  linearises every monitored phase voltage, line and transformer loading around the current planned trajectory by
+  finite differences with the real three-phase solver, solves a MILP with a trust region on the actuators, and
+  replays the horizon in the real solver; at most four rounds, the trust region halves when the prediction misses.
+  Decision variables per step: charge and discharge power with a charge/discharge binary (no simultaneous charging and
+  discharging) and three curtailment fractions, one per phase group. Horizon 16 quarter hours (at least 8 required),
+  the same plan across three retained forecast scenarios. Objective, in order: hard limits, then least curtailed
+  energy, then least battery throughput, then a soft end-of-horizon reserve.
+- **Optimiser:** SciPy's HiGHS MILP (matrix form fits the sensitivity matrices) unless OR-Tools is faster on the same
+  problems; both are already dependencies; the comparison is recorded below.
+- **Re-planning:** every quarter hour, receding horizon, the first action executed; the battery's energy carries over.
+  Forecasts are corrected causally with an exponentially weighted residual (solar, demand, grid voltage) whose
+  coefficients are set on a development day, not on the fixture days; solar is never corrected at night. Extra
+  trigger reasons (forecast residual, margin) are logged. Observations are **simulated** (a scenario not among the
+  retained forecast ones, plus declared perturbations) and labelled so; they are not meter data.
+- **Switching:** only an explicit allowlist of tie switches, all marked **hypothetical** (inferred from feeder-end
+  geometry, not installed equipment); each device operation counts against a daily budget with a minimum dwell; at
+  most one reconfiguration schedule per horizon is enumerated outside the MILP. The transformer tap stays fixed for
+  the day (off-load tap changer).
+- **Verification and statuses:** every executed action is solved in the real solver at the observed step and checked
+  against every declared limit (voltage band, line and transformer loading, solver convergence, voltage unbalance
+  only when declared). Statuses: verified_safe, optimiser_infeasible, search_exhausted, solver_failed,
+  unsafe_fallback, invalid_action. Fallback order: the planned action if verified safe; else the first safe action in
+  a finite permitted set checked with the solver; else the least-violation action, labelled unsafe_fallback; never
+  called safe without the solver.
+- **Comparison:** the existing reactive battery controller on the identical observations, starting energy and battery.
+- **Code location:** a new top-level `control/` package that uses `engine/` as a library, so the results cache key
+  (and the precomputed demo) is unchanged.
+
+**Result: forecast correction settings (development day 10 June 2025, not a fixture day; 10 held-out truth scenarios,
+every 16-step horizon of the day).** Mean absolute error of the horizon's later steps without correction: solar
+0.0113 kW/kWp, demand 24.1% of the mean, grid voltage 4.63 V. Best of rho {0.3, 0.5, 0.7, 0.9} x decay {0.8, 0.9,
+0.95} by the mean of the three relative errors: **rho 0.3, decay 0.95**: solar 0.0085, demand 10.5%, grid 3.65 V
+(0.66 of the uncorrected error). These are the defaults; the fixture days were not used to choose them.
+
+**Result: Addition 1 demonstrations (run 10 Oct 2026, `python -m scripts.control_replay --near-limit`).**
+
+| Demonstration (`data/results/control/`) | Receding-horizon controller | Reactive battery rule, same observations | No control |
+| --- | --- | --- | --- |
+| Forecast error: an unforecast cloud (benchmark street, 09:00 to 18:00) | **0** of 36 unsafe | 10 | 13 |
+| Battery only, like for like with the reactive rule (same day) | **9** of 36 | 10 | 13 |
+| Battery saturation: 85% charge before the solar peak (09:00 to 15:00) | **0** of 24 | 21 | 21 |
+| Depletion and an infeasible evening: weak street, grid sag and 50% more demand, permitted switching (16:00 to 22:00) | **6** of 24, all labelled unsafe | 8 | 8 |
+
+Per quarter hour the loop took 1.4 to 2.1 s typical and up to 5.6 s (p95) on the development laptop, about 1 minute per
+demonstration; the reactive rule takes under 0.1 s for the same window. The near-limit sweep (09:15 of
+forecast_error, the executed action held) stays inside 253 V up to 5% more sun (252.6 V) and crosses it at 10% more
+(253.2 V). Battery only, the look-ahead controller beats the reactive rule by one quarter hour (9 against 10); the
+larger gains come from coordinating curtailment with the battery, so the two effects are reported separately. On the
+weak street the battery empties (10%) holding the evening voltage up, one permitted reconfiguration is used at 18:00
+when the sag starts (budget 2 operations, then refused for the rest of the day), and 6 quarter hours remain below
+207 V with no permitted action safe: they are labelled unsafe_fallback with the reason, not hidden. The existing
+battery fix in the tournament inherits the homes' 0.95 power factor; that is left unchanged here (it is in the cached
+results) and noted as a known modelling issue.

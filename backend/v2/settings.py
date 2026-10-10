@@ -59,7 +59,7 @@ class Settings(BaseSettings):
     code_version: str = Field(default_factory=results_version)  # part of every cache key
     max_body_bytes: int = 1_000_000
     rate_limit_per_minute: int = 30
-    rate_limited_paths: tuple[str, ...] = ("/whatif", "/connection-check")
+    rate_limited_paths: tuple[str, ...] = ("/whatif", "/connection-check", "/control/replay")
 
     @property
     def cors_origin_list(self) -> list[str]:

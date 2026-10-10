@@ -44,6 +44,23 @@ what it still needs ("about 1 V less voltage at the worst moments" under ±10%).
 none does on any of the three days. The place **and the phase** of a new connection matter as much as its size, which
 a flat state cap cannot see.
 
+## Control across the day (Addition 1)
+
+Every quarter hour the controller looks four hours ahead, plans the battery, curtailment of each phase group and
+permitted switching together, executes the first step, sees what happened and plans again with the battery's real
+charge. Each executed action is solved in the full three-phase power flow at the observed state before it counts as
+safe; when nothing permitted is safe it says so and logs the least-violation action as unsafe. Observations are
+simulated (another scenario of the same forecast with declared changes), the tie switches are hypothetical and the
+transformer tap stays fixed for the day. Code in `control/`, method in [docs/DECISIONS.md](docs/DECISIONS.md),
+rerun with `python -m scripts.control_replay`.
+
+| Demonstration (`data/results/control/`) | Receding-horizon controller | Reactive battery rule, same observations | No control |
+| --- | --- | --- | --- |
+| Forecast error: an unforecast cloud (benchmark street, 09:00 to 18:00) | **0** of 36 unsafe | 10 | 13 |
+| Battery only, like for like with the reactive rule (same day) | **9** of 36 | 10 | 13 |
+| Battery saturation: 85% charge before the solar peak (09:00 to 15:00) | **0** of 24 | 21 | 21 |
+| Depletion and an infeasible evening: weak street, grid sag and 50% more demand, permitted switching (16:00 to 22:00) | **6** of 24, all labelled unsafe | 8 | 8 |
+
 ## How much to trust it
 
 Every gate is measured by `python -m scripts.evaluate` into [data/results/results.json](data/results/results.json); the

@@ -62,7 +62,7 @@ export default function TryChange({ network = DEFAULT_NETWORK, go, ...props }: V
       <Status state={catalog} />
       {offline && <p className="note" role="note">{t('try.offline', { setting: 'GRIDTWIN_OFFLINE=0' })}</p>}
       {catalog.data && view.ready && <Builder catalog={catalog.data} network={network} rule={view.rule} date={view.date} offline={offline} />}
-      <NextStep to="home" go={go} />
+      <NextStep to="control" go={go} />
     </div>
   )
 }
