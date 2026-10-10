@@ -46,9 +46,10 @@
   --unsafe: var(--act);
   --unsafe-text: var(--act-text);
 
-  --head: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', 'Segoe UI', system-ui, 'Noto Sans Devanagari', sans-serif;
-  --text: 'Figtree Variable', 'Figtree', 'Segoe UI', system-ui, 'Noto Sans Devanagari', sans-serif;
-  --mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'Cascadia Mono', monospace;
+  /* Noto Sans Devanagari is bundled (Hindi) and split by unicode range, so English pages never download it */
+  --head: 'Bricolage Grotesque Variable', 'Noto Sans Devanagari Variable', 'Bricolage Grotesque', 'Segoe UI', system-ui, 'Noto Sans Devanagari', sans-serif;
+  --text: 'Figtree Variable', 'Noto Sans Devanagari Variable', 'Figtree', 'Segoe UI', system-ui, 'Noto Sans Devanagari', sans-serif;
+  --mono: 'JetBrains Mono Variable', 'Noto Sans Devanagari Variable', 'JetBrains Mono', ui-monospace, 'Cascadia Mono', monospace;
 
   --r-l: 22px;
   --r-m: 14px;
