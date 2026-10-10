@@ -19,7 +19,8 @@ type E2 = { runs: number; speedup: number; skipped_candidates: number; candidate
 export type SurrogateStreet = {
   id: string; selected: string; selection_reason: string | null
   states: { train: number | null; test: number | null; boundary_test: number | null; out_of_range: number | null }
-  guard_v: (number | null)[]; guard_loading_pts: (number | null)[]
+  guard_v: (number | null)[]; guard_loading_pts: (number | null)[]; shipped_round: number
+  rounds: { round: number; rule: string; unsafe_as_safe: number; truly_unsafe: number; false_rejections: number; truly_safe: number }[]
   support: { taps: number[]; modes: string[]; battery_node: number; battery_kw: number[]; upstream_pu: number[] } | null
   candidates: Candidate[]
   gates: { name: string; value: number | null; target: number; passed: boolean }[]
@@ -165,6 +166,29 @@ function StreetView({ s }: { s: SurrogateStreet }) {
           </table>
         </div>
       </section>
+
+      {s.rounds.length > 0 && (
+        <section className="card" aria-labelledby="sg-rounds">
+          <h3 id="sg-rounds">{t('surrogate.rounds_title')}</h3>
+          <p className="card-sub">{t('surrogate.rounds_intro')}</p>
+          <div className="table-scroll">
+            <table className="data-table" aria-label={t('surrogate.rounds_title')}>
+              <thead><tr>{(['col_round', 'col_rule', 'col_missed', 'col_false_rej'] as const).map((k) => <th key={k} scope="col">{t(`surrogate.${k}`)}</th>)}</tr></thead>
+              <tbody>
+                {s.rounds.map((r) => (
+                  <tr key={`${r.round}-${r.rule}`} data-in-use={r.round === s.shipped_round}>
+                    <th scope="row">{t(`surrogate.round.${r.round === 1 ? 'one' : 'two'}` as StringKey)}
+                      {r.round === s.shipped_round && <span className="badge">{t('surrogate.in_use')}</span>}</th>
+                    <td>{ruleLabel(r.rule)}</td>
+                    <td>{t('surrogate.of', { n: r.unsafe_as_safe, total: r.truly_unsafe })}</td>
+                    <td>{t('surrogate.of', { n: r.false_rejections, total: r.truly_safe })}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
 
       <section className="card" aria-labelledby="sg-limits">
         <h3 id="sg-limits">{t('surrogate.q_limits')}</h3>

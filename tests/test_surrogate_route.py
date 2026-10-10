@@ -33,8 +33,10 @@ def _write_reports(tmp_path, *, e2=True):
     street = {
         "selected": "mlp", "support": {"taps": [0, 1, 2], "modes": ["fixed_pf"], "battery_node": 65, "battery_kw": [-100, 100],
                                        "upstream_pu": [0.85, 1.2], "not_screened": ["voltage unbalance (VUF)"]},
-        "guard": {"danger": [0.9, 0.8, 1.5, 1.2], "optimistic": [0.9, 0.8, 1.5, 1.2]},
-        "heldout": {"states": {"all": 100, "base": 80, "boundary": 20, "held_out_tap_mode": 10},
+        "guard": {"at_limits": {"up_2005": {"v_max_v": 1.4, "v_min_v": 1.1}, "pm10": {"v_max_v": 2.1, "v_min_v": 1.3},
+                                "line_pts": 1.5, "trafo_pts": 1.2}, "round": 2},
+        "heldout": {"states": {"all": 100, "base": 80, "boundary": 20, "held_out_tap_mode": 10}, "shipped_round": 2,
+                    "rounds": {"1": {"mlp": _cand()}, "2": {"ridge": _cand(), "lgbm": _cand(), "mlp": _cand()}},
                     "candidates": {"ridge": _cand(), "lgbm": _cand(), "mlp": _cand()}},
         "out_of_range": {"tap_negative": {"states": 250, "unsupported": 250, "risky": 250, "reasons": {"tap -1": 125}}},
         "latency": {"fixed_pf": {"1": {"screen_ms_per_state": 0.5, "solver_ms_per_state": 2.4, "states": 1}}},
@@ -76,6 +78,8 @@ def test_summary_has_every_section_and_says_the_screener_is_off_without_an_artif
     assert st["latency"][0]["solver_ms_per_state"] == 2.4
     assert st["e1"]["speedup_vs_solve_all"] == 3.0 and st["e2"]["skipped_candidates"] == 3
     assert st["states"]["train"] == 10 and st["states"]["boundary_test"] == 20
+    assert st["guard_v"] == [1.4, 1.1] and st["guard_loading_pts"] == [1.5, 1.2] and st["shipped_round"] == 2
+    assert {(r["round"], r["rule"]) for r in st["rounds"]} == {(1, "up_2005"), (1, "pm10"), (2, "up_2005"), (2, "pm10")}
     assert len(body["disagreements"]["examples"]) <= 12 and body["disagreements"]["counts"][0]["rows"] == 30
     assert "simulated" in body["provenance"]
 

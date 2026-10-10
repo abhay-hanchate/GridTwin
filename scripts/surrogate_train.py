@@ -53,8 +53,12 @@ def score(model, failure, guard: dict, data: train.Data, split: dataset.Split) -
 
 
 def guard_in_units(guard: dict) -> dict:
-    conv = np.array([NOMINAL_V, NOMINAL_V, 1.0, 1.0])
-    return {side: [round(float(v) * c, 4) for v, c in zip(guard[side], conv)] for side in ("danger", "optimistic")}
+    """The danger margins at the limits (V and points), plus the raw table when the margin is one per extreme."""
+    out = {"at_limits": calibrate.limit_margins(guard)}
+    if "edges" not in guard:
+        conv = np.array([NOMINAL_V, NOMINAL_V, 1.0, 1.0])
+        out.update({side: [round(float(v) * c, 4) for v, c in zip(guard[side], conv)] for side in ("danger", "optimistic")})
+    return out
 
 
 def run_street(street: str, root: Path, model_root: Path, seed: int) -> dict:
@@ -99,13 +103,53 @@ def run_street(street: str, root: Path, model_root: Path, seed: int) -> dict:
     net = compute.network(street)
     data_manifest = dataset.street_dir(street, root) / "manifest.json"
     artifact.write(model_root, street, candidates[chosen]["model"], failure, candidates[chosen]["guard"], data["train"], net,
-                   extra={"selected_at_utc": selected_at, "selection_reason": why, "training_seed": seed,
+                   extra={"selected_at_utc": selected_at, "selection_reason": why, "guard_round": 1, "training_seed": seed,
                           "dataset_manifest_sha256": schema.file_sha256(data_manifest),
                           "trained_on": {s: len(v) for s, v in sp.items()}})
     return {"selected": chosen, "reason": why, "selected_at_utc": selected_at, "failure_model": failure_info,
             "states": {s: {"total": len(v), "boundary": int(v.boundary.sum()), "solver_failures": int((~v.labels.converged).sum())}
                        for s, v in sp.items()},
             "candidates": {k: v["report"] for k, v in candidates.items()}, "seconds": round(time.perf_counter() - t0, 1)}
+
+
+def round2(street: str, root: Path, model_root: Path, report: dict, bins: int = 8) -> dict:
+    """Pre-registered round 2 (docs/DECISIONS.md): the same fitted models, Mondrian margins by predicted value.
+    Ships only if the model's guarded unsafe-as-safe on tune is not higher than in round 1."""
+    from backend.v2 import compute
+    first = report["streets"][street]
+    sp = {s: dataset.load_split(street, s, root) for s in ("train", "tune", "calibrate")}
+    data = {s: train.prepare(v) for s, v in sp.items()}
+    cal, ok = data["calibrate"], data["calibrate"].converged
+    candidate_dir = model_root / "candidates" / street
+    scores, rows, kept = {}, {}, {}
+    for kind in ("ridge", "lgbm", "mlp"):
+        model, failure = predict.load(candidate_dir / f"{kind}.npz")
+        guard = calibrate.fit_guard(model.extremes(cal.x[ok]), cal.extremes[ok], bins=bins)
+        (candidate_dir / f"{kind}_guard_round2.json").write_text(json.dumps(guard), encoding="utf-8")
+        tune_score = score(model, failure, guard, data["tune"], sp["tune"])
+        fs = sum(tune_score["rules"][r]["guarded"]["unsafe_as_safe"] for r in RULES)
+        fr = float(np.mean([tune_score["rules"][r]["guarded"]["false_rejection_rate"] or 0.0 for r in RULES]))
+        scores[kind] = {"false_safe": fs, "false_rejection_rate": round(fr, 5), "latency_s": first["candidates"][kind]["selection"]["latency_s"]}
+        rows[kind] = {"guard": {**guard_in_units(guard), "bins": bins, "bin_counts": guard["bin_counts"]}, "tune": tune_score,
+                      "selection": scores[kind]}
+        kept[kind] = (model, failure, guard)
+    chosen, why = train.select(scores)
+    first_fs = first["candidates"][chosen]["selection"]["false_safe"]
+    ships = scores[chosen]["false_safe"] <= first_fs
+    out = {"bins": bins, "selected": chosen, "reason": why, "ships": ships,
+           "rule": "round 2 ships only if its tune unsafe-as-safe is not higher than round 1's for the same model",
+           "selected_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"), "candidates": rows}
+    if ships:
+        model, failure, guard = kept[chosen]
+        net = compute.network(street)
+        data_manifest = dataset.street_dir(street, root) / "manifest.json"
+        artifact.write(model_root, street, model, failure, guard, data["train"], net,
+                       extra={"selected_at_utc": out["selected_at_utc"], "selection_reason": f"round 2: {why}",
+                              "guard_round": 2, "training_seed": train.SEED,
+                              "dataset_manifest_sha256": schema.file_sha256(data_manifest),
+                              "trained_on": {s: len(v) for s, v in sp.items()}})
+    print(f"{street}: round 2 selected {chosen}; ships: {ships}", flush=True)
+    return out
 
 
 def main(argv=None) -> None:
@@ -116,6 +160,7 @@ def main(argv=None) -> None:
     p.add_argument("--models", default=str(artifact.MODEL_DIR))
     p.add_argument("--report", default=str(REPORT))
     p.add_argument("--seed", type=int, default=train.SEED)
+    p.add_argument("--round2", action="store_true", help="recalibrate the fitted candidates with Mondrian margins")
     args = p.parse_args(argv)
     report_path = Path(args.report)
     report = json.loads(report_path.read_text(encoding="utf-8")) if report_path.exists() else {}
@@ -123,7 +168,10 @@ def main(argv=None) -> None:
                    "provenance": "simulated states labelled by the power-grid-model solver; selection on tune only",
                    "rules": RULES, "streets": report.get("streets", {})})
     for street in args.street or tuple(schema.BATTERY_NODES):
-        report["streets"][street] = run_street(street, Path(args.root), Path(args.models), args.seed)
+        if args.round2:
+            report["streets"][street]["round2"] = round2(street, Path(args.root), Path(args.models), report)
+        else:
+            report["streets"][street] = run_street(street, Path(args.root), Path(args.models), args.seed)
         report_path.parent.mkdir(parents=True, exist_ok=True)
         report_path.write_text(json.dumps(report, indent=1), encoding="utf-8")
 

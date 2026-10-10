@@ -610,8 +610,8 @@
   "surrogate.states_test": "Test states",
   "surrogate.states_boundary": "Near-limit test states",
   "surrogate.states_ood": "Out-of-range states",
-  "surrogate.guard": "Safety margin added",
-  "surrogate.guard_value": "{v} V on the highest voltage, {l} points on line loading",
+  "surrogate.guard": "Safety margin at the limits",
+  "surrogate.guard_value": "{v} V at the upper voltage limit, {l} points at full line loading",
   "surrogate.q_accuracy": "How close is it to the solver?",
   "surrogate.q_accuracy_intro": "Errors on months, solar levels and settings it never trained on. Three models were compared on the same data.",
   "surrogate.col_model": "Model",
@@ -692,5 +692,11 @@
   "surrogate.not_built.gnn": "A graph neural network: every street here shares one layout, so its main strength, new layouts, could not be tested honestly.",
   "surrogate.not_built.physics": "Physics-informed refinement: it adds time to get close to what the solver gives directly.",
   "surrogate.not_built.gpu": "Graphics-card inference: the models run on the processor; a graphics card was not needed.",
-  "surrogate.provenance": "From the evaluation run of {at}. The method was fixed in advance in the decisions record."
+  "surrogate.provenance": "From the evaluation run of {at}. The method was fixed in advance in the decisions record.",
+  "surrogate.rounds_title": "One margin for every state, or a margin by predicted value",
+  "surrogate.rounds_intro": "The first round used one margin, set by the largest errors far from any limit. The second round, written down before the test was scored, sizes the margin by the predicted value. Unseen months and solar levels.",
+  "surrogate.col_round": "Margin",
+  "surrogate.round.one": "One margin for every state",
+  "surrogate.round.two": "Margin by predicted value",
+  "surrogate.in_use": "in use"
 }

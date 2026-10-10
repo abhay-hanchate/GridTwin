@@ -10,7 +10,9 @@ import Surrogate, { type SurrogatePayload, type SurrogateStreet } from './Surrog
 const scr = (fs: number, unsafe: number, fr: number, safe: number) => ({ unsafe_as_safe: fs, truly_unsafe: unsafe, false_rejections: fr, truly_safe: safe })
 const street = (id: string, selected: string, e2 = true): SurrogateStreet => ({
   id, selected, selection_reason: 'lowest', states: { train: 44958, test: 22447, boundary_test: 4015, out_of_range: 2000 },
-  guard_v: [0.87, 0.65], guard_loading_pts: [1.25, 0.75],
+  guard_v: [0.87, 0.65], guard_loading_pts: [1.25, 0.75], shipped_round: 2,
+  rounds: [{ round: 1, rule: 'pm10', unsafe_as_safe: 0, truly_unsafe: 1500, false_rejections: 9100, truly_safe: 14900 },
+    { round: 2, rule: 'pm10', unsafe_as_safe: 2, truly_unsafe: 1500, false_rejections: 840, truly_safe: 14900 }],
   support: { taps: [0, 1, 2], modes: ['fixed_pf', 'volt_var'], battery_node: 65, battery_kw: [-99.9, 99.8], upstream_pu: [0.85, 1.2] },
   candidates: [
     { kind: 'ridge', selected: selected === 'ridge', node_level: true, voltage_mae_v: 0.71, voltage_p99_v: 3.4, loading_mae_pts: 0.52,
@@ -87,6 +89,15 @@ describe('Surrogate', () => {
     for (let n = walker.nextNode(); n; n = walker.nextNode()) numbers(n.textContent ?? '').forEach((x) => shown.add(x))
     expect(shown.size).toBeGreaterThan(10)
     for (const n of shown) expect(allowed.has(n), `"${n}" is on the page but not in the response`).toBe(true)
+  })
+
+  it('compares one margin for every state with margins by predicted value, and marks the one in use', async () => {
+    serve({ '/surrogate': PAYLOAD })
+    await show()
+    const rounds = screen.getByRole('table', { name: /margin by predicted value/i })
+    expect(rounds.querySelectorAll('tbody tr').length).toBe(2)
+    expect(rounds.querySelector('tr[data-in-use="true"]')?.textContent).toContain('840 of 14900')
+    expect(rounds.querySelector('tr[data-in-use="false"]')?.textContent).toContain('9100 of 14900')
   })
 
   it('a missing evaluation is an error, not an empty page', async () => {

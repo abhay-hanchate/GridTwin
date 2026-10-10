@@ -67,6 +67,18 @@ def _screening(res: dict) -> list[dict]:
     return rows
 
 
+def _rounds(held: dict, selected: str) -> list[dict]:
+    """The chosen model with one margin for every state (round 1) and with margins by predicted value (round 2)."""
+    rows = []
+    for rnd, cands in sorted(held.get("rounds", {}).items()):
+        for rule in RULES:
+            g = cands.get(selected, {}).get("base", {}).get("rules", {}).get(rule, {}).get("guarded")
+            if g:
+                rows.append({"round": int(rnd), "rule": rule, "unsafe_as_safe": g["unsafe_as_safe"], "truly_unsafe": g["truly_unsafe"],
+                             "false_rejections": g["false_rejections"], "truly_safe": g["truly_safe"]})
+    return rows
+
+
 def _street(sid: str, ev: dict, bake: dict) -> dict:
     selected = ev.get("selected") or bake.get("selected")
     held = ev.get("heldout", {})
@@ -74,10 +86,13 @@ def _street(sid: str, ev: dict, bake: dict) -> dict:
     states = {s: bake.get("states", {}).get(s, {}).get("total") for s in ("train", "tune", "calibrate")}
     states.update(test=held.get("states", {}).get("all"), boundary_test=held.get("states", {}).get("boundary"),
                   out_of_range=sum(v["states"] for v in ev.get("out_of_range", {}).values()) or None)
-    guard = ev.get("guard", {}).get("danger", [None] * 4)
+    at = ev.get("guard", {}).get("at_limits", {})
     return {
         "id": sid, "selected": selected, "selection_reason": bake.get("reason"), "selected_at": bake.get("selected_at_utc"),
-        "states": states, "guard_v": guard[:2], "guard_loading_pts": guard[2:], "support": ev.get("support"),
+        "states": states, "support": ev.get("support"), "shipped_round": held.get("shipped_round", 1),
+        "guard_v": [at.get("up_2005", {}).get("v_max_v"), at.get("up_2005", {}).get("v_min_v")],
+        "guard_loading_pts": [at.get("line_pts"), at.get("trafo_pts")],
+        "rounds": _rounds(held, selected),
         "candidates": [_candidate(k, cands[k], selected) for k in ("ridge", "lgbm", "mlp") if k in cands],
         "gates": [{"name": k, **v} for k, v in cands.get(selected, {}).get("gates_on_base", {}).items()],
         "screening": _screening(cands.get(selected, {})),

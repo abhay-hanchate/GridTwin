@@ -80,20 +80,27 @@ def gates(reg: dict) -> dict:
     return {k: {"value": val, "target": tgt, "passed": val is not None and val <= tgt} for k, (val, tgt) in checks.items()}
 
 
-def score_heldout(street: str, models_root: Path, data_root: Path, selected: str) -> tuple[dict, list]:
+def score_heldout(street: str, models_root: Path, data_root: Path, selected: str, shipped_round: int) -> tuple[dict, list]:
+    """Every candidate, with the round 1 margins and (if run) the round 2 margins, scored once on the test split."""
     test = dataset.load_split(street, "test", data_root)
     data = train.prepare(test)
     subsets = _subsets(test)
     cand_dir = models_root / "candidates" / street
-    out, examples = {"states": {k: int(v.sum()) for k, v in subsets.items()}, "candidates": {}}, []
-    for kind in ("ridge", "lgbm", "mlp"):
-        model, failure = predict.load(cand_dir / f"{kind}.npz")
-        guard = json.loads((cand_dir / f"{kind}_guard.json").read_text(encoding="utf-8"))
-        res = {name: _score(model, failure, guard, data.x[m], _take(test.labels, m)) for name, m in subsets.items() if m.any()}
-        res["gates_on_base"] = gates(res["base"]["regression"])
-        out["candidates"][kind] = res
-        if kind == selected:
-            examples = _heldout_examples(street, model, failure, guard, data, test)
+    out, examples = {"states": {k: int(v.sum()) for k, v in subsets.items()}, "rounds": {}, "shipped_round": shipped_round}, []
+    for rnd, suffix in ((1, "_guard.json"), (2, "_guard_round2.json")):
+        for kind in ("ridge", "lgbm", "mlp"):
+            gpath = cand_dir / f"{kind}{suffix}"
+            if not gpath.exists():
+                continue
+            model, failure = predict.load(cand_dir / f"{kind}.npz")
+            guard = json.loads(gpath.read_text(encoding="utf-8"))
+            res = {name: _score(model, failure, guard, data.x[m], _take(test.labels, m)) for name, m in subsets.items() if m.any()}
+            res["gates_on_base"] = gates(res["base"]["regression"])
+            res["margins_at_limits"] = calibrate.limit_margins(guard)
+            out["rounds"].setdefault(str(rnd), {})[kind] = res
+            if kind == selected and rnd == shipped_round:
+                examples = _heldout_examples(street, model, failure, guard, data, test)
+    out["candidates"] = out["rounds"][str(shipped_round)]
     return out, examples
 
 
@@ -385,11 +392,10 @@ def main(argv=None) -> None:
                           "upstream_pu": [manifest["box"]["min"][manifest["feature_names"].index("upstream_pu")],
                                           manifest["box"]["max"][manifest["feature_names"].index("upstream_pu")]],
                           "not_screened": manifest["not_screened"]}
-        rec["guard"] = {side: [round(v * c, 4) for v, c in zip(manifest["guard"][side], (230, 230, 1, 1))]
-                        for side in ("danger", "optimistic")}
+        rec["guard"] = {"at_limits": calibrate.limit_margins(manifest["guard"]), "round": manifest.get("guard_round", 1)}
         if "heldout" not in args.skip:
             print(f"{street}: held-out scoring", flush=True)
-            rec["heldout"], ex = score_heldout(street, models_root, data_root, selected)
+            rec["heldout"], ex = score_heldout(street, models_root, data_root, selected, manifest.get("guard_round", 1))
             examples = [e for e in examples if not (e["street"] == street and e["source"] == "held-out test split")] + ex
             write_sample(street, data_root)
         if "ood" not in args.skip:

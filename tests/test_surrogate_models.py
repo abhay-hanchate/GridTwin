@@ -138,3 +138,35 @@ def test_selection_rule_is_the_pre_registered_one():
 def test_a_column_constant_in_training_is_centred_not_blown_up():
     s = predict.Scaler.fit(np.array([[1.0, 0.0], [3.0, 0.0]]))
     assert s.apply(np.array([[2.0, 1.0]]))[0, 1] == 1.0
+
+
+def test_mondrian_guard_is_tight_where_errors_are_small_and_wide_where_they_are_large():
+    rng = np.random.default_rng(5)
+    n = 40000
+    pred = np.column_stack([rng.uniform(0.9, 1.1, n), rng.uniform(0.8, 1.05, n), rng.uniform(0, 120, n), rng.uniform(0, 120, n)])
+    noise = np.where(pred[:, 1:2] < 0.9, 0.05, 0.002) * rng.normal(size=(n, 4))       # big errors only at deep under-voltage
+    true = pred + noise
+    g = calibrate.fit_guard(pred[:20000], true[:20000], alpha=0.05, bins=8)
+    assert len(g["edges"][1]) == 7 and np.shape(g["danger"]) == (4, 8)
+    lo, hi = np.array([[1.0, 0.85, 50, 50]]), np.array([[1.0, 1.0, 50, 50]])
+    m_lo, m_hi = calibrate.margins(lo, g, "danger")[0, 1], calibrate.margins(hi, g, "danger")[0, 1]
+    assert m_hi < 0.01 < m_lo                                    # the deep-under-voltage tail no longer widens every state
+    guarded, _ = calibrate.bounds(pred[20000:], g)
+    t = true[20000:]
+    assert ((guarded[:, 1] <= t[:, 1]).mean()) >= 0.95 - 0.01    # still covers, bin by bin under exchangeability
+    flat = calibrate.fit_guard(pred[:20000], true[:20000], alpha=0.05)
+    assert calibrate.margins(hi, flat, "danger")[0, 1] > m_hi
+
+
+def test_a_bin_too_small_for_the_level_is_always_risky():
+    pred = np.tile([[1.0, 1.0, 10.0, 10.0]], (40, 1)) + np.linspace(0, 0.01, 40)[:, None]
+    g = calibrate.fit_guard(pred, pred, alpha=0.005, bins=4)
+    assert np.isinf(calibrate.margins(pred[:1], g, "danger")).all()
+    assert calibrate.decide(pred[:1], g, 0.9, 1.1)["risky"][0]
+
+
+def test_margin_at_a_limit_reads_the_bin_that_holds_it():
+    g = {"danger": [[1.0, 2.0], [3.0, 4.0], [5.0, 6.0], [7.0, 8.0]], "optimistic": [[0, 0]] * 4,
+         "edges": [[1.05], [0.95], [50.0], [50.0]]}
+    assert calibrate.margin_at(g, 0, 1.06) == 2.0 and calibrate.margin_at(g, 1, 0.94) == 3.0
+    assert calibrate.margin_at({"danger": [0.1, 0.2, 0.3, 0.4]}, 2, 100.0) == 0.3
