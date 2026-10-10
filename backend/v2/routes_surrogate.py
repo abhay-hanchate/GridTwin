@@ -129,7 +129,7 @@ def _street(sid: str, ev: dict, bake: dict, old: dict) -> dict:
         "out_of_range": [{"kind": k, "states": v["states"], "unsupported": v["unsupported"]} for k, v in ev.get("out_of_range", {}).items()],
         "latency": [{"mode": mode, "batch": int(b), "screen_ms_per_state": row.get("screen_ms_per_state"),
                      "solver_ms_per_state": row.get("solver_ms_per_state")}
-                    for mode, rows in ev.get("latency", {}).items() for b, row in rows.items()],
+                    for mode, rows in ev.get("latency", {}).items() for b, row in rows.items() if b.isdigit() and row],
         "e1": ev.get("e1_controller_style", {}).get("summary"), "e2": ev.get("e2_fix_tournament", {}).get("summary"),
     }
 

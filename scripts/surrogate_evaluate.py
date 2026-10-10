@@ -211,10 +211,13 @@ def latency(street: str, screener, data_root: Path, reps: int) -> dict:
     for mode in ("fixed_pf", "volt_var"):
         s = test.states
         rows = np.flatnonzero(~test.boundary & (s.mode == schema.MODES.index(mode)) & (s.battery_kw == 0) & (s.topology == 0))
-        rows = np.array([i for i in rows[:6 * max(BATCHES)]
-                         if not sm.check(to_operating_states(street, s.take([i]), layouts)[0])[0]])
-        res = {}
+        ok = np.array([not sm.check(st)[0] for st in to_operating_states(street, s.take(rows), layouts)], bool)
+        rows = rows[ok] if len(rows) else rows.astype(int)
+        res = {"accepted_test_states": int(len(rows))}
         for b in BATCHES:
+            if len(rows) < b:                       # not enough states the screen accepts for this batch size
+                res[str(b)] = None
+                continue
             pick = s.take(rows[:b])
             states = to_operating_states(street, pick, layouts)
             x = np.stack([sm.check(st)[1] for st in states])

@@ -39,7 +39,8 @@ def _write_reports(tmp_path, *, e2=True, archive=True):
         "heldout": {"states": {"all": 50, "base": 40, "boundary": 10}, "supported": {"all": 45},
                     "candidates": {"ridge": _cand(), "lgbm": _cand(), "mlp": _cand(fr=1)}},
         "out_of_range": {"tap_negative": {"states": 250, "unsupported": 250, "risky": 250, "reasons": {"tap -1": 125}}},
-        "latency": {"fixed_pf": {"1": {"screen_ms_per_state": 0.5, "solver_ms_per_state": 2.4, "states": 1}}},
+        "latency": {"fixed_pf": {"accepted_test_states": 1, "1": {"screen_ms_per_state": 0.5, "solver_ms_per_state": 2.4, "states": 1},
+                                 "16": None}},
         "e1_controller_style": {"summary": {"runs": 4, "speedup_vs_solve_all": 3.0, "speedup_vs_cost_order": 1.2,
                                             "same_choice_as_solve_all": 4, "false_rejections": 1, "overrules": 0,
                                             "runs_with_a_safe_action": 2}},
@@ -85,7 +86,7 @@ def test_summary_has_every_section_and_says_the_screener_is_off_without_an_artif
     assert st["screening"][0]["guarded"]["miss_rate_upper95"] == 0.26
     assert st["screening"][0]["guarded"]["miss_upper95_per_10k"] == 2600.0      # shown on the page as-is
     assert st["out_of_range"] == [{"kind": "tap_negative", "states": 250, "unsupported": 250}]
-    assert st["latency"][0]["solver_ms_per_state"] == 2.4
+    assert st["latency"] == [{"mode": "fixed_pf", "batch": 1, "screen_ms_per_state": 0.5, "solver_ms_per_state": 2.4}]
     assert st["e1"]["speedup_vs_solve_all"] == 3.0 and st["e2"]["skipped_candidates"] == 3
     assert st["states"]["train"] == 10 and st["states"]["boundary_test"] == 10 and st["states"]["test_supported"] == 45
     assert st["support"]["battery_nodes"] == [21, 65] and st["shipped_round"] == 4
