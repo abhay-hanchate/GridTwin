@@ -86,11 +86,29 @@ describe('Tomorrow', () => {
   })
 
   it('chances that passed the held-out check are called slightly better than the historical average, never accurate', async () => {
-    serve({ calibration: { reliable: true, raw: risk.p_unsafe, calibrated: risk.p_unsafe } })
+    serve({ series: 'calibrated', calibration: { reliable: true, applied: true, raw: risk.p_unsafe, calibrated: risk.p_unsafe } })
     await show()
     const note = screen.getByRole('note').textContent ?? ''
     expect(note).toMatch(/slightly better than the historical average/i)
     expect(note).not.toMatch(/accurate/i)
+  })
+
+  it('a reliable map that does not apply here (a fix or another street) says the chances are raw', async () => {
+    serve({ series: 'raw', calibration: { reliable: true, applied: false, raw: risk.p_unsafe, calibrated: risk.p_unsafe } })
+    await show()
+    expect(screen.getByRole('note').textContent).toMatch(/raw chances/i)
+  })
+
+  it('calibrated chances drive the chart and the hours, and drop the raw scenario range', async () => {
+    const p = risk.p_unsafe.map((x) => Math.min(1, x + 0.1))
+    serve({ series: 'calibrated', p_unsafe: p, expected_unsafe_hours: { mean: 7.5, p10: null, p90: null },
+      calibration: { reliable: true, applied: true, raw: risk.p_unsafe, calibrated: p } })
+    await show()
+    const strip = screen.getByRole('img', { name: /probability/i })
+    expect(strip.querySelectorAll('[data-step]').length).toBe(p.length)
+    const kpi = document.querySelector('[data-numbers="expected unsafe hours"]')!.textContent ?? ''
+    expect(kpi).toContain('7.5')
+    expect(kpi).not.toMatch(/P10/)
   })
 
   it('links to the printable evening report for the same day, rule and language', async () => {

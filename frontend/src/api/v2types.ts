@@ -23,7 +23,8 @@ export interface Risk {
   p_unsafe_without_solar?: number[]        // the same scenarios with every panel off
   t?: string[]                             // HH:MM per step
   thresholds?: { watch: number; act: number }
-  expected_unsafe_hours: { mean: number; p10: number; p90: number }
+  series?: 'calibrated' | 'raw'           // which chances p_unsafe holds; level and first times derive from it
+  expected_unsafe_hours: { mean: number; p10: number | null; p90: number | null }  // range null when calibrated
   first_watch: string | null
   first_act: string | null
   peak_voltage_v: { p10: number; p50: number; p90: number }
@@ -31,7 +32,7 @@ export interface Risk {
   shares: Partial<Record<LimitType, number>>
   n_scenarios?: number
   provenance: Record<string, string>
-  calibration?: { reliable?: boolean; raw: number[]; calibrated: number[] }
+  calibration?: { reliable?: boolean; applied?: boolean; raw: number[]; calibrated: number[] }
 }
 
 export interface BindingLimit {

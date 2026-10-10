@@ -127,7 +127,9 @@ function Summary({ risk, fixes, rule, vmax }: { risk: Risk; fixes: Fixes | null;
         <div className={`stat ${risk.level === 'ok' ? 'ok' : 'act'}`}>
           <span className="label">{t('overview.f_hours')}</span>
           <span className="value">{one(risk.expected_unsafe_hours.mean)}<small>{t('overview.unit_h')}</small></span>
-          <p>{t('home.hours_range', { p10: one(risk.expected_unsafe_hours.p10), p90: one(risk.expected_unsafe_hours.p90) })}</p>
+          {risk.expected_unsafe_hours.p10 !== null && risk.expected_unsafe_hours.p90 !== null && (
+            <p>{t('home.hours_range', { p10: one(risk.expected_unsafe_hours.p10), p90: one(risk.expected_unsafe_hours.p90) })}</p>
+          )}
         </div>
         <div className="stat">
           <span className="label">{t('overview.f_peak')}</span>
