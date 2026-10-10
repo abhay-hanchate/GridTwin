@@ -1,6 +1,6 @@
 import { useV2 } from '../api/v2'
 import type { Gate, GateStatus, Results } from '../api/v2types'
-import type { Area } from '../app/areas'
+import { AREAS, type Area } from '../app/areas'
 import { NextStep } from '../components/Explainer'
 import Measured from '../components/Measured'
 import Status from '../components/Status'
@@ -25,7 +25,7 @@ export default function Proof({ go }: { go?: (area: Area) => void }) {
   return (
     <div className="v2-page">
       <header className="page-hero">
-        <span className="kicker">{t('journey.step', { n: 5 })} · {t('area.proof')}</span>
+        <span className="kicker">{t('journey.step', { n: AREAS.indexOf('proof') })} · {t('area.proof')}</span>
         <h2>{t('proof.page_title')}</h2>
         <p>{t('proof.page_intro')}</p>
       </header>
