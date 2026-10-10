@@ -22,7 +22,7 @@ export function makeStreet(fix = 'none'): Street {
   const run = (cap: number): StreetRun => ({
     home_v: T.map((_, i) => [i >= 40 && i < 56 ? cap : 236, 234]),
     home_phase: ['A', 'B'],
-    line_phase_kw: T.map((_, i) => (i >= 40 && i < 56 ? [[-3, 0.5, 0], [-3, 0, 0]] : [[0.4, 0.5, 0], [0.4, 0, 0]])),
+    line_phase_kw: T.map((_, i) => (i >= 40 && i < 56 ? [[-3, 0.5, 0], [0, 0.5, 0]] : [[0.4, 0.5, 0], [0, 0.5, 0]])),
     line_neutral_a: T.map(() => [2, 1]),
     line_loading_pct: T.map(() => [20, 10]),
     trafo_kw: T.map((_, i) => (i >= 40 && i < 56 ? -2.5 : 0.9)),

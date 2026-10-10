@@ -60,26 +60,35 @@ describe('Overview', () => {
 })
 
 describe('the street player', () => {
-  it('draws the four conductors of every wire and every home on its phase', async () => {
+  it('draws the transformer, the three phases and every home on its own phase', async () => {
     serve(nightRisk)
     render(<LangProvider><Overview /></LangProvider>)
     await settle()
     const map = screen.getByRole('img', { name: /the street at/i })
-    expect(map.querySelectorAll('.flow').length).toBe(2 * 4)
-    expect(map.querySelectorAll('.drop.wire-a').length).toBe(1)
-    expect(map.querySelectorAll('.drop.wire-b').length).toBe(1)
+    expect(map.querySelectorAll('[data-home]').length).toBe(2)
+    expect(map.querySelectorAll('.sv-feeder-base').length).toBe(3)
+    expect(map.querySelectorAll('.sv-drop.ph-a').length).toBe(1)
+    expect(map.querySelectorAll('.sv-drop.ph-b').length).toBe(1)
   })
 
-  it('at midday solar flows back to the transformer and the solar home turns red', async () => {
+  it('at midday the solar home sends power back up phase A, goes over the limit, and the balance adds up', async () => {
     serve(nightRisk)
     render(<LangProvider><Overview /></LangProvider>)
     await settle()
     fireEvent.change(screen.getByRole('slider', { name: /time of day/i }), { target: { value: '48' } })
     await settle()
     const map = screen.getByRole('img', { name: /the street at 12:00/i })
-    expect(map.querySelector('.flow.wire-a')!.classList.contains('back')).toBe(true)
-    expect(map.querySelector('[data-home="0"] .home')!.classList.contains('v-over')).toBe(true)
+    const solarHome = map.querySelector('[data-home="0"]')!
+    expect(solarHome.classList.contains('v-over')).toBe(true)
+    expect(solarHome.classList.contains('exporting')).toBe(true)
+    expect(map.querySelectorAll('.sv-flow.feeder')[0].classList.contains('back')).toBe(true)
     expect(screen.getByText(/solar sent back to the grid/i)).toBeTruthy()
+    // from the wire flows: 3 kW solar = 0.5 kW homes + 0 lost + 2.5 kW sent back
+    expect(document.querySelector('[data-numbers="balance"]')!.textContent).toMatch(/solar 3 = homes 0\.5 \+ lost 0 \+ sent back 2\.5 kW/)
+    // the home itself: 3 kW of solar, 0 kW used, all of it sent back
+    fireEvent.click(solarHome.querySelector('.sv-hit')!)
+    const card = screen.getByRole('status')
+    expect(card.textContent).toMatch(/sending back \(reverse flow\)3 kW/i)
   })
 
   it('play moves the clock forward and pause stops it', async () => {

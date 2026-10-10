@@ -51,6 +51,5 @@ describe('every precomputed result renders', () => {
     await settle()
     const map = screen.getByRole('img', { name: /the street at/i })
     expect(map.querySelectorAll('[data-home]').length).toBe(street.homes.length)
-    expect(map.querySelectorAll('.flow').length).toBe(street.layout.lines.length * 4)
   })
 })
