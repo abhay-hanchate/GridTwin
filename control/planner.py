@@ -44,7 +44,7 @@ class PlannerConfig:
     w_curtail: float = 1.0               # per kWh of solar curtailed
     w_throughput: float = 0.02           # per kWh moved through the battery
     w_reserve: float = 0.05              # per kWh below the end-of-horizon energy target
-    reserve_soc: float = 0.5             # soft target at the end of the horizon (never a hard limit)
+    reserve_soc: float = 0.5             # soft floor at the end of the horizon, capped at the energy now (not a limit)
     w_slack: float = 200.0               # per volt-equivalent of a limit the plan cannot meet
     vuf_limit: float | None = None
     time_limit_s: float = 10.0
@@ -151,7 +151,8 @@ def _solve_milp(fc, y0, jac, p_ref, k_ref, trust_kw, trust_keep, state, bat, rul
         add([(ic + k, 1.0), (iz + k, -bat.kw)], -np.inf, 0.0)               # charge only when z = 1
         add([(id_ + k, 1.0), (iz + k, bat.kw)], -np.inf, bat.kw)           # discharge only when z = 0
         add([(ic + k, 1.0), (id_ + k, -1.0)], p_ref[k] - trust_kw, p_ref[k] + trust_kw)     # trust region
-    add([(ir, 1.0), (ie + h - 1, 1.0)], bat.kwh * cfg.reserve_soc, np.inf)              # reserve shortfall
+    # soft reserve: discourages emptying the battery below min(now, target); it never pushes the battery to charge
+    add([(ir, 1.0), (ie + h - 1, 1.0)], min(state.energy_kwh, bat.kwh * cfg.reserve_soc), np.inf)
 
     vmax, vmin = rule.vmax_v - cfg.margin_v, rule.vmin_v + cfg.margin_v
     lmax = 100.0 - cfg.margin_loading
@@ -191,8 +192,11 @@ def plan(ex: Executor, fc: StepInputs, state: ControlState, bat: BatteryModel, r
     t0 = time.perf_counter()
     s, h = fc.shape
     topology = state.topology_id
-    p_ref = np.zeros(h) if warm is None else warm[0].copy()
-    k_ref = np.ones((h, N_GROUPS)) if warm is None else warm[1].copy()
+    p_ref, k_ref = np.zeros(h), np.ones((h, N_GROUPS))
+    if warm is not None:                                 # the previous plan shifted by one step; trim or pad to h
+        n = min(h, len(warm[0]))
+        p_ref[:n], k_ref[:n] = warm[0][:n], warm[1][:n]
+    p_ref = np.clip(p_ref, -bat.kw, bat.kw)
     if not cfg.curtail:
         k_ref[:] = 1.0
     avail = fc.pv_per_kwp[:, :, None] * ex.base.house_kwp[None, None, :]

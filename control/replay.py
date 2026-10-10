@@ -176,13 +176,23 @@ def run(cfg: ReplayConfig) -> Replay:
         # 3. plan on the current topology; consider permitted switching when it would help
         best: tuple[PlanResult, str] = (plan(ex, fc_h, state, bat, rule, pcfg, warm=warm), state.topology_id)
         options = [BASE] + list(nets) if state.topology_id != BASE else list(nets)
+        switch_log = []
         if cfg.switching and (not best[0].verified or best[0].curtailed_kwh > 0.5):
             for tid in options:
-                if tid == state.topology_id or action_errors(state, Action(topology_id=tid), bat, policy, k):
+                if tid == state.topology_id:
+                    continue
+                errs_sw = action_errors(state, Action(topology_id=tid), bat, policy, k)
+                if errs_sw:
+                    switch_log.append({"id": tid, "considered": False, "reason": "; ".join(errs_sw)})
                     continue
                 alt = plan(ex, fc_h, replace(state, topology_id=tid), bat, rule, pcfg)
-                if (not alt.verified, alt.curtailed_kwh + 0.5 * operations_for(state.topology_id, tid)) < \
-                        (not best[0].verified, best[0].curtailed_kwh):
+                better = (not alt.verified, alt.curtailed_kwh + 0.5 * operations_for(state.topology_id, tid)) < \
+                    (not best[0].verified, best[0].curtailed_kwh)
+                switch_log.append({"id": tid, "considered": True, "verified": alt.verified,
+                                   "curtailed_kwh": _r(alt.curtailed_kwh, 3), "chosen": bool(better),
+                                   "reason": "fewer unsafe steps or less curtailment after the operation cost"
+                                   if better else "no better than the current topology after the operation cost"})
+                if better:
                     best = (alt, tid)
         planned, topo = best
         plan_secs.append(planned.seconds)
@@ -232,7 +242,7 @@ def run(cfg: ReplayConfig) -> Replay:
             status=status.value, reason=reason, replan_triggers=triggers, topology_before=topo_before,
             topology_after=state.topology_id, operations_used=state.operations_used,
             operations_left=policy.max_operations - state.operations_used,
-            planner={**planned.summary(), "horizon": planned.horizon},
+            planner={**planned.summary(), "horizon": planned.horizon, "switching_options": switch_log},
             before=_check_dict(before), after=_check_dict(after),
             forecast={k_: v for k_, v in fc_info.items() if k_ != "step"},
             plan_horizon=[{"battery_kw": _r(p, 3), "keep": [_r(x, 3) for x in kk], "energy_kwh": _r(e, 3)}

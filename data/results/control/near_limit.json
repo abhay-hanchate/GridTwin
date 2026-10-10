@@ -1,0 +1,56 @@
+{
+ "run_id": "forecast_error",
+ "step": 37,
+ "time": "09:15",
+ "action": {
+  "battery_kw": 1.833,
+  "keep": [
+   0.743,
+   1.0,
+   0.926
+  ],
+  "topology_id": "base",
+  "source": "plan",
+  "curtailed_kwh": 3.5217
+ },
+ "limit_v": 253.0,
+ "provenance": "simulated observation scaled; the executed action held fixed",
+ "rows": [
+  {
+   "solar_factor": 0.9,
+   "v_max_v": 251.15,
+   "safe": true,
+   "margin_v": 1.85
+  },
+  {
+   "solar_factor": 0.95,
+   "v_max_v": 251.58,
+   "safe": true,
+   "margin_v": 1.42
+  },
+  {
+   "solar_factor": 1.0,
+   "v_max_v": 252.02,
+   "safe": true,
+   "margin_v": 0.98
+  },
+  {
+   "solar_factor": 1.02,
+   "v_max_v": 252.25,
+   "safe": true,
+   "margin_v": 0.75
+  },
+  {
+   "solar_factor": 1.05,
+   "v_max_v": 252.6,
+   "safe": true,
+   "margin_v": 0.4
+  },
+  {
+   "solar_factor": 1.1,
+   "v_max_v": 253.18,
+   "safe": false,
+   "margin_v": -0.18
+  }
+ ]
+}

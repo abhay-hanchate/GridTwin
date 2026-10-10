@@ -1,0 +1,200 @@
+{
+ "battery_only": {
+  "title": "Battery only, against the reactive rule (same observations as forecast_error)",
+  "network_id": "benchmark_250",
+  "rule_id": "pm10",
+  "summary": {
+   "steps": 36,
+   "horizon": 16,
+   "statuses": {
+    "verified_safe": 27,
+    "optimiser_infeasible": 0,
+    "search_exhausted": 0,
+    "solver_failed": 0,
+    "unsafe_fallback": 9,
+    "invalid_action": 0
+   },
+   "unsafe_steps": 9,
+   "baseline_unsafe_steps": 10,
+   "unsafe_steps_without_control": 13,
+   "curtailed_kwh": 0.0,
+   "throughput_kwh": 88.888,
+   "baseline_throughput_kwh": 25.263,
+   "soc_min": 0.2947,
+   "soc_max": 0.9,
+   "soc_final": 0.362,
+   "operations_used": 0,
+   "fallbacks": 12,
+   "replans": 36,
+   "infeasible_periods": [
+    {
+     "first_step": 39,
+     "last_step": 45,
+     "from": "09:45",
+     "until": "11:15",
+     "steps": 7,
+     "statuses": [
+      "unsafe_fallback"
+     ],
+     "first_reason": "planned action unsafe at the observed step: over-voltage 256.3 V > 253.0 V; search exhausted: none of 5 permitted actions was safe; least violation 1.55 V-equivalent"
+    },
+    {
+     "first_step": 55,
+     "last_step": 56,
+     "from": "13:45",
+     "until": "14:00",
+     "steps": 2,
+     "statuses": [
+      "unsafe_fallback"
+     ],
+     "first_reason": "planned action unsafe at the observed step: over-voltage 257.3 V > 253.0 V; search exhausted: none of 5 permitted actions was safe; least violation 2.30 V-equivalent"
+    }
+   ],
+   "worst_after_severity": 8.44
+  },
+  "timing": {
+   "total_s": 56.67,
+   "step_p50_s": 1.609,
+   "step_p95_s": 2.134,
+   "plan_p50_s": 1.604,
+   "baseline_s": 0.076
+  }
+ },
+ "battery_saturation": {
+  "title": "Battery saturation: a nearly full battery before the solar peak",
+  "network_id": "benchmark_250",
+  "rule_id": "pm10",
+  "summary": {
+   "steps": 24,
+   "horizon": 16,
+   "statuses": {
+    "verified_safe": 24,
+    "optimiser_infeasible": 0,
+    "search_exhausted": 0,
+    "solver_failed": 0,
+    "unsafe_fallback": 0,
+    "invalid_action": 0
+   },
+   "unsafe_steps": 0,
+   "baseline_unsafe_steps": 21,
+   "unsafe_steps_without_control": 21,
+   "curtailed_kwh": 145.672,
+   "throughput_kwh": 34.835,
+   "baseline_throughput_kwh": 3.158,
+   "soc_min": 0.342,
+   "soc_max": 0.85,
+   "soc_final": 0.342,
+   "operations_used": 0,
+   "fallbacks": 0,
+   "replans": 24,
+   "infeasible_periods": [],
+   "worst_after_severity": 0.0
+  },
+  "timing": {
+   "total_s": 57.32,
+   "step_p50_s": 2.224,
+   "step_p95_s": 5.154,
+   "plan_p50_s": 2.22,
+   "baseline_s": 0.057
+  }
+ },
+ "depletion_infeasible": {
+  "title": "Battery depletion and an infeasible evening on the weak street, with permitted switching",
+  "network_id": "rural_weak_63",
+  "rule_id": "pm10",
+  "summary": {
+   "steps": 24,
+   "horizon": 16,
+   "statuses": {
+    "verified_safe": 18,
+    "optimiser_infeasible": 0,
+    "search_exhausted": 0,
+    "solver_failed": 0,
+    "unsafe_fallback": 6,
+    "invalid_action": 0
+   },
+   "unsafe_steps": 6,
+   "baseline_unsafe_steps": 8,
+   "unsafe_steps_without_control": 8,
+   "curtailed_kwh": 4.116,
+   "throughput_kwh": 33.488,
+   "baseline_throughput_kwh": 17.1,
+   "soc_min": 0.1,
+   "soc_max": 0.4899,
+   "soc_final": 0.1798,
+   "operations_used": 2,
+   "fallbacks": 8,
+   "replans": 24,
+   "infeasible_periods": [
+    {
+     "first_step": 79,
+     "last_step": 79,
+     "from": "19:45",
+     "until": "19:45",
+     "steps": 1,
+     "statuses": [
+      "unsafe_fallback"
+     ],
+     "first_reason": "planned action unsafe at the observed step: under-voltage 204.4 V < 207.0 V; search exhausted: none of 25 permitted actions was safe; least violation 1.82 V-equivalent"
+    },
+    {
+     "first_step": 81,
+     "last_step": 85,
+     "from": "20:15",
+     "until": "21:15",
+     "steps": 5,
+     "statuses": [
+      "unsafe_fallback"
+     ],
+     "first_reason": "planned action unsafe at the observed step: under-voltage 203.3 V < 207.0 V; search exhausted: none of 25 permitted actions was safe; least violation 0.32 V-equivalent"
+    }
+   ],
+   "worst_after_severity": 6.969
+  },
+  "timing": {
+   "total_s": 48.73,
+   "step_p50_s": 1.715,
+   "step_p95_s": 5.807,
+   "plan_p50_s": 1.574,
+   "baseline_s": 0.047
+  }
+ },
+ "forecast_error": {
+  "title": "Forecast error: a cloud the forecast did not see",
+  "network_id": "benchmark_250",
+  "rule_id": "pm10",
+  "summary": {
+   "steps": 36,
+   "horizon": 16,
+   "statuses": {
+    "verified_safe": 36,
+    "optimiser_infeasible": 0,
+    "search_exhausted": 0,
+    "solver_failed": 0,
+    "unsafe_fallback": 0,
+    "invalid_action": 0
+   },
+   "unsafe_steps": 0,
+   "baseline_unsafe_steps": 10,
+   "unsafe_steps_without_control": 13,
+   "curtailed_kwh": 61.536,
+   "throughput_kwh": 51.972,
+   "baseline_throughput_kwh": 25.263,
+   "soc_min": 0.1,
+   "soc_max": 0.5579,
+   "soc_final": 0.3554,
+   "operations_used": 0,
+   "fallbacks": 0,
+   "replans": 36,
+   "infeasible_periods": [],
+   "worst_after_severity": 0.0
+  },
+  "timing": {
+   "total_s": 61.6,
+   "step_p50_s": 1.516,
+   "step_p95_s": 3.997,
+   "plan_p50_s": 1.512,
+   "baseline_s": 0.07
+  }
+ }
+}
