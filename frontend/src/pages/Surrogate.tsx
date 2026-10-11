@@ -101,7 +101,8 @@ function SurrogateView({ d }: { d: SurrogatePayload }) {
 function StreetView({ s }: { s: SurrogateStreet }) {
   const t = useT()
   const rules = useV2<Rule[]>('/rules')
-  const ruleLabel = (id: string) => rules.data?.find((r) => r.id === id)?.label ?? id
+  // the short band ("±6% of 230 V"), not the regulation's full name, so narrow table columns stay readable
+  const ruleLabel = (id: string) => (rules.data?.find((r) => r.id === id)?.label ?? id).split(':').pop()!.trim()
   const kind = (k: string) => t(`surrogate.kind.${k}` as StringKey)
   const mode = (m: string) => t(`surrogate.mode.${m}` as StringKey)
   return (
@@ -116,13 +117,13 @@ function StreetView({ s }: { s: SurrogateStreet }) {
         <div className="stat"><p>{t('surrogate.states_boundary')}</p><span className="value">{num(s.states.boundary_test, 0)}</span></div>
         <div className="stat"><p>{t('surrogate.states_ood')}</p><span className="value">{num(s.states.out_of_range, 0)}</span></div>
         <div className="stat"><p>{t('surrogate.guard')}</p>
-          <span className="value text">{t('surrogate.guard_value', { v: num(s.guard_v[0]), l: num(s.guard_loading_pts[0]) })}</span></div>
+          <span className="value text sg-guard">{t('surrogate.guard_value', { v: num(s.guard_v[0]), l: num(s.guard_loading_pts[0]) })}</span></div>
       </section>
 
       <section className="card" aria-labelledby="sg-accuracy">
         <div className="card-head"><h3 id="sg-accuracy">{t('surrogate.q_accuracy')}</h3><Info>{t('surrogate.q_accuracy_intro')}</Info></div>
         <div className="table-scroll">
-          <table className="data-table" aria-label={t('surrogate.q_accuracy')}>
+          <div className="ev-table-wrap"><table className="data-table" aria-label={t('surrogate.q_accuracy')}>
             <thead><tr>{(['col_model', 'col_v_mae', 'col_v_p99', 'col_l_mae', 'col_l_p99', 'col_boundary', 'col_vuf', 'col_gates'] as const)
               .map((k) => <th key={k} scope="col">{t(`surrogate.${k}`)}</th>)}</tr></thead>
             <tbody>
@@ -136,7 +137,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
         <h3>{t('surrogate.gates_title')}</h3>
         <ul className="gate-summary">
@@ -152,7 +153,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
       <section className="card" aria-labelledby="sg-misses">
         <div className="card-head"><h3 id="sg-misses">{t('surrogate.q_misses')}</h3><Info>{t('surrogate.q_misses_intro')}</Info></div>
         <div className="table-scroll">
-          <table className="data-table" aria-label={t('surrogate.q_misses')}>
+          <div className="ev-table-wrap"><table className="data-table" aria-label={t('surrogate.q_misses')}>
             <thead><tr>{(['col_rule', 'col_split', 'col_missed', 'col_bound', 'col_missed_point', 'col_false_rej'] as const)
               .map((k) => <th key={k} scope="col">{t(`surrogate.${k}`)}</th>)}</tr></thead>
             <tbody>
@@ -167,7 +168,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
       </section>
 
@@ -175,7 +176,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
         <section className="card" aria-labelledby="sg-rounds">
           <div className="card-head"><h3 id="sg-rounds">{t('surrogate.rounds_title')}</h3><Info>{t('surrogate.rounds_intro')}</Info></div>
           <div className="table-scroll">
-            <table className="data-table" aria-label={t('surrogate.rounds_title')}>
+            <div className="ev-table-wrap"><table className="data-table" aria-label={t('surrogate.rounds_title')}>
               <thead><tr>{(['col_round', 'col_rule', 'col_missed', 'col_false_rej'] as const).map((k) => <th key={k} scope="col">{t(`surrogate.${k}`)}</th>)}</tr></thead>
               <tbody>
                 {s.rounds.map((r) => (
@@ -188,7 +189,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table></div>
           </div>
         </section>
       )}
@@ -200,7 +201,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
           layouts: s.support.line_layouts ?? '—',
           umin: num(s.support.upstream_pu[0], 3), umax: num(s.support.upstream_pu[1], 3) })}</p>}
         <div className="table-scroll">
-          <table className="data-table" aria-label={t('surrogate.q_limits')}>
+          <div className="ev-table-wrap"><table className="data-table" aria-label={t('surrogate.q_limits')}>
             <thead><tr><th scope="col">{t('surrogate.col_input')}</th><th scope="col">{t('surrogate.col_refused')}</th></tr></thead>
             <tbody>
               {s.out_of_range.map((o) => (
@@ -210,7 +211,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
         <p className="note" role="note">{t('surrogate.not_screened')}</p>
       </section>
@@ -225,7 +226,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
         <p data-section="e2">{s.e2 ? t('surrogate.e2_text', { runs: s.e2.runs, candidates: s.e2.candidates, skipped: s.e2.skipped_candidates,
           fr: s.e2.false_rejections, same: s.e2.same_best, speedup: num(s.e2.speedup) }) : t('surrogate.not_run')}</p>
         <div className="table-scroll">
-          <table className="data-table" aria-label={t('surrogate.q_speed')}>
+          <div className="ev-table-wrap"><table className="data-table" aria-label={t('surrogate.q_speed')}>
             <thead><tr>{(['col_mode', 'col_batch', 'col_screen', 'col_solver'] as const).map((k) => <th key={k} scope="col">{t(`surrogate.${k}`)}</th>)}</tr></thead>
             <tbody>
               {s.latency.map((l) => (
@@ -233,7 +234,7 @@ function StreetView({ s }: { s: SurrogateStreet }) {
                   <td>{num(l.screen_ms_per_state, 4)}</td><td>{num(l.solver_ms_per_state, 4)}</td></tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
       </section>
     </>

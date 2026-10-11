@@ -293,4 +293,10 @@ h1, h2, h3, h4 { letter-spacing: -0.03em; }
 @media (prefers-reduced-motion: reduce) { .tab-glide { transition: none; } }
 @media (max-width: 560px) { .tab { padding: 8px 9px; } .tabs { padding: 4px; } .tab-glide { top: 4px; bottom: 4px; } }
 
-.player-summary { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; max-width: 90ch; }
+.player-summary { display: block; max-width: 90ch; }
+.player-summary .info { margin-left: 6px; vertical-align: -6px; }
+
+/* polish: long sentence tiles use body size; fix and change cards get the green icon well */
+.stat .value.text.sg-guard { font-size: var(--fs-m); line-height: 1.35; letter-spacing: -0.01em; }
+.scenario .ico, .q-block .ico { color: var(--green-text); }
+.ev-table-wrap tbody th[scope="row"] { white-space: nowrap; }

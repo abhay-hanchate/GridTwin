@@ -851,5 +851,9 @@
   "shell.menu": "Menu",
   "shell.close": "Close",
   "menu.q_home": "What does GridTwin do, at a glance?",
-  "menu.q_evidence": "Where is the proof for each requirement?"
+  "menu.q_evidence": "Where is the proof for each requirement?",
+  "try.p_ev_start": "Charging starts at (hour of the day)",
+  "try.p_ev_hours": "Charging lasts (hours)",
+  "try.p_battery_kw": "Battery power, kW",
+  "try.p_battery_hours": "Hours of storage (energy = power × hours)"
 }
