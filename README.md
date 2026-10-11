@@ -282,7 +282,7 @@ the dashboard's **Fast screen** page and `GET /api/v2/surrogate`.
 | F28 | Fix brief 10 Oct 2026: F1-F10  results regenerated on the fixed code |  | Tabsirshaikh | ✅ Done | [#29](https://github.com/abhay-hanchate/GridTwin/pull/29) |
 | F29 | Addition 2: power-flow surrogate screen with solver verification | ML | Tabsirshaikh | 🔄 In progress |  |
 | F30 | Final-round additions 1 and 2: multi-step control and power-flow surrogate |  | Tabsirshaikh | ✅ Done | [#30](https://github.com/abhay-hanchate/GridTwin/pull/30) |
-| F31 | Redesign the dashboard: green palette  less text  motion  dark mode |  | abhay-hanchate | ✅ Done | [#32](https://github.com/abhay-hanchate/GridTwin/pull/32) |
+| F31 | Redesign the dashboard: green palette  less text  motion  dark mode |  | abhay-hanchate | ✅ Done | [#33](https://github.com/abhay-hanchate/GridTwin/pull/33) |
 <!-- FEATURES:END -->
 
 ## Team
