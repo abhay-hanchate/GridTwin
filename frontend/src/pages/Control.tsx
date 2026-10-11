@@ -138,7 +138,7 @@ function Legend({ items }: { items: [string, string][] }) {
   )
 }
 
-function SocChart({ run }: { run: ControlRun }) {
+export function SocChart({ run }: { run: ControlRun }) {
   const t = useT()
   const h = 220
   const r = run.records
@@ -159,7 +159,7 @@ function SocChart({ run }: { run: ControlRun }) {
   )
 }
 
-function ActionChart({ run }: { run: ControlRun }) {
+export function ActionChart({ run }: { run: ControlRun }) {
   const t = useT()
   const h = 220
   const r = run.records
@@ -182,7 +182,7 @@ function ActionChart({ run }: { run: ControlRun }) {
   )
 }
 
-function VoltageChart({ run }: { run: ControlRun }) {
+export function VoltageChart({ run }: { run: ControlRun }) {
   const t = useT()
   const h = 240
   const r = run.records
@@ -210,7 +210,7 @@ function VoltageChart({ run }: { run: ControlRun }) {
   )
 }
 
-function Steps({ records }: { records: ControlRecord[] }) {
+export function Steps({ records }: { records: ControlRecord[] }) {
   const t = useT()
   return (
     <details className="more control-steps">
@@ -253,7 +253,7 @@ function Rerun({ fixture, onRun }: { fixture: string; onRun: (body: string) => v
   )
 }
 
-function NearLimit({ sweep }: { sweep: NonNullable<ControlRuns['near_limit']> }) {
+export function NearLimit({ sweep }: { sweep: NonNullable<ControlRuns['near_limit']> }) {
   const t = useT()
   return (
     <section className="card" data-numbers="near limit" aria-labelledby="near-title">

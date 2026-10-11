@@ -64,7 +64,7 @@ export default function Surrogate({ go }: { go?: (area: Area) => void }) {
         <summary>{t('surrogate.not_built_title')}</summary>
         <ul>{NOT_BUILT.map((k) => <li key={k}>{t(`surrogate.not_built.${k}`)}</li>)}</ul>
       </details>
-      <NextStep to="home" go={go} />
+      <NextStep to="evidence" go={go} />
     </div>
   )
 }

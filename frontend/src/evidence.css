@@ -1,0 +1,102 @@
+/* Evidence page: checklist, charts, files. Colours come from the theme tokens, so light and dark both work. */
+
+/* tones shared by lines, dots, legend keys and gradient stops */
+.tone-deep { --c: #4f6d51; } .tone-leaf { --c: #689d4b; } .tone-mint { --c: #a9c8a6; } .tone-sun { --c: #e3a83f; }
+.tone-coral { --c: #d96868; } .tone-steel { --c: #5b93b0; } .tone-ink { --c: var(--ink-3); }
+
+.evidence .ev-section { margin: 26px 0 0; font-size: clamp(1.3rem, 1.1rem + 0.9vw, 1.8rem); letter-spacing: -0.035em; display: flex; align-items: center; gap: 10px; }
+.evidence .ev-section::before { content: ''; width: 26px; height: 4px; border-radius: 2px; background: var(--grad-green); }
+.evidence .ev-sub { margin: 18px 0 6px !important; font-size: var(--fs-m) !important; color: var(--ink-2); }
+
+/* checklist with a progress ring */
+.ev-score-head { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; margin-bottom: 14px; }
+.ev-score-head h3 { margin: 0 0 4px !important; }
+.ev-score-head p { margin: 0; }
+.ev-ring { --p: 0%; width: 108px; height: 108px; border-radius: 50%; display: grid; place-items: center; align-content: center;
+  background: radial-gradient(closest-side, var(--surface) 76%, transparent 78% 100%), conic-gradient(#689d4b var(--p), var(--surface-3) 0); }
+.ev-ring b { font-size: 2rem; line-height: 1; background: var(--grad-num); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.ev-ring span { font: 600 0.8rem var(--mono); color: var(--ink-3); }
+.ev-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 14px; }
+.ev-group { padding: 14px 16px; border-radius: var(--r-m); background: var(--surface-2); }
+.ev-group h4 { margin: 0 0 8px; font-size: var(--fs-s); color: var(--green-text); text-transform: uppercase; letter-spacing: 0.06em; }
+.ev-group ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+.ev-group li { display: flex; align-items: center; gap: 8px; font-size: var(--fs-s); }
+.ev-group li.met svg { color: var(--fern); flex: none; }
+.ev-group li.partial svg { color: var(--watch); flex: none; }
+.ev-group li button { border: 0; background: none; padding: 2px 0; text-align: left; color: var(--ink); text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 3px; }
+.ev-group li button:hover { text-decoration-color: var(--fern); }
+.ev-tag { margin-left: auto; font: 700 0.62rem var(--text); text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 999px; background: var(--watch-soft); color: var(--watch-text); }
+
+/* run picker and KPI tiles */
+.ev-runs { margin-bottom: 14px; }
+.ev-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 10px; }
+.ev-kpi { position: relative; overflow: hidden; display: grid; gap: 2px; padding: 12px 14px; border-radius: var(--r-m); background: var(--surface-2); }
+.ev-kpi::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--c); }
+.ev-kpi b { font-size: 1.6rem; line-height: 1.1; color: var(--c); }
+.ev-kpi.tone-deep b { background: var(--grad-num); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.ev-kpi small { color: var(--ink-3); font-size: var(--fs-xs); }
+
+/* charts */
+.ev-chart { margin: 0; }
+.ev-chart svg { display: block; width: 100%; height: auto; }
+.ev-split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 8px; }
+@media (max-width: 760px) { .ev-split { grid-template-columns: minmax(0, 1fr); } }
+.ev-plot { fill: color-mix(in srgb, var(--surface-2) 70%, transparent); }
+.ev-grid { stroke: var(--line); stroke-dasharray: 2 4; }
+.ev-tick { font: 11px var(--mono); fill: var(--ink-3); }
+.ev-row-label { font-size: 12px; }
+.ev-val { font: 600 11px var(--mono); fill: var(--ink-2); }
+.ev-line { fill: none; stroke: var(--c); stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; }
+.ev-line.dashed { stroke-dasharray: 6 5; stroke-width: 1.8; opacity: 0.8; }
+.ev-ref { stroke: var(--c); stroke-width: 1.4; stroke-dasharray: 5 5; }
+.ev-ref-label { font: 600 11px var(--mono); fill: var(--c); }
+.ev-stop { stop-color: var(--c); }
+.ev-span { stroke: var(--line-strong); stroke-width: 3; stroke-linecap: round; }
+.ev-dot { fill: var(--c); stroke: var(--surface); stroke-width: 2.5; }
+.ev-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 8px 0 0; padding: 0; list-style: none; font-size: var(--fs-xs); color: var(--ink-2); }
+.ev-legend li { display: inline-flex; align-items: center; gap: 7px; }
+.ev-legend i { width: 18px; height: 4px; border-radius: 2px; background: var(--c); }
+.ev-legend i.dashed { background: repeating-linear-gradient(90deg, var(--c) 0 5px, transparent 5px 9px); }
+
+/* stacked rows (data splits) */
+.ev-stack { display: grid; gap: 10px; }
+.ev-stack-row { display: grid; grid-template-columns: 110px minmax(0, 1fr) 80px; align-items: center; gap: 12px; }
+.ev-stack-label { font-size: var(--fs-s); font-weight: 600; }
+.ev-stack-track { display: flex; height: 22px; border-radius: 7px; overflow: hidden; background: var(--surface-2); }
+.ev-seg { height: 100%; background: linear-gradient(180deg, color-mix(in srgb, var(--c) 78%, #fff), var(--c)); }
+.ev-seg + .ev-seg { box-shadow: inset 1px 0 0 var(--surface); }
+.ev-stack-total { text-align: right; font-size: var(--fs-s); color: var(--ink-2); }
+
+/* status strip, infeasible periods, chips */
+.ev-status-strip { display: flex; gap: 2px; margin-top: 10px; }
+.ev-status-strip span { flex: 1; height: 12px; border-radius: 3px; background: var(--fern); }
+.ev-status-strip span.bad { background: var(--coral); }
+.ev-periods { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.ev-periods li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 10px 14px; border-radius: var(--r-m); background: var(--act-soft); font-size: var(--fs-s); }
+.ev-none { margin: 0; padding: 12px 14px; border-radius: var(--r-m); background: var(--ok-soft); color: var(--ok-text); }
+.ev-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+
+/* supported range, end-to-end, tables, files */
+.ev-support { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 8px; margin-top: 12px; }
+.ev-support > div { display: grid; gap: 3px; padding: 10px 12px; border-radius: var(--r-s); background: var(--surface-2); }
+.ev-support b { font-size: var(--fs-s); font-weight: 600; overflow-wrap: anywhere; }
+.ev-e2e { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 10px; margin-top: 14px; }
+.ev-e2e .note { grid-column: 1 / -1; }
+.ev-table-wrap { overflow-x: auto; }
+.ev-table-wrap .data-table td, .ev-table-wrap .data-table th { white-space: normal; }
+.row-warn { background: var(--act-soft); }
+.ev-config th { font-family: var(--mono); font-size: var(--fs-xs); color: var(--ink-3); width: 30%; }
+.ev-files { display: grid; gap: 14px; }
+.ev-file-group h4 { margin: 0 0 6px; font-size: var(--fs-s); display: flex; gap: 8px; align-items: center; }
+.ev-file-group ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; }
+.ev-file-group li { display: grid; grid-template-columns: 18px minmax(0, 1.2fr) minmax(0, 1fr) 70px 16px; align-items: center; gap: 10px; padding: 7px 10px; border-radius: var(--r-s); font-size: var(--fs-s); }
+.ev-file-group li:hover { background: var(--surface-2); }
+.ev-file-group li a { font-family: var(--mono); font-size: 0.8rem; overflow-wrap: anywhere; color: var(--green-text); }
+.ev-file-group li svg { color: var(--ink-3); }
+.ev-file-group .num { text-align: right; }
+@media (max-width: 760px) {
+  .ev-file-group li { grid-template-columns: 18px minmax(0, 1fr) 60px; }
+  .ev-file-group li > span.muted:not(.num), .ev-file-group li .ev-dl { display: none; }
+  .ev-stack-row { grid-template-columns: 80px minmax(0, 1fr) 64px; }
+}
+.ev-cap { margin: 0 0 6px; font-size: var(--fs-s); font-weight: 650; color: var(--ink-2); }

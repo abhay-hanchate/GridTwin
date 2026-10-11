@@ -1,4 +1,4 @@
-import { CloudSun, FlaskConical, Gauge, LayoutDashboard, Map as MapIcon, Rocket, Wrench, type LucideIcon } from 'lucide-react'
+import { CloudSun, FileCheck2, FlaskConical, Gauge, LayoutDashboard, Map as MapIcon, Rocket, Wrench, type LucideIcon } from 'lucide-react'
 import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
 import ThemeToggle from '../components/ThemeToggle'
 import { LANGS, useLang, useT, type StringKey } from '../i18n'
@@ -6,7 +6,7 @@ import { AREAS, type Area } from './areas'
 
 const label = (area: Area) => `area.${area}` as StringKey
 const ICONS: Record<Area, LucideIcon> = {
-  home: LayoutDashboard, forecast: CloudSun, fixes: Wrench, planning: MapIcon, try: FlaskConical, control: Gauge, surrogate: Rocket,
+  home: LayoutDashboard, forecast: CloudSun, fixes: Wrench, planning: MapIcon, try: FlaskConical, control: Gauge, surrogate: Rocket, evidence: FileCheck2,
 }
 const fromHash = (): Area | null => {
   const id = window.location.hash.slice(1)
