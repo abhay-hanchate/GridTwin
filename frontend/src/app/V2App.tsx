@@ -10,6 +10,7 @@ const pages = {
   overview: () => import('../pages/Overview'), forecast: () => import('../pages/Forecast'), fixes: () => import('../pages/Fixes'),
   try: () => import('../pages/TryChange'), planning: () => import('../pages/Planning'),
   control: () => import('../pages/Control'), surrogate: () => import('../pages/Surrogate'),
+  evidence: () => import('../pages/Evidence'),
 }
 const Overview = lazy(pages.overview)
 const Forecast = lazy(pages.forecast)
@@ -17,6 +18,7 @@ const Fixes = lazy(pages.fixes)
 const TryChange = lazy(pages.try)
 const Control = lazy(pages.control)
 const Surrogate = lazy(pages.surrogate)
+const Evidence = lazy(pages.evidence)
 const Planning = lazy(pages.planning)
 
 /** After the first page shows, fetch the other pages' code in the background so every step opens at once. */
@@ -35,6 +37,7 @@ function Page({ area, view, go }: { area: Area; view: ViewProps; go: (area: Area
     case 'try': return <TryChange {...view} go={go} />
     case 'control': return <Control go={go} />
     case 'surrogate': return <Surrogate go={go} />
+    case 'evidence': return <Evidence go={go} />
     case 'fixes': return <Fixes {...view} go={go} />
     case 'planning': return <Planning {...view} go={go} />
   }
@@ -64,7 +67,7 @@ function Layout() {
   return (
     <Shell
       // the day and rule matter on the pages that share them; Control and Fast screen have their own inputs
-      context={(area) => (['control', 'surrogate'].includes(area) ? null : <ContextBar rule={rule} date={date} />)}
+      context={(area) => (['control', 'surrogate', 'evidence'].includes(area) ? null : <ContextBar rule={rule} date={date} />)}
       render={(area, go) => (
         <Suspense fallback={<div className="loading" role="status">{t('shell.loading')}</div>}>
           <Page area={area} view={view} go={go} />

@@ -1,0 +1,98 @@
+/* Full-screen menu: a Menu button in the header opens a dark green sheet that sweeps out from the button; every step
+   is a large row; the side shows the hovered step. Picking a step closes the sheet and switches the page. */
+
+.header { align-items: center; }
+.areas, .tabs, .tab-glide { display: none; }
+
+/* the step you are on, shown next to the brand */
+.current-step { order: 2; display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px 7px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); font-weight: 600; font-size: var(--fs-s);
+  box-shadow: var(--shadow); transition: transform 200ms var(--ease), border-color 200ms var(--ease); }
+.current-step:hover { transform: translateY(-1px); border-color: var(--g-2); }
+.current-step svg { color: var(--green-text); }
+.cs-no { font-size: 0.72rem; color: var(--ink-3); letter-spacing: 0.04em; }
+
+/* the Menu button: two lines that turn into a cross */
+.menu-btn { order: 3; position: relative; z-index: 60; display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px 9px 13px;
+  border-radius: 999px; border: 0; background: var(--grad-green); color: #f4f8f2; font-weight: 650; font-size: var(--fs-s);
+  box-shadow: 0 10px 22px -12px rgba(47, 74, 50, 0.9); transition: transform 250ms var(--ease), background 300ms var(--ease); }
+.menu-btn:hover { transform: translateY(-1px); }
+.menu-btn.is-open { background: #f2f2f2; color: #23332a; }
+.menu-lines { position: relative; width: 18px; height: 12px; }
+.menu-lines i { position: absolute; left: 0; right: 0; height: 2px; border-radius: 2px; background: currentColor; transition: transform 400ms var(--ease), top 400ms var(--ease); }
+.menu-lines i:first-child { top: 2px; }
+.menu-lines i:last-child { top: 8px; }
+.menu-btn.is-open .menu-lines i:first-child { top: 5px; transform: rotate(45deg); }
+.menu-btn.is-open .menu-lines i:last-child { top: 5px; transform: rotate(-45deg); }
+.theme-toggle { margin-left: auto; }
+.lang-switch { order: 3; }
+.context-bar { order: 5; }
+
+/* the sheet */
+.site-menu { position: fixed; inset: 0; z-index: 50; overflow-y: auto; color: #eef3ec;
+  background:
+    radial-gradient(60% 50% at 85% 15%, rgba(145, 174, 110, 0.28), transparent 70%),
+    radial-gradient(50% 60% at 10% 90%, rgba(217, 104, 104, 0.12), transparent 70%),
+    linear-gradient(160deg, #1b2a20 0%, #23382a 55%, #2e4a35 100%);
+  clip-path: circle(0% at calc(100% - 70px) 40px); visibility: hidden;
+  transition: clip-path 700ms cubic-bezier(0.76, 0, 0.24, 1), visibility 0s linear 700ms; }
+.site-menu.open { clip-path: circle(150% at calc(100% - 70px) 40px); visibility: visible; transition: clip-path 700ms cubic-bezier(0.76, 0, 0.24, 1), visibility 0s; }
+.site-menu::before { content: ''; position: fixed; inset: 0; pointer-events: none; opacity: 0.35;
+  background-image: linear-gradient(rgba(210, 237, 215, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(210, 237, 215, 0.06) 1px, transparent 1px);
+  background-size: 64px 64px; mask-image: radial-gradient(80% 80% at 50% 40%, #000, transparent); }
+.sm-inner { position: relative; max-width: 1280px; margin: 0 auto; min-height: 100%; padding: calc(env(safe-area-inset-top, 0px) + 84px) 28px 32px;
+  display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+@media (max-width: 900px) { .sm-inner { grid-template-columns: minmax(0, 1fr); padding-inline: 16px; padding-top: calc(env(safe-area-inset-top, 0px) + 84px); } .sm-side { display: none; } }
+
+.sm-list [role='tablist'] { display: grid; gap: 2px; }
+.sm-item { position: relative; display: grid; grid-template-columns: 44px 30px minmax(0, 1fr) 30px; align-items: center; gap: 14px; width: 100%;
+  padding: 10px 16px; border: 0; border-radius: 16px; background: transparent; color: inherit; text-align: left;
+  opacity: 0; transform: translateY(24px); transition: opacity 500ms var(--ease), transform 600ms var(--ease), background 250ms var(--ease); }
+.site-menu.open .sm-item { opacity: 1; transform: none; transition-delay: calc(180ms + var(--i) * 55ms), calc(180ms + var(--i) * 55ms), 0s; }
+.sm-item::after { content: ''; position: absolute; left: 16px; right: 16px; bottom: 0; height: 1px; background: rgba(210, 237, 215, 0.1); }
+.sm-item:hover, .sm-item:focus-visible { background: rgba(210, 237, 215, 0.07); outline: none; }
+.sm-no { font: 600 0.82rem var(--mono); color: rgba(210, 237, 215, 0.55); }
+.sm-icon { color: #a9c8a6; transition: transform 350ms var(--ease), color 250ms; }
+.sm-text { display: grid; gap: 2px; min-width: 0; }
+.sm-title { font: 650 clamp(1.5rem, 0.9rem + 2.4vh, 2.5rem)/1.05 var(--head); letter-spacing: -0.045em; transition: transform 400ms var(--ease), color 250ms; }
+.sm-q { font-size: var(--fs-s); color: rgba(238, 243, 236, 0.6); }
+.sm-arrow { font-size: 1.4rem; color: #d2edd7; opacity: 0; transform: translateX(-10px); transition: opacity 250ms var(--ease), transform 350ms var(--ease); }
+.sm-item:hover .sm-title, .sm-item:focus-visible .sm-title { transform: translateX(8px); color: #d2edd7; }
+.sm-item:hover .sm-icon, .sm-item:focus-visible .sm-icon { transform: scale(1.15) rotate(-6deg); color: #d2edd7; }
+.sm-item:hover .sm-arrow, .sm-item:focus-visible .sm-arrow { opacity: 1; transform: none; }
+.sm-item.active .sm-title { background: linear-gradient(120deg, #d2edd7, #91ae6e); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.sm-item.active .sm-no { color: #91ae6e; }
+.sm-item.active::before { content: ''; position: absolute; left: 0; top: 18px; bottom: 18px; width: 3px; border-radius: 2px; background: #91ae6e; }
+@media (max-width: 560px) { .sm-item { grid-template-columns: 32px 24px minmax(0, 1fr); padding: 12px 8px; } .sm-arrow { display: none; } }
+
+/* the side: the hovered step, large */
+.sm-side { align-self: center; display: grid; gap: 10px; padding: 36px; border-radius: 28px; border: 1px solid rgba(210, 237, 215, 0.12);
+  background: linear-gradient(160deg, rgba(210, 237, 215, 0.08), rgba(210, 237, 215, 0.02)); backdrop-filter: blur(6px);
+  opacity: 0; transform: translateY(20px) scale(0.98); transition: opacity 600ms var(--ease) 0s, transform 700ms var(--ease) 0s; }
+.site-menu.open .sm-side { opacity: 1; transform: none; transition-delay: 380ms; }
+.sm-big-icon { width: 160px; height: 160px; display: grid; place-items: center; border-radius: 36px; color: #d2edd7;
+  background: radial-gradient(circle at 30% 30%, rgba(145, 174, 110, 0.35), rgba(93, 122, 94, 0.15)); animation: sm-pop 500ms var(--ease) both; }
+@keyframes sm-pop { from { opacity: 0; transform: scale(0.85) rotate(-8deg); } to { opacity: 1; transform: none; } }
+.sm-side-no { margin: 8px 0 0; font: 600 0.85rem var(--mono); color: rgba(210, 237, 215, 0.55); }
+.sm-side-title { margin: 0; font: 700 2rem/1.05 var(--head); letter-spacing: -0.04em; }
+.sm-side-q { margin: 0; color: rgba(238, 243, 236, 0.7); font-size: var(--fs-l); max-width: 30ch; }
+
+/* the header stays above the sheet so the button can close it */
+.header { z-index: 55; }
+body:has(.site-menu.open) .header { background: transparent; border-bottom-color: transparent; backdrop-filter: none; }
+body:has(.site-menu.open) .header .brand h1 { background: linear-gradient(120deg, #d2edd7, #91ae6e); -webkit-background-clip: text; background-clip: text; }
+body:has(.site-menu.open) .header .current-step, body:has(.site-menu.open) .header .theme-toggle,
+body:has(.site-menu.open) .header .lang-switch, body:has(.site-menu.open) .header .context-bar { opacity: 0; pointer-events: none; }
+.current-step, .theme-toggle, .lang-switch, .context-bar { transition: opacity 300ms var(--ease); }
+
+@media (max-width: 640px) {
+  .current-step .cs-label { display: none; }
+  .menu-word { display: none; }
+  /* pinned to the corner, so a wrapping header never pushes it onto the menu */
+  .menu-btn { position: fixed; top: calc(env(safe-area-inset-top, 0px) + 12px); right: 16px; padding: 11px 12px; }
+  .header { padding-right: 76px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-menu, .site-menu.open { transition: none; }
+  .sm-item, .sm-side, .sm-big-icon { transition: none; animation: none; opacity: 1; transform: none; }
+}
