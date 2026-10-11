@@ -292,3 +292,5 @@ h1, h2, h3, h4 { letter-spacing: -0.03em; }
 @media (max-width: 1340px) { .tab .tab-label { display: none; } .tab.active .tab-label { display: inline; } .tab { padding: 9px 11px; } }
 @media (prefers-reduced-motion: reduce) { .tab-glide { transition: none; } }
 @media (max-width: 560px) { .tab { padding: 8px 9px; } .tabs { padding: 4px; } .tab-glide { top: 4px; bottom: 4px; } }
+
+.player-summary { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; max-width: 90ch; }

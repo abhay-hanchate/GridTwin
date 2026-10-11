@@ -3,6 +3,7 @@ import { useV2, v2Path } from '../../api/v2'
 import type { Street, StreetRun } from '../../api/v2types'
 import { one, volts } from '../../format'
 import { useT, type StringKey } from '../../i18n'
+import Info from '../Info'
 import Prov from '../Prov'
 import Status from '../Status'
 import VoltageCompare from '../VoltageCompare'
@@ -396,7 +397,8 @@ function StandardPlayer({ s, startStep, compact, markers, onPick, modeLabels }: 
 
       {solved.length < vs.length && <p className="note" role="note">{t('player.nosolve_note')}</p>}
       {b.solar === 0 && b.grid >= 0 && over > 0 && <p className="note" role="note">{t('player.night_high')}</p>}
-      <p className="muted">{t('player.how', { steps: unsafeSteps })} {t('player.flow_note')}</p>
+      <p className="muted player-summary">{t('player.summary', { steps: unsafeSteps })}
+        <Info>{t('player.how', { steps: unsafeSteps })} {t('player.flow_note')}</Info></p>
     </div>
   )
 }

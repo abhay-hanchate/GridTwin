@@ -704,5 +704,6 @@
   "ctx.bar": "The day, rule and status being shown",
   "ctx.bar_hours": "{hours} h unsafe",
   "shell.theme_dark": "Switch to dark mode",
-  "shell.theme_light": "Switch to light mode"
+  "shell.theme_light": "Switch to light mode",
+  "player.summary": "Press play to watch the day. Amber = solar sent back, blue = power drawn; red houses and red timeline marks break the rule ({steps} quarter hours today). Tap a house for its numbers."
 }
