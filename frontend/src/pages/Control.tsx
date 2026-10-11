@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useV2 } from '../api/v2'
 import type { ControlRecord, ControlRun, ControlRuns } from '../api/v2types'
 import { AREAS, type Area } from '../app/areas'
+import Info from '../components/Info'
 import { NextStep } from '../components/Explainer'
 import Prov from '../components/Prov'
 import Status from '../components/Status'
@@ -9,7 +10,8 @@ import { one, pct } from '../format'
 import { useT, type StringKey } from '../i18n'
 
 const W = 960
-const PAD = { l: 48, r: 12, t: 12, b: 26 }
+const PAD = { l: 48, r: 26, t: 36, b: 26 }      // the top band holds the legend, clear of the data
+const INSET = 12                                  // first and last bars sit inside the plot, not on its edges
 const SAFE = 'verified_safe'
 
 /** Addition 1: receding-horizon control of the battery, curtailment and switching, quarter hour by quarter hour.
@@ -26,8 +28,7 @@ export default function Control({ go }: { go?: (area: Area) => void }) {
     <div className="v2-page control-page">
       <header className="page-hero">
         <span className="kicker">{t('journey.step', { n: AREAS.indexOf('control') })} · {t('area.control')}</span>
-        <h2>{t('control.page_title')}</h2>
-        <p>{t('control.page_intro')}</p>
+        <div className="hero-title"><h2>{t('control.page_title')}</h2><Info>{t('control.page_intro')}</Info></div>
       </header>
       <Status state={runs} />
       {runs.data && (
@@ -72,18 +73,15 @@ function RunView({ run }: { run: ControlRun }) {
         </section>
       </div>
       <section className="card" data-numbers="state of charge">
-        <h3>{t('control.soc_title')} <Prov kind="modeled" /></h3>
-        <p className="card-sub">{t('control.soc_sub')}</p>
+        <div className="card-head"><h3>{t('control.soc_title')} <Prov kind="modeled" /></h3><Info>{t('control.soc_sub')}</Info></div>
         <SocChart run={run} />
       </section>
       <section className="card" data-numbers="actions">
-        <h3>{t('control.actions_title')}</h3>
-        <p className="card-sub">{t('control.actions_sub', { kw: one(run.config.battery_kw) })}</p>
+        <div className="card-head"><h3>{t('control.actions_title')}</h3><Info>{t('control.actions_sub', { kw: one(run.config.battery_kw) })}</Info></div>
         <ActionChart run={run} />
       </section>
       <section className="card" data-numbers="verification">
-        <h3>{t('control.verify_title')}</h3>
-        <p className="card-sub">{t('control.verify_sub')}</p>
+        <div className="card-head"><h3>{t('control.verify_title')}</h3><Info>{t('control.verify_sub')}</Info></div>
         <VoltageChart run={run} />
       </section>
       <section className="card" aria-labelledby="periods-title">
@@ -106,7 +104,7 @@ function RunView({ run }: { run: ControlRun }) {
 }
 
 function scale(n: number, h: number, lo: number, hi: number) {
-  const x = (i: number) => PAD.l + (i * (W - PAD.l - PAD.r)) / Math.max(1, n - 1)
+  const x = (i: number) => PAD.l + INSET + (i * (W - PAD.l - PAD.r - 2 * INSET)) / Math.max(1, n - 1)
   const y = (v: number) => PAD.t + (1 - (v - lo) / (hi - lo || 1)) * (h - PAD.t - PAD.b)
   return { x, y }
 }
@@ -118,7 +116,24 @@ function Axis({ times, h, ticks, y, fmt }: { times: string[]; h: number; ticks: 
   return (
     <g className="axis-g" aria-hidden="true">
       {ticks.map((v) => <g key={v}><line x1={PAD.l} x2={W - PAD.r} y1={y(v)} y2={y(v)} className="grid" /><text x={PAD.l - 6} y={y(v) + 4} textAnchor="end">{fmt(v)}</text></g>)}
-      {times.map((tm, i) => (i % every === 0 ? <text key={tm} x={x(i)} y={h - 6} textAnchor="middle">{tm}</text> : null))}
+      {times.map((tm, i) => (i % every === 0 || i === n - 1
+        ? <text key={tm} x={x(i)} y={h - 6} textAnchor={i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle'}
+          className={i !== n - 1 && n - 1 - i < every / 2 ? 'crowded' : undefined}>{tm}</text>
+        : null))}
+    </g>
+  )
+}
+
+/** The chart's key, in one row above the plot so it never covers a bar or a line. */
+function Legend({ items }: { items: [string, string][] }) {
+  // each key starts after the ones before it: a swatch, a gap and about 7 px per character of their labels
+  const starts = items.map((_, i) => items.slice(0, i).reduce((x, [, label]) => x + 26 + label.length * 7, PAD.l))
+  return (
+    <g className="legend-g">
+      {items.map(([cls, label], i) => {
+        const x = starts[i]
+        return <g key={cls}><rect x={x} y={12} width={12} height={4} rx={2} className={`key ${cls}`} /><text x={x + 18} y={18} className={cls}>{label}</text></g>
+      })}
     </g>
   )
 }
@@ -139,8 +154,7 @@ function SocChart({ run }: { run: ControlRun }) {
       <rect x={PAD.l} width={W - PAD.l - PAD.r} y={y(run.config.soc_max)} height={y(run.config.soc_min) - y(run.config.soc_max)} className="soc-band" />
       <path d={path(base)} className="line baseline" />
       <path d={path(ours)} className="line ours" data-series="controller" />
-      <g className="legend-g"><text x={PAD.l + 8} y={PAD.t + 14} className="ours-t">{t('control.legend_ours')}</text>
-        <text x={PAD.l + 8} y={PAD.t + 30} className="base-t">{t('control.legend_reactive')}</text></g>
+      <Legend items={[['ours-t', t('control.legend_ours')], ['base-t', t('control.legend_reactive')]]} />
     </svg>
   )
 }
@@ -163,8 +177,7 @@ function ActionChart({ run }: { run: ControlRun }) {
           y={Math.min(y(0), y(p))} height={Math.abs(y(p) - y(0))}><title>{`${v.time} ${one(p)} kW`}</title></rect>
       })}
       <path className="line curtail" d={curtailedKw.map((c, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(c).toFixed(1)}`).join('')} />
-      <g className="legend-g"><text x={PAD.l + 8} y={PAD.t + 14} className="charge-t">{t('control.legend_battery')}</text>
-        <text x={PAD.l + 8} y={PAD.t + 30} className="curtail-t">{t('control.legend_curtail')}</text></g>
+      <Legend items={[['charge-t', t('control.legend_battery')], ['curtail-t', t('control.legend_curtail')]]} />
     </svg>
   )
 }
@@ -192,8 +205,7 @@ function VoltageChart({ run }: { run: ControlRun }) {
       <path className="line after" d={line((v) => v.after.v_max_v)} />
       <path className="line before" d={line((v) => v.before.v_min_v)} />
       <path className="line after" d={line((v) => v.after.v_min_v)} />
-      <g className="legend-g"><text x={PAD.l + 8} y={PAD.t + 14} className="after-t">{t('control.legend_after')}</text>
-        <text x={PAD.l + 8} y={PAD.t + 30} className="before-t">{t('control.legend_before')}</text></g>
+      <Legend items={[['after-t', t('control.legend_after')], ['before-t', t('control.legend_before')]]} />
     </svg>
   )
 }
@@ -230,8 +242,7 @@ function Rerun({ fixture, onRun }: { fixture: string; onRun: (body: string) => v
   const body = useMemo(() => JSON.stringify({ fixture, soc_start: soc / 100, curtail, switching }), [fixture, soc, curtail, switching])
   return (
     <section className="card rerun" aria-labelledby="rerun-title">
-      <h3 id="rerun-title">{t('control.rerun_title')}</h3>
-      <p className="card-sub">{t('control.rerun_sub')}</p>
+      <div className="card-head"><h3 id="rerun-title">{t('control.rerun_title')}</h3><Info>{t('control.rerun_sub')}</Info></div>
       <label className="field">{t('control.rerun_soc', { v: pct(soc / 100) })}
         <input type="range" min={10} max={90} step={5} value={soc} onChange={(e) => setSoc(Number(e.target.value))} />
       </label>
@@ -246,8 +257,7 @@ function NearLimit({ sweep }: { sweep: NonNullable<ControlRuns['near_limit']> })
   const t = useT()
   return (
     <section className="card" data-numbers="near limit" aria-labelledby="near-title">
-      <h3 id="near-title">{t('control.near_title')} <Prov kind="modeled" /></h3>
-      <p className="card-sub">{t('control.near_sub', { time: sweep.time, limit: one(sweep.limit_v) })}</p>
+      <div className="card-head"><h3 id="near-title">{t('control.near_title')} <Prov kind="modeled" /></h3><Info>{t('control.near_sub', { time: sweep.time, limit: one(sweep.limit_v) })}</Info></div>
       <div className="table-wrap"><table>
         <thead><tr><th>{t('control.near_col_sun')}</th><th>{t('control.near_col_v')}</th><th>{t('control.near_col_safe')}</th></tr></thead>
         <tbody>{sweep.rows.map((row) => (

@@ -14,6 +14,14 @@ export default function RiskStrip({ p, times, watch, act, split }: Props) {
   return (
     <figure className="risk-strip">
       <svg role="img" aria-label={label} viewBox={`0 0 ${p.length} 100`} preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="rs-grid" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#5d7a5e" /><stop offset="1" stopColor="#3f5a45" />
+          </linearGradient>
+          <linearGradient id="rs-solar" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#d96868" /><stop offset="1" stopColor="#e3a83f" />
+          </linearGradient>
+        </defs>
         {p.map((v, i) => {
           const grid = attributed ? split.grid[i] : 0
           return (

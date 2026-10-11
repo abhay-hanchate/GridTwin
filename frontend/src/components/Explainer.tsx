@@ -34,7 +34,8 @@ export default function Explainer({ groups }: { groups: Group[] }) {
   const t = useT()
   return (
     <section className="explainer" aria-labelledby="explainer-title">
-      <h2 id="explainer-title">{t('explain.title')}</h2>
+      <details>
+      <summary><h2 id="explainer-title">{t('explain.title')}</h2><span className="summary-hint">{t('ui.labels_show')}</span></summary>
       <p>{t('explain.intro')}</p>
       {groups.map((g) => (
         <div key={g} className="explain-group">
@@ -50,6 +51,7 @@ export default function Explainer({ groups }: { groups: Group[] }) {
           </dl>
         </div>
       ))}
+      </details>
     </section>
   )
 }

@@ -12,8 +12,8 @@ import { homeClass } from './voltage'
  *  on the phase it is connected to, in order along the wire. Current flows along each wire the way the power goes:
  *  amber back towards the transformer when solar is exported, blue towards the homes when they draw. */
 
-const EXPORT = '#f59e0b'
-const IMPORT = '#0ea5e9'
+const EXPORT = '#e3a83f'
+const IMPORT = '#5b93b0'
 const IDLE = 0.02                // kW below which a wire is shown still
 
 export interface HomeNow {
@@ -155,7 +155,7 @@ function StreetView({ phase, dist, kwp, now, phaseKw, grid, scale, limits, trafo
           <defs>
             <radialGradient id="sv-glow-back"><stop offset="0" stopColor={EXPORT} stopOpacity="0.55" /><stop offset="1" stopColor={EXPORT} stopOpacity="0" /></radialGradient>
             <radialGradient id="sv-glow-draw"><stop offset="0" stopColor={IMPORT} stopOpacity="0.45" /><stop offset="1" stopColor={IMPORT} stopOpacity="0" /></radialGradient>
-            <linearGradient id="sv-trafo" x1="0" x2="1"><stop offset="0" stopColor="#3b4a63" /><stop offset="0.5" stopColor="#56677f" /><stop offset="1" stopColor="#2c3a50" /></linearGradient>
+            <linearGradient id="sv-trafo" x1="0" x2="1"><stop offset="0" stopColor="#3f5a45" /><stop offset="0.5" stopColor="#5d7a5e" /><stop offset="1" stopColor="#33493a" /></linearGradient>
           </defs>
 
           {/* lanes: a soft strip behind each phase's homes */}

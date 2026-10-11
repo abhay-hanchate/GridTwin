@@ -18,7 +18,6 @@ export default function DayContext({ view }: { view: View }) {
         <CalendarDays size={18} aria-hidden="true" />
         <p>
           <b>{t('ctx.line', { day: dayName(view.date, lang, t), rule: view.band?.label ?? view.rule })}</b>
-          <span className="muted">{t('ctx.same')}</span>
         </p>
         <button className="btn btn-ghost dc-toggle" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
           {t(open ? 'ctx.done' : 'ctx.change')}

@@ -32,30 +32,32 @@ export default function DayStrip({ t: times, grid, solar, unsafe, maxKw, step, o
     const bw = w / n
     const X = (k: number) => k * bw
     c.clearRect(0, 0, w, h)
+    // the playhead and axis take the theme's ink, so they stay visible in light and dark
+    const ink = (typeof getComputedStyle === 'function' ? getComputedStyle(c.canvas).getPropertyValue('--ink').trim() : '') || '#1d2a21'
     // sunlight, faint, behind everything
-    c.fillStyle = 'rgba(245,158,11,0.10)'
+    c.fillStyle = 'rgba(227,168,63,0.10)'
     c.beginPath(); c.moveTo(0, mid)
     solar.forEach((s, k) => c.lineTo(X(k) + bw / 2, mid - (s / maxKw) * half))
     c.lineTo(w, mid); c.closePath(); c.fill()
     // grid flow: one bar per quarter hour
     grid.forEach((g, k) => {
       const hh = (Math.abs(g) / maxKw) * half
-      c.fillStyle = g < 0 ? (k <= step ? '#f59e0b' : 'rgba(245,158,11,0.45)') : (k <= step ? '#0ea5e9' : 'rgba(14,165,233,0.4)')
+      c.fillStyle = g < 0 ? (k <= step ? '#e3a83f' : 'rgba(227,168,63,0.45)') : (k <= step ? '#5b93b0' : 'rgba(91,147,176,0.4)')
       c.fillRect(X(k) + 0.5, g < 0 ? mid : mid - hh, Math.max(1, bw - 1), Math.max(0.5, hh))
     })
-    c.strokeStyle = 'rgba(19,32,51,0.25)'; c.lineWidth = 1
-    c.beginPath(); c.moveTo(0, mid); c.lineTo(w, mid); c.stroke()
+    c.strokeStyle = ink; c.globalAlpha = 0.25; c.lineWidth = 1
+    c.beginPath(); c.moveTo(0, mid); c.lineTo(w, mid); c.stroke(); c.globalAlpha = 1
     // the quarter hours that break the rule
     unsafe.forEach((u, k) => {
       if (!u) return
-      c.fillStyle = '#e3433f'
+      c.fillStyle = '#d96868'
       c.fillRect(X(k), h - bandH, Math.ceil(bw), bandH)
     })
     // the playhead
     const px = X(step) + bw / 2
-    c.strokeStyle = '#132033'; c.lineWidth = 2
+    c.strokeStyle = ink; c.lineWidth = 2
     c.beginPath(); c.moveTo(px, 0); c.lineTo(px, h); c.stroke()
-    c.fillStyle = '#132033'
+    c.fillStyle = ink
     c.beginPath(); c.arc(px, mid - (grid[step] / maxKw) * half, 4.5, 0, Math.PI * 2); c.fill()
   }, [ctx, w, h, n, grid, solar, unsafe, maxKw, step])
 

@@ -162,7 +162,7 @@
   "overview.title_a": "Know tomorrow's",
   "overview.title_em": "voltage",
   "overview.title_b": "before the street feels it.",
-  "overview.lede": "At midday, rooftop solar pushes power back into the street and raises the voltage, which damages appliances and trips inverters. GridTwin forecasts when that will happen, tests every fix in a physics simulation, and tells a planner how much more solar the street can take.",
+  "overview.lede": "Rooftop solar pushes street voltage up at midday. GridTwin sees it a day ahead, tests every fix in physics, and shows how much more solar fits.",
   "overview.cta_forecast": "See the forecast",
   "overview.summary_eyebrow": "In plain words · {day}",
   "overview.plain_ok": "Under {rule}, the street is expected to stay safe all day.",
@@ -269,7 +269,7 @@
   "overview.fact_ok": "Every fix is tested in the same simulation. If none keeps the whole day safe, GridTwin says so and names what stops it.",
   "overview.f_fix_pending": "Still computing",
   "overview.journey_eyebrow": "The way through",
-  "overview.journey_title": "Five steps, one question each",
+  "overview.journey_title": "Six steps, one question each",
   "overview.journey_intro": "Start with the forecast, then find a fix, plan for more solar, test the future, and check how far to trust it.",
   "home.replay_title": "Watch the street on this day",
   "home.replay_intro": "The highest-sun case of the day's scenarios, played quarter hour by quarter hour.",
@@ -695,5 +695,14 @@
   "next.surrogate": "Next: how a learned shortcut speeds up the checks",
   "next.surrogate_why": "A fast model screens candidate actions; the full simulation still decides what is safe.",
   "overview.q_surrogate": "Can a learned model speed up the checks?",
-  "overview.a_surrogate": "A fast screen for candidate actions, with the full simulation still the final judge."
+  "overview.a_surrogate": "A fast screen for candidate actions, with the full simulation still the final judge.",
+  "ui.sources": "Data sources",
+  "ui.labels_show": "What the colours mean",
+  "hero.alt": "Animation: the sun rises, rooftop panels push the street's voltage over its limit, and a fix brings it back inside.",
+  "hero.voltage": "Street voltage",
+  "hero.limit": "limit",
+  "ctx.bar": "The day, rule and status being shown",
+  "ctx.bar_hours": "{hours} h unsafe",
+  "shell.theme_dark": "Switch to dark mode",
+  "shell.theme_light": "Switch to light mode"
 }
