@@ -1,3 +1,4 @@
+import { Activity, BatteryCharging, Cpu, Gauge, PlugZap, SunDim, SunMedium, ThermometerSun, UtilityPole } from 'lucide-react'
 import { useMemo, useState, type CSSProperties, type ReactElement } from 'react'
 import { useV2 } from '../api/v2'
 import type { CatalogEntry, DaySummary, ParamSchema, Street, WhatIfResult } from '../api/v2types'
@@ -16,13 +17,24 @@ import { useT, type StringKey } from '../i18n'
 import { choicesValid, chosen, initialChoices, type Choice } from '../whatif'
 
 const NOMINAL_V = 230
-const sv = { fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
+const ic = { size: 20, strokeWidth: 2, 'aria-hidden': true } as const
 const ICON: Record<string, ReactElement> = {
-  'change.panel_size': <svg viewBox="0 0 24 24" {...sv} aria-hidden="true"><path d="M3 18h18M5 18l2-8h10l2 8M9 10l-1 8M15 10l1 8M12 3v3M6 5l1.5 1.5M18 5l-1.5 1.5" /></svg>,
-  'change.upstream_shift': <svg viewBox="0 0 24 24" {...sv} aria-hidden="true"><path d="M12 2 7 22M12 2l5 20M8.5 15h7M9.6 10h4.8M4 6h16" /></svg>,
-  'change.ev_charging': <svg viewBox="0 0 24 24" {...sv} aria-hidden="true"><path d="M5 16V9l2-4h10l2 4v7M3 16h18v3H3zM7 13h2M15 13h2" /></svg>,
-  'change.heatwave': <svg viewBox="0 0 24 24" {...sv} aria-hidden="true"><path d="M14 14.8V4a2 2 0 1 0-4 0v10.8a4 4 0 1 0 4 0z" /></svg>,
+  'change.panel_size': <SunMedium {...ic} />,
+  'change.upstream_shift': <UtilityPole {...ic} />,
+  'change.ev_charging': <PlugZap {...ic} />,
+  'change.heatwave': <ThermometerSun {...ic} />,
+  'fix.tap': <Gauge {...ic} />,
+  'fix.volt_var': <Cpu {...ic} />,
+  'fix.volt_watt': <Activity {...ic} />,
+  'fix.curtail': <SunDim {...ic} />,
+  'fix.battery': <BatteryCharging {...ic} />,
 }
+// Slider labels the catalogue leaves without a description (or with a formula), in plain words.
+const PARAM_LABEL: Record<string, StringKey> = {
+  'change.ev_charging.start_hour': 'try.p_ev_start', 'change.ev_charging.hours': 'try.p_ev_hours',
+  'fix.battery.kw': 'try.p_battery_kw', 'fix.battery.hours': 'try.p_battery_hours',
+}
+const sentence = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
 // One-click futures. Values are inputs the user can still move; the results always come from the engine.
 const PRESETS: { id: string; set: Record<string, Record<string, number>> }[] = [
   { id: 'ev', set: { 'change.ev_charging': { share_of_homes: 0.5, kw: 7.4, start_hour: 19, hours: 4 } } },
@@ -134,7 +146,7 @@ function Scenario({ entry, choice, onChange }: { entry: CatalogEntry; choice: Ch
   return (
     <div className={`scenario ${choice.on ? 'on' : ''}`} data-entry={entry.id}>
       <div className="head">
-        <span className="ico">{ICON[entry.id] ?? <svg viewBox="0 0 24 24" {...sv} aria-hidden="true"><path d="M5 12l4 4 10-10" /></svg>}</span>
+        <span className="ico">{ICON[entry.id] ?? <Gauge {...ic} />}</span>
         <h4>{entry.label}</h4>
         <button className="switch" role="switch" aria-checked={choice.on} aria-label={entry.label} onClick={() => onChange({ ...choice, on: !choice.on })} />
       </div>
@@ -146,7 +158,7 @@ function Scenario({ entry, choice, onChange }: { entry: CatalogEntry; choice: Ch
         const id = `${entry.id}.${name}`
         return (
           <div key={name} className="slider-row">
-            <div className="top"><label htmlFor={id}>{p.description ?? p.title ?? name}</label><b>{isShare(name) ? pct(v) : one(v)}</b></div>
+            <div className="top"><label htmlFor={id}>{PARAM_LABEL[`${entry.id}.${name}`] ? t(PARAM_LABEL[`${entry.id}.${name}`]) : sentence(p.description ?? p.title ?? name)}</label><b>{isShare(name) ? pct(v) : one(v)}</b></div>
             <input id={id} type="range" min={lo} max={hi} step={stepFor(p)} value={v} disabled={!choice.on} style={fill(v, lo, hi)}
               aria-valuetext={isShare(name) ? pct(v) : one(v)}
               onChange={(e) => onChange({ ...choice, values: { ...choice.values, [name]: e.target.value } })} />
