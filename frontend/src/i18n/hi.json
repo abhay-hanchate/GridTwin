@@ -847,5 +847,9 @@
   "ev.f.action_logs": "कार्रवाई लॉग",
   "ev.f.error_latency_results": "त्रुटि और समय परिणाम",
   "ev.f.final_verification_outputs": "अंतिम जाँच परिणाम",
-  "ev.f.pre_registration": "पूर्व-पंजीकरण"
+  "ev.f.pre_registration": "पूर्व-पंजीकरण",
+  "shell.menu": "मेनू",
+  "shell.close": "बंद करें",
+  "menu.q_home": "ग्रिडट्विन एक नज़र में क्या करता है?",
+  "menu.q_evidence": "हर आवश्यकता का प्रमाण कहाँ है?"
 }

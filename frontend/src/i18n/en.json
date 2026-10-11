@@ -847,5 +847,9 @@
   "ev.f.action_logs": "Action logs",
   "ev.f.error_latency_results": "Error and latency results",
   "ev.f.final_verification_outputs": "Final verification outputs",
-  "ev.f.pre_registration": "Pre-registration"
+  "ev.f.pre_registration": "Pre-registration",
+  "shell.menu": "Menu",
+  "shell.close": "Close",
+  "menu.q_home": "What does GridTwin do, at a glance?",
+  "menu.q_evidence": "Where is the proof for each requirement?"
 }

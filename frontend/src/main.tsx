@@ -6,6 +6,7 @@ import '@fontsource-variable/noto-sans-devanagari/index.css'
 import './index.css'
 import './redesign.css'
 import './evidence.css'
+import './menu.css'
 import V2App from './app/V2App'
 
 createRoot(document.getElementById('root')!).render(
